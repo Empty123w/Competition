@@ -1,0 +1,163 @@
+{
+  "raw_hashes": {
+    "设备运行参数.csv": {
+      "exists": true,
+      "size_bytes": 37097799,
+      "md5": "b3871b9b8e4daedc7c8ab378dfda0c5c",
+      "sha256": "2df316d158908345edb45df65290e0110c9eab2ada62998edc65eed8f8ecd022"
+    },
+    "设备状态监测.csv": {
+      "exists": true,
+      "size_bytes": 57048549,
+      "md5": "f65bf1c96495737604a1a4e160bce04d",
+      "sha256": "445f79f9c93cb3053f44842695616c25289a3e5a5d2aa98ace848f670e7d0279"
+    },
+    "用气负荷数据.csv": {
+      "exists": true,
+      "size_bytes": 22462006,
+      "md5": "f3d44035f10daaabba296b80f7f69c05",
+      "sha256": "3315aace82554ee0f7ea57f004a32b497d5842b3887fc8c3f9e19245a5999d49"
+    },
+    "管网运行数据.xlsx": {
+      "exists": true,
+      "size_bytes": 10280221,
+      "md5": "fda89c095e8a4f6790fc7be519043518",
+      "sha256": "40eed63b68c3adec4eadf117ba85e17de96937ef8dbaddf433711df6a18f63df"
+    },
+    "环境参数.xlsx": {
+      "exists": true,
+      "size_bytes": 6690317,
+      "md5": "e03c994bba611c6607c31d431a72f624",
+      "sha256": "6c1f400cca344b2affe861a09625822122e3e9806746b439d4b792df531f51f0"
+    },
+    "运行事件记录.xlsx": {
+      "exists": true,
+      "size_bytes": 8054455,
+      "md5": "7f82b691f73c9454f586656f35d27d72",
+      "sha256": "fac02673dc83b318b1d78d5505d5ceb21434d170da339ff364f6405c20e0b91f"
+    },
+    "维护保养记录.xlsx": {
+      "exists": true,
+      "size_bytes": 9025704,
+      "md5": "ebda352973d82feca3bafb829983f8f9",
+      "sha256": "af450bd31bed032a5ce90178bd82089769724b7b1e999c26ce473a743e8fcb80"
+    },
+    "设备档案.json": {
+      "exists": true,
+      "size_bytes": 2646,
+      "md5": "5e2c9f1147b29f99afdbfb1b6f4b3884",
+      "sha256": "bc4182f63b580d66712ce1e23c795521729e556e332a93fa2a17a58874900af4"
+    },
+    "指标释义.json": {
+      "exists": true,
+      "size_bytes": 6243,
+      "md5": "dc8a4654750a40bb8c7e2e7aa4b0b0ba",
+      "sha256": "44f8ac2b8a4d717fb3e011224e7e503d637c80b3438bd22328571103b9dae08a"
+    }
+  },
+  "outputs": {
+    "station_timeseries.parquet": {
+      "rows": 264961,
+      "columns": [
+        "time",
+        "header_pressure_mpa",
+        "total_flow_m3_min",
+        "total_power_kw",
+        "station_temperature_c",
+        "station_humidity_percent",
+        "load_rate",
+        "load_level",
+        "environment_interpolated"
+      ]
+    },
+    "device_timeseries.parquet": {
+      "rows": 529922,
+      "columns": [
+        "time",
+        "device_id",
+        "device_type",
+        "running",
+        "state_source",
+        "discharge_pressure_mpa",
+        "flow_m3_min",
+        "power_kw",
+        "load_ratio",
+        "specific_power",
+        "igv_percent",
+        "bov_closed_percent",
+        "current_proxy_a",
+        "vibration_stage_1_mm_s",
+        "vibration_stage_2_mm_s",
+        "vibration_stage_3_mm_s",
+        "discharge_temperature_c",
+        "runtime_hours",
+        "load_hours",
+        "maintenance_remaining_hours",
+        "fault_code",
+        "quality_valid",
+        "quality_reason",
+        "temperature_available",
+        "maintenance_sentinel_removed",
+        "fault_label_quality",
+        "possible_station_level_event"
+      ]
+    },
+    "events.parquet": {
+      "rows": 529922,
+      "columns": [
+        "time",
+        "device_id",
+        "status_code",
+        "running",
+        "fault_code",
+        "warning_code",
+        "fault_label_quality",
+        "possible_station_level_event"
+      ]
+    },
+    "maintenance.parquet": {
+      "rows": 529922,
+      "columns": [
+        "time",
+        "device_id",
+        "runtime_hours",
+        "load_hours",
+        "maintenance_remaining_hours",
+        "maintenance_sentinel_removed"
+      ]
+    }
+  },
+  "checks": {
+    "raw_hash_unchanged": {
+      "pass": true
+    },
+    "no_sentinel_in_cleaned": {
+      "pass": true
+    },
+    "no_constant_in_features": {
+      "pass": true
+    },
+    "long_gap_not_interpolated": {
+      "pass": true,
+      "rows_in_gap": 17280
+    },
+    "station_flow_sum": {
+      "pass": true
+    },
+    "station_power_sum": {
+      "pass": true
+    },
+    "device_rows": {
+      "pass": true,
+      "rows": 529922,
+      "baseline": 529922,
+      "diff": 0
+    },
+    "quality_flags_present": {
+      "pass": true
+    },
+    "all_pass": {
+      "pass": true
+    }
+  }
+}

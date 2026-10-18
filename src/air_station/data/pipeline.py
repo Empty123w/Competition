@@ -197,11 +197,75 @@ def clean_stage(raw_dir: str, processed_dir: str, report_dir: str, config_path: 
 
 
 # --------------------------------------------------------------------------- #
+# 阶段 A2: 清洗与标准化
+# --------------------------------------------------------------------------- #
+def standardize_stage(raw_dir: str, processed_dir: str, report_dir: str, config_path: str,
+                      archive_dir: str = "analysis/reports/phase2") -> dict:
+    from air_station.data import validators
+
+    config = _load_config(config_path)
+    tables = cleaners.build_standard_tables(raw_dir, processed_dir, config)
+    checks = cleaners.run_acceptance_checks(tables, raw_dir)
+
+    outputs = {
+        "station_timeseries.parquet": {"rows": int(len(tables["station"])),
+                                       "columns": list(tables["station"].columns)},
+        "device_timeseries.parquet": {"rows": int(len(tables["device"])),
+                                      "columns": list(tables["device"].columns)},
+        "events.parquet": {"rows": int(len(tables["events"])),
+                           "columns": list(tables["events"].columns)},
+        "maintenance.parquet": {"rows": int(len(tables["maintenance"])),
+                                "columns": list(tables["maintenance"].columns)},
+    }
+    manifest = {
+        "raw_hashes": validators.hash_manifest(raw_dir, cleaners.REQUIRED_RAW),
+        "outputs": outputs,
+        "checks": checks,
+    }
+    _write_json(Path(processed_dir) / "data_manifest.json", manifest)
+    _write_json(Path(report_dir) / "data_cleaning_checks.json", checks)
+    _write_report(Path(archive_dir) / "data_cleaning_report.md", manifest)
+    return manifest
+
+
+def _write_report(path: Path, manifest: dict) -> None:
+    outs = manifest["outputs"]
+    checks = manifest["checks"]
+    lines = ["# 阶段 2 数据清洗报告", "",
+             "由 `python -m air_station.data.pipeline --stage standardize` 生成。", "",
+             "## 1. 标准输出表", "",
+             "| 文件 | 行数 | 列数 |", "|------|------|------|"]
+    for name, info in outs.items():
+        lines.append(f"| {name} | {info['rows']:,} | {len(info['columns'])} |")
+    lines += ["", "## 2. 验收自检", "", "| 检查项 | 结果 |", "|--------|------|"]
+    for k, v in checks.items():
+        if k == "all_pass":
+            continue
+        lines.append(f"| {k} | {'PASS' if v.get('pass') else 'FAIL'} |")
+    lines += ["", f"**总计: {'PASS' if checks['all_pass']['pass'] else 'FAIL'}**", "",
+              "## 3. 质量标记列", "",
+              "- 站级: `environment_interpolated` (温湿度掉点/插值)",
+              "- 设备级: `temperature_available`, `maintenance_sentinel_removed`, "
+              "`fault_label_quality`, `possible_station_level_event`, `quality_valid`, `quality_reason`",
+              "", "## 4. 清洗规则要点", "",
+              "- B相电流恒零: 保留原始, 不入特征; 生成 `current_proxy_a`=(A相+C相)/2",
+              "- 大气压恒常量: 保留记录, 不入模型",
+              "- 中冷/后冷前6天长缺失: 保留为空, 不插值, 标记 `temperature_available=false`",
+              "- 环境温湿度=0 掉点: 仅短缺口插值并标记 `environment_interpolated`",
+              "- 维护计数器 65535/4294970000: 精准置 NaN, 标记 `maintenance_sentinel_removed`",
+              "- 状态: 8/10 用事件记录, 其余异常值用功率>1kW 兜底, 标记 `state_source`",
+              "- 故障码26: 保留, 标记 `fault_label_quality=weak`, `possible_station_level_event=true`",
+              ""]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
+# --------------------------------------------------------------------------- #
 # CLI
 # --------------------------------------------------------------------------- #
 def main() -> int:
-    ap = argparse.ArgumentParser(description="数据流水线 (A1 校验 / A2 清洗)")
-    ap.add_argument("--stage", choices=["validate", "clean", "all"], default="validate")
+    ap = argparse.ArgumentParser(description="数据流水线 (A1 校验 / A2 标准化)")
+    ap.add_argument("--stage", choices=["validate", "clean", "standardize", "all"], default="validate")
     ap.add_argument("--input", dest="raw_dir", default="data")
     ap.add_argument("--processed-dir", default="data/processed")
     ap.add_argument("--report-dir", default="artifacts/metrics")
@@ -213,7 +277,19 @@ def main() -> int:
         print_validation(report)
         if not report["passed"]:
             return 1
-    if args.stage in ("clean", "all"):
+    if args.stage in ("standardize", "all"):
+        manifest = standardize_stage(args.raw_dir, args.processed_dir,
+                                     args.report_dir, args.config)
+        c = manifest["checks"]
+        print(f"[标准化] 站级 {manifest['outputs']['station_timeseries.parquet']['rows']:,} 行, "
+              f"设备级 {manifest['outputs']['device_timeseries.parquet']['rows']:,} 行")
+        for k, v in c.items():
+            if k != "all_pass":
+                print(f"    {'PASS' if v.get('pass') else 'FAIL'} {k}")
+        print(f"[标准化] 总计: {'PASS' if c['all_pass']['pass'] else 'FAIL'}")
+        if not c["all_pass"]["pass"]:
+            return 1
+    if args.stage == "clean":
         rep = clean_stage(args.raw_dir, args.processed_dir, args.report_dir, args.config)
         print(f"[清洗] 长表行数={rep['long_rows']} 站级行数={rep['station_rows']} "
               f"产出文件={len(rep['processed_files'])}")
