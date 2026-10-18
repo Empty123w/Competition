@@ -1,0 +1,117 @@
+# =====================================================================
+# 阶段 A5: 健康诊断阈值(外部化, 演示时可随时调整)
+# - 所有专家规则阈值集中于此, 代码不得硬编码
+# - feature 名称对应 data/processed/health_features.parquet 的列
+# - warn/alarm 参考运行工况分位数标定(p95/p99), 便于演示产生合理分级
+# =====================================================================
+
+# 健康评分 -> 风险等级(评分下限)
+levels:
+  normal: 85        # score >= 85 -> 正常
+  attention: 70     # >= 70 -> 关注
+  warning: 50       # >= 50 -> 预警
+  # < warning -> 严重
+labels:
+  normal: "正常"
+  attention: "关注"
+  warning: "预警"
+  critical: "严重"
+
+# 专家规则: 超出 warn 开始扣分, 达到 alarm 满分
+expert_rules:
+  - feature: vib1_current
+    label: "1级振动"
+    unit: "mm/s"
+    warn: 6.5
+    alarm: 9.0
+    normal_range: [3.5, 6.0]
+    higher_is_worse: true
+  - feature: vib2_current
+    label: "2级振动"
+    unit: "mm/s"
+    warn: 9.5
+    alarm: 11.5
+    normal_range: [8.0, 9.5]
+    higher_is_worse: true
+  - feature: vib3_current
+    label: "3级振动"
+    unit: "mm/s"
+    warn: 9.0
+    alarm: 12.0
+    normal_range: [3.0, 8.8]
+    higher_is_worse: true
+  - feature: discharge_temp_c
+    label: "排气温度"
+    unit: "℃"
+    warn: 105.0
+    alarm: 112.0
+    normal_range: [90.0, 105.0]
+    higher_is_worse: true
+  - feature: oil_tank_c
+    label: "油箱油温"
+    unit: "℃"
+    warn: 66.0
+    alarm: 70.0
+    normal_range: [50.0, 65.0]
+    higher_is_worse: true
+  - feature: coil_max_diff_c
+    label: "三相线圈最大温差"
+    unit: "℃"
+    warn: 12.0
+    alarm: 16.0
+    normal_range: [6.0, 12.0]
+    higher_is_worse: true
+  - feature: unit_flow_power
+    label: "单位流量功率"
+    unit: "kW/(m3/min)"
+    warn: 6.5
+    alarm: 8.0
+    normal_range: [4.5, 6.2]
+    higher_is_worse: true
+  - feature: oil_filter_dp
+    label: "油滤器压差"
+    unit: "kPa"
+    warn: 200.0
+    alarm: 220.0
+    normal_range: [140.0, 195.0]
+    higher_is_worse: true
+  - feature: air_filter_dp
+    label: "空气过滤器压降"
+    unit: "Pa"
+    warn: 0.0
+    alarm: 5.0
+    normal_range: [-25.0, 0.0]
+    higher_is_worse: true
+
+# 异常评分(相对同负荷区间正常基准的偏差 dev_*)
+anomaly:
+  method: deviation
+  dev_scale: 4.0          # |dev| / dev_scale, 截断到 0~1
+  dev_features:
+    - dev_vib1_current
+    - dev_vib2_current
+    - dev_vib3_current
+    - dev_discharge_temp_c
+    - dev_bearing_d_c
+    - dev_oil_tank_c
+    - dev_current_proxy_a
+    - dev_unit_flow_power
+
+# 合成权重
+scoring:
+  weight_rule: 0.5
+  weight_anomaly: 0.5
+
+# 趋势判定(基于 health_features 的 trend{N}_{feature})
+trend:
+  window: 15              # 使用 trend15_*
+  slope_epsilon: 0.02     # 单位/分钟, 超过视为有方向
+
+# 建议模板(按触发最大扣分的专家规则)
+suggestions:
+  default: "维持当前运行工况"
+  vibration: "建议降低该机加载率并检查轴承/联轴器与润滑"
+  temperature: "建议检查冷却水系统与润滑油, 必要时降载运行"
+  unit_flow_power: "能效偏高, 建议优化加载率与压力设定"
+  pressure_drop: "建议检查/更换过滤器滤芯"
+  anomaly: "存在相对正常工况的异常偏离, 建议安排点检"

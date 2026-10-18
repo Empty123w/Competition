@@ -1,0 +1,29 @@
+{
+  "status": "success",
+  "validation_mode": "unsupervised",
+  "evaluation_time": "2026-09-12T00:00:00",
+  "devices": [
+    {
+      "device_id": "4#",
+      "health_score": 65,
+      "risk_level": "预警",
+      "anomaly_score": 0.26,
+      "top_anomaly_factor": "排气温度偏离正常范围",
+      "current_value": "108.00 ℃",
+      "normal_range": "90.0 ~ 105.0 ℃",
+      "trend_direction": "平稳",
+      "suggestion": "建议检查冷却水系统与润滑油, 必要时降载运行"
+    },
+    {
+      "device_id": "5#",
+      "health_score": 63,
+      "risk_level": "预警",
+      "anomaly_score": 0.59,
+      "top_anomaly_factor": "排气温度偏离正常范围",
+      "current_value": "106.00 ℃",
+      "normal_range": "90.0 ~ 105.0 ℃",
+      "trend_direction": "平稳",
+      "suggestion": "建议检查冷却水系统与润滑油, 必要时降载运行"
+    }
+  ]
+}

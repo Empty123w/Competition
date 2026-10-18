@@ -1,0 +1,27 @@
+{
+  "validation_mode": "unsupervised",
+  "evaluation_time": "2026-09-12T00:00:00",
+  "warning_threshold": 50,
+  "devices": {
+    "4#": {
+      "health_score_latest": 65,
+      "risk_level_latest": "预警",
+      "health_score_mean": 78.46,
+      "health_score_min": 0.0,
+      "anomaly_rate": 0.0742,
+      "normal_mean_score": 78.04,
+      "fault_mean_score": 84.13,
+      "separation": -6.09
+    },
+    "5#": {
+      "health_score_latest": 63,
+      "risk_level_latest": "预警",
+      "health_score_mean": 75.35,
+      "health_score_min": 0.0,
+      "anomaly_rate": 0.0622,
+      "normal_mean_score": 74.93,
+      "fault_mean_score": 82.01,
+      "separation": -7.07
+    }
+  }
+}

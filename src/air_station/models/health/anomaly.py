@@ -1,52 +1,32 @@
-"""无监督异常检测。"""
+"""无监督异常评分 (阶段 A5)。
+
+直接使用 A3 的 health_features.parquet 中 `dev_*`(相对同负荷区间正常基准的偏差),
+按阈值配置的 dev_scale 归一化, 不重新计算特征。
+"""
 from __future__ import annotations
 
 import numpy as np
 import pandas as pd
 
 
-def rolling_zscore(frame: pd.DataFrame, window: int = 60,
-                   threshold: float = 3.0) -> pd.Series:
-    """滚动 z-score 异常评分(0~1)。"""
-    scores = []
-    for c in frame.columns:
-        s = pd.to_numeric(frame[c], errors="coerce")
-        mu = s.rolling(window, min_periods=max(5, window // 6)).mean()
-        sd = s.rolling(window, min_periods=max(5, window // 6)).std()
-        z = (s - mu) / sd.replace(0, np.nan)
-        scores.append((z.abs() / threshold).clip(upper=1.0))
-    if not scores:
+def anomaly_score_series(frame: pd.DataFrame, dev_features: list[str],
+                         dev_scale: float = 3.0) -> pd.Series:
+    cols = [c for c in dev_features if c in frame.columns]
+    if not cols:
         return pd.Series(0.0, index=frame.index)
-    return pd.concat(scores, axis=1).max(axis=1).fillna(0.0)
+    vals = frame[cols].to_numpy(dtype=float)
+    with np.errstate(invalid="ignore"):
+        score = np.nanmax(np.abs(vals) / dev_scale, axis=1)
+    score = np.clip(score, 0.0, 1.0)
+    return pd.Series(np.nan_to_num(score, nan=0.0), index=frame.index)
 
 
-def isolation_forest(frame: pd.DataFrame, baseline_end: str,
-                     contamination: float = 0.02, random_state: int = 42) -> pd.Series:
-    """IsolationForest 异常评分(0~1, 越大越异常)。用 baseline 期拟合。"""
-    from sklearn.ensemble import IsolationForest
-
-    X = frame.select_dtypes(include=[np.number]).fillna(frame.median(numeric_only=True))
-    if X.empty:
-        return pd.Series(0.0, index=frame.index)
-    mask = pd.to_datetime(frame.index) <= pd.Timestamp(baseline_end)
-    X_base = X[mask] if mask.any() else X
-    if len(X_base) < 50:
-        X_base = X
-    model = IsolationForest(contamination=contamination, random_state=random_state)
-    model.fit(X_base.values)
-    # score_samples: 越低越异常; 转成 0~1, 越大越异常
-    raw = -model.score_samples(X.values)
-    lo, hi = np.nanmin(raw), np.nanmax(raw)
-    norm = (raw - lo) / (hi - lo) if hi > lo else np.zeros_like(raw)
-    return pd.Series(norm, index=frame.index)
-
-
-def detect(frame: pd.DataFrame, config: dict) -> pd.Series:
-    acfg = config.get("anomaly", {})
-    method = acfg.get("method", "rolling_zscore")
-    if method == "isolation_forest":
-        return isolation_forest(frame, acfg.get("baseline_end", "2100-01-01"),
-                                acfg.get("contamination", 0.02),
-                                acfg.get("random_state", 42))
-    return rolling_zscore(frame, acfg.get("rolling_window", 60),
-                          acfg.get("zscore_threshold", 3.0))
+def top_deviation(row: pd.Series, dev_features: list[str]) -> tuple[str | None, float]:
+    """返回偏离最大的 dev 特征与其值。"""
+    best, best_v = None, -1.0
+    for c in dev_features:
+        if c in row.index and not pd.isna(row[c]):
+            v = abs(float(row[c]))
+            if v > best_v:
+                best, best_v = c, v
+    return best, (best_v if best else 0.0)

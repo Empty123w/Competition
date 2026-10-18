@@ -1,98 +1,148 @@
-"""设备健康诊断评估: 与已知故障弱标签窗口做合理性核对。
+"""设备健康诊断离线指标与报告 (阶段 A5)。
 
-故障窗口与评估阈值全部来自 configs/health.yaml, 不在代码中硬编码。
+输出:
+  - artifacts/metrics/health_metrics.json
+  - analysis/reports/phaseA5/health_report.md
+
+直接读取 health_features.parquet; 加载后先过滤 running==1。
 """
 from __future__ import annotations
 
 import argparse
 import json
+from datetime import datetime
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import yaml
 
-from air_station.models.health import anomaly, features as HF, rules as HR, scoring
+from air_station.models.health import anomaly, rules, scoring, service
 
-
-def _fault_windows(config: dict) -> dict[int, list[tuple[str, str]]]:
-    raw = config.get("fault_weak_labels", {}).get("windows", {})
-    out: dict[int, list[tuple[str, str]]] = {}
-    for k, v in raw.items():
-        out[int(k)] = [(w["start"], w["end"]) for w in v]
-    return out
+FAULT_CFG = "configs/health.yaml"
 
 
-def _device_series(processed_dir: str, number: int, config: dict) -> pd.DataFrame:
-    frame = HF.value_frame(processed_dir, number, config)
-    frame = frame.set_index(pd.to_datetime(frame["time"])).drop(columns=["time"])
-    rules_cfg = config.get("rules", [])
-    rule_map = {r["column"]: {"warn": r["warn"], "alarm": r["alarm"]} for r in rules_cfg}
-    penalties = HR.evaluate_rules(frame, rule_map)
-    rule_penalty = penalties.mean(axis=1) if not penalties.empty else pd.Series(0.0, index=frame.index)
-    an_score = anomaly.detect(frame, config)
-    combined = scoring.combine(rule_penalty, an_score, config)
-    combined["rule_penalties"] = penalties.apply(
-        lambda r: json.dumps({k: round(float(v), 3) for k, v in r.items() if v > 0}), axis=1)
-    return combined
+def _fault_windows(cfg: dict) -> dict[int, list[tuple[str, str]]]:
+    raw = cfg.get("fault_weak_labels", {}).get("windows", {})
+    return {int(k): [(w["start"], w["end"]) for w in v] for k, v in raw.items()}
 
 
-def _lead_time(hi: pd.Series, fault_start: pd.Timestamp,
-               threshold: float, lookback_hours: int) -> float | None:
-    window_start = fault_start - pd.Timedelta(hours=lookback_hours)
-    mask = (hi.index >= window_start) & (hi.index < fault_start) & (hi.values < threshold)
-    if not mask.any():
-        return None
-    first = hi.index[mask][0]
-    return float((fault_start - first).total_seconds() / 3600.0)
+def _device_scores(sub: pd.DataFrame, thresholds: dict):
+    rules_cfg = thresholds.get("expert_rules", [])
+    pen = rules.rule_penalties(sub, rules_cfg)
+    rule_max = pen.max(axis=1).to_numpy() if not pen.empty else np.zeros(len(sub))
+    acfg = thresholds.get("anomaly", {})
+    anom = anomaly.anomaly_score_series(sub, acfg.get("dev_features", []),
+                                        acfg.get("dev_scale", 3.0)).to_numpy()
+    score = scoring.combine(rule_max, anom, thresholds)
+    return pd.Series(score, index=sub.index), pd.Series(anom, index=sub.index), pen
 
 
 def evaluate(processed_dir: str = "data/processed",
-             config_path: str = "configs/health.yaml",
-             report_dir: str = "artifacts/metrics") -> dict:
-    config = yaml.safe_load(Path(config_path).read_text(encoding="utf-8"))
-    ecfg = config.get("evaluate", {})
-    lead_threshold = float(ecfg.get("lead_time_threshold", 60))
-    lookback_hours = int(ecfg.get("lead_time_lookback_hours", 72))
-    windows = _fault_windows(config)
+             thresholds_path: str = rules.DEFAULT_THRESHOLDS,
+             health_cfg_path: str = FAULT_CFG,
+             metrics_dir: str = "artifacts/metrics",
+             report_path: str = "analysis/reports/phaseA5/health_report.md") -> dict:
+    import yaml
+    thresholds = rules.load_thresholds(thresholds_path)
+    health_cfg = yaml.safe_load(Path(health_cfg_path).read_text(encoding="utf-8"))
+    windows = _fault_windows(health_cfg)
+    warning_thr = thresholds.get("levels", {}).get("warning", 50)
 
-    results: dict = {"devices": {}, "lead_time_threshold": lead_threshold}
-    for number in config.get("devices", [4, 5]):
-        series = _device_series(processed_dir, number, config)
-        hi = series["health_index"]
-        in_fault = pd.Series(False, index=hi.index)
-        for s, e in windows.get(number, []):
-            in_fault |= (hi.index >= pd.Timestamp(s)) & (hi.index <= pd.Timestamp(e))
-        normal_mean = float(hi[~in_fault].mean())
-        fault_mean = float(hi[in_fault].mean()) if in_fault.any() else float("nan")
-        leads = [lt for s, _e in windows.get(number, [])
-                 if (lt := _lead_time(hi, pd.Timestamp(s), lead_threshold, lookback_hours)) is not None]
-        results["devices"][number] = {
-            "hours": int(len(hi)),
-            "normal_mean_hi": round(normal_mean, 2),
-            "fault_mean_hi": round(fault_mean, 2) if not np.isnan(fault_mean) else None,
-            "separation": round(normal_mean - fault_mean, 2) if not np.isnan(fault_mean) else None,
-            "lead_time_hours": [round(x, 1) for x in leads],
-            "min_hi": round(float(hi.min()), 2),
+    df = service._load_features(processed_dir, thresholds)   # 已过滤 running==1
+    devices: dict = {}
+    eval_time = None
+    for number, sub in df.sort_values(["device_id", "time"]).groupby("device_id", observed=True):
+        sub = sub.reset_index(drop=True)
+        eval_time = max(eval_time, pd.Timestamp(sub["time"].iloc[-1])) if eval_time is not None \
+            else pd.Timestamp(sub["time"].iloc[-1])
+        score, anom, pen = _device_scores(sub, thresholds)
+        t = pd.to_datetime(sub["time"])
+        in_fault = pd.Series(False, index=sub.index)
+        for s, e in windows.get(int(number), []):
+            in_fault |= ((t >= pd.Timestamp(s)) & (t <= pd.Timestamp(e)))
+        normal_mean = float(score[~in_fault].mean())
+        fault_mean = float(score[in_fault].mean()) if in_fault.any() else None
+        latest_score = float(score.iloc[-1])
+        devices[f"{int(number)}#"] = {
+            "health_score_latest": int(round(latest_score)),
+            "risk_level_latest": scoring.risk_level(latest_score, thresholds),
+            "health_score_mean": round(float(score.mean()), 2),
+            "health_score_min": round(float(score.min()), 2),
+            "anomaly_rate": round(float((score < warning_thr).mean()), 4),
+            "normal_mean_score": round(normal_mean, 2),
+            "fault_mean_score": round(fault_mean, 2) if fault_mean is not None else None,
+            "separation": round(normal_mean - fault_mean, 2) if fault_mean is not None else None,
         }
-    out = Path(report_dir)
-    out.mkdir(parents=True, exist_ok=True)
-    (out / "health_metrics.json").write_text(
-        json.dumps(results, ensure_ascii=False, indent=2), encoding="utf-8")
-    return results
+
+    out = {
+        "validation_mode": "unsupervised",
+        "evaluation_time": eval_time.isoformat() if eval_time is not None else None,
+        "warning_threshold": warning_thr,
+        "devices": devices,
+    }
+    md = Path(metrics_dir)
+    md.mkdir(parents=True, exist_ok=True)
+    (md / "health_metrics.json").write_text(
+        json.dumps(out, ensure_ascii=False, indent=2), encoding="utf-8")
+
+    # 接口样例
+    sample = service.health_json(processed_dir, thresholds_path)
+    rep_dir = Path(report_path).parent
+    rep_dir.mkdir(parents=True, exist_ok=True)
+    (rep_dir / "health_interface_sample.json").write_text(
+        json.dumps(sample, ensure_ascii=False, indent=2), encoding="utf-8")
+    _write_report(Path(report_path), out, sample)
+    return out
+
+
+def _write_report(path: Path, out: dict, sample: dict) -> None:
+    lines = ["# 阶段 A5 设备健康诊断报告", "",
+             f"- 验证模式：{out['validation_mode']}（无监督，无多类故障标签）",
+             f"- 评估时刻：{out['evaluation_time']}",
+             f"- 数据源：`data/processed/health_features.parquet`（已过滤 running==1）",
+             f"- 阈值来源：`configs/health_thresholds.yaml`（外部化，可调）", "",
+             "## 1. 方法", "",
+             "健康评分 = 100 × (1 − (权重×专家规则扣分 + 权重×相对偏差异常分))。"
+             "专家规则基于当前值对 warn/alarm 软阈值扣分；异常分基于 `dev_*`（相对同负荷区间"
+             "正常基准的偏差，按加载率分档）归一化。停机状态在加载后第一时间过滤，不参与统计。", "",
+             "## 2. 各机组指标", "",
+             "| 机组 | 最新健康分 | 风险等级 | 均值 | 最低 | 异常率 | 正常期均值 | 故障期均值 | 分离度 |",
+             "|------|-----------|----------|------|------|--------|------------|------------|--------|"]
+    for dv, m in out["devices"].items():
+        lines.append(f"| {dv} | {m['health_score_latest']} | {m['risk_level_latest']} | "
+                     f"{m['health_score_mean']} | {m['health_score_min']} | {m['anomaly_rate']} | "
+                     f"{m['normal_mean_score']} | {m['fault_mean_score']} | {m['separation']} |")
+    lines += ["", "> 故障期均值基于运行事件记录中的故障码 26 弱标签窗口，仅作合理性核对；"
+                  "两机故障高度同步，疑似站级共因事件，非独立故障真值。", "",
+              "## 3. 最新诊断（接口输出）", "",
+              "| 机组 | 健康分 | 风险 | 异常分 | 主因 | 当前值 | 正常范围 | 趋势 |",
+              "|------|--------|------|--------|------|--------|----------|------|"]
+    for d in sample["devices"]:
+        lines.append(f"| {d['device_id']} | {d['health_score']} | {d['risk_level']} | "
+                     f"{d['anomaly_score']} | {d['top_anomaly_factor']} | {d['current_value']} | "
+                     f"{d['normal_range']} | {d['trend_direction']} |")
+    lines += ["", "## 4. 局限", "",
+              "- 无多类故障标签与 RUL 标签，健康评分与风险分级为无监督结果，需人工/机理复核；",
+              "- 专家规则阈值来自工程经验，可在 `configs/health_thresholds.yaml` 调整；",
+              "- 喘振相关诊断需结合喘振边界（当前缺失），不在本阶段范围。", ""]
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text("\n".join(lines), encoding="utf-8")
 
 
 def main() -> int:
-    ap = argparse.ArgumentParser(description="评估健康诊断")
+    ap = argparse.ArgumentParser(description="健康诊断指标与报告")
     ap.add_argument("--processed-dir", default="data/processed")
-    ap.add_argument("--config", default="configs/health.yaml")
-    ap.add_argument("--report-dir", default="artifacts/metrics")
+    ap.add_argument("--thresholds", default=rules.DEFAULT_THRESHOLDS)
+    ap.add_argument("--health-config", default=FAULT_CFG)
+    ap.add_argument("--metrics-dir", default="artifacts/metrics")
+    ap.add_argument("--report", default="analysis/reports/phaseA5/health_report.md")
     args = ap.parse_args()
-    res = evaluate(args.processed_dir, args.config, args.report_dir)
-    for n, m in res["devices"].items():
-        print(f"  机组 {n}#: 正常HI={m['normal_mean_hi']} 故障HI={m['fault_mean_hi']} "
-              f"分离度={m['separation']} 提前={m['lead_time_hours']}h")
-    print("[OK] 健康评估完成")
+    out = evaluate(args.processed_dir, args.thresholds, args.health_config,
+                   args.metrics_dir, args.report)
+    for dv, m in out["devices"].items():
+        print(f"  {dv}: 健康分={m['health_score_latest']} 风险={m['risk_level_latest']} "
+              f"异常率={m['anomaly_rate']} 分离度={m['separation']}")
+    print("[OK] health_metrics.json 与 health_report.md 已生成")
     return 0
 
 

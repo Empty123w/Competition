@@ -59,10 +59,13 @@ def _read_f32_usecols(path: Path, usecols: list[str], encodings=("utf-8-sig", "g
     raise RuntimeError(f"读取失败 {path}")
 
 
-def _guard_div(num: pd.Series, den: pd.Series) -> pd.Series:
+def _guard_div(num: pd.Series, den: pd.Series, eps: float = EPS) -> pd.Series:
     d = den.astype("float64")
-    out = num.astype("float64") / d.where(d.abs() > EPS)
+    out = num.astype("float64") / d.where(d.abs() > eps)
     return out
+
+
+UNIT_FLOW_MIN_FLOW = 10.0  # m3/min, 小于该流量时单位流量功率无意义
 
 
 def _load_band(load_ratio: pd.Series, bands: dict) -> pd.Series:
@@ -113,7 +116,7 @@ def _device_frame(d: int, dev: pd.DataFrame, st: pd.DataFrame, op: pd.DataFrame,
                                 - f[["coil_u_c", "coil_v_c", "coil_w_c"]].min(axis=1))
     if {"bearing_d_c", "bearing_nd_c"}.issubset(f.columns):
         f["bearing_d_nd_max_diff_c"] = (f["bearing_d_c"] - f["bearing_nd_c"]).abs()
-    f["unit_flow_power"] = _guard_div(f["power_kw"], f["flow_m3_min"])
+    f["unit_flow_power"] = _guard_div(f["power_kw"], f["flow_m3_min"], UNIT_FLOW_MIN_FLOW)
 
     # 趋势斜率(首尾差分, 基于 shift(1) 防泄漏)
     for ind in TREND_INDICATORS:
