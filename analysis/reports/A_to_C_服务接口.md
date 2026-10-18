@@ -10,6 +10,7 @@
 ```python
 from air_station.models.forecasting.service import forecast_json
 from air_station.models.health.service import health_json
+from air_station.models.rul.service import rul_json
 
 def forecast_json(processed_dir: str = "data/processed",
                   config_path: str = "configs/forecasting.yaml",
@@ -18,6 +19,10 @@ def forecast_json(processed_dir: str = "data/processed",
 
 def health_json(processed_dir: str = "data/processed",
                 thresholds_path: str = "configs/health_thresholds.yaml") -> dict: ...
+
+def rul_json(config_path: str = "configs/rul.yaml",
+             sequences_path: str = "data/simulated/rul_sequences.parquet",
+             model_dir: str = "artifacts/models") -> dict: ...
 ```
 
 ## 2. 正常调用示例
@@ -26,12 +31,16 @@ def health_json(processed_dir: str = "data/processed",
 import json
 from air_station.models.forecasting.service import forecast_json
 from air_station.models.health.service import health_json
+from air_station.models.rul.service import rul_json
 
 fc = forecast_json()                       # 默认 15/30/60 分钟
 print(json.dumps(fc, ensure_ascii=False, allow_nan=False))
 
 h = health_json()                          # 4# / 5#
 print(json.dumps(h, ensure_ascii=False, allow_nan=False))
+
+r = rul_json()                             # 4# / 5#（模拟）
+print(json.dumps(r, ensure_ascii=False, allow_nan=False))
 ```
 
 ## 3. 成功 JSON 示例
@@ -79,6 +88,28 @@ print(json.dumps(h, ensure_ascii=False, allow_nan=False))
 - `trend_direction ∈ {平稳, 改善, 恶化}`；`current_value`/`normal_range` 不适用时为 `"N/A"`
 - 无 `model_version`/调试字段等额外键
 
+### RUL `rul_json`（模拟）
+
+```json
+{
+  "status": "success",
+  "validation_mode": "simulation",
+  "evaluation_time": "2028-01-31T16:00:00Z",
+  "devices": [
+    {"device_id": "4#", "estimated_rul_hours": 341.2,
+     "lower_bound_hours": 307.0, "upper_bound_hours": 672.7,
+     "method": "GradientBoostingRegressor"}
+  ]
+}
+```
+
+- 顶层字段**必须且只能**：`status, validation_mode, evaluation_time, devices`
+- 每个设备**必须且只能** 5 字段：`device_id, estimated_rul_hours, lower_bound_hours,
+  upper_bound_hours, method`
+- `validation_mode` 固定 `simulation`；`evaluation_time` 为 UTC ISO 8601（`Z` 结尾）
+- `devices` 稳定排序 `4#`,`5#`；`lower_bound_hours <= estimated_rul_hours <= upper_bound_hours`
+- 数值有限、非负
+
 ## 4. 必需输入文件与配置
 
 | 用途 | 文件 |
@@ -88,6 +119,9 @@ print(json.dumps(h, ensure_ascii=False, allow_nan=False))
 | 预测模型 | `artifacts/models/forecast_{15,30,60}m.pkl` |
 | 健康特征 | `data/processed/health_features.parquet` |
 | 健康阈值 | `configs/health_thresholds.yaml` |
+| RUL 模拟序列 | `data/simulated/rul_sequences.parquet` |
+| RUL 配置 | `configs/rul.yaml` |
+| RUL 模型 | `artifacts/models/rul_{median,lower,upper}.pkl` |
 
 ## 5. 模型文件位置与命名
 
@@ -100,6 +134,17 @@ artifacts/models/
 ├── forecast_30m.txt
 ├── forecast_60m.txt
 └── forecast_meta.json
+```
+
+RUL 模型：
+
+```
+artifacts/models/
+├── rul_median.pkl   # joblib: {model, features, alpha=0.5, model_type}
+├── rul_lower.pkl    # alpha=0.1
+├── rul_upper.pkl    # alpha=0.9
+├── rul_split.json   # episode 级划分
+└── rul_meta.json
 ```
 
 `.pkl` 为运行时加载格式；`.txt` 是 LightGBM 原生文本副本。加载 `.pkl` 需要 `lightgbm`
@@ -118,6 +163,10 @@ artifacts/models/
 | 配置文件缺失 | `FileNotFoundError` | 配置路径 |
 | 健康特征缺失/为空 | `FileNotFoundError`/`ValueError` | 路径 |
 | 健康阈值配置缺失 | `FileNotFoundError` | 阈值路径 |
+| RUL 模拟序列缺失 | `FileNotFoundError` | 序列路径 + “先运行 models.rul.simulator” |
+| RUL 模型缺失 | `FileNotFoundError` | 模型路径 + “先运行 models.rul.train” |
+| RUL 模型损坏 | `RuntimeError` | 模型路径 + 原因 |
+| RUL 特征缺失 | `ValueError` | 设备号 + 缺失提示 |
 
 ## 7. C 的职责边界
 

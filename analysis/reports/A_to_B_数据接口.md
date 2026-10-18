@@ -13,6 +13,7 @@
 | `data/processed/events.parquet` | 运行事件长表（状态/故障） | `time` + `device_id` | 1 分钟 |
 | `data/processed/maintenance.parquet` | 维护保养长表（运行/负载/保养剩余） | `time` + `device_id` | 1 分钟 |
 | `artifacts/metrics/forecast_test_predictions.parquet` | 测试集逐点预测（预测+区间+真值） | `time` + `horizon_minutes` | 1 分钟 |
+| `data/simulated/rul_sequences.parquet` | RUL 模拟退化序列（origin=simulated） | `episode_id`（+ `time`） | 6 小时 |
 
 > 若在全新环境，先运行 `python -m air_station.data.pipeline --stage standardize --input data`（及 `--stage features`）生成上述前四个文件。
 
@@ -66,6 +67,22 @@
 ### 2.4 `forecast_test_predictions.parquet`
 `time, horizon_minutes, predicted_flow, lower_bound, upper_bound, actual_flow`（单位 m3/min；测试集 2026-08-21 ~ 09-12）。
 
+### 2.5 `rul_sequences.parquet`（模拟，origin=simulated）
+| 字段 | 单位 | 说明 |
+|------|------|------|
+| time | — | 时间（每个 episode 连续，6 小时步长） |
+| device_id | — | 4 / 5 |
+| episode_id | — | 退化周期唯一标识，如 `4-018`；**保养复位后产生新 episode** |
+| scenario | — | normal / slow / fast / noisy |
+| rul_hours | h | **真实模拟 RUL 标签**（非真实寿命） |
+| vib1_current / vib2_current / vib3_current | mm/s | 振动（随退化指数上升） |
+| discharge_temp_c | ℃ | 排气温度 |
+| oil_tank_c | ℃ | 油箱油温 |
+| current_proxy_a | A | 代理电流 |
+| unit_flow_power | kW/(m3/min) | 单位流量功率 |
+| maintenance_reset | bool | 该点为保养复位点 |
+| origin | — | 固定 `simulated` |
+
 ## 3. B 获取在线预测
 
 ```python
@@ -81,6 +98,19 @@ from air_station.models.health.service import health_json
 h = health_json()
 # h["devices"] -> [{device_id, health_score, risk_level, anomaly_score, ...}, ...]
 ```
+
+## 4.1 B 获取 RUL 剩余寿命（模拟）
+
+```python
+from air_station.models.rul.service import rul_json
+r = rul_json()
+# r["devices"] -> [{device_id, estimated_rul_hours, lower_bound_hours, upper_bound_hours, method}, ...]
+```
+
+- `validation_mode = "simulation"`，为**模拟退化模型**的输出，用于寿命约束/演示；
+- 作为调度约束时可参考：`estimated_rul_hours` 越低，可对机组执行更保守的加载策略；
+  是否停机仍由 B 的安全规则与人工确认决定；
+- **不得**将 `estimated_rul_hours` 表述为真实寿命或维修依据。
 
 ## 5. 风险等级如何供 B 使用
 
