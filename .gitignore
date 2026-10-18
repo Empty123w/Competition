@@ -12,6 +12,7 @@ venv/
 data/processed/*
 !data/processed/.gitkeep
 !data/processed/data_manifest.json
+!data/processed/feature_manifest.json
 data/simulated/*
 !data/simulated/.gitkeep
 artifacts/models/*

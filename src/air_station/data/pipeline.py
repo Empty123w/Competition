@@ -261,15 +261,84 @@ def _write_report(path: Path, manifest: dict) -> None:
 
 
 # --------------------------------------------------------------------------- #
+# 阶段 A3: 特征工程
+# --------------------------------------------------------------------------- #
+def features_stage(raw_dir: str, processed_dir: str, report_dir: str,
+                   forecast_config: str, health_config: str,
+                   archive_dir: str = "analysis/reports/phaseA3") -> dict:
+    import numpy as np
+    import yaml
+    from air_station.models.forecasting import features as FF
+    from air_station.models.health import features as HF
+
+    fcfg = yaml.safe_load(Path(forecast_config).read_text(encoding="utf-8"))
+    hcfg = yaml.safe_load(Path(health_config).read_text(encoding="utf-8"))
+
+    fc = FF.build_forecast_features(processed_dir, fcfg)
+    hf = HF.build_health_features(raw_dir, processed_dir, hcfg)
+
+    def _no_inf(df):
+        num = df.select_dtypes(include=[np.number])
+        return bool(np.isinf(num.to_numpy()).sum() == 0)
+
+    checks = {
+        "forecast_no_inf": {"pass": _no_inf(fc)},
+        "health_no_inf": {"pass": _no_inf(hf)},
+        "forecast_rows": {"pass": len(fc) > 0, "rows": int(len(fc))},
+        "health_rows": {"pass": len(hf) > 0, "rows": int(len(hf))},
+        "health_has_running_field": {"pass": "running" in hf.columns},
+        "health_dev_nan_when_stopped": {
+            "pass": bool(hf.loc[~hf["running"].astype(bool),
+                                [c for c in hf.columns if c.startswith("dev_")]].isna().all().all())},
+    }
+    checks["all_pass"] = {"pass": all(v.get("pass") for v in checks.values())}
+
+    _write_json(Path(report_dir) / "feature_checks.json", checks)
+    _write_feature_dictionary(FF.FEATURE_SPECS, HF.FEATURE_SPECS, Path(archive_dir))
+    manifest = {
+        "forecast_features": {"rows": int(len(fc)), "columns": list(fc.columns)},
+        "health_features": {"rows": int(len(hf)), "columns": list(hf.columns)},
+        "checks": checks,
+    }
+    _write_json(Path(processed_dir) / "feature_manifest.json", manifest)
+    return manifest
+
+
+def _write_feature_dictionary(forecast_specs: list, health_specs: list, out_dir: Path) -> None:
+    import csv
+    out_dir.mkdir(parents=True, exist_ok=True)
+    rows = []
+    for scope, specs in (("forecast", forecast_specs), ("health", health_specs)):
+        for s in specs:
+            rows.append({"scope": scope, "name": s["name"], "unit": s["unit"],
+                         "description": s["desc"], "calculation": s["calc"],
+                         "missing_strategy": s["missing"]})
+    with open(out_dir / "feature_dictionary.csv", "w", newline="", encoding="utf-8-sig") as f:
+        w = csv.DictWriter(f, fieldnames=["scope", "name", "unit", "description",
+                                          "calculation", "missing_strategy"])
+        w.writeheader()
+        w.writerows(rows)
+    lines = ["# 阶段 A3 特征字典", "", "| scope | name | unit | description | calculation | missing |",
+             "|-------|------|------|-------------|-------------|---------|"]
+    for r in rows:
+        lines.append(f"| {r['scope']} | {r['name']} | {r['unit']} | {r['description']} | "
+                     f"{r['calculation']} | {r['missing_strategy']} |")
+    (out_dir / "feature_dictionary.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+# --------------------------------------------------------------------------- #
 # CLI
 # --------------------------------------------------------------------------- #
 def main() -> int:
-    ap = argparse.ArgumentParser(description="数据流水线 (A1 校验 / A2 标准化)")
-    ap.add_argument("--stage", choices=["validate", "clean", "standardize", "all"], default="validate")
+    ap = argparse.ArgumentParser(description="数据流水线 (A1 校验 / A2 标准化 / A3 特征)")
+    ap.add_argument("--stage", choices=["validate", "clean", "standardize", "features", "all"],
+                    default="validate")
     ap.add_argument("--input", dest="raw_dir", default="data")
     ap.add_argument("--processed-dir", default="data/processed")
     ap.add_argument("--report-dir", default="artifacts/metrics")
     ap.add_argument("--config", default="configs/data_quality.yaml")
+    ap.add_argument("--forecast-config", default="configs/forecasting.yaml")
+    ap.add_argument("--health-config", default="configs/health.yaml")
     args = ap.parse_args()
 
     if args.stage in ("validate", "all"):
@@ -287,6 +356,18 @@ def main() -> int:
             if k != "all_pass":
                 print(f"    {'PASS' if v.get('pass') else 'FAIL'} {k}")
         print(f"[标准化] 总计: {'PASS' if c['all_pass']['pass'] else 'FAIL'}")
+        if not c["all_pass"]["pass"]:
+            return 1
+    if args.stage in ("features", "all"):
+        m = features_stage(args.raw_dir, args.processed_dir, args.report_dir,
+                           args.forecast_config, args.health_config)
+        c = m["checks"]
+        print(f"[特征] forecast {m['forecast_features']['rows']:,} 行 / "
+              f"health {m['health_features']['rows']:,} 行")
+        for k, v in c.items():
+            if k != "all_pass":
+                print(f"    {'PASS' if v.get('pass') else 'FAIL'} {k}")
+        print(f"[特征] 总计: {'PASS' if c['all_pass']['pass'] else 'FAIL'}")
         if not c["all_pass"]["pass"]:
             return 1
     if args.stage == "clean":

@@ -11,9 +11,9 @@ paths:
 
 # ---- 目标与预测时间范围 ----
 target:
-  column: "总流量"
+  column: "total_flow_m3_min"
   unit: "m3/min"
-  source: "data/processed/station.parquet"
+  source: "data/processed/station_timeseries.parquet"
   origin: inferred            # = 4#实时流量 + 5#实时流量
 
 data_range:                   # 训练可用数据的时间范围
@@ -33,21 +33,16 @@ split:
 
 # ---- 特征 ----
 features:
-  calendar: [hour, minute, dow, is_weekend]   # 无单位(类别/计数)
-  lags:
-    - { minutes: 1,    unit: min }
-    - { minutes: 5,    unit: min }
-    - { minutes: 15,   unit: min }
-    - { minutes: 60,   unit: min }
-    - { minutes: 1440, unit: min }
-  rolling:
-    - { minutes: 15,  unit: min, agg: mean }
-    - { minutes: 60,  unit: min, agg: mean }
-    - { minutes: 240, unit: min, agg: mean }
-  ambient:
-    - { column: "站房温度", unit: "℃" }
-    - { column: "站房湿度", unit: "%RH" }
-  load_ratio: { column: "负荷率", unit: "-" }
+  calendar: [hour, weekday, month, is_workday]   # 无单位
+  cycle_encoding: [hour_sin, hour_cos, weekday_sin, weekday_cos]  # 周期 sin/cos
+  lags_minutes: [1, 5, 15, 30, 60, 1440]          # 历史负荷滞后(min); 可选周滞后 10080
+  optional_lag_minutes: 10080
+  rolling_minutes: [5, 15, 30, 60]                # 滚动窗口(min), 统计 mean/std/min/max
+  diff_minutes: [1, 5, 15]                         # 变化率(min)
+  ambient: [station_temperature_c, station_humidity_percent]   # ℃ / %RH
+  extra: [header_pressure_mpa, running_count, load_level]      # MPa / 台 / 类别
+  rolling_closed: left          # 滚动窗口左闭右开, 且先 shift(1)
+  volatility_window_minutes: 15
 
 # ---- 模型参数 ----
 model:

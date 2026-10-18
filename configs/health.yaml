@@ -12,6 +12,11 @@ paths:
 # ---- 设备与粒度 ----
 devices: [4, 5]
 granularity_minutes: 60         # 单位 min, 健康评估降采样粒度
+
+# 加载率分层(用于建立分工况参考分布)
+load_bands:
+  low_upper: 0.3                # load_ratio < 0.3  -> low
+  high_lower: 0.7               # load_ratio > 0.7  -> high; 其余 mid
 data_range:
   start: "2026-03-12 00:00:00"
   end: "2026-09-12 00:00:00"

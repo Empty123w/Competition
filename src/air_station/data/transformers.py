@@ -9,20 +9,28 @@ import pandas as pd
 TIME_COL = "time"
 
 
+_ALIASES = {"station": "station_timeseries", "device": "device_timeseries",
+            "long": None}
+
+
 def load_processed(processed_dir: str | Path, name: str) -> pd.DataFrame:
-    """读取 processed 目录下的表 (parquet 优先, 回退 csv)。"""
+    """读取 processed 目录下的表 (parquet 优先, 回退 csv)。
+
+    支持别名: station -> station_timeseries, device -> device_timeseries。
+    """
     d = Path(processed_dir)
-    pq = d / f"{name}.parquet"
-    csv = d / f"{name}.csv"
-    if pq.exists():
-        df = pd.read_parquet(pq)
-    elif csv.exists():
-        df = pd.read_csv(csv)
-    else:
-        raise FileNotFoundError(f"未找到 {pq} 或 {csv}")
-    if TIME_COL in df.columns:
-        df[TIME_COL] = pd.to_datetime(df[TIME_COL])
-    return df
+    candidates = [name]
+    if name in _ALIASES and _ALIASES[name]:
+        candidates.append(_ALIASES[name])
+    for cand in candidates:
+        for ext in ("parquet", "csv"):
+            p = d / f"{cand}.{ext}"
+            if p.exists():
+                df = pd.read_parquet(p) if ext == "parquet" else pd.read_csv(p)
+                if TIME_COL in df.columns:
+                    df[TIME_COL] = pd.to_datetime(df[TIME_COL])
+                return df
+    raise FileNotFoundError(f"未找到 {name} (尝试: {candidates}) in {d}")
 
 
 def resample(df: pd.DataFrame, rule: str, agg: str = "mean",
