@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# 生成产物（不入库，保留 .gitkeep）
+data/processed/*
+!data/processed/.gitkeep
+data/simulated/*
+!data/simulated/.gitkeep
+artifacts/models/*
+!artifacts/models/.gitkeep
+artifacts/metrics/*
+!artifacts/metrics/.gitkeep
+artifacts/logs/*
+!artifacts/logs/.gitkeep
+
+# 前端
+node_modules/
+frontend/node_modules/
+frontend/dist/
+
+# 编辑器
+.vscode/
+.idea/
+.DS_Store
+
+# 环境
+.env
+.env.*

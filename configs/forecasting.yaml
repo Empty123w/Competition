@@ -1,0 +1,37 @@
+# 用气负荷预测配置
+target: 总流量
+unit: m3/min
+
+# 时间粒度
+granularity: minute        # minute | hour
+resample_rule: null        # granularity=hour 时用 "1h"
+
+# 数据集切分（按时间）
+split:
+  train_end: "2026-07-31 23:59:00"
+  valid_end: "2026-08-20 23:59:00"
+  # 其余为 test
+
+# 特征
+features:
+  calendar: [hour, minute, dow, is_weekend]
+  lags_minutes: [1, 5, 15, 60, 1440]     # 滞后分钟数（粒度为小时时自动换算）
+  rolling_minutes: [15, 60, 240]
+  load_ratio: true
+  ambient: [站房温度, 站房湿度]
+
+# 预测时域
+horizon_minutes: [15, 60, 1440]
+
+# 模型
+model:
+  type: "hist_gbdt"     # naive | seasonal_naive | ridge | hist_gbdt
+  random_state: 42
+  params:
+    max_iter: 200
+    learning_rate: 0.08
+    max_depth: 6
+
+# 评估
+evaluate:
+  mape_epsilon: 1.0     # 避免分母为 0

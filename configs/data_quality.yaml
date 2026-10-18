@@ -1,0 +1,36 @@
+# 数据质量与清洗配置
+raw_dir: data
+processed_dir: data/processed
+simulated_dir: data/simulated
+fixtures_dir: data/fixtures
+
+# 时间
+time_column: time
+expected_freq_seconds: 60
+expected_start: "2026-03-12 00:00:00"
+expected_end: "2026-09-12 00:00:00"
+
+# 无效列（整列无效，直接剔除）
+drop_columns:
+  - 4#B相电流
+  - 5#B相电流
+  - 大气压
+
+# 哨兵值（维护保养记录计数器）
+sentinel_values:
+  65535: "uint16_overflow"
+  4294970000: "uint32_overflow"
+
+# 缺失处理
+missing:
+  # 中冷/后冷温度前 6 天连续缺测：标记 + 线性插值上限
+  max_interpolate_gap_minutes: 30
+  flag_prefix: "miss_"
+
+# 环境参数掉点
+environment_zero_fill:
+  columns: [站房温度, 站房湿度]
+  method: "ffill"   # 0 视为掉点，用前值填充
+
+# 运行态掩码：功率大于该阈值视为运行
+running_power_threshold_kw: 1.0

@@ -1,0 +1,53 @@
+# 设备健康诊断配置
+devices: [4, 5]
+granularity_minutes: 60        # 健康评估的时间粒度(降采样以降内存)
+
+# 参与健康评估的指标(来自设备状态监测)
+indicators:
+  vibration: [一级震动, 二级震动, 三级震动]
+  temperature:
+    - 齿轮箱供油温度
+    - 电机轴承D端温度
+    - 电机轴承ND端温度
+    - 电机线圈1U1温度
+    - 电机线圈1V1温度
+    - 电机线圈1W1温度
+    - 电机温度
+    - 油箱油温
+    - 排气温度
+    - 二级进口温度
+    - 三级进口温度
+    - 冷却水温度
+    - 中冷入口温度1
+    - 中冷出口温度1
+    - 后冷入口温度1
+    - 后冷出口温度1
+
+# 阈值规则(软阈值, 超出扣分)
+rules:
+  排气温度:  {warn: 100, alarm: 110}      # ℃
+  油箱油温:  {warn: 65,  alarm: 75}
+  电机温度:  {warn: 75,  alarm: 90}
+  一级震动:  {warn: 8,   alarm: 12}       # mm/s
+  二级震动:  {warn: 8,   alarm: 12}
+  三级震动:  {warn: 8,   alarm: 12}
+
+# 无监督异常检测
+anomaly:
+  method: "isolation_forest"  # rolling_zscore | isolation_forest
+  baseline_end: "2026-08-20 23:59:00"   # 用此之前的“正常期”拟合
+  rolling_window: 60
+  zscore_threshold: 3.0
+  contamination: 0.02
+  random_state: 42
+
+# 健康指数合成
+scoring:
+  weights:
+    rule: 0.5
+    anomaly: 0.5
+  levels:
+    healthy: 80
+    watch: 60
+    warning: 40
+    # < warning 阈值 视为 critical
