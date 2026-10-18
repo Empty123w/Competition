@@ -1,7 +1,14 @@
-"""数据流水线: 加载 -> 校验 -> 清洗 -> 持久化 -> 质量报告。
+"""数据流水线 (阶段 A1 起)。
 
-针对低内存环境, 对两张大型表(设备状态监测/设备运行参数)采用**分块流式**处理,
-逐块 melt 并追加写入 parquet, 避免一次性构建千万行长表。
+用法:
+  # 阶段 A1: 读取与校验原始数据
+  python -m air_station.data.pipeline --stage validate --input data
+
+  # 阶段 A2: 清洗与持久化(分块流式, 适配低内存)
+  python -m air_station.data.pipeline --stage clean --input data
+
+  # 全部
+  python -m air_station.data.pipeline --stage all
 """
 from __future__ import annotations
 
@@ -18,11 +25,67 @@ from air_station.data import cleaners, loaders, validators
 TIME_COL = "time"
 CHUNK = 20000
 DEVICE_PREFIX = re.compile(r"^([45])#(.+)$")
-
-# 需要分块流式处理的大表
 BIG_TABLES = {"设备状态监测", "设备运行参数"}
 
 
+# --------------------------------------------------------------------------- #
+# 工具
+# --------------------------------------------------------------------------- #
+def _load_config(path: str) -> dict:
+    import yaml
+    p = Path(path)
+    return yaml.safe_load(p.read_text(encoding="utf-8")) if p.exists() else {}
+
+
+def _write_json(path: Path, payload) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2), encoding="utf-8")
+
+
+# --------------------------------------------------------------------------- #
+# 阶段 A1: 校验
+# --------------------------------------------------------------------------- #
+def validate_stage(raw_dir: str, report_dir: str, config_path: str,
+                   archive_dir: str = "analysis/reports/phaseA1") -> dict:
+    config = _load_config(config_path)
+    report = validators.validate_raw(raw_dir, config)
+    out = Path(report_dir)
+    _write_json(out / "raw_validation.json", report)
+    _write_json(out / "file_hash_manifest.json", report["file_hashes"])
+    _write_json(out / "validation_issues.json",
+                {"errors": [i for i in report["issues"] if i["level"] == "error"],
+                 "warnings": [i for i in report["issues"] if i["level"] == "warning"]})
+    # 可入库的归档副本
+    if archive_dir:
+        arc = Path(archive_dir)
+        _write_json(arc / "raw_validation.json", report)
+        _write_json(arc / "file_hash_manifest.json", report["file_hashes"])
+        _write_json(arc / "validation_issues.json",
+                    {"errors": [i for i in report["issues"] if i["level"] == "error"],
+                     "warnings": [i for i in report["issues"] if i["level"] == "warning"]})
+    return report
+
+
+def print_validation(report: dict) -> None:
+    print(f"[校验] 原始目录: {report['raw_dir']}")
+    print(f"[校验] 已加载表: {len(report['files_loaded'])} 张")
+    for name, info in report["per_table"].items():
+        print(f"    - {info['file']:<22} 行={info['rows']:>7} "
+              f"范围={info['time_min']}~{info['time_max']} 频率={info['freq_mode_s']}s "
+              f"重复={info['duplicates']} 乱序={info['out_of_order']}")
+    al = report["alignment"]
+    print(f"[校验] 跨表对齐: {'通过' if al.get('aligned') else '不一致'} (基准={al.get('base_table')})")
+    print(f"[校验] 文件哈希: 已生成 {len(report['file_hashes'])} 条")
+    print(f"[校验] 错误 {report['error_count']} 条, 警告 {report['warning_count']} 条, "
+          f"结果: {'PASS' if report['passed'] else 'FAIL'}")
+    for i in report["issues"]:
+        loc = "/".join(x for x in (i["file"], i["field"]) if x)
+        print(f"    [{i['level'].upper()}] {i['code']} {loc} :: {i['message']}")
+
+
+# --------------------------------------------------------------------------- #
+# 阶段 A2: 清洗(分块流式)
+# --------------------------------------------------------------------------- #
 def _numeric_dtype(columns) -> dict:
     return {c: "float32" for c in columns if c != TIME_COL}
 
@@ -30,12 +93,7 @@ def _numeric_dtype(columns) -> dict:
 def _iter_chunks(raw_dir: Path, name: str):
     filename, kind = loaders.TABLES[name]
     path = raw_dir / filename
-    if kind == "csv_utf8":
-        enc = "utf-8-sig"
-    elif kind == "csv_gbk":
-        enc = "gbk"
-    else:
-        enc = None
+    enc = "utf-8-sig" if kind == "csv_utf8" else ("gbk" if kind == "csv_gbk" else None)
     if kind.startswith("csv"):
         header = pd.read_csv(path, nrows=0, encoding=enc)
         dtype = _numeric_dtype(header.columns)
@@ -44,16 +102,17 @@ def _iter_chunks(raw_dir: Path, name: str):
         for ch in reader:
             yield ch
     else:
-        df = loaders._read_xlsx(path)
-        df[TIME_COL] = pd.to_datetime(df[TIME_COL], errors="coerce")
+        df = loaders.load_excel(path)
         for i in range(0, len(df), CHUNK):
             yield df.iloc[i:i + CHUNK].copy()
 
 
 def _clean_chunk(name: str, ch: pd.DataFrame, config: dict) -> pd.DataFrame:
-    drop_cols = config.get("drop_columns", [])
-    sentinels = config.get("sentinel_values", {})
-    thr = config.get("running_power_threshold_kw", 1.0)
+    dq = config.get("data_quality", config)
+    drop_cols = [c["name"] for c in dq.get("invalid_columns", [])] if isinstance(
+        dq.get("invalid_columns", []), list) else []
+    sentinels = {str(s["value"]): s.get("meaning") for s in dq.get("sentinels", [])}
+    thr = dq.get("running_state", {}).get("power_threshold_kw", 1.0)
     ch = cleaners.drop_invalid(ch, drop_cols)
     ch = cleaners.mask_sentinels(ch, sentinels)
     if name == "设备运行参数":
@@ -93,45 +152,25 @@ def _stream_write(path: Path, chunks_iter, transform) -> int:
     return n
 
 
-def _time_only(path: Path, name: str) -> pd.Series:
-    filename, kind = loaders.TABLES[name]
-    p = path / filename
-    if kind == "csv_gbk":
-        return pd.to_datetime(pd.read_csv(p, usecols=[TIME_COL], encoding="gbk")[TIME_COL])
-    if kind == "csv_utf8":
-        return pd.to_datetime(pd.read_csv(p, usecols=[TIME_COL], encoding="utf-8-sig")[TIME_COL])
-    df = loaders._read_xlsx(p)
-    return pd.to_datetime(df[TIME_COL])
-
-
-def run(raw_dir: str = "data",
-        processed_dir: str = "data/processed",
-        report_dir: str = "artifacts/metrics",
-        config_path: str = "configs/data_quality.yaml") -> dict:
+def clean_stage(raw_dir: str, processed_dir: str, report_dir: str, config_path: str) -> dict:
     raw = Path(raw_dir)
     out_dir = Path(processed_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    config = cleaners.load_config(config_path)
+    config = _load_config(config_path)
 
     written: list[str] = []
     long_rows = 0
-
-    # 1) 大表分块流式: 同时落盘宽表与长表
     for name in BIG_TABLES:
         wide_path = out_dir / f"{name}.parquet"
         long_path = out_dir / f"long_{name}.parquet"
-
-        def _clean_only(ch, _n=name):
-            return _clean_chunk(_n, ch, config)
-
-        # 宽表: 需与长表一致, 用同一清洗
-        _stream_write(wide_path, _iter_chunks(raw, name), _clean_only)
+        _stream_write(wide_path, _iter_chunks(raw, name),
+                      lambda ch, _n=name: _clean_chunk(_n, ch, config))
         written.append(str(wide_path))
-        long_rows += _stream_write(long_path, _iter_chunks(raw, name),
-                                   lambda ch, _n=name: _long_chunk(_n, _clean_chunk(_n, ch, config)))
+        long_rows += _stream_write(
+            long_path, _iter_chunks(raw, name),
+            lambda ch, _n=name: _long_chunk(_n, _clean_chunk(_n, ch, config)))
         written.append(str(long_path))
 
-    # 2) 小表整表处理
     small: dict[str, pd.DataFrame] = {}
     for name in loaders.TABLES:
         if name in BIG_TABLES:
@@ -139,58 +178,45 @@ def run(raw_dir: str = "data",
         df = loaders.load_table(raw, name)
         df = _clean_chunk(name, df, config)
         small[name] = df
-        path = out_dir / f"{name}.parquet"
-        cleaners._write_frame(df, path)
-        written.append(str(path))
+        cleaners._write_frame(df, out_dir / f"{name}.parquet")
+        written.append(str(out_dir / f"{name}.parquet"))
         ldf = cleaners.to_long({name: df}).get(name)
         if ldf is not None and len(ldf):
-            lp = out_dir / f"long_{name}.parquet"
-            cleaners._write_frame(ldf, lp)
-            written.append(str(lp))
+            cleaners._write_frame(ldf, out_dir / f"long_{name}.parquet")
+            written.append(str(out_dir / f"long_{name}.parquet"))
             long_rows += len(ldf)
 
-    # 3) 站级宽表
     station = cleaners.build_station(small)
     cleaners._write_frame(station, out_dir / "station.parquet")
     written.append(str(out_dir / "station.parquet"))
 
-    # 4) 校验报告(仅读时间列 + 形状)
-    times = {n: _time_only(raw, n) for n in loaders.TABLES}
-    base = times[list(times)[0]]
-    alignment = {"aligned": True, "start": str(base.min()), "end": str(base.max()), "tables": {}}
-    for n, t in times.items():
-        ok = len(t) == len(base) and bool((t.reset_index(drop=True) == base.reset_index(drop=True)).all())
-        steps = t.diff().dt.total_seconds().dropna()
-        alignment["tables"][n] = {
-            "rows": int(len(t)), "aligned": ok,
-            "duplicated_ts": int(t.duplicated().sum()),
-            "freq_mode_s": float(steps.mode().iloc[0]) if not steps.empty else None,
-        }
-        alignment["aligned"] &= ok
-
-    report = {
-        "alignment": alignment,
-        "processed_files": written,
-        "long_rows": int(long_rows),
-        "station_rows": int(len(station)),
-    }
-    out = Path(report_dir)
-    out.mkdir(parents=True, exist_ok=True)
-    (out / "data_pipeline_report.json").write_text(
-        json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+    report = {"processed_files": written, "long_rows": int(long_rows),
+              "station_rows": int(len(station))}
+    _write_json(Path(report_dir) / "data_pipeline_report.json", report)
     return report
 
 
+# --------------------------------------------------------------------------- #
+# CLI
+# --------------------------------------------------------------------------- #
 def main() -> int:
-    ap = argparse.ArgumentParser(description="数据流水线")
-    ap.add_argument("--raw-dir", default="data")
+    ap = argparse.ArgumentParser(description="数据流水线 (A1 校验 / A2 清洗)")
+    ap.add_argument("--stage", choices=["validate", "clean", "all"], default="validate")
+    ap.add_argument("--input", dest="raw_dir", default="data")
     ap.add_argument("--processed-dir", default="data/processed")
     ap.add_argument("--report-dir", default="artifacts/metrics")
     ap.add_argument("--config", default="configs/data_quality.yaml")
     args = ap.parse_args()
-    rep = run(args.raw_dir, args.processed_dir, args.report_dir, args.config)
-    print(f"[OK] 对齐={rep['alignment']['aligned']} 长表行数={rep['long_rows']} "
-          f"站级行数={rep['station_rows']} 产出文件={len(rep['processed_files'])}")
+
+    if args.stage in ("validate", "all"):
+        report = validate_stage(args.raw_dir, args.report_dir, args.config)
+        print_validation(report)
+        if not report["passed"]:
+            return 1
+    if args.stage in ("clean", "all"):
+        rep = clean_stage(args.raw_dir, args.processed_dir, args.report_dir, args.config)
+        print(f"[清洗] 长表行数={rep['long_rows']} 站级行数={rep['station_rows']} "
+              f"产出文件={len(rep['processed_files'])}")
     return 0
 
 
