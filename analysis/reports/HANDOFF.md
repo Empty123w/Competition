@@ -7,6 +7,7 @@
 > - 调度算法（B）：`analysis/reports/A_to_B_数据接口.md`
 > - 后端（C）：`analysis/reports/A_to_C_服务接口.md`
 > - 字段口径：`analysis/reports/phaseA0/接口字段清单.md`（已与当前实现同步）
+> - 剩余寿命（模拟）：`rul_json()`，见 `analysis/reports/phaseA5_rul/rul_report.md`（`validation_mode=simulation`）
 
 ---
 

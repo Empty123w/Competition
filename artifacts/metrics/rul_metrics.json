@@ -1,0 +1,28 @@
+{
+  "validation_mode": "simulation",
+  "origin": "simulated",
+  "model_type": "GradientBoostingRegressor",
+  "n_test": 1906,
+  "test_episodes": 6,
+  "metrics": {
+    "MAE": 68.59,
+    "RMSE": 111.236,
+    "MAPE": 9.172,
+    "within_20pct": 0.8861
+  },
+  "interval_coverage": 0.7445,
+  "interval_level": 0.8,
+  "monotonic_decreasing_ratio": 0.5915,
+  "spearman_pred_true": 0.9785,
+  "baseline": {
+    "name": "trend_extrapolation(vib_roll)",
+    "MAE": 634.116,
+    "RMSE": 761.355,
+    "MAPE": 75.613,
+    "within_20pct": 0.2009
+  },
+  "model_beats_baseline_MAE": true,
+  "bounds": {
+    "lower_le_median_le_upper": true
+  }
+}

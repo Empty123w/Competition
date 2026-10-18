@@ -1,0 +1,65 @@
+# =====================================================================
+# RUL(剩余寿命)模拟与建模配置
+# - 数据来源为“模拟”(origin=simulated); 特征范围参考真实 4#/5# 数据
+# - 固定随机种子, 保证可复现
+# =====================================================================
+
+seed: 42
+devices: [4, 5]
+
+# RUL 口径
+initial_rul_hours: 2000.0            # 每个 episode 初始 RUL
+maintenance_reset_rul_hours: 300.0   # 退化到此值触发保养复位, 开始新 episode
+step_hours: 6.0                      # 模拟步长(h)
+
+# 每个设备生成多少个退化 episode(含保养复位后的新周期)
+episodes_per_device: 20
+
+# 场景(权重用于按设备逐 episode 抽样)
+scenarios:
+  normal: { weight: 0.40, duration_hours: 1800.0, k_vib: 1.2, k_temp: 1.0, noise: 0.05 }
+  slow:   { weight: 0.20, duration_hours: 2400.0, k_vib: 0.9, k_temp: 0.8, noise: 0.05 }
+  fast:   { weight: 0.20, duration_hours: 1100.0, k_vib: 1.7, k_temp: 1.4, noise: 0.06 }
+  noisy:  { weight: 0.20, duration_hours: 1800.0, k_vib: 1.2, k_temp: 1.0, noise: 0.20 }
+
+# 健康基线(参考真实数据 p50) —— 随退化指数上升
+device_baseline:
+  4: { vib1: 4.2, vib2: 8.9, vib3: 4.2, discharge_temp: 90.0, oil_tank: 56.0,
+       current_proxy: 80.0, unit_flow_power: 5.2 }
+  5: { vib1: 4.2, vib2: 8.9, vib3: 4.2, discharge_temp: 92.0, oil_tank: 58.0,
+       current_proxy: 82.0, unit_flow_power: 5.4 }
+
+# 退化增益(退化指数 d∈[0,1] 时的上升幅度)
+signals:
+  temp_grow_c: 26.0        # 排气温度上升(℃)
+  oil_grow_c: 13.0         # 油箱油温上升(℃)
+  current_grow_a: 8.0      # 代理电流上升(A)
+  ufp_grow: 1.2            # 单位流量功率上升
+
+# episode 级划分(禁止同一退化序列跨集合)
+split: { train: 0.70, val: 0.15, test: 0.15 }
+
+# 模型
+model:
+  type: GradientBoostingRegressor
+  random_state: 42
+  params: { n_estimators: 300, max_depth: 3, learning_rate: 0.05, subsample: 0.9 }
+
+# 趋势外推基线
+baseline:
+  indicator: vib_roll          # 使用振动的滚动均值
+  window_steps: 8
+  threshold: 18.0              # 退化指标阈值(mm/s 量级), 外推到该值估算 RUL
+
+# 评估
+evaluate:
+  within_pct: 0.20            # 预测落在真实 ±20% 的比例
+  interval_level: 0.80        # 下/上限分位数 0.1/0.9 -> 80% 区间
+
+# 产物路径(相对)
+paths:
+  simulated_dir: data/simulated
+  model_dir: artifacts/models
+  metrics_dir: artifacts/metrics
+  report_dir: analysis/reports/phaseA5_rul
+  figure_dir: analysis/figures

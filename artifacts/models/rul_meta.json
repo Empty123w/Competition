@@ -1,0 +1,21 @@
+{
+  "model_type": "GradientBoostingRegressor",
+  "features": [
+    "vib1_current",
+    "vib2_current",
+    "vib3_current",
+    "discharge_temp_c",
+    "oil_tank_c",
+    "current_proxy_a",
+    "unit_flow_power",
+    "vib_roll",
+    "temp_roll",
+    "vib_delta"
+  ],
+  "n_train": 7926,
+  "episodes": {
+    "train": 28,
+    "val": 6,
+    "test": 6
+  }
+}
