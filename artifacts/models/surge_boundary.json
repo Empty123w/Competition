@@ -1,0 +1,76 @@
+{
+  "boundary_version": "surge-proxy-v0.1",
+  "generated_at": "2026-10-18T15:12:46Z",
+  "validation_mode": "simulation",
+  "source": "inferred",
+  "note": "历史少见运行点包络, 非真实喘振线",
+  "devices": {
+    "4#": {
+      "knots": [
+        {
+          "pressure_mpa": 0.5193,
+          "flow_m3min": 242.68,
+          "n": 75501
+        },
+        {
+          "pressure_mpa": 0.5671,
+          "flow_m3min": 228.8,
+          "n": 38422
+        },
+        {
+          "pressure_mpa": 0.59,
+          "flow_m3min": 223.66,
+          "n": 19396
+        },
+        {
+          "pressure_mpa": 0.6008,
+          "flow_m3min": 188.8,
+          "n": 40220
+        },
+        {
+          "pressure_mpa": 0.6348,
+          "flow_m3min": 219.84,
+          "n": 33088
+        }
+      ],
+      "low_percentile": 0.02,
+      "min_bin_samples": 500
+    },
+    "5#": {
+      "knots": [
+        {
+          "pressure_mpa": 0.5269,
+          "flow_m3min": 245.96,
+          "n": 49502
+        },
+        {
+          "pressure_mpa": 0.5627,
+          "flow_m3min": 236.96,
+          "n": 57472
+        },
+        {
+          "pressure_mpa": 0.59,
+          "flow_m3min": 229.68,
+          "n": 13719
+        },
+        {
+          "pressure_mpa": 0.6004,
+          "flow_m3min": 119.88,
+          "n": 98489
+        },
+        {
+          "pressure_mpa": 0.6428,
+          "flow_m3min": 226.01,
+          "n": 28004
+        },
+        {
+          "pressure_mpa": 0.661,
+          "flow_m3min": 159.88,
+          "n": 9585
+        }
+      ],
+      "low_percentile": 0.02,
+      "min_bin_samples": 500
+    }
+  }
+}

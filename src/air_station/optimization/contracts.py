@@ -54,6 +54,11 @@ RC_TRANSITION_CAPACITY_GAP = "TRANSITION_CAPACITY_GAP"
 RC_OUT_OF_MODEL_RANGE = "OUT_OF_MODEL_RANGE"
 RC_POWER_OVER_CAP = "POWER_OVER_CAP"
 RC_SURGE_NOT_ASSESSED = "SURGE_NOT_ASSESSED_B4"
+RC_SURGE_HIGH = "SURGE_HIGH_BLOCKED"
+RC_SURGE_MEDIUM = "SURGE_MEDIUM_REVIEW"
+RC_SURGE_UNKNOWN = "SURGE_UNKNOWN"
+RC_SURGE_BOUNDARY_UNKNOWN = "SURGE_BOUNDARY_UNKNOWN"
+RC_SURGE_DATA_MISSING = "SURGE_DATA_MISSING"
 RC_PRESSURE_COUNTERFACTUAL = "PRESSURE_COUNTERFACTUAL_UNSUPPORTED"
 RC_RUL_SIMULATION = "RUL_SIMULATION_PENALTY_ON"
 
@@ -383,6 +388,36 @@ class RulAssessment:
         }
 
 
+@dataclass
+class SurgeAssessment:
+    """B4 喘振风险代理评估结果 (任务书 V1.1 §8)。
+
+    代理评分/统计边界, **非**厂家真实喘振线; 无法评价时必须 unknown, 不得默认 low。
+    """
+    status: str = "success"
+    boundary_version: str = ""
+    boundary_source: str = ""
+    validation_mode: str = "simulation"
+    devices: list[dict] = field(default_factory=list)
+    safety_blocked: bool = False
+    counts: dict = field(default_factory=dict)
+    reason_codes: list[str] = field(default_factory=list)
+    capability: dict = field(default_factory=dict)
+
+    def to_dict(self) -> dict:
+        return {
+            "status": self.status,
+            "boundary_version": self.boundary_version,
+            "boundary_source": self.boundary_source,
+            "validation_mode": self.validation_mode,
+            "devices": _json_safe(self.devices),
+            "safety_blocked": bool(self.safety_blocked),
+            "counts": _json_safe(self.counts),
+            "reason_codes": list(self.reason_codes),
+            "capability": _json_safe(self.capability),
+        }
+
+
 # ------------------------------------------------------------------ #
 # 规则状态 (供最小运行/停机与去抖判定; 由 pipeline 跨步传递)
 # ------------------------------------------------------------------ #
@@ -469,6 +504,8 @@ class DispatchResult:
     requires_field_review: bool = True
     fallback_candidate: Optional[dict] = None
     is_fallback: bool = False
+    surge_assessment: dict = field(default_factory=dict)
+    safety_blocked: bool = False
 
     @property
     def feasible(self) -> bool:
@@ -507,6 +544,8 @@ class DispatchResult:
             "requires_field_review": bool(self.requires_field_review),
             "fallback_candidate": _json_safe(self.fallback_candidate) if self.fallback_candidate else None,
             "is_fallback": bool(self.is_fallback),
+            "surge_assessment": _json_safe(self.surge_assessment),
+            "safety_blocked": bool(self.safety_blocked),
         }
 
 

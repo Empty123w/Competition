@@ -4,7 +4,7 @@
     "INFEASIBLE_CAPACITY"
   ],
   "as_of": "2026-09-11T00:00:00",
-  "forecast_id": "demo-fc",
+  "forecast_id": "demo",
   "health_ids": [],
   "model_version": "b2-power-v0.1",
   "policy_version": "b3-optimizer-v0.1",
@@ -18,7 +18,7 @@
   "reserve_m3_min": null,
   "constraints": [],
   "explanation": "",
-  "elapsed_seconds": 0.0133,
+  "elapsed_seconds": 0.0185,
   "action_sequence": [],
   "source_flags": {
     "demand_basis": "pending",
@@ -41,7 +41,11 @@
     "total_flow_m3_min": null,
     "estimated_power_kw": 0.0,
     "recheck_passed": false,
-    "candidate_type": "rule_fallback"
+    "candidate_type": "rule_fallback",
+    "surge_status": "low",
+    "safety_blocked": false
   },
-  "is_fallback": false
+  "is_fallback": false,
+  "surge_assessment": {},
+  "safety_blocked": false
 }

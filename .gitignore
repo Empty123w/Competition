@@ -35,6 +35,7 @@ artifacts/models/*
 !artifacts/models/rul_meta.json
 !artifacts/models/power_model.json
 !artifacts/models/pressure_model.json
+!artifacts/models/surge_boundary.json
 artifacts/metrics/*
 !artifacts/metrics/.gitkeep
 !artifacts/metrics/forecast_metrics.json

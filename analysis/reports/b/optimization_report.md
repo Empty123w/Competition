@@ -72,7 +72,7 @@ CAL-02 需求口径、CAL-03 备用定义、CAL-04 加载率口径、CAL-05 压�
 ## 6. 压力、喘振与执行许可
 
 - 压力：调用 B2 `predict_pressure`（persistence）。**不宣称优化后压力安全**，统一标记 `PRESSURE_COUNTERFACTUAL_UNSUPPORTED`，压力影响待复核。
-- 喘振：B4 代理未开发，统一 `surge_status="not_assessed_b4"` + `SURGE_NOT_ASSESSED_B4`，**不默认 low**。
+- 喘振：已接入 B4 代理评估（见 `surge_risk_report.md`）。`surge_status ∈ {low,medium,high,unknown}`，`high`/`unknown` 触发 `safety_blocked`，**不默认 low**；关闭 B4 时回退占位 `not_assessed_b4`。
 - `execution_permission="simulation_candidate_only"`（永不为 authorized）；`simulation_feasible` 与现场许可分离；`requires_field_review=True`。
 
 ## 7. B1 / B3 同工况初步对比

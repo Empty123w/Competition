@@ -77,7 +77,11 @@ dispatch:
   step_minutes: 1.0                    # 评估步长 (数据为 1 分钟粒度)
   surge:
     assessor: "B4"
-    status: "not_assessed_b4"
+    enabled: true
+    boundary_version: "surge-proxy-v0.1"
+    config_path: "configs/safety.yaml"
+    boundary_path: "artifacts/models/surge_boundary.json"
+    status_when_unavailable: "not_assessed_b4"
   execution_permission: "simulation_candidate_only"   # 永不为 authorized
   fallback:
     enabled: true

@@ -112,9 +112,18 @@ def test_pressure_counterfactual_flag(power_model_path, pressure_model_path):
     assert "NOT supported" in cap.get("counterfactual_after_dispatch", "")
 
 
-# 10. 喘振代理尚未建立 --------------------------------------------- #
-def test_surge_pending_flag(power_model_path, pressure_model_path):
+# 10. 喘振代理 (B4 集成) ------------------------------------------- #
+def test_surge_assessed_by_b4(power_model_path, pressure_model_path):
     d = _run(power_model_path, pressure_model_path).to_dict()
+    assert d["surge_status"] in {"low", "medium", "high", "unknown"}
+    assert d["surge_assessment"] and d["surge_assessment"].get("devices")
+    assert C.RC_SURGE_NOT_ASSESSED not in d["reason_codes"]
+    assert d["surge_assessment"]["validation_mode"] == "simulation"
+
+
+def test_surge_disabled_keeps_placeholder(power_model_path, pressure_model_path):
+    d = H.run(H.snapshot(), H.forecast(300), H.constraints(), power_model_path,
+              pressure_model_path, dispatch={"surge": {"enabled": False}}).to_dict()
     assert d["surge_status"] == "not_assessed_b4"
     assert C.RC_SURGE_NOT_ASSESSED in d["reason_codes"]
 

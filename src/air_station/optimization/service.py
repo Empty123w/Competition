@@ -74,6 +74,32 @@ def _finish(r: DispatchResult, t0: float) -> DispatchResult:
     return r
 
 
+def _attach_surge(result: DispatchResult, snapshot: StationSnapshot, dcfg: dict) -> None:
+    """接入 B4 喘振代理评估 (向后兼容: 不可用时保留占位状态)。"""
+    scfg = dcfg.get("surge", {})
+    if not scfg.get("enabled", False):
+        result.surge_status = scfg.get("status_when_unavailable", "not_assessed_b4")
+        return
+    try:
+        from air_station.safety import surge as SURGE
+        a = SURGE.assess_surge_risk(
+            snapshot, result, boundary_version=scfg.get("boundary_version"),
+            config_path=scfg.get("config_path", "configs/safety.yaml"),
+            boundary_path=scfg.get("boundary_path", "artifacts/models/surge_boundary.json"))
+        result.surge_assessment = a.to_dict()
+        result.surge_status = SURGE.worst_level(a)
+        result.safety_blocked = bool(a.safety_blocked)
+        result.reason_codes = list(dict.fromkeys(
+            [rc for rc in result.reason_codes if rc != C.RC_SURGE_NOT_ASSESSED]
+            + list(a.reason_codes)))
+    except Exception as e:  # noqa
+        result.surge_status = scfg.get("status_when_unavailable", "not_assessed_b4")
+        result.surge_assessment = {"status": "unknown", "message": str(e),
+                                   "validation_mode": "simulation"}
+        result.safety_blocked = True
+        result.reason_codes = list(dict.fromkeys(result.reason_codes + [C.RC_SURGE_UNKNOWN]))
+
+
 def _pressure_block(snapshot, total_flow, n_on, pressure_model_path):
     if snapshot.header_pressure_mpa is None:
         return {"status": C.RC_INSUFFICIENT_DATA, "message": "母管压力缺失, 压力影响待复核"}
@@ -159,6 +185,10 @@ def optimize_dispatch(
                 fb = FB.rule_fallback(snapshot, forecast, health, constraints,
                                       baseline_config=base_cfg, power_model_path=power_model_path,
                                       state=state, reason_codes=reason_codes, required=required)
+                _attach_surge(fb["dispatch_result"], snapshot, dcfg)
+                _fr = fb["dispatch_result"]
+                fb["summary"]["surge_status"] = _fr.surge_status
+                fb["summary"]["safety_blocked"] = bool(_fr.safety_blocked)
                 result.fallback_candidate = fb["summary"]
             except Exception as e:  # noqa
                 result.fallback_candidate = {"status": C.RC_MODEL_UNAVAILABLE, "message": str(e)}
@@ -278,8 +308,9 @@ def optimize_dispatch(
     result.explanation = (
         f"最优组合={list(combo)}, 供气={alloc['total_flow_m3min']:.1f} m3/min, "
         f"预计功率={alloc['power_kw']:.1f} kW, 切换={best['n_switches']} 次; "
-        f"压力待复核(反事实不支持), 喘振待 B4 评估; 仅仿真候选, 未经现场放行")
+        f"压力待复核(反事实不支持); 仅仿真候选, 未经现场放行")
 
+    _attach_surge(result, snapshot, dcfg)
     return _finish(result, t0)
 
 

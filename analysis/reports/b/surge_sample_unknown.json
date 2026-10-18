@@ -1,0 +1,41 @@
+{
+  "status": "success",
+  "boundary_version": "surge-proxy-v0.1",
+  "boundary_source": "engineering_assumed",
+  "validation_mode": "simulation",
+  "devices": [
+    {
+      "device_id": "4#",
+      "risk_level": "unknown",
+      "risk_margin": null,
+      "margin_definition": "(planned_flow - boundary_flow)/boundary_flow",
+      "planned_flow_m3min": 240.0,
+      "boundary_flow_m3min": null,
+      "pressure_mpa": null,
+      "trigger_factors": [],
+      "boundary_source": "engineering_assumed",
+      "boundary_version": "surge-proxy-v0.1",
+      "limit_suggestion": "边界或关键测量缺失, 无法评估, 需人工复核补充数据",
+      "validation_mode": "simulation",
+      "reason_codes": [
+        "SURGE_DATA_MISSING"
+      ]
+    }
+  ],
+  "safety_blocked": true,
+  "counts": {
+    "low": 0,
+    "medium": 0,
+    "high": 0,
+    "unknown": 1
+  },
+  "reason_codes": [
+    "SURGE_UNKNOWN"
+  ],
+  "capability": {
+    "boundary_type": "proxy",
+    "is_real_surge_line": false,
+    "counterfactual_pressure": "unsupported",
+    "statement": "代理评分与统计边界, 非真实喘振线; 低风险不等于现场安全认证"
+  }
+}
