@@ -13,6 +13,13 @@ data/processed/*
 !data/processed/.gitkeep
 !data/processed/data_manifest.json
 !data/processed/feature_manifest.json
+# B/C 运行所需的标准化数据与特征(纳入版本库, 开箱即用)
+!data/processed/station_timeseries.parquet
+!data/processed/device_timeseries.parquet
+!data/processed/events.parquet
+!data/processed/maintenance.parquet
+!data/processed/forecast_features.parquet
+!data/processed/health_features.parquet
 data/simulated/*
 !data/simulated/.gitkeep
 artifacts/models/*
