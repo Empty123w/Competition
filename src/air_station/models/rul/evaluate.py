@@ -87,6 +87,15 @@ def evaluate(config_path: str = "configs/rul.yaml",
 
     _plot_episode(cfg, df, splits["test"], figure_dir)
     _write_report(Path(report_dir) / "rul_report.md", out)
+    # 接口样例(与运行时接口一致)
+    from air_station.models.rul import service
+    try:
+        sample = service.rul_json(config_path, seq_path, model_dir)
+        rp = Path(report_dir); rp.mkdir(parents=True, exist_ok=True)
+        (rp / "rul_interface_sample.json").write_text(
+            json.dumps(sample, ensure_ascii=False, indent=2, allow_nan=False), encoding="utf-8")
+    except Exception as e:  # noqa
+        print(f"[warn] 生成 RUL 接口样例失败: {e}")
     return out
 
 

@@ -1,0 +1,21 @@
+{
+  "status": "success",
+  "validation_mode": "simulation",
+  "evaluation_time": "2028-01-31T16:00:00Z",
+  "devices": [
+    {
+      "device_id": "4#",
+      "estimated_rul_hours": 341.2,
+      "lower_bound_hours": 307.0,
+      "upper_bound_hours": 672.7,
+      "method": "GradientBoostingRegressor"
+    },
+    {
+      "device_id": "5#",
+      "estimated_rul_hours": 332.9,
+      "lower_bound_hours": 309.8,
+      "upper_bound_hours": 612.3,
+      "method": "GradientBoostingRegressor"
+    }
+  ]
+}
