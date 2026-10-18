@@ -24,6 +24,8 @@ artifacts/metrics/*
 !artifacts/metrics/.gitkeep
 !artifacts/metrics/forecast_metrics.json
 !artifacts/metrics/health_metrics.json
+!artifacts/metrics/forecast_test_predictions.parquet
+!artifacts/metrics/forecast_test_predictions.csv
 artifacts/logs/*
 !artifacts/logs/.gitkeep
 
