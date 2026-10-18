@@ -21,7 +21,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-WORKSPACE = Path(os.environ.get("WORKSPACE", "/workspace"))
+WORKSPACE = Path(os.environ.get("WORKSPACE", ".")).resolve()
 REPORT_DIR = WORKSPACE / "reports"
 EXCLUDE_DIRS = {".git", "node_modules", "scripts", "reports", "docs", "__pycache__",
                 "dist", "build", ".venv", "venv", "target"}

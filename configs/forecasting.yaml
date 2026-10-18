@@ -1,37 +1,69 @@
-# 用气负荷预测配置
-target: 总流量
-unit: m3/min
+# =====================================================================
+# 阶段 A0 配置 2/3: 用气负荷预测
+# - 相对路径; 阈值/参数集中; 字段与单位齐全
+# =====================================================================
 
-# 时间粒度
-granularity: minute        # minute | hour
-resample_rule: null        # granularity=hour 时用 "1h"
+# ---- 路径(相对) ----
+paths:
+  processed_dir: data/processed
+  model_dir: artifacts/models
+  metrics_dir: artifacts/metrics
 
-# 数据集切分（按时间）
+# ---- 目标与预测时间范围 ----
+target:
+  column: "总流量"
+  unit: "m3/min"
+  source: "data/processed/station.parquet"
+  origin: inferred            # = 4#实时流量 + 5#实时流量
+
+data_range:                   # 训练可用数据的时间范围
+  start: "2026-03-12 00:00:00"
+  end: "2026-09-12 00:00:00"
+
+granularity: minute           # minute | hour
+forecast:
+  horizon_minutes: [15, 60, 1440]   # 单位 min: 15min / 1h / 1day 三个时域
+  step_minutes_default: 5           # 服务产出曲线的默认步长, 单位 min
+
+# ---- 数据切分日期(时间范围) ----
 split:
-  train_end: "2026-07-31 23:59:00"
-  valid_end: "2026-08-20 23:59:00"
-  # 其余为 test
+  train: { start: "2026-03-12 00:00:00", end: "2026-07-31 23:59:00" }
+  valid: { start: "2026-08-01 00:00:00", end: "2026-08-20 23:59:00" }
+  test:  { start: "2026-08-21 00:00:00", end: "2026-09-12 00:00:00" }
 
-# 特征
+# ---- 特征 ----
 features:
-  calendar: [hour, minute, dow, is_weekend]
-  lags_minutes: [1, 5, 15, 60, 1440]     # 滞后分钟数（粒度为小时时自动换算）
-  rolling_minutes: [15, 60, 240]
-  load_ratio: true
-  ambient: [站房温度, 站房湿度]
+  calendar: [hour, minute, dow, is_weekend]   # 无单位(类别/计数)
+  lags:
+    - { minutes: 1,    unit: min }
+    - { minutes: 5,    unit: min }
+    - { minutes: 15,   unit: min }
+    - { minutes: 60,   unit: min }
+    - { minutes: 1440, unit: min }
+  rolling:
+    - { minutes: 15,  unit: min, agg: mean }
+    - { minutes: 60,  unit: min, agg: mean }
+    - { minutes: 240, unit: min, agg: mean }
+  ambient:
+    - { column: "站房温度", unit: "℃" }
+    - { column: "站房湿度", unit: "%RH" }
+  load_ratio: { column: "负荷率", unit: "-" }
 
-# 预测时域
-horizon_minutes: [15, 60, 1440]
-
-# 模型
+# ---- 模型参数 ----
 model:
-  type: "hist_gbdt"     # naive | seasonal_naive | ridge | hist_gbdt
+  type: hist_gbdt             # naive | seasonal_naive | ridge | hist_gbdt
   random_state: 42
   params:
     max_iter: 200
     learning_rate: 0.08
     max_depth: 6
 
-# 评估
+# ---- 评价指标 ----
 evaluate:
-  mape_epsilon: 1.0     # 避免分母为 0
+  metrics: [mape, mae, rmse]
+  units: { mape: "%", mae: "m3/min", rmse: "m3/min" }
+  mape_epsilon: 1.0           # 单位 m3/min, 防分母为 0
+  target_mape_pct: 8.0        # 赛题要求 <= 8%
+  baselines: [persistence, seasonal_naive, moving_average]
+  seasonal_period_minutes: 1440   # 季节朴素周期, 单位 min
+  moving_average_window_minutes: 60

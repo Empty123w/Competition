@@ -1,53 +1,96 @@
-# 设备健康诊断配置
+# =====================================================================
+# 阶段 A0 配置 3/3: 设备健康诊断
+# - 相对路径; 阈值集中; 字段与单位齐全
+# =====================================================================
+
+# ---- 路径(相对) ----
+paths:
+  processed_dir: data/processed
+  model_dir: artifacts/models
+  metrics_dir: artifacts/metrics
+
+# ---- 设备与粒度 ----
 devices: [4, 5]
-granularity_minutes: 60        # 健康评估的时间粒度(降采样以降内存)
+granularity_minutes: 60         # 单位 min, 健康评估降采样粒度
+data_range:
+  start: "2026-03-12 00:00:00"
+  end: "2026-09-12 00:00:00"
 
-# 参与健康评估的指标(来自设备状态监测)
+# 用于拟合"正常基线"的时间范围(与 forecasting 的 train+valid 对齐)
+baseline_range:
+  start: "2026-03-12 00:00:00"
+  end: "2026-08-20 23:59:00"
+
+# ---- 健康诊断字段(含单位) ----
 indicators:
-  vibration: [一级震动, 二级震动, 三级震动]
+  vibration:
+    - { column: "一级震动", unit: "mm/s" }
+    - { column: "二级震动", unit: "mm/s" }
+    - { column: "三级震动", unit: "mm/s" }
   temperature:
-    - 齿轮箱供油温度
-    - 电机轴承D端温度
-    - 电机轴承ND端温度
-    - 电机线圈1U1温度
-    - 电机线圈1V1温度
-    - 电机线圈1W1温度
-    - 电机温度
-    - 油箱油温
-    - 排气温度
-    - 二级进口温度
-    - 三级进口温度
-    - 冷却水温度
-    - 中冷入口温度1
-    - 中冷出口温度1
-    - 后冷入口温度1
-    - 后冷出口温度1
+    - { column: "齿轮箱供油温度", unit: "℃" }
+    - { column: "电机轴承D端温度", unit: "℃" }
+    - { column: "电机轴承ND端温度", unit: "℃" }
+    - { column: "电机线圈1U1温度", unit: "℃" }
+    - { column: "电机线圈1V1温度", unit: "℃" }
+    - { column: "电机线圈1W1温度", unit: "℃" }
+    - { column: "电机温度", unit: "℃" }
+    - { column: "油箱油温", unit: "℃" }
+    - { column: "排气温度", unit: "℃" }
+    - { column: "二级进口温度", unit: "℃" }
+    - { column: "三级进口温度", unit: "℃" }
+    - { column: "冷却水温度", unit: "℃" }
+    - { column: "中冷入口温度1", unit: "℃" }
+    - { column: "中冷出口温度1", unit: "℃" }
+    - { column: "后冷入口温度1", unit: "℃" }
+    - { column: "后冷出口温度1", unit: "℃" }
 
-# 阈值规则(软阈值, 超出扣分)
+# ---- 专家规则阈值(软阈值; warn 以下不扣分, alarm 以上满扣) ----
 rules:
-  排气温度:  {warn: 100, alarm: 110}      # ℃
-  油箱油温:  {warn: 65,  alarm: 75}
-  电机温度:  {warn: 75,  alarm: 90}
-  一级震动:  {warn: 8,   alarm: 12}       # mm/s
-  二级震动:  {warn: 8,   alarm: 12}
-  三级震动:  {warn: 8,   alarm: 12}
+  - { column: "排气温度", warn: 100, alarm: 110, unit: "℃" }
+  - { column: "油箱油温", warn: 65,  alarm: 75,  unit: "℃" }
+  - { column: "电机温度", warn: 75,  alarm: 90,  unit: "℃" }
+  - { column: "一级震动", warn: 8,   alarm: 12,  unit: "mm/s" }
+  - { column: "二级震动", warn: 8,   alarm: 12,  unit: "mm/s" }
+  - { column: "三级震动", warn: 8,   alarm: 12,  unit: "mm/s" }
 
-# 无监督异常检测
+# ---- 异常模型参数 ----
 anomaly:
-  method: "isolation_forest"  # rolling_zscore | isolation_forest
-  baseline_end: "2026-08-20 23:59:00"   # 用此之前的“正常期”拟合
-  rolling_window: 60
-  zscore_threshold: 3.0
-  contamination: 0.02
+  method: isolation_forest      # rolling_zscore | isolation_forest
+  rolling_window: 60            # 单位 min (rolling_zscore 用)
+  zscore_threshold: 3.0         # 无单位
+  contamination: 0.02           # 无单位
   random_state: 42
 
-# 健康指数合成
+# ---- 健康等级阈值(健康指数 0~100) ----
 scoring:
-  weights:
-    rule: 0.5
-    anomaly: 0.5
-  levels:
+  weights: { rule: 0.5, anomaly: 0.5 }
+  levels:                       # 健康指数下限
     healthy: 80
     watch: 60
     warning: 40
-    # < warning 阈值 视为 critical
+    # < warning 视为 critical
+  health_index_range: [0, 100]
+
+# ---- 故障弱标签窗口(来自运行事件记录, 故障码 26; 事件级弱标签) ----
+fault_weak_labels:
+  source: "data/processed/运行事件记录.parquet"
+  fault_code: 26
+  origin: inferred
+  windows:
+    4:
+      - { start: "2026-03-19 15:30:00", end: "2026-03-20 09:18:00", duration_min: 1069 }
+      - { start: "2026-03-31 19:35:00", end: "2026-04-13 14:47:00", duration_min: 18433 }
+      - { start: "2026-04-21 14:16:00", end: "2026-04-21 14:16:00", duration_min: 1 }
+      - { start: "2026-04-22 10:07:00", end: "2026-04-22 10:08:00", duration_min: 2 }
+      - { start: "2026-08-09 08:28:00", end: "2026-08-09 08:28:00", duration_min: 1 }
+    5:
+      - { start: "2026-03-19 15:34:00", end: "2026-03-20 09:18:00", duration_min: 1065 }
+      - { start: "2026-04-02 18:36:00", end: "2026-04-13 14:47:00", duration_min: 15612 }
+  caveat: "两机故障高度同步(03-19 起, 04-13 止), 疑似站级共因; 仅作事件级弱标签"
+
+# ---- 评估口径 ----
+evaluate:
+  lead_time_threshold: 60       # 健康指数低于该值视为预警, 用于计算提前时间
+  lead_time_lookback_hours: 72  # 单位 h
+  outputs: [separation, lead_time_hours, min_hi]

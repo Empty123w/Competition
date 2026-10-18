@@ -19,13 +19,13 @@ def mape(y_true: np.ndarray, y_pred: np.ndarray, eps: float = 1.0) -> float:
     return float(np.mean(np.abs(y_true - y_pred) / np.maximum(np.abs(y_true), eps)) * 100)
 
 
-def _metrics(y_true, y_pred) -> dict:
+def _metrics(y_true, y_pred, eps: float = 1.0) -> dict:
     y_true = np.asarray(y_true, dtype=float)
     y_pred = np.asarray(y_pred, dtype=float)
     err = y_true - y_pred
     return {"mae": float(np.mean(np.abs(err))),
             "rmse": float(np.sqrt(np.mean(err ** 2))),
-            "mape": mape(y_true, y_pred)}
+            "mape": mape(y_true, y_pred, eps)}
 
 
 def evaluate(processed_dir: str = "data/processed",
@@ -35,6 +35,7 @@ def evaluate(processed_dir: str = "data/processed",
     import joblib
 
     config = yaml.safe_load(Path(config_path).read_text(encoding="utf-8"))
+    eps = float(config.get("evaluate", {}).get("mape_epsilon", 1.0))
     station = T.load_processed(processed_dir, "station")
     df = F.build_features(station, config)
     fcols = F.feature_columns(df)
@@ -54,19 +55,22 @@ def evaluate(processed_dir: str = "data/processed",
         if len(data) == 0:
             continue
         pred = model.predict(data[fcols].astype("float32"))
-        results["model"][str(horizon)] = _metrics(data["y"].values, pred)
+        results["model"][str(horizon)] = _metrics(data["y"].values, pred, eps)
 
     # 基线评估(以 15 分钟时域为例, 逐点对齐)
     h0 = config.get("horizon_minutes", [15])[0]
+    ecfg = config.get("evaluate", {})
+    season = int(ecfg.get("seasonal_period_minutes", 1440))
+    ma_win = int(ecfg.get("moving_average_window_minutes", 60))
     data = test.copy()
     data["y"] = data["target"].shift(-h0)
     data["persistence"] = data["target"]
-    data["seasonal_naive"] = data["target"].shift(1440 - h0)
-    data["moving_average"] = data["target"].rolling(60, min_periods=1).mean()
+    data["seasonal_naive"] = data["target"].shift(season - h0)
+    data["moving_average"] = data["target"].rolling(ma_win, min_periods=1).mean()
     data = data.dropna(subset=["y", "persistence", "seasonal_naive", "moving_average"])
     y_true = data["y"].values
     for name in ("persistence", "seasonal_naive", "moving_average"):
-        results["baselines"][name] = _metrics(y_true, data[name].values)
+        results["baselines"][name] = _metrics(y_true, data[name].values, eps)
 
     out = Path(report_dir)
     out.mkdir(parents=True, exist_ok=True)
