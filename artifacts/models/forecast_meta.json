@@ -1,0 +1,70 @@
+{
+  "trained_at": "2026-10-18T16:41:52",
+  "model_type": "LightGBM",
+  "feature_cols": [
+    "load_level",
+    "hour",
+    "weekday",
+    "month",
+    "is_workday",
+    "hour_sin",
+    "hour_cos",
+    "weekday_sin",
+    "weekday_cos",
+    "lag_0",
+    "lag_1",
+    "lag_5",
+    "lag_15",
+    "lag_30",
+    "lag_60",
+    "lag_1440",
+    "roll_5_mean",
+    "roll_5_std",
+    "roll_5_min",
+    "roll_5_max",
+    "roll_15_mean",
+    "roll_15_std",
+    "roll_15_min",
+    "roll_15_max",
+    "roll_30_mean",
+    "roll_30_std",
+    "roll_30_min",
+    "roll_30_max",
+    "roll_60_mean",
+    "roll_60_std",
+    "roll_60_min",
+    "roll_60_max",
+    "diff_1",
+    "diff_5",
+    "diff_15",
+    "ambient_temp_c",
+    "ambient_humidity_pct",
+    "load_volatility_15",
+    "running_count"
+  ],
+  "data_split_ratios": {
+    "train": 0.7717,
+    "valid": 0.1087,
+    "test": 0.1196
+  },
+  "models": {
+    "15": {
+      "path": "artifacts/models/forecast_15m.pkl",
+      "ci_lower": -15.429579018134802,
+      "ci_upper": 13.673020488895972,
+      "n_train": 204465
+    },
+    "30": {
+      "path": "artifacts/models/forecast_30m.pkl",
+      "ci_lower": -18.63488263155011,
+      "ci_upper": 18.293870486635804,
+      "n_train": 204450
+    },
+    "60": {
+      "path": "artifacts/models/forecast_60m.pkl",
+      "ci_lower": -20.4601639155065,
+      "ci_upper": 22.816578969356414,
+      "n_train": 204420
+    }
+  }
+}

@@ -29,6 +29,7 @@ FEATURE_SPECS: list[dict] = [
     {"name": "hour_cos", "unit": "-", "desc": "小时周期cos", "calc": "cos(2π·hour/24)", "missing": "无缺失"},
     {"name": "weekday_sin", "unit": "-", "desc": "星期周期sin", "calc": "sin(2π·weekday/7)", "missing": "无缺失"},
     {"name": "weekday_cos", "unit": "-", "desc": "星期周期cos", "calc": "cos(2π·weekday/7)", "missing": "无缺失"},
+    {"name": "lag_0", "unit": "m3/min", "desc": "当前观测总流量(T 时刻已知, 用于预测 T+h)", "calc": "target(t)", "missing": "保留NaN"},
     {"name": "lag_k", "unit": "m3/min", "desc": "k 分钟前总流量", "calc": "target.shift(k)", "missing": "保留NaN(树模型)"},
     {"name": "roll_w_mean", "unit": "m3/min", "desc": "过去 w 分钟均值", "calc": "target.shift(1).rolling(w)", "missing": "保留NaN"},
     {"name": "roll_w_std", "unit": "m3/min", "desc": "过去 w 分钟标准差", "calc": "同上.std", "missing": "保留NaN"},
@@ -60,7 +61,8 @@ def build_features(station: pd.DataFrame, config: dict) -> pd.DataFrame:
     fcfg = config.get("features", {})
     target_col = config.get("target", {}).get("column", "total_flow_m3_min")
     y = pd.to_numeric(df[target_col], errors="coerce")
-    base = y.shift(1)   # 防泄漏: 仅 T-1 及以前
+    base = y.shift(1)   # 防泄漏: 滚动/差分仅用 T-1 及以前
+    df["lag_0"] = y     # 当前观测值(T 时刻已知, 预测 T+h 时可用, 非未来信息)
 
     for lag in fcfg.get("lags_minutes", [1, 5, 15, 30, 60, 1440]):
         df[f"lag_{lag}"] = y.shift(lag)
@@ -86,8 +88,14 @@ def build_features(station: pd.DataFrame, config: dict) -> pd.DataFrame:
     return df
 
 
-def feature_columns(df: pd.DataFrame) -> list[str]:
-    drop = {TIME_COL, "target", "environment_interpolated"}
+EXCLUDE_DEFAULT = ["header_pressure_mpa", "total_power_kw", "load_rate",
+                   "station_temperature_c", "station_humidity_percent",
+                   "environment_interpolated"]
+
+
+def feature_columns(df: pd.DataFrame, exclude: list[str] | None = None) -> list[str]:
+    drop = {TIME_COL, "target", "environment_interpolated", "load_band", "device_id"}
+    drop |= set(exclude if exclude is not None else EXCLUDE_DEFAULT)
     cols = []
     for c in df.columns:
         if c in drop:

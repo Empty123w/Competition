@@ -10,6 +10,7 @@
 | forecast | hour_cos | - | 小时周期cos | cos(2π·hour/24) | 无缺失 |
 | forecast | weekday_sin | - | 星期周期sin | sin(2π·weekday/7) | 无缺失 |
 | forecast | weekday_cos | - | 星期周期cos | cos(2π·weekday/7) | 无缺失 |
+| forecast | lag_0 | m3/min | 当前观测总流量(T 时刻已知, 用于预测 T+h) | target(t) | 保留NaN |
 | forecast | lag_k | m3/min | k 分钟前总流量 | target.shift(k) | 保留NaN(树模型) |
 | forecast | roll_w_mean | m3/min | 过去 w 分钟均值 | target.shift(1).rolling(w) | 保留NaN |
 | forecast | roll_w_std | m3/min | 过去 w 分钟标准差 | 同上.std | 保留NaN |

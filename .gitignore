@@ -17,8 +17,13 @@ data/simulated/*
 !data/simulated/.gitkeep
 artifacts/models/*
 !artifacts/models/.gitkeep
+!artifacts/models/forecast_*.pkl
+!artifacts/models/forecast_*.txt
+!artifacts/models/forecast_meta.json
 artifacts/metrics/*
 !artifacts/metrics/.gitkeep
+!artifacts/metrics/forecast_metrics.json
+!artifacts/metrics/health_metrics.json
 artifacts/logs/*
 !artifacts/logs/.gitkeep
 

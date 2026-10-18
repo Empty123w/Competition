@@ -1,0 +1,29 @@
+{
+  "status": "success",
+  "model_type": "LightGBM",
+  "prediction_base_time": "2026-09-12T00:00:00",
+  "predictions": [
+    {
+      "horizon_minutes": 15,
+      "target_time": "2026-09-12T00:15:00",
+      "predicted_flow": 499.18,
+      "lower_bound": 483.75,
+      "upper_bound": 512.86
+    },
+    {
+      "horizon_minutes": 30,
+      "target_time": "2026-09-12T00:30:00",
+      "predicted_flow": 498.49,
+      "lower_bound": 479.85,
+      "upper_bound": 516.78
+    },
+    {
+      "horizon_minutes": 60,
+      "target_time": "2026-09-12T01:00:00",
+      "predicted_flow": 500.39,
+      "lower_bound": 479.93,
+      "upper_bound": 523.21
+    }
+  ],
+  "elapsed_seconds": 1.54
+}

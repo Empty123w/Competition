@@ -1,0 +1,90 @@
+{
+  "model_type": "LightGBM",
+  "data_split": {
+    "train_ratio": 0.7717,
+    "val_ratio": 0.1087,
+    "test_ratio": 0.1196
+  },
+  "metrics": {
+    "15min": {
+      "MAPE": 1.13,
+      "MAE": 4.996,
+      "RMSE": 18.975,
+      "WAPE": 1.06,
+      "baseline_lag1_MAPE": 0.96,
+      "baseline_best": "lag_1",
+      "baseline_best_MAPE": 0.96,
+      "baseline_MAPE_all": {
+        "lag_1": 0.96,
+        "ma_15": 0.97,
+        "same_time_yesterday": 4.27,
+        "same_time_last_week": 5.47
+      },
+      "improvement_over_baseline": "-17.7%"
+    },
+    "30min": {
+      "MAPE": 1.57,
+      "MAE": 7.038,
+      "RMSE": 22.611,
+      "WAPE": 1.49,
+      "baseline_lag1_MAPE": 1.14,
+      "baseline_best": "lag_1",
+      "baseline_best_MAPE": 1.14,
+      "baseline_MAPE_all": {
+        "lag_1": 1.14,
+        "ma_15": 1.15,
+        "same_time_yesterday": 4.27,
+        "same_time_last_week": 5.47
+      },
+      "improvement_over_baseline": "-37.7%"
+    },
+    "60min": {
+      "MAPE": 2.05,
+      "MAE": 10.196,
+      "RMSE": 28.554,
+      "WAPE": 2.16,
+      "baseline_lag1_MAPE": 1.46,
+      "baseline_best": "lag_1",
+      "baseline_best_MAPE": 1.46,
+      "baseline_MAPE_all": {
+        "lag_1": 1.46,
+        "ma_15": 1.47,
+        "same_time_yesterday": 4.28,
+        "same_time_last_week": 5.47
+      },
+      "improvement_over_baseline": "-40.4%"
+    }
+  },
+  "confidence_interval": {
+    "level": 0.9,
+    "test_coverage_rate": 0.9469,
+    "per_horizon": {
+      "15min": 0.9647,
+      "30min": 0.9464,
+      "60min": 0.9296
+    }
+  },
+  "feature_importance_top5": [
+    {
+      "feature": "ambient_temp_c",
+      "importance": 769.0
+    },
+    {
+      "feature": "ambient_humidity_pct",
+      "importance": 657.0
+    },
+    {
+      "feature": "lag_0",
+      "importance": 559.0
+    },
+    {
+      "feature": "lag_1440",
+      "importance": 528.0
+    },
+    {
+      "feature": "roll_60_std",
+      "importance": 394.0
+    }
+  ],
+  "target_mape_pct": 8.0
+}

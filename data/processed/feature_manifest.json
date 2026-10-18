@@ -18,6 +18,7 @@
       "hour_cos",
       "weekday_sin",
       "weekday_cos",
+      "lag_0",
       "lag_1",
       "lag_5",
       "lag_15",

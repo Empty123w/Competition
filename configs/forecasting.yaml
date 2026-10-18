@@ -22,8 +22,8 @@ data_range:                   # 训练可用数据的时间范围
 
 granularity: minute           # minute | hour
 forecast:
-  horizon_minutes: [15, 60, 1440]   # 单位 min: 15min / 1h / 1day 三个时域
-  step_minutes_default: 5           # 服务产出曲线的默认步长, 单位 min
+  horizon_minutes: [15, 30, 60]     # 三个独立直接预测模型(min)
+  step_minutes_default: 15          # 服务产出曲线的默认步长, 单位 min
 
 # ---- 数据切分日期(时间范围) ----
 split:
@@ -43,22 +43,34 @@ features:
   extra: [header_pressure_mpa, running_count, load_level]      # MPa / 台 / 类别
   rolling_closed: left          # 滚动窗口左闭右开, 且先 shift(1)
   volatility_window_minutes: 15
+  # 剔除会引发分布漂移/过拟合的原始站级测量(保留其可用代理, 如 ambient_* / 滚动量)
+  exclude: [header_pressure_mpa, total_power_kw, load_rate,
+            station_temperature_c, station_humidity_percent, environment_interpolated]
 
 # ---- 模型参数 ----
 model:
-  type: hist_gbdt             # naive | seasonal_naive | ridge | hist_gbdt
+  type: lightgbm             # lightgbm | xgboost | hist_gbdt
+  fallback: hist_gbdt        # 首选不可用时回退
   random_state: 42
   params:
-    max_iter: 200
-    learning_rate: 0.08
-    max_depth: 6
+    n_estimators: 300
+    learning_rate: 0.05
+    num_leaves: 31
+    min_child_samples: 50
+    subsample: 0.8
+    colsample_bytree: 0.7
 
 # ---- 评价指标 ----
 evaluate:
-  metrics: [mape, mae, rmse]
-  units: { mape: "%", mae: "m3/min", rmse: "m3/min" }
+  metrics: [MAPE, MAE, RMSE, WAPE]
+  units: { MAPE: "%", MAE: "m3/min", RMSE: "m3/min", WAPE: "%" }
   mape_epsilon: 1.0           # 单位 m3/min, 防分母为 0
+  mape_min_flow_m3min: 1.0    # MAPE 仅在真实流量 >= 该门槛时统计
   target_mape_pct: 8.0        # 赛题要求 <= 8%
-  baselines: [persistence, seasonal_naive, moving_average]
-  seasonal_period_minutes: 1440   # 季节朴素周期, 单位 min
-  moving_average_window_minutes: 60
+  baselines: [lag_1, ma_15, same_time_yesterday, same_time_last_week]
+  seasonal_period_minutes: 1440   # 前一天同一时刻
+  weekly_period_minutes: 10080    # 前一周同一时刻
+  moving_average_window_minutes: 15
+  confidence_level: 0.90      # 预测区间
+  ci_lower_quantile: 0.05
+  ci_upper_quantile: 0.95

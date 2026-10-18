@@ -1,42 +1,43 @@
-"""预测基线方法。"""
+"""负荷预测基线方法 (阶段 A4)。
+
+所有基线仅使用目标时刻之前的数据:
+  - lag_1: 上一时刻值(值在 t, 预测 t+h);
+  - ma_15: 最近 15 分钟平均值(截至 t);
+  - same_time_yesterday: 前一天同一时刻(target 序列 shift(1440-h));
+  - same_time_last_week: 前一周同一时刻(shift(10080-h), 数据范围允许时)。
+"""
 from __future__ import annotations
 
 import numpy as np
 import pandas as pd
 
 
-def persistence(y: pd.Series, horizon: int = 1) -> pd.Series:
-    """持续性预测: 用当前值预测未来。"""
-    return pd.Series(np.repeat(y.iloc[0], horizon)) if len(y) else pd.Series(dtype=float)
+def baseline_series(target: pd.Series, name: str, horizon: int, cfg: dict) -> pd.Series:
+    e = cfg.get("evaluate", {})
+    day = int(e.get("seasonal_period_minutes", 1440))
+    week = int(e.get("weekly_period_minutes", 10080))
+    ma_w = int(e.get("moving_average_window_minutes", 15))
+    if name == "lag_1":
+        return target
+    if name == "ma_15":
+        return target.rolling(ma_w, min_periods=1).mean()
+    if name == "same_time_yesterday":
+        return target.shift(day - horizon)
+    if name == "same_time_last_week":
+        return target.shift(week - horizon)
+    raise ValueError(f"未知基线: {name}")
 
 
-def seasonal_naive(y: pd.Series, season: int = 1440, horizon: int = 1) -> np.ndarray:
-    """季节朴素: 用同一周期前的值(默认 1440 分钟=1天)。"""
-    if len(y) <= season:
-        return np.repeat(y.iloc[-1], horizon)
-    vals = y.values
-    out = []
-    for h in range(1, horizon + 1):
-        idx = len(vals) - season + (h - 1)
-        out.append(vals[idx % len(vals)])
-    return np.array(out, dtype=float)
+def all_baselines(target: pd.Series, horizon: int, cfg: dict) -> dict[str, pd.Series]:
+    return {name: baseline_series(target, name, horizon, cfg)
+            for name in cfg.get("evaluate", {}).get(
+                "baselines", ["lag_1", "ma_15", "same_time_yesterday", "same_time_last_week"])}
 
 
-def moving_average(y: pd.Series, window: int = 60, horizon: int = 1) -> np.ndarray:
-    v = float(y.tail(window).mean()) if len(y) else np.nan
-    return np.repeat(v, horizon)
-
-
-def evaluate_baselines(y_true: np.ndarray, preds: dict[str, np.ndarray]) -> dict:
-    """对多个基线计算 MAE/RMSE/MAPE。"""
-    out = {}
-    y_true = np.asarray(y_true, dtype=float)
-    for name, p in preds.items():
-        p = np.asarray(p, dtype=float)
-        err = y_true - p
-        mae = float(np.mean(np.abs(err)))
-        rmse = float(np.sqrt(np.mean(err ** 2)))
-        denom = np.maximum(np.abs(y_true), 1.0)
-        mape = float(np.mean(np.abs(err) / denom) * 100)
-        out[name] = {"mae": mae, "rmse": rmse, "mape": mape}
-    return out
+def signed_residual_quantiles(y_true: np.ndarray, y_pred: np.ndarray,
+                              q_lo: float, q_hi: float) -> tuple[float, float]:
+    r = np.asarray(y_true, dtype=float) - np.asarray(y_pred, dtype=float)
+    r = r[~np.isnan(r)]
+    if len(r) == 0:
+        return 0.0, 0.0
+    return float(np.quantile(r, q_lo)), float(np.quantile(r, q_hi))
