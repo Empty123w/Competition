@@ -1,0 +1,174 @@
+{
+  "status": "success",
+  "reason_codes": [
+    "PRESSURE_COUNTERFACTUAL_UNSUPPORTED",
+    "SURGE_NOT_ASSESSED_B4"
+  ],
+  "as_of": "2026-09-11T00:00:00",
+  "forecast_id": "demo-fc",
+  "health_ids": [],
+  "model_version": "b2-power-v0.1",
+  "policy_version": "b3-optimizer-v0.1",
+  "validation_mode": "simulation",
+  "objective_components": {
+    "candidate_type": "optimized",
+    "terms": {
+      "power": 0.8446,
+      "switch": 0.0,
+      "health": 0.0,
+      "rul": 0.0
+    },
+    "weights": {
+      "power": 1.0,
+      "switch": 0.05,
+      "health": 0.1,
+      "rul": 0.0
+    },
+    "total_objective": 0.8446,
+    "power_kw_estimate": 2111.57,
+    "energy_kwh_estimate": 2111.57,
+    "note": "分项已归一化后加权; 功率来自 B2 工程近似模型"
+  },
+  "device_actions": [
+    {
+      "device_id": "4#",
+      "action": "adjust",
+      "target_flow_m3_min": 120.0,
+      "target_load_ratio": 0.4463,
+      "running_after": true,
+      "estimated_power_kw": 920.34,
+      "reason_codes": [],
+      "upper_limit_m3_min": 268.9,
+      "health_factor": 1.0
+    },
+    {
+      "device_id": "5#",
+      "action": "adjust",
+      "target_flow_m3_min": 180.0,
+      "target_load_ratio": 0.6694,
+      "running_after": true,
+      "estimated_power_kw": 1191.23,
+      "reason_codes": [],
+      "upper_limit_m3_min": 268.9,
+      "health_factor": 1.0
+    }
+  ],
+  "total_flow_m3_min": 300.0,
+  "required_flow_m3_min": 300.0,
+  "estimated_power_kw": 2111.57,
+  "pressure_setpoint_mpa": 0.6,
+  "reserve_m3_min": 237.8,
+  "constraints": [
+    {
+      "name": "demand",
+      "pass": true,
+      "margin": 0.0,
+      "unit": "m3/min",
+      "detail": "供气 300.0 vs 需求 300.0"
+    },
+    {
+      "name": "capacity",
+      "pass": true,
+      "margin": 222.8,
+      "unit": "m3/min",
+      "detail": "容量 vs 需求+备用"
+    },
+    {
+      "name": "reserve",
+      "pass": true,
+      "margin": 237.8,
+      "unit": "m3/min",
+      "detail": "备用模式=extra"
+    },
+    {
+      "name": "transition",
+      "pass": true,
+      "margin": null,
+      "unit": "",
+      "detail": "切换过程供气"
+    },
+    {
+      "name": "health",
+      "pass": true,
+      "margin": null,
+      "unit": "",
+      "detail": "健康为无监督软惩罚, 不自动停机"
+    },
+    {
+      "name": "switching",
+      "pass": true,
+      "margin": 0.0,
+      "unit": "次",
+      "detail": "启停锁由构造保证"
+    }
+  ],
+  "explanation": "最优组合=['4#', '5#'], 供气=300.0 m3/min, 预计功率=2111.6 kW, 切换=0 次; 压力待复核(反事实不支持), 喘振待 B4 评估; 仅仿真候选, 未经现场放行",
+  "elapsed_seconds": 0.0321,
+  "action_sequence": [
+    "adjust:4#=120.0",
+    "adjust:5#=180.0"
+  ],
+  "source_flags": {
+    "demand_basis": "pending",
+    "reserve": "pending",
+    "pressure_band": "pending",
+    "health_penalty": "engineering",
+    "switch_cost": "engineering"
+  },
+  "target_combination": [
+    "4#",
+    "5#"
+  ],
+  "estimated_energy_kwh": 2111.57,
+  "pressure_prediction": {
+    "status": "success",
+    "current_pressure_mpa": 0.6,
+    "predicted_pressure_mpa": 0.6,
+    "uncertainty_1.96sigma_mpa": 0.0197,
+    "method": "persistence",
+    "horizon_minutes": 1,
+    "in_reference_band": true,
+    "reference_band_mpa": [
+      0.55,
+      0.66
+    ],
+    "model_version": "b2-pressure-v0.1",
+    "validation_mode": "simulation",
+    "capability": {
+      "historical_short_horizon": "supported (persistence-dominated)",
+      "counterfactual_after_dispatch": "NOT supported by current data",
+      "reason": "压力近似随机游走, 变化与流量/运行台数相关性弱, 无法可靠识别调度动作对压力的因果影响"
+    },
+    "caveats": [
+      "压力近似随机游走, 该预测为历史短时持续性, 不代表调度动作后的压力",
+      "压力合格带为待确认示例, 非厂家安全标准"
+    ]
+  },
+  "surge_status": "not_assessed_b4",
+  "transition_plan": [],
+  "baseline_comparison": {
+    "baseline": {
+      "status": "success",
+      "estimated_power_kw": 2223.64,
+      "total_flow_m3_min": 300.0,
+      "combination": [
+        "4#",
+        "5#"
+      ],
+      "reason_codes": [
+        "HOLD",
+        "FALLBACK_RULE"
+      ]
+    },
+    "optimized_power_kw": 2111.57,
+    "baseline_power_kw": 2223.64,
+    "power_delta_kw": -112.07,
+    "power_reduction_pct": 5.04,
+    "basis": "model_estimate (simulation), same demand/reserve/pressure/scenario"
+  },
+  "execution_permission": "simulation_candidate_only",
+  "simulation_feasible": true,
+  "requires_field_review": true,
+  "fallback_candidate": null,
+  "is_fallback": false
+}

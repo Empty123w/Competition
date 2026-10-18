@@ -45,6 +45,17 @@ RC_CAPACITY_START = "CAPACITY_LOW_START"
 RC_ADJUST_LOAD = "ADJUST_LOAD"
 RC_HOLD = "HOLD"
 RC_DEBOUNCE_INSUFFICIENT = "DEBOUNCE_INSUFFICIENT_HISTORY"
+# --- B3 ---
+RC_TIMEOUT = "TIMEOUT"
+RC_FALLBACK_RULE = "FALLBACK_RULE"
+RC_DEVICE_UNAVAILABLE = "DEVICE_UNAVAILABLE"
+RC_RESERVE_N1 = "RESERVE_N1_INSUFFICIENT"
+RC_TRANSITION_CAPACITY_GAP = "TRANSITION_CAPACITY_GAP"
+RC_OUT_OF_MODEL_RANGE = "OUT_OF_MODEL_RANGE"
+RC_POWER_OVER_CAP = "POWER_OVER_CAP"
+RC_SURGE_NOT_ASSESSED = "SURGE_NOT_ASSESSED_B4"
+RC_PRESSURE_COUNTERFACTUAL = "PRESSURE_COUNTERFACTUAL_UNSUPPORTED"
+RC_RUL_SIMULATION = "RUL_SIMULATION_PENALTY_ON"
 
 # 真实设备仅 4#、5# (V1.1 §2.2); 3# 仅用于独立仿真场景
 DEVICE_IDS = ("4#", "5#")
@@ -329,6 +340,49 @@ class DispatchConstraints:
         return "simulation" if any(s in UNCONFIRMED_SOURCES for s in used) else "rule_baseline"
 
 
+@dataclass
+class RulAssessment:
+    """B3 可选模拟寿命输入 (来自 A 的 rul_json(), validation_mode=simulation)。
+
+    仅参与**软惩罚排序**, 不触发停机; 缺失时不得补造。
+    """
+    device_id: str
+    estimated_rul_hours: Optional[float] = None
+    lower_bound_hours: Optional[float] = None
+    upper_bound_hours: Optional[float] = None
+    method: str = ""
+    source: str = "simulation"
+    validation_mode: str = "simulation"
+
+    def __post_init__(self) -> None:
+        self.device_id = normalize_device_id(self.device_id)
+
+    @classmethod
+    def from_rul_json(cls, payload: dict) -> list["RulAssessment"]:
+        out = []
+        for d in (payload or {}).get("devices", []):
+            out.append(cls(
+                device_id=d.get("device_id"),
+                estimated_rul_hours=safe_float(d.get("estimated_rul_hours")),
+                lower_bound_hours=safe_float(d.get("lower_bound_hours")),
+                upper_bound_hours=safe_float(d.get("upper_bound_hours")),
+                method=d.get("method", ""),
+                source="simulation", validation_mode=(payload or {}).get("validation_mode", "simulation"),
+            ))
+        return out
+
+    def to_dict(self) -> dict:
+        return {
+            "device_id": self.device_id,
+            "estimated_rul_hours": safe_float(self.estimated_rul_hours, 1),
+            "lower_bound_hours": safe_float(self.lower_bound_hours, 1),
+            "upper_bound_hours": safe_float(self.upper_bound_hours, 1),
+            "method": self.method,
+            "source": self.source,
+            "validation_mode": self.validation_mode,
+        }
+
+
 # ------------------------------------------------------------------ #
 # 规则状态 (供最小运行/停机与去抖判定; 由 pipeline 跨步传递)
 # ------------------------------------------------------------------ #
@@ -403,6 +457,18 @@ class DispatchResult:
     elapsed_seconds: Optional[float] = None
     action_sequence: list[str] = field(default_factory=list)
     source_flags: dict = field(default_factory=dict)
+    # --- B3 扩展字段 (向后兼容, 默认空/None) ---
+    target_combination: list[str] = field(default_factory=list)
+    estimated_energy_kwh: Optional[float] = None
+    pressure_prediction: dict = field(default_factory=dict)
+    surge_status: str = "not_assessed_b4"
+    transition_plan: list[dict] = field(default_factory=list)
+    baseline_comparison: dict = field(default_factory=dict)
+    execution_permission: str = "simulation_candidate_only"
+    simulation_feasible: bool = False
+    requires_field_review: bool = True
+    fallback_candidate: Optional[dict] = None
+    is_fallback: bool = False
 
     @property
     def feasible(self) -> bool:
@@ -430,6 +496,17 @@ class DispatchResult:
             "elapsed_seconds": safe_float(self.elapsed_seconds, 4),
             "action_sequence": list(self.action_sequence),
             "source_flags": dict(self.source_flags),
+            "target_combination": list(self.target_combination),
+            "estimated_energy_kwh": safe_float(self.estimated_energy_kwh, 2),
+            "pressure_prediction": _json_safe(self.pressure_prediction),
+            "surge_status": self.surge_status,
+            "transition_plan": _json_safe(self.transition_plan),
+            "baseline_comparison": _json_safe(self.baseline_comparison),
+            "execution_permission": self.execution_permission,
+            "simulation_feasible": bool(self.simulation_feasible),
+            "requires_field_review": bool(self.requires_field_review),
+            "fallback_candidate": _json_safe(self.fallback_candidate) if self.fallback_candidate else None,
+            "is_fallback": bool(self.is_fallback),
         }
 
 

@@ -49,6 +49,45 @@ pressure:
     reference_band_mpa: pending
     dynamics: simulation
 
+# ---- B3 多机优化调度 ----
+dispatch:
+  policy_version: "b3-optimizer-v0.1"
+  combo_enumeration: explicit_four      # 停机 / 仅4# / 仅5# / 双机
+  allocation: greedy_marginal           # 边际功率贪心分配
+  selection: min_total_normalized_objective
+  # 目标项权重 (分项先归一化再加权, 不同量纲不直接相加)
+  weights:
+    power: 1.0
+    switch: 0.05
+    health: 0.10
+    rul: 0.0                            # 默认关闭寿命惩罚
+  normalization:
+    power_ref_kw: 2500.0                # = 2 x rated_power
+    switch_ref: 2.0
+  health_penalty_map: { normal: 0.0, attention: 0.2, warning: 0.5, critical: 1.0 }
+  health_source: "unsupervised"          # 无监督软惩罚, 非真实故障概率
+  rul:
+    enabled: false                      # 默认不开启
+    simulation: true
+    threshold_hours: 500.0
+    source: "simulation"
+  timeout_seconds: 30.0
+  # 单机功率硬上限 (工程假设: 基于实测瞬时最大功率约 1497 kW 取裕度)
+  power_cap_kw_per_device: 1600.0
+  step_minutes: 1.0                    # 评估步长 (数据为 1 分钟粒度)
+  surge:
+    assessor: "B4"
+    status: "not_assessed_b4"
+  execution_permission: "simulation_candidate_only"   # 永不为 authorized
+  fallback:
+    enabled: true
+  source_flags:
+    demand_basis: pending
+    reserve: pending
+    pressure_band: pending
+    health_penalty: engineering
+    switch_cost: engineering
+
 # ---- 产物路径 ----
 paths:
   processed_dir: data/processed
@@ -56,3 +95,4 @@ paths:
   metrics_dir: artifacts/metrics
   power_model: artifacts/models/power_model.json
   pressure_model: artifacts/models/pressure_model.json
+  baseline_config: configs/baseline.yaml

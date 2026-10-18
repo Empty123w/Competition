@@ -1,0 +1,47 @@
+{
+  "status": "INFEASIBLE",
+  "reason_codes": [
+    "INFEASIBLE_CAPACITY"
+  ],
+  "as_of": "2026-09-11T00:00:00",
+  "forecast_id": "demo-fc",
+  "health_ids": [],
+  "model_version": "b2-power-v0.1",
+  "policy_version": "b3-optimizer-v0.1",
+  "validation_mode": "simulation",
+  "objective_components": {},
+  "device_actions": [],
+  "total_flow_m3_min": null,
+  "required_flow_m3_min": 560.0,
+  "estimated_power_kw": null,
+  "pressure_setpoint_mpa": 0.6,
+  "reserve_m3_min": null,
+  "constraints": [],
+  "explanation": "",
+  "elapsed_seconds": 0.0133,
+  "action_sequence": [],
+  "source_flags": {
+    "demand_basis": "pending",
+    "reserve": "pending",
+    "pressure_band": "pending",
+    "health_penalty": "engineering",
+    "switch_cost": "engineering"
+  },
+  "target_combination": [],
+  "estimated_energy_kwh": null,
+  "pressure_prediction": {},
+  "surge_status": "not_assessed_b4",
+  "transition_plan": [],
+  "baseline_comparison": {},
+  "execution_permission": "simulation_candidate_only",
+  "simulation_feasible": false,
+  "requires_field_review": true,
+  "fallback_candidate": {
+    "status": "INFEASIBLE",
+    "total_flow_m3_min": null,
+    "estimated_power_kw": 0.0,
+    "recheck_passed": false,
+    "candidate_type": "rule_fallback"
+  },
+  "is_fallback": false
+}
