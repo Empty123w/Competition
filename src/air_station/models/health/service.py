@@ -48,10 +48,15 @@ def needed_columns(thresholds: dict) -> set[str]:
 def _load_features(processed_dir: str, thresholds: dict) -> pd.DataFrame:
     """只读所需列并降为 float32, 加载后第一步过滤 running==1。"""
     path = Path(processed_dir) / "health_features.parquet"
+    if not path.exists():
+        raise FileNotFoundError(
+            f"[health] 特征文件缺失: {path} (先运行 data.pipeline --stage features)")
     import pyarrow.parquet as pq
     avail = set(pq.read_schema(path).names)
     use = sorted(c for c in needed_columns(thresholds) if c in avail)
     df = pd.read_parquet(path, columns=use)
+    if df.empty:
+        raise ValueError(f"[health] 特征文件为空: {path}")
     for c in df.columns:
         if df[c].dtype == "float64":
             df[c] = df[c].astype("float32")
@@ -66,9 +71,9 @@ def _trend_direction(row: pd.Series, feature: str, higher_is_worse: bool,
         return "平稳"
     slope = float(row[col])
     if slope > eps:
-        return "恶化" if higher_is_worse else "好转"
+        return "恶化" if higher_is_worse else "改善"
     if slope < -eps:
-        return "好转" if higher_is_worse else "恶化"
+        return "改善" if higher_is_worse else "恶化"
     return "平稳"
 
 
@@ -93,7 +98,7 @@ def _device_entry(number: int, row: pd.Series, thresholds: dict) -> dict:
         direction = _trend_direction(row, feature, worst["higher_is_worse"],
                                      tw.get("window", 15), tw.get("slope_epsilon", 0.02))
         factor = worst["label"] + ("连续上升" if direction == "恶化" else
-                                   ("持续下降" if direction == "好转" else "偏离正常范围"))
+                                   ("持续下降" if direction == "改善" else "偏离正常范围"))
         cur = f"{worst['value']:.2f} {worst['unit']}"
         rng = worst.get("normal_range")
         rng_s = f"{rng[0]} ~ {rng[1]} {worst['unit']}" if rng else "N/A"
@@ -120,6 +125,15 @@ def _device_entry(number: int, row: pd.Series, thresholds: dict) -> dict:
     }
 
 
+def _to_utc_z(ts) -> str:
+    """无时区本地时间按 Asia/Shanghai 解释, 再转 UTC, 输出 Z 格式。"""
+    from zoneinfo import ZoneInfo
+    t = pd.Timestamp(ts)
+    if t.tzinfo is None:
+        t = t.tz_localize("Asia/Shanghai")
+    return t.tz_convert("UTC").strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
 def health_json(processed_dir: str = "data/processed",
                 thresholds_path: str = rules.DEFAULT_THRESHOLDS) -> dict:
     thresholds = rules.load_thresholds(thresholds_path)
@@ -128,12 +142,14 @@ def health_json(processed_dir: str = "data/processed",
     eval_time = None
     for number, sub in df.sort_values(["device_id", "time"]).groupby("device_id", observed=True):
         row = sub.iloc[-1]
-        eval_time = pd.Timestamp(row["time"]) if eval_time is None else max(eval_time, pd.Timestamp(row["time"]))
+        ts = pd.Timestamp(row["time"])
+        eval_time = ts if eval_time is None else max(eval_time, ts)
         devices.append(_device_entry(int(number), row, thresholds))
+    devices.sort(key=lambda d: d["device_id"])
     return {
         "status": "success",
         "validation_mode": "unsupervised",
-        "evaluation_time": eval_time.isoformat() if eval_time is not None else None,
+        "evaluation_time": _to_utc_z(eval_time) if eval_time is not None else None,
         "devices": devices,
     }
 

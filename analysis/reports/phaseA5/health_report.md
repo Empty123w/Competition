@@ -1,7 +1,7 @@
 # 阶段 A5 设备健康诊断报告
 
 - 验证模式：unsupervised（无监督，无多类故障标签）
-- 评估时刻：2026-09-12T00:00:00
+- 评估时刻：2026-09-11T16:00:00Z
 - 数据源：`data/processed/health_features.parquet`（已过滤 running==1）
 - 阈值来源：`configs/health_thresholds.yaml`（外部化，可调）
 

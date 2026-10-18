@@ -76,7 +76,7 @@ def evaluate(processed_dir: str = "data/processed",
 
     out = {
         "validation_mode": "unsupervised",
-        "evaluation_time": eval_time.isoformat() if eval_time is not None else None,
+        "evaluation_time": service._to_utc_z(eval_time) if eval_time is not None else None,
         "warning_threshold": warning_thr,
         "devices": devices,
     }
