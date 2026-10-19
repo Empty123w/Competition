@@ -1,0 +1,571 @@
+{
+  "protocol": {
+    "truth_mechanism": {
+      "form": "quadratic stability limit q_stab(p)=A+B*x+C*x^2, x=p-0.66",
+      "params": {
+        "A": 82.0,
+        "B": 300.0,
+        "C": -400.0
+      },
+      "independence": "与 B4 的 linear 90+350*x 在函数形式与参数上均不同, 且由独立工程估计给定",
+      "limitation": "仍为仿真替代, 非厂家真实喘振线; 不伪造厂家边界"
+    },
+    "event_definition": "flow<q_stab(p) 连续>=3s",
+    "alarm_definition": "B4 risk in {medium,high}; EW flow<q_b4(p)+band; unknown 单列(不计报警)",
+    "match_window_s": 120,
+    "lead_target_s": 30.0,
+    "lead_denominator": "全部危险事件(漏报不排除)",
+    "ew_band_m3min": 40.0,
+    "band_frozen": true,
+    "evidence_scope": "合成秒级仿真; 非现场; 非分钟插值",
+    "uses_B5_final_window": false
+  },
+  "dev": {
+    "scenarios": {
+      "normal_low": {
+        "n_seconds": 900,
+        "true_events": 0,
+        "unknown_seconds": 0,
+        "b4": {
+          "time_level": {
+            "TP": 0,
+            "FP": 0,
+            "FN": 0,
+            "TN": 900,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "event_level": {
+            "n_events": 0,
+            "n_detected": 0,
+            "leads_s": [],
+            "lead_ge_30s_coverage_all_events": null
+          },
+          "false_alarm_onsets": 0,
+          "false_alarms_per_hour": 0.0,
+          "alarm_active_seconds": 0,
+          "normal_seconds": 900
+        },
+        "ew": {
+          "time_level": {
+            "TP": 0,
+            "FP": 0,
+            "FN": 0,
+            "TN": 900,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "event_level": {
+            "n_events": 0,
+            "n_detected": 0,
+            "leads_s": [],
+            "lead_ge_30s_coverage_all_events": null
+          },
+          "false_alarm_onsets": 0,
+          "false_alarms_per_hour": 0.0,
+          "alarm_active_seconds": 0,
+          "normal_seconds": 900
+        }
+      },
+      "brief_disturb": {
+        "n_seconds": 900,
+        "true_events": 0,
+        "unknown_seconds": 0,
+        "b4": {
+          "time_level": {
+            "TP": 0,
+            "FP": 0,
+            "FN": 0,
+            "TN": 900,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "event_level": {
+            "n_events": 0,
+            "n_detected": 0,
+            "leads_s": [],
+            "lead_ge_30s_coverage_all_events": null
+          },
+          "false_alarm_onsets": 0,
+          "false_alarms_per_hour": 0.0,
+          "alarm_active_seconds": 0,
+          "normal_seconds": 900
+        },
+        "ew": {
+          "time_level": {
+            "TP": 0,
+            "FP": 0,
+            "FN": 0,
+            "TN": 900,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "event_level": {
+            "n_events": 0,
+            "n_detected": 0,
+            "leads_s": [],
+            "lead_ge_30s_coverage_all_events": null
+          },
+          "false_alarm_onsets": 0,
+          "false_alarms_per_hour": 0.0,
+          "alarm_active_seconds": 0,
+          "normal_seconds": 900
+        }
+      },
+      "gradual": {
+        "n_seconds": 900,
+        "true_events": 1,
+        "unknown_seconds": 0,
+        "b4": {
+          "time_level": {
+            "TP": 728,
+            "FP": 20,
+            "FN": 0,
+            "TN": 152,
+            "precision": 0.9733,
+            "recall": 1.0,
+            "f1": 0.9864
+          },
+          "event_level": {
+            "n_events": 1,
+            "n_detected": 1,
+            "leads_s": [
+              23
+            ],
+            "lead_ge_30s_coverage_all_events": 0.0
+          },
+          "false_alarm_onsets": 3,
+          "false_alarms_per_hour": 12.0,
+          "alarm_active_seconds": 748,
+          "normal_seconds": 172
+        },
+        "ew": {
+          "time_level": {
+            "TP": 728,
+            "FP": 65,
+            "FN": 0,
+            "TN": 107,
+            "precision": 0.918,
+            "recall": 1.0,
+            "f1": 0.9573
+          },
+          "event_level": {
+            "n_events": 1,
+            "n_detected": 1,
+            "leads_s": [
+              65
+            ],
+            "lead_ge_30s_coverage_all_events": 1.0
+          },
+          "false_alarm_onsets": 1,
+          "false_alarms_per_hour": 4.0,
+          "alarm_active_seconds": 793,
+          "normal_seconds": 172
+        }
+      }
+    },
+    "summary": {
+      "b4": {
+        "events": 1,
+        "detected": 1,
+        "recall_event_level": 1.0,
+        "lead_ge_30s_coverage_all_events": 0.0,
+        "precision_time_level": 0.9733,
+        "recall_time_level": 1.0,
+        "false_alarms_per_hour": 4.0,
+        "alarm_active_ratio": 0.277,
+        "unknown_seconds": 0
+      },
+      "ew": {
+        "events": 1,
+        "detected": 1,
+        "recall_event_level": 1.0,
+        "lead_ge_30s_coverage_all_events": 1.0,
+        "precision_time_level": 0.918,
+        "recall_time_level": 1.0,
+        "false_alarms_per_hour": 1.333,
+        "alarm_active_ratio": 0.2937
+      }
+    },
+    "total_hours": 0.75
+  },
+  "valid": {
+    "scenarios": {
+      "normal_low": {
+        "n_seconds": 900,
+        "true_events": 0,
+        "unknown_seconds": 0,
+        "b4": {
+          "time_level": {
+            "TP": 0,
+            "FP": 0,
+            "FN": 0,
+            "TN": 900,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "event_level": {
+            "n_events": 0,
+            "n_detected": 0,
+            "leads_s": [],
+            "lead_ge_30s_coverage_all_events": null
+          },
+          "false_alarm_onsets": 0,
+          "false_alarms_per_hour": 0.0,
+          "alarm_active_seconds": 0,
+          "normal_seconds": 900
+        },
+        "ew": {
+          "time_level": {
+            "TP": 0,
+            "FP": 0,
+            "FN": 0,
+            "TN": 900,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "event_level": {
+            "n_events": 0,
+            "n_detected": 0,
+            "leads_s": [],
+            "lead_ge_30s_coverage_all_events": null
+          },
+          "false_alarm_onsets": 0,
+          "false_alarms_per_hour": 0.0,
+          "alarm_active_seconds": 0,
+          "normal_seconds": 900
+        }
+      },
+      "brief_disturb": {
+        "n_seconds": 900,
+        "true_events": 0,
+        "unknown_seconds": 0,
+        "b4": {
+          "time_level": {
+            "TP": 0,
+            "FP": 0,
+            "FN": 0,
+            "TN": 900,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "event_level": {
+            "n_events": 0,
+            "n_detected": 0,
+            "leads_s": [],
+            "lead_ge_30s_coverage_all_events": null
+          },
+          "false_alarm_onsets": 0,
+          "false_alarms_per_hour": 0.0,
+          "alarm_active_seconds": 0,
+          "normal_seconds": 900
+        },
+        "ew": {
+          "time_level": {
+            "TP": 0,
+            "FP": 0,
+            "FN": 0,
+            "TN": 900,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "event_level": {
+            "n_events": 0,
+            "n_detected": 0,
+            "leads_s": [],
+            "lead_ge_30s_coverage_all_events": null
+          },
+          "false_alarm_onsets": 0,
+          "false_alarms_per_hour": 0.0,
+          "alarm_active_seconds": 0,
+          "normal_seconds": 900
+        }
+      },
+      "gradual": {
+        "n_seconds": 900,
+        "true_events": 1,
+        "unknown_seconds": 0,
+        "b4": {
+          "time_level": {
+            "TP": 730,
+            "FP": 19,
+            "FN": 0,
+            "TN": 151,
+            "precision": 0.9746,
+            "recall": 1.0,
+            "f1": 0.9872
+          },
+          "event_level": {
+            "n_events": 1,
+            "n_detected": 1,
+            "leads_s": [
+              20
+            ],
+            "lead_ge_30s_coverage_all_events": 0.0
+          },
+          "false_alarm_onsets": 2,
+          "false_alarms_per_hour": 8.0,
+          "alarm_active_seconds": 749,
+          "normal_seconds": 170
+        },
+        "ew": {
+          "time_level": {
+            "TP": 730,
+            "FP": 61,
+            "FN": 0,
+            "TN": 109,
+            "precision": 0.9229,
+            "recall": 1.0,
+            "f1": 0.9599
+          },
+          "event_level": {
+            "n_events": 1,
+            "n_detected": 1,
+            "leads_s": [
+              62
+            ],
+            "lead_ge_30s_coverage_all_events": 1.0
+          },
+          "false_alarm_onsets": 2,
+          "false_alarms_per_hour": 8.0,
+          "alarm_active_seconds": 791,
+          "normal_seconds": 170
+        }
+      },
+      "rapid": {
+        "n_seconds": 900,
+        "true_events": 0,
+        "unknown_seconds": 0,
+        "b4": {
+          "time_level": {
+            "TP": 0,
+            "FP": 0,
+            "FN": 0,
+            "TN": 900,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "event_level": {
+            "n_events": 0,
+            "n_detected": 0,
+            "leads_s": [],
+            "lead_ge_30s_coverage_all_events": null
+          },
+          "false_alarm_onsets": 0,
+          "false_alarms_per_hour": 0.0,
+          "alarm_active_seconds": 0,
+          "normal_seconds": 900
+        },
+        "ew": {
+          "time_level": {
+            "TP": 0,
+            "FP": 34,
+            "FN": 0,
+            "TN": 866,
+            "precision": 0.0,
+            "recall": null,
+            "f1": null
+          },
+          "event_level": {
+            "n_events": 0,
+            "n_detected": 0,
+            "leads_s": [],
+            "lead_ge_30s_coverage_all_events": null
+          },
+          "false_alarm_onsets": 32,
+          "false_alarms_per_hour": 128.0,
+          "alarm_active_seconds": 34,
+          "normal_seconds": 900
+        }
+      },
+      "switch": {
+        "n_seconds": 900,
+        "true_events": 0,
+        "unknown_seconds": 0,
+        "b4": {
+          "time_level": {
+            "TP": 0,
+            "FP": 0,
+            "FN": 0,
+            "TN": 900,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "event_level": {
+            "n_events": 0,
+            "n_detected": 0,
+            "leads_s": [],
+            "lead_ge_30s_coverage_all_events": null
+          },
+          "false_alarm_onsets": 0,
+          "false_alarms_per_hour": 0.0,
+          "alarm_active_seconds": 0,
+          "normal_seconds": 900
+        },
+        "ew": {
+          "time_level": {
+            "TP": 0,
+            "FP": 0,
+            "FN": 0,
+            "TN": 900,
+            "precision": null,
+            "recall": null,
+            "f1": null
+          },
+          "event_level": {
+            "n_events": 0,
+            "n_detected": 0,
+            "leads_s": [],
+            "lead_ge_30s_coverage_all_events": null
+          },
+          "false_alarm_onsets": 0,
+          "false_alarms_per_hour": 0.0,
+          "alarm_active_seconds": 0,
+          "normal_seconds": 900
+        }
+      },
+      "noisy": {
+        "n_seconds": 900,
+        "true_events": 4,
+        "unknown_seconds": 0,
+        "b4": {
+          "time_level": {
+            "TP": 689,
+            "FP": 20,
+            "FN": 0,
+            "TN": 191,
+            "precision": 0.9718,
+            "recall": 1.0,
+            "f1": 0.9857
+          },
+          "event_level": {
+            "n_events": 4,
+            "n_detected": 4,
+            "leads_s": [
+              13,
+              23,
+              28,
+              41
+            ],
+            "lead_ge_30s_coverage_all_events": 0.25
+          },
+          "false_alarm_onsets": 3,
+          "false_alarms_per_hour": 12.0,
+          "alarm_active_seconds": 709,
+          "normal_seconds": 211
+        },
+        "ew": {
+          "time_level": {
+            "TP": 689,
+            "FP": 78,
+            "FN": 0,
+            "TN": 133,
+            "precision": 0.8983,
+            "recall": 1.0,
+            "f1": 0.9464
+          },
+          "event_level": {
+            "n_events": 4,
+            "n_detected": 4,
+            "leads_s": [
+              82,
+              92,
+              97,
+              110
+            ],
+            "lead_ge_30s_coverage_all_events": 1.0
+          },
+          "false_alarm_onsets": 9,
+          "false_alarms_per_hour": 36.0,
+          "alarm_active_seconds": 767,
+          "normal_seconds": 211
+        }
+      },
+      "sensor_missing": {
+        "n_seconds": 900,
+        "true_events": 1,
+        "unknown_seconds": 99,
+        "b4": {
+          "time_level": {
+            "TP": 612,
+            "FP": 22,
+            "FN": 99,
+            "TN": 167,
+            "precision": 0.9653,
+            "recall": 0.8608,
+            "f1": 0.91
+          },
+          "event_level": {
+            "n_events": 1,
+            "n_detected": 1,
+            "leads_s": [
+              26
+            ],
+            "lead_ge_30s_coverage_all_events": 0.0
+          },
+          "false_alarm_onsets": 4,
+          "false_alarms_per_hour": 16.0,
+          "alarm_active_seconds": 634,
+          "normal_seconds": 189
+        },
+        "ew": {
+          "time_level": {
+            "TP": 612,
+            "FP": 71,
+            "FN": 99,
+            "TN": 118,
+            "precision": 0.896,
+            "recall": 0.8608,
+            "f1": 0.878
+          },
+          "event_level": {
+            "n_events": 1,
+            "n_detected": 1,
+            "leads_s": [
+              71
+            ],
+            "lead_ge_30s_coverage_all_events": 1.0
+          },
+          "false_alarm_onsets": 1,
+          "false_alarms_per_hour": 4.0,
+          "alarm_active_seconds": 683,
+          "normal_seconds": 189
+        }
+      }
+    },
+    "summary": {
+      "b4": {
+        "events": 6,
+        "detected": 6,
+        "recall_event_level": 1.0,
+        "lead_ge_30s_coverage_all_events": 0.1667,
+        "precision_time_level": 0.9708,
+        "recall_time_level": 0.9535,
+        "false_alarms_per_hour": 5.143,
+        "alarm_active_ratio": 0.3321,
+        "unknown_seconds": 99
+      },
+      "ew": {
+        "events": 6,
+        "detected": 6,
+        "recall_event_level": 1.0,
+        "lead_ge_30s_coverage_all_events": 1.0,
+        "precision_time_level": 0.8927,
+        "recall_time_level": 0.9535,
+        "false_alarms_per_hour": 25.143,
+        "alarm_active_ratio": 0.3611
+      }
+    },
+    "total_hours": 1.75
+  }
+}

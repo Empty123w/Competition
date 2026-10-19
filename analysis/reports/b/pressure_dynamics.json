@@ -1,0 +1,137 @@
+{
+  "protocol": {
+    "train": [
+      "2026-03-12",
+      "2026-07-31 23:59:00"
+    ],
+    "valid": [
+      "2026-08-01",
+      "2026-08-20 23:59:00"
+    ],
+    "uses_B5_final_window": false,
+    "evidence_scope": "开发/验证窗口; 分钟级; 非现场反事实验证"
+  },
+  "persistence_valid": {
+    "MAE": 0.00212,
+    "RMSE": 0.01163,
+    "n": 28787
+  },
+  "measurement_note": "仅有站级母管压力与站级供气流量; 无独立耗气测点与管网储气参数, 故 ARX 输入 u 仅为供气吞吐代理, 不能识别调度动作的因果响应",
+  "variants": {
+    "arx_na1_nb1": {
+      "one_step_valid": {
+        "MAE": 0.00296,
+        "RMSE": 0.01158,
+        "n": 28786
+      },
+      "free_run_mae_by_horizon": {
+        "k1": 0.00296,
+        "k2": 0.00478,
+        "k3": 0.00573,
+        "k4": 0.00632,
+        "k5": 0.00709
+      },
+      "ar_poles_abs": [],
+      "max_pole_abs": 0.0,
+      "stable": true,
+      "step_flow_+50m3min_effect_on_next_p": -0.000101,
+      "beta": [
+        0.985256,
+        -2e-06,
+        -1.8e-05,
+        0.001264,
+        0.007762
+      ],
+      "cols": [
+        "p_lag1",
+        "u_lag0",
+        "du_lag0",
+        "n_lag0"
+      ]
+    },
+    "arx_na2_nb1": {
+      "one_step_valid": {
+        "MAE": 0.0029,
+        "RMSE": 0.01151,
+        "n": 28786
+      },
+      "free_run_mae_by_horizon": {
+        "k1": 0.0029,
+        "k2": 0.00436,
+        "k3": 0.00511,
+        "k4": 0.00554,
+        "k5": 0.00617
+      },
+      "ar_poles_abs": [
+        0.20683
+      ],
+      "max_pole_abs": 0.20683,
+      "stable": true,
+      "step_flow_+50m3min_effect_on_next_p": -8.3e-05,
+      "beta": [
+        0.818471,
+        0.169284,
+        -2e-06,
+        5e-06,
+        0.001075,
+        0.006413
+      ],
+      "cols": [
+        "p_lag1",
+        "p_lag2",
+        "u_lag0",
+        "du_lag0",
+        "n_lag0"
+      ]
+    },
+    "arx_na2_nb2": {
+      "one_step_valid": {
+        "MAE": 0.0029,
+        "RMSE": 0.01151,
+        "n": 28786
+      },
+      "free_run_mae_by_horizon": {
+        "k1": 0.0029,
+        "k2": 0.00436,
+        "k3": 0.00511,
+        "k4": 0.00554,
+        "k5": 0.00617
+      },
+      "ar_poles_abs": [
+        0.20683
+      ],
+      "max_pole_abs": 0.20683,
+      "stable": true,
+      "step_flow_+50m3min_effect_on_next_p": 2e-05,
+      "beta": [
+        0.818471,
+        0.169284,
+        0.0,
+        -2e-06,
+        2e-06,
+        0.001075,
+        0.006413
+      ],
+      "cols": [
+        "p_lag1",
+        "p_lag2",
+        "u_lag0",
+        "u_lag1",
+        "du_lag0",
+        "n_lag0"
+      ]
+    }
+  },
+  "conclusion": {
+    "best_one_step": "arx_na2_nb1",
+    "persistence_beaten": false,
+    "counterfactual_identifiable": false,
+    "reason": "Δp 与流量变化近乎不相关(历史 corr≈-0.017), ARX 输入为吞吐代理; 低预测误差主要来自持续性, 不等于调度反事实可信",
+    "gaps": [
+      "独立耗气(demand)测点",
+      "管网储气/容积与响应时延参数",
+      "设定点阶跃受控试验数据",
+      "逐机排气压力与母管的动态关系"
+    ]
+  }
+}
