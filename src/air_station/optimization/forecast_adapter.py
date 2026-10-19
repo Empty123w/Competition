@@ -47,14 +47,14 @@ class ForecastMeta:
 
 @dataclass
 class ForecastBundle:
-    byissue_ts: dict[pd.Timestamp, dict[int, dict]] = field(default_factory=dict)
+    by_issue: dict[pd.Timestamp, dict[int, dict]] = field(default_factory=dict)
     actual_by_target: dict[pd.Timestamp, float] = field(default_factory=dict)
     horizons: list[int] = field(default_factory=list)
     meta: ForecastMeta = field(default_factory=ForecastMeta)
 
     # ---- 调度输入 (predictions) ----
     def forecast_result(self, as_of, horizon_minutes: int) -> Optional[ForecastResult]:
-        row = self.byissue_ts.get(pd.Timestamp(as_of), {}).get(int(horizon_minutes))
+        row = self.by_issue.get(pd.Timestamp(as_of), {}).get(int(horizon_minutes))
         if row is None:
             return None
         return ForecastResult(
@@ -69,7 +69,7 @@ class ForecastBundle:
         ts = pd.Timestamp(as_of)
         out: dict[int, float] = {}
         for h in hours_minutes:
-            row = self.byissue_ts.get(ts, {}).get(int(h))
+            row = self.by_issue.get(ts, {}).get(int(h))
             if row is None or row.get("predicted_flow") is None:
                 raise KeyError(f"缺预测: as_of={ts} horizon={h}")
             out[int(h)] = float(row["predicted_flow"])
@@ -88,7 +88,7 @@ class ForecastBundle:
         - **绝不**使用 `actual_flow` 或未来时刻的数据补齐。
         """
         ts = pd.Timestamp(as_of)
-        rows = self.byissue_ts.get(ts, {})
+        rows = self.by_issue.get(ts, {})
         if not rows:
             raise KeyError(f"as_of={ts} 无任何预测")
         avail = sorted(h for h, r in rows.items() if r.get("predicted_flow") is not None)
@@ -154,7 +154,7 @@ def load_forecast_bundle(path: str | Path, meta: Optional[ForecastMeta] = None,
         rec = {"predicted_flow": _f(row.predicted_flow),
                "lower_bound": _f(getattr(row, "lower_bound", None)),
                "upper_bound": _f(getattr(row, "upper_bound", None))}
-        bundle.byissue_ts.setdefault(pd.Timestamp(row.issue_ts), {})[h] = rec
+        bundle.by_issue.setdefault(pd.Timestamp(row.issue_ts), {})[h] = rec
         # 内嵌 actual_flow (旧格式) —— 仅评估
         act = _f(getattr(row, "actual_flow", None))
         if act is not None:
@@ -162,7 +162,7 @@ def load_forecast_bundle(path: str | Path, meta: Optional[ForecastMeta] = None,
     if scoring is not None:
         attach_scoring_actuals(bundle, scoring, split=scoring_split)
     if meta.data_cutoff is None:
-        lastissue_ts = max(bundle.byissue_ts)
+        lastissue_ts = max(bundle.by_issue)
         meta.data_cutoff = (lastissue_ts + pd.Timedelta(minutes=max(bundle.horizons))).isoformat()
     return bundle
 
