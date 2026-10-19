@@ -1,0 +1,43 @@
+{
+  "code_evidence": {
+    "demand_basis": "configs/baseline.yaml demand.basis = upper_bound (B1 用 forecast.demand_value(upper_bound))",
+    "reserve": "need=required+extra5% 仅用于**容量/启停判定**(是否开机); 供气分配目标=required(upper_bound)",
+    "allocation": "基载机(4#)=required-min(5#), 调节机(5#)吸收余量 -> 双机时 5# 常压到最小 -> 低负荷来源",
+    "power_model": "power_estimate.mode=none -> B1 自身不产功率; 实验中用 B2 模型按其流量估算",
+    "no_optimization": "无功率搜索/无多步预测; 单步规则(容量驱动+压力迟滞+启停锁定+切换预算)"
+  },
+  "protocol": {
+    "window": "valid",
+    "steps": 1915
+  },
+  "b1_vs_upper": {
+    "b1_supply_m3": 13055340.8,
+    "sum_ub15_m3": 13040117.0,
+    "b1_over_ub_pct": 0.117
+  },
+  "b1_vs_historical": {
+    "steps": 1915,
+    "b1_supply_m3": 13055340.8,
+    "hist_supply_m3": 12444220.3,
+    "b1_over_hist_pct": 4.911,
+    "b1_energy_kwh_est": 1229014.1,
+    "hist_energy_kwh": 1164511.8,
+    "b1_sec": 0.094139,
+    "hist_sec": 0.093579,
+    "b1_mean_n": 2.0,
+    "hist_mean_n": 1.985
+  },
+  "b1_device_share": {
+    "4#": 0.5826,
+    "5#": 0.4174,
+    "5#_at_min_frac": 0.0433
+  },
+  "hist_device_load_ratio_mean": {
+    "4": 0.8501,
+    "5": 0.7738
+  },
+  "hist_running_share": {
+    "4": 0.9971,
+    "5": 0.9868
+  }
+}
