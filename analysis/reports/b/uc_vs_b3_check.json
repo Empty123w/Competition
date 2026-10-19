@@ -1,0 +1,21 @@
+{
+  "block": {
+    "start": "2026-04-20 00:00:00",
+    "n": 480
+  },
+  "both_exec": 475,
+  "same_combo": 475,
+  "same_flow_within_1m3min": 475,
+  "b3_fallback_steps": 5,
+  "uc_fallback_steps": 5,
+  "combo_identical_pct": 100.0,
+  "flow_identical_pct": 100.0,
+  "ramp": {
+    "unit": "m3/min per 15-min step (running machine)",
+    "source": "data-derived p99(|Δflow per minute|) x STEP",
+    "RAMP_STEP": {
+      "4#": 77.0,
+      "5#": 287.0
+    }
+  }
+}
