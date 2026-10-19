@@ -1,0 +1,9 @@
+[start] window=valid n=1916 strategies=['b1_rule', 'b3_b4', 'cand', 'k0.50', 'k0.33', 'k0.25', 'k0.15', 'k0.00', 'bal']
+[ckpt] 250/1916 steps; best-not-yet; elapsed=47s
+[ckpt] 500/1916 steps; best-not-yet; elapsed=90s
+[ckpt] 750/1916 steps; best-not-yet; elapsed=132s
+[ckpt] 1000/1916 steps; best-not-yet; elapsed=172s
+[ckpt] 1250/1916 steps; best-not-yet; elapsed=210s
+[ckpt] 1500/1916 steps; best-not-yet; elapsed=250s
+[ckpt] 1750/1916 steps; best-not-yet; elapsed=291s
+[ckpt] 1916/1916 steps; best-not-yet; elapsed=318s
