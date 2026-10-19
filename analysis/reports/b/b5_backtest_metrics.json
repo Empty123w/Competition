@@ -1,0 +1,316 @@
+{
+  "meta": {
+    "step_minutes": 5,
+    "n_samples": 6325,
+    "window": [
+      "2026-08-21 00:00:00",
+      "2026-09-11 23:00:00"
+    ],
+    "runtime_s": 608.8,
+    "stateful_replay": true,
+    "field_confirmable": "unknown (offline simulation; not field-confirmed)"
+  },
+  "windows": {
+    "all": {
+      "label": "all",
+      "n": 6325,
+      "duration_h": 527.083,
+      "required_m3": 15535785.2,
+      "b1_evaluable_steps": 4735,
+      "b1_energy_kwh": 1027382.01,
+      "b1_supply_m3": 11445124.8,
+      "b1_sec": 0.089766,
+      "b1_shortfall_m3": 28.78,
+      "b3_evaluable_steps": 4710,
+      "b3_energy_kwh": 983248.9,
+      "b3_supply_m3": 11383678.9,
+      "b3_sec": 0.086374,
+      "b3_shortfall_m3": 28.785,
+      "fair_steps": 4710,
+      "energy_reduction_pct": 3.8746,
+      "sec_reduction_pct": 3.6626,
+      "b3_surge": {
+        "low": 4568,
+        "medium": 144,
+        "unknown": 23,
+        "not_assessed_b4": 1590
+      },
+      "b3_blocked_steps": 23,
+      "pressure_unknown_steps": 2,
+      "obs_reference": {
+        "n": 6325,
+        "obs_supply_m3": 14927045.8,
+        "obs_energy_kwh": 1352502.27
+      },
+      "b1_big_small_minutes": 890.0,
+      "b3_big_small_minutes": 435.0,
+      "b1_4#_switches": 0,
+      "b1_5#_switches": 0,
+      "b3_4#_switches": 2,
+      "b3_5#_switches": 2
+    },
+    "common_feasible_preB4": {
+      "label": "common_feasible_preB4",
+      "n": 4735,
+      "duration_h": 394.583,
+      "required_m3": 11407722.7,
+      "b1_evaluable_steps": 4735,
+      "b1_energy_kwh": 1027382.01,
+      "b1_supply_m3": 11445124.8,
+      "b1_sec": 0.089766,
+      "b1_shortfall_m3": 28.78,
+      "b3_evaluable_steps": 4710,
+      "b3_energy_kwh": 983248.9,
+      "b3_supply_m3": 11383678.9,
+      "b3_sec": 0.086374,
+      "b3_shortfall_m3": 28.785,
+      "fair_steps": 4710,
+      "energy_reduction_pct": 3.8746,
+      "sec_reduction_pct": 3.6626,
+      "b3_surge": {
+        "low": 4568,
+        "medium": 144,
+        "unknown": 23
+      },
+      "b3_blocked_steps": 23,
+      "pressure_unknown_steps": 1,
+      "obs_reference": {
+        "n": 4735,
+        "obs_supply_m3": 10972009.4,
+        "obs_energy_kwh": 1000207.31
+      },
+      "b1_big_small_minutes": 890.0,
+      "b3_big_small_minutes": 435.0,
+      "b1_4#_switches": 0,
+      "b1_5#_switches": 0,
+      "b3_4#_switches": 2,
+      "b3_5#_switches": 2
+    },
+    "b4_retained": {
+      "label": "b4_retained",
+      "n": 4710,
+      "duration_h": 392.5,
+      "required_m3": 11379923.3,
+      "b1_evaluable_steps": 4710,
+      "b1_energy_kwh": 1022881.52,
+      "b1_supply_m3": 11408780.9,
+      "b1_sec": 0.089657,
+      "b1_shortfall_m3": 28.71,
+      "b3_evaluable_steps": 4710,
+      "b3_energy_kwh": 983248.9,
+      "b3_supply_m3": 11383678.9,
+      "b3_sec": 0.086374,
+      "b3_shortfall_m3": 28.785,
+      "fair_steps": 4710,
+      "energy_reduction_pct": 3.8746,
+      "sec_reduction_pct": 3.6626,
+      "b3_surge": {
+        "low": 4568,
+        "medium": 142
+      },
+      "b3_blocked_steps": 0,
+      "pressure_unknown_steps": 0,
+      "obs_reference": {
+        "n": 4710,
+        "obs_supply_m3": 10960210.5,
+        "obs_energy_kwh": 999001.62
+      },
+      "b1_big_small_minutes": 700.0,
+      "b3_big_small_minutes": 410.0,
+      "b1_4#_switches": 0,
+      "b1_5#_switches": 0,
+      "b3_4#_switches": 2,
+      "b3_5#_switches": 2
+    },
+    "matched_posthoc": {
+      "label": "matched_posthoc",
+      "n": 4672,
+      "duration_h": 389.333,
+      "required_m3": 11369523.9,
+      "b1_evaluable_steps": 4672,
+      "b1_energy_kwh": 1016673.74,
+      "b1_supply_m3": 11369524.8,
+      "b1_sec": 0.089421,
+      "b1_shortfall_m3": 28.78,
+      "b3_evaluable_steps": 4665,
+      "b3_energy_kwh": 979700.64,
+      "b3_supply_m3": 11354780.9,
+      "b3_sec": 0.086281,
+      "b3_shortfall_m3": 28.71,
+      "fair_steps": 4665,
+      "energy_reduction_pct": 3.4999,
+      "sec_reduction_pct": 3.4999,
+      "b3_surge": {
+        "low": 4568,
+        "medium": 99,
+        "unknown": 5
+      },
+      "b3_blocked_steps": 5,
+      "pressure_unknown_steps": 1,
+      "obs_reference": {
+        "n": 4672,
+        "obs_supply_m3": 10972009.4,
+        "obs_energy_kwh": 1000057.01
+      },
+      "b1_big_small_minutes": 260.0,
+      "b3_big_small_minutes": 240.0,
+      "b1_4#_switches": 0,
+      "b1_5#_switches": 0,
+      "b3_4#_switches": 2,
+      "b3_5#_switches": 0
+    }
+  },
+  "infeasible": {
+    "n": 1590,
+    "required_m3_unevaluable": 4128062.5,
+    "note": "容量不可行; 无供气动作; 不可评估; 不含 B4 阻断步"
+  },
+  "blocked_subset_of_common": {
+    "common_n": 4735,
+    "blocked_n": 23,
+    "note": "B4 阻断为共同可行子集, 不属容量不可行"
+  },
+  "by_level": {
+    "high": {
+      "label": "high",
+      "n": 1578,
+      "duration_h": 131.5,
+      "required_m3": 3968335.3,
+      "b1_evaluable_steps": 1578,
+      "b1_energy_kwh": 346224.79,
+      "b1_supply_m3": 3968336.1,
+      "b1_sec": 0.087247,
+      "b1_shortfall_m3": 9.84,
+      "b3_evaluable_steps": 1577,
+      "b3_energy_kwh": 337452.81,
+      "b3_supply_m3": 3965813.8,
+      "b3_sec": 0.08509,
+      "b3_shortfall_m3": 9.825,
+      "fair_steps": 1577,
+      "energy_reduction_pct": 2.4718,
+      "sec_reduction_pct": 2.4718,
+      "b3_surge": {
+        "low": 1577,
+        "unknown": 1
+      },
+      "b3_blocked_steps": 1,
+      "pressure_unknown_steps": 0,
+      "obs_reference": {
+        "n": 1578,
+        "obs_supply_m3": 3842396.1,
+        "obs_energy_kwh": 345882.5
+      },
+      "b1_big_small_minutes": 0.0,
+      "b3_big_small_minutes": 0.0,
+      "b1_4#_switches": 0,
+      "b1_5#_switches": 0,
+      "b3_4#_switches": 0,
+      "b3_5#_switches": 0
+    },
+    "low": {
+      "label": "low",
+      "n": 1579,
+      "duration_h": 131.583,
+      "required_m3": 3572748.2,
+      "b1_evaluable_steps": 1579,
+      "b1_energy_kwh": 336963.38,
+      "b1_supply_m3": 3610150.1,
+      "b1_sec": 0.093338,
+      "b1_shortfall_m3": 9.17,
+      "b3_evaluable_steps": 1556,
+      "b3_energy_kwh": 313536.11,
+      "b3_supply_m3": 3553667.1,
+      "b3_sec": 0.088229,
+      "b3_shortfall_m3": 9.195,
+      "fair_steps": 1556,
+      "energy_reduction_pct": 5.8168,
+      "sec_reduction_pct": 5.1516,
+      "b3_surge": {
+        "low": 1419,
+        "medium": 139,
+        "unknown": 21
+      },
+      "b3_blocked_steps": 21,
+      "pressure_unknown_steps": 1,
+      "obs_reference": {
+        "n": 1579,
+        "obs_supply_m3": 3399453.8,
+        "obs_energy_kwh": 314386.3
+      },
+      "b1_big_small_minutes": 890.0,
+      "b3_big_small_minutes": 435.0,
+      "b1_4#_switches": 0,
+      "b1_5#_switches": 0,
+      "b3_4#_switches": 2,
+      "b3_5#_switches": 2
+    },
+    "mid": {
+      "label": "mid",
+      "n": 1578,
+      "duration_h": 131.5,
+      "required_m3": 3866639.2,
+      "b1_evaluable_steps": 1578,
+      "b1_energy_kwh": 344193.84,
+      "b1_supply_m3": 3866638.6,
+      "b1_sec": 0.089016,
+      "b1_shortfall_m3": 9.77,
+      "b3_evaluable_steps": 1577,
+      "b3_energy_kwh": 332259.98,
+      "b3_supply_m3": 3864198.0,
+      "b3_sec": 0.085984,
+      "b3_shortfall_m3": 9.765,
+      "fair_steps": 1577,
+      "energy_reduction_pct": 3.406,
+      "sec_reduction_pct": 3.406,
+      "b3_surge": {
+        "low": 1572,
+        "unknown": 1,
+        "medium": 5
+      },
+      "b3_blocked_steps": 1,
+      "pressure_unknown_steps": 0,
+      "obs_reference": {
+        "n": 1578,
+        "obs_supply_m3": 3730159.5,
+        "obs_energy_kwh": 339938.51
+      },
+      "b1_big_small_minutes": 0.0,
+      "b3_big_small_minutes": 0.0,
+      "b1_4#_switches": 0,
+      "b1_5#_switches": 0,
+      "b3_4#_switches": 0,
+      "b3_5#_switches": 0
+    }
+  },
+  "comparison_pre_post_b4": {
+    "preB4_full": {
+      "n": 4735,
+      "b1_energy_kwh": 1027382.01,
+      "b3_energy_kwh": 986156.29,
+      "b1_supply_m3": 11445124.8,
+      "b3_supply_m3": 11411910.8,
+      "b1_sec": 0.089766,
+      "b3_sec": 0.086415,
+      "energy_reduction_pct": 4.0127,
+      "sec_reduction_pct": 3.7333
+    },
+    "postB4_retained": {
+      "n": 4710,
+      "b1_energy_kwh": 1022881.52,
+      "b3_energy_kwh": 983248.9,
+      "b1_supply_m3": 11408780.9,
+      "b3_supply_m3": 11383678.9,
+      "b1_sec": 0.089657,
+      "b3_sec": 0.086374,
+      "energy_reduction_pct": 3.8746,
+      "sec_reduction_pct": 3.6626
+    },
+    "all_window": {
+      "n": 6325,
+      "b1_evaluable": 4735,
+      "b3_evaluable": 4710,
+      "infeasible": 1590,
+      "infeasible_required_m3_unevaluable": 4128062.5
+    }
+  }
+}

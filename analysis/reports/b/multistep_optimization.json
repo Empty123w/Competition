@@ -1,0 +1,148 @@
+{
+  "protocol": {
+    "window": "2026-08-01~2026-08-20",
+    "step_minutes": 15,
+    "horizon_steps": 4,
+    "horizon_minutes": 60,
+    "reserve": "frozen extra 5%",
+    "demand_basis": "upper_bound",
+    "uses_B5_final_window": false,
+    "switch_penalty_kwh_per_event": 2.0,
+    "evidence_scope": "开发/验证窗口 + 仅过去信息 (季节日) 预测; oracle 仅诊断; 非 A 冻结口径, 非达标证据"
+  },
+  "per_planner": {
+    "b1_rule": {
+      "evaluable_steps": 1919,
+      "energy_kwh": 1216727.3,
+      "supply_m3": 12402896.1,
+      "sec_kwh_per_m3": 0.0981,
+      "shortfall_vs_observed_m3": 377408.09,
+      "surge": {
+        "medium": 724,
+        "low": 1195,
+        "unknown": 1
+      },
+      "blocked_steps": 1,
+      "big_small_minutes": 10260.0
+    },
+    "myopic": {
+      "evaluable_steps": 1691,
+      "energy_kwh": 989080.63,
+      "supply_m3": 10951120.9,
+      "sec_kwh_per_m3": 0.090318,
+      "shortfall_vs_observed_m3": 298856.72,
+      "surge": {
+        "medium": 615,
+        "low": 1076,
+        "unknown": 1
+      },
+      "blocked_steps": 1,
+      "big_small_minutes": 7110.0
+    },
+    "multi_step": {
+      "evaluable_steps": 1919,
+      "energy_kwh": 1121218.87,
+      "supply_m3": 12386795.0,
+      "sec_kwh_per_m3": 0.090517,
+      "shortfall_vs_observed_m3": 393508.59,
+      "surge": {
+        "medium": 713,
+        "low": 1206,
+        "unknown": 1
+      },
+      "blocked_steps": 1,
+      "big_small_minutes": 8970.0
+    },
+    "oracle": {
+      "evaluable_steps": 1919,
+      "energy_kwh": 1125946.71,
+      "supply_m3": 12480588.0,
+      "sec_kwh_per_m3": 0.090216,
+      "shortfall_vs_observed_m3": 0.07,
+      "surge": {
+        "medium": 717,
+        "low": 1202,
+        "unknown": 1
+      },
+      "blocked_steps": 1,
+      "big_small_minutes": 7935.0
+    }
+  },
+  "fair_steps": 1691,
+  "fair_energy_kwh": {
+    "b1_rule": 1072527.73,
+    "myopic": 989080.63,
+    "multi_step": 989322.68,
+    "oracle": 997964.96
+  },
+  "fair_supply_m3": {
+    "b1_rule": 10969021.8,
+    "myopic": 10951120.9,
+    "multi_step": 10952920.9,
+    "oracle": 11045865.9
+  },
+  "fair_sec": {
+    "b1_rule": 0.097778,
+    "myopic": 0.090318,
+    "multi_step": 0.090325,
+    "oracle": 0.090347
+  },
+  "fair_shortfall_vs_observed_m3": {
+    "b1_rule": 280955.75,
+    "myopic": 298856.72,
+    "multi_step": 297056.72,
+    "oracle": 0.06
+  },
+  "fair_big_small_minutes": {
+    "b1_rule": 8415.0,
+    "myopic": 7110.0,
+    "multi_step": 7125.0,
+    "oracle": 7215.0
+  },
+  "fair_big_small_reduction_pct": {
+    "myopic": 15.508,
+    "multi_step": 15.3298
+  },
+  "myopic_vs_b1_saving_pct": 7.7804,
+  "multi_step_vs_b1_saving_pct": 7.7578,
+  "oracle_vs_b1_saving_pct": 6.9521,
+  "multi_step_vs_myopic_pct": -0.0245,
+  "oracle_vs_myopic_pct": -0.8982,
+  "coverage": {
+    "b1_rule": 1920,
+    "myopic": 1692,
+    "multi_step": 1920,
+    "oracle": 1920
+  },
+  "myopic_infeasible_steps": 228,
+  "note_pct_basis": "*_vs_b1_saving_pct 为相对 B1 的电量降幅(%); multi_step_vs_myopic_pct 为相对 myopic(同规划器 H=1) 的降幅(%); 两者口径不同, 不可混加",
+  "alignment": {
+    "required_forecast_mean_m3min": 430.233,
+    "required_actual_mean_m3min": 433.482,
+    "forecast_error_mean_m3min": -3.249,
+    "forecast_underestimate_share": 0.5062,
+    "note": "预测在 t 发出, 目标供气区间 [t,t+15min); required_forecast=前一日同时刻流量, required_actual=obs_flow(t). 缺供主要由预测低估(前一日同时刻→当日)造成, 而非算法不满足其预测要求."
+  },
+  "service_matched_steps": 834,
+  "service_matched_energy_kwh": {
+    "b1_rule": 533942.46,
+    "myopic": 497170.84,
+    "multi_step": 497170.84
+  },
+  "service_matched_sec": {
+    "b1_rule": 0.096327,
+    "myopic": 0.089693,
+    "multi_step": 0.089693
+  },
+  "service_matched_myopic_vs_b1_pct": 6.8868,
+  "service_matched_multi_step_vs_b1_pct": 6.8868,
+  "service_matched_big_small_minutes": {
+    "b1_rule": 2655.0,
+    "myopic": 2655.0,
+    "multi_step": 2655.0
+  },
+  "service_matched_fair_steps": 834,
+  "n_steps": 1920,
+  "runtime_s": 308.6,
+  "myopic_infeasible_covered_by_multistep": 228
+}
