@@ -1,0 +1,281 @@
+{
+  "manifest": {
+    "source_commit": "e922de0f37aeee5f77352266c8a1a83f7d4eecb1",
+    "timezone": "Asia/Shanghai",
+    "target": {
+      "type": "point_in_time",
+      "unit": "m3/min",
+      "definition": "target_time = as_of + horizon_minutes; 瞬时点流量"
+    },
+    "primary_key": [
+      "as_of",
+      "horizon_minutes"
+    ],
+    "issue_frequency_minutes": 5,
+    "horizons_minutes": [
+      15,
+      30,
+      60
+    ],
+    "interval": {
+      "level": 0.9,
+      "method": "rolling calibration residual quantiles"
+    }
+  },
+  "file_checks": {
+    "forecast_dev_dispatch.parquet": {
+      "rows": 110571,
+      "cols": [
+        "as_of",
+        "target_time",
+        "horizon_minutes",
+        "predicted_flow",
+        "lower_bound",
+        "upper_bound"
+      ],
+      "manifest_rows": 110571,
+      "rows_match": true,
+      "sha256": "F4E95C2EEF88AB9C1B86C34D5B434F8182784C237423C5234CBDC3D1FCB34646",
+      "manifest_sha256": "F4E95C2EEF88AB9C1B86C34D5B434F8182784C237423C5234CBDC3D1FCB34646",
+      "sha256_match": true,
+      "cols_match": true
+    },
+    "forecast_validation_dispatch.parquet": {
+      "rows": 17259,
+      "cols": [
+        "as_of",
+        "target_time",
+        "horizon_minutes",
+        "predicted_flow",
+        "lower_bound",
+        "upper_bound"
+      ],
+      "manifest_rows": 17259,
+      "rows_match": true,
+      "sha256": "1917D0D66BBD8F0F388E1A0023C5C05C55F03A4A4CDDFEFDF359804F20F52DE9",
+      "manifest_sha256": "1917D0D66BBD8F0F388E1A0023C5C05C55F03A4A4CDDFEFDF359804F20F52DE9",
+      "sha256_match": true,
+      "cols_match": true
+    },
+    "forecast_scoring_actuals.parquet": {
+      "rows": 127830,
+      "cols": [
+        "split",
+        "as_of",
+        "target_time",
+        "horizon_minutes",
+        "actual_flow",
+        "actual_available"
+      ],
+      "manifest_rows": 127830,
+      "rows_match": true,
+      "sha256": "2F4EAB163B163ED6EFDCDE46071975F722FB687DDA59B42757CFEDED36DCFAFD",
+      "manifest_sha256": "2F4EAB163B163ED6EFDCDE46071975F722FB687DDA59B42757CFEDED36DCFAFD",
+      "sha256_match": true,
+      "cols_match": true
+    }
+  },
+  "structure": {
+    "dev_dispatch": {
+      "pk_unique": true,
+      "target_time_ok": true,
+      "issue_freq_minutes": 5,
+      "horizons": [
+        15,
+        30,
+        60
+      ],
+      "tz_naive": true,
+      "min_as_of": "2026-03-26 00:00:00",
+      "max_as_of": "2026-07-31 23:40:00"
+    },
+    "val_dispatch": {
+      "pk_unique": true,
+      "target_time_ok": true,
+      "issue_freq_minutes": 5,
+      "horizons": [
+        15,
+        30,
+        60
+      ],
+      "tz_naive": true,
+      "min_as_of": "2026-08-01 00:00:00",
+      "max_as_of": "2026-08-20 23:40:00"
+    },
+    "scoring_actuals": {
+      "pk_unique": true,
+      "target_time_ok": true,
+      "issue_freq_minutes": 5,
+      "horizons": [
+        15,
+        30,
+        60
+      ],
+      "tz_naive": true,
+      "min_as_of": "2026-03-26 00:00:00",
+      "max_as_of": "2026-08-20 23:40:00"
+    }
+  },
+  "quality": {
+    "dev": {
+      "missing_rate": 0.0,
+      "overall": {
+        "n": 110571,
+        "MAE": 9.0442,
+        "RMSE": 31.4174,
+        "MAPE": 7.949,
+        "MAPE_floor1": 52.405,
+        "MAPE_excl_zero": 7.949,
+        "zero_flow_n": 2796,
+        "MAPE_mf50": 2.614,
+        "WAPE": 2.204,
+        "coverage_90": 0.4245,
+        "below_lower_rate": 0.3007,
+        "above_upper_rate": 0.2747,
+        "underestimate_rate": 0.4822,
+        "low_flow_share": 0.0269
+      },
+      "by_horizon": {
+        "15min": {
+          "n": 36861,
+          "MAE": 7.2191,
+          "RMSE": 26.1089,
+          "MAPE": 6.993,
+          "MAPE_floor1": 36.081,
+          "MAPE_excl_zero": 6.993,
+          "zero_flow_n": 932,
+          "MAPE_mf50": 2.109,
+          "WAPE": 1.759,
+          "coverage_90": 0.4811,
+          "below_lower_rate": 0.2753,
+          "above_upper_rate": 0.2436,
+          "underestimate_rate": 0.4801,
+          "low_flow_share": 0.0269
+        },
+        "30min": {
+          "n": 36858,
+          "MAE": 8.8609,
+          "RMSE": 30.8269,
+          "MAPE": 7.475,
+          "MAPE_floor1": 50.719,
+          "MAPE_excl_zero": 7.475,
+          "zero_flow_n": 932,
+          "MAPE_mf50": 2.568,
+          "WAPE": 2.159,
+          "coverage_90": 0.4364,
+          "below_lower_rate": 0.2923,
+          "above_upper_rate": 0.2713,
+          "underestimate_rate": 0.4815,
+          "low_flow_share": 0.0269
+        },
+        "60min": {
+          "n": 36852,
+          "MAE": 11.0529,
+          "RMSE": 36.4591,
+          "MAPE": 9.38,
+          "MAPE_floor1": 70.42,
+          "MAPE_excl_zero": 9.38,
+          "zero_flow_n": 932,
+          "MAPE_mf50": 3.166,
+          "WAPE": 2.693,
+          "coverage_90": 0.3561,
+          "below_lower_rate": 0.3346,
+          "above_upper_rate": 0.3093,
+          "underestimate_rate": 0.485,
+          "low_flow_share": 0.0269
+        }
+      }
+    },
+    "validation": {
+      "missing_rate": 0.0,
+      "overall": {
+        "n": 17259,
+        "MAE": 9.1535,
+        "RMSE": 29.5298,
+        "MAPE": 2.575,
+        "MAPE_floor1": 34.561,
+        "MAPE_excl_zero": 2.575,
+        "zero_flow_n": 12,
+        "MAPE_mf50": 2.575,
+        "WAPE": 2.112,
+        "coverage_90": 0.258,
+        "below_lower_rate": 0.3799,
+        "above_upper_rate": 0.3621,
+        "underestimate_rate": 0.4902,
+        "low_flow_share": 0.0007
+      },
+      "by_horizon": {
+        "15min": {
+          "n": 5757,
+          "MAE": 7.4448,
+          "RMSE": 26.2544,
+          "MAPE": 2.048,
+          "MAPE_floor1": 34.097,
+          "MAPE_excl_zero": 2.048,
+          "zero_flow_n": 4,
+          "MAPE_mf50": 2.048,
+          "WAPE": 1.718,
+          "coverage_90": 0.2937,
+          "below_lower_rate": 0.3722,
+          "above_upper_rate": 0.334,
+          "underestimate_rate": 0.4798,
+          "low_flow_share": 0.0007
+        },
+        "30min": {
+          "n": 5754,
+          "MAE": 9.0873,
+          "RMSE": 29.6191,
+          "MAPE": 2.556,
+          "MAPE_floor1": 34.56,
+          "MAPE_excl_zero": 2.556,
+          "zero_flow_n": 4,
+          "MAPE_mf50": 2.556,
+          "WAPE": 2.097,
+          "coverage_90": 0.2609,
+          "below_lower_rate": 0.3752,
+          "above_upper_rate": 0.3639,
+          "underestimate_rate": 0.4955,
+          "low_flow_share": 0.0007
+        },
+        "60min": {
+          "n": 5748,
+          "MAE": 10.9311,
+          "RMSE": 32.3993,
+          "MAPE": 3.122,
+          "MAPE_floor1": 35.025,
+          "MAPE_excl_zero": 3.122,
+          "zero_flow_n": 4,
+          "MAPE_mf50": 3.122,
+          "WAPE": 2.522,
+          "coverage_90": 0.2194,
+          "below_lower_rate": 0.3923,
+          "above_upper_rate": 0.3883,
+          "underestimate_rate": 0.4955,
+          "low_flow_share": 0.0007
+        }
+      }
+    }
+  },
+  "a_reported_vs_recomputed": {
+    "valid_15min": {
+      "A_MAPE": 34.097,
+      "B_MAPE": 2.048,
+      "A_MAE": 7.445,
+      "B_MAE": 7.4448,
+      "A_coverage": 0.2937,
+      "B_coverage": 0.2937
+    },
+    "valid_30min": {
+      "A_MAPE": 34.56,
+      "B_MAPE": 2.556,
+      "A_coverage": 0.2609,
+      "B_coverage": 0.2609
+    },
+    "valid_60min": {
+      "A_MAPE": 35.025,
+      "B_MAPE": 3.122,
+      "A_coverage": 0.2194,
+      "B_coverage": 0.2194
+    }
+  }
+}

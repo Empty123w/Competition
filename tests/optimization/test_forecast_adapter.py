@@ -98,6 +98,67 @@ def test_demand_series_for_steps_strict_raises(tmp_path):
         b.demand_series_for_steps("2026-03-26 00:00:00", step_minutes=15, n_steps=2, missing_policy="strict")
 
 
+def _write_a6(tmp_path, rows, name="a6.parquet"):
+    df = pd.DataFrame(rows, columns=["as_of", "target_time", "horizon_minutes",
+                                     "predicted_flow", "lower_bound", "upper_bound"])
+    p = tmp_path / name
+    df.to_parquet(p)
+    return p
+
+
+def test_a6_as_of_and_target_time(tmp_path):
+    p = _write_a6(tmp_path, [
+        ["2026-03-26 00:00:00", "2026-03-26 00:15:00", 15, 100.0, 90.0, 110.0],
+        ["2026-03-26 00:00:00", "2026-03-26 00:30:00", 30, 120.0, 100.0, 130.0],
+    ])
+    b = load_forecast_bundle(p)
+    fr = b.forecast_result("2026-03-26 00:00:00", 30)
+    assert fr.predicted_flow == 120.0
+    assert b.demand_series_for_steps("2026-03-26 00:00:00", 15, 2) == [100.0, 120.0]
+
+
+def test_a6_target_time_mismatch_raises(tmp_path):
+    p = _write_a6(tmp_path, [["2026-03-26 00:00:00", "2026-03-26 00:99:00", 15, 100.0, 90.0, 110.0]])
+    with pytest.raises(ValueError):
+        load_forecast_bundle(p)
+
+
+def test_attach_scoring_actuals_not_used_as_input(tmp_path):
+    f = _write_a6(tmp_path, [["2026-03-26 00:00:00", "2026-03-26 00:15:00", 15, 100.0, 90.0, 110.0]])
+    scoring = pd.DataFrame({
+        "split": ["dev"], "as_of": [pd.Timestamp("2026-03-26 00:00:00")],
+        "target_time": [pd.Timestamp("2026-03-26 00:15:00")], "horizon_minutes": [15],
+        "actual_flow": [105.0], "actual_available": [True]})
+    b = load_forecast_bundle(f, scoring=scoring, scoring_split="dev")
+    assert b.actual_at_target("2026-03-26 00:00:00", 15) == 105.0
+    # actual 不进入调度输入
+    assert b.forecast_result("2026-03-26 00:00:00", 15).predicted_flow == 100.0
+
+
+def test_unavailable_actual_is_skipped(tmp_path):
+    f = _write_a6(tmp_path, [["2026-03-26 00:00:00", "2026-03-26 00:15:00", 15, 100.0, 90.0, 110.0]])
+    scoring = pd.DataFrame({
+        "split": ["dev"], "as_of": [pd.Timestamp("2026-03-26 00:00:00")],
+        "target_time": [pd.Timestamp("2026-03-26 00:15:00")], "horizon_minutes": [15],
+        "actual_flow": [float("nan")], "actual_available": [False]})
+    b = load_forecast_bundle(f, scoring=scoring)
+    assert b.actual_at_target("2026-03-26 00:00:00", 15) is None
+
+
+def test_load_real_a6_handoff_bundle():
+    from pathlib import Path as _P
+    root = _P(__file__).resolve().parents[2]
+    disp = root / "artifacts" / "handoff_b" / "forecast_validation_dispatch.parquet"
+    scor = root / "artifacts" / "handoff_b" / "forecast_scoring_actuals.parquet"
+    if not disp.exists() or not scor.exists():
+        pytest.skip("A6 交接文件缺失")
+    b = load_forecast_bundle(disp, scoring=pd.read_parquet(scor), scoring_split="valid")
+    assert b.horizons == [15, 30, 60]
+    assert b.meta.sample_minutes == 5
+    series = b.demand_series_for_steps("2026-08-01 00:00:00", step_minutes=15, n_steps=4)  # 15/30/45/60, 45 回退30
+    assert len(series) == 4
+
+
 def test_horizon_30_alignment(tmp_path):
     p = _write(tmp_path, [
         ["2026-03-26 00:00:00", 15, 100.0, 90.0, 110.0, None],
