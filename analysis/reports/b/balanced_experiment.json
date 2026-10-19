@@ -1,0 +1,46 @@
+{
+  "block": {
+    "start": "2026-04-20 00:00:00",
+    "n": 480,
+    "fair": 475
+  },
+  "per": {
+    "b1_rule": {
+      "energy_kwh": 254917.93,
+      "supply_m3": 1958669.2,
+      "saving_vs_b1_pct": 0.0,
+      "gap_m3": 4744.35,
+      "low_min": 7305.0,
+      "low_reduction_vs_b1_pct": 0.0,
+      "extra_supply_vs_b1_m3": 0.0
+    },
+    "b3_b4": {
+      "energy_kwh": 244748.87,
+      "supply_m3": 1956213.9,
+      "saving_vs_b1_pct": 3.9891,
+      "gap_m3": 6562.95,
+      "low_min": 6960.0,
+      "low_reduction_vs_b1_pct": 4.7228,
+      "extra_supply_vs_b1_m3": -2455.3
+    },
+    "cand": {
+      "energy_kwh": 244748.79,
+      "supply_m3": 1956213.8,
+      "saving_vs_b1_pct": 3.9892,
+      "gap_m3": 6562.94,
+      "low_min": 6960.0,
+      "low_reduction_vs_b1_pct": 4.7228,
+      "extra_supply_vs_b1_m3": -2455.5
+    },
+    "bal": {
+      "energy_kwh": 247526.68,
+      "supply_m3": 1956213.8,
+      "saving_vs_b1_pct": 2.8995,
+      "gap_m3": 6562.94,
+      "low_min": 765.0,
+      "low_reduction_vs_b1_pct": 89.5277,
+      "extra_supply_vs_b1_m3": -2455.5
+    }
+  },
+  "runtime_s": 50.9
+}

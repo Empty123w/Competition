@@ -66,6 +66,17 @@ def test_plan_none_when_capacity_infeasible():
                    model_path=MODEL, cfg=UC.UCConfig()) is None
 
 
+def test_balanced_forces_both_above_min_nonlow():
+    cfg = UC.UCConfig(balanced=True)
+    # 需求 300 (>=2*134.45) -> 双机每台 >=134.45
+    al = UC.best_allocation(("4#", "5#"), 300.0, _caps(), {}, {}, MODEL, cfg, {})
+    for d, f in al["flows"].items():
+        assert f >= 134.45 - 1e-6
+    # 需求 200 (<2*134.45) -> 不强制 (无法双机都 >=134.45)
+    al2 = UC.best_allocation(("4#", "5#"), 200.0, _caps(), {}, {}, MODEL, cfg, {})
+    assert sum(al2["flows"].values()) + 1e-6 >= 200.0
+
+
 def test_demand_for_bases():
     cfg = UC.UCConfig(demand_basis="mid")
     assert UC.demand_for(100.0, 140.0, cfg) == 120.0

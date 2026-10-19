@@ -46,6 +46,7 @@ class UCConfig:
     demand_basis: str = "upper"   # upper | pred | mid | pred_plus
     margin_m3min: float = 0.0     # pred_plus 裕量
     grid: float = GRID
+    balanced: bool = False        # 均衡分配: 需求允许时, 每台运行机 >= 134.45 (消除可再平衡低负荷)
 
 
 def _power(device_id, flow, model_path, cache):
@@ -78,6 +79,10 @@ def best_allocation(combo, required, caps, prev_flows, prev_running, model_path,
     bnd = {}
     for d in combo:
         bnd[d] = _bounds(caps[d], prev_flows.get(d), prev_running.get(d, False), cfg)
+    # 均衡分配: 若需求足够 (>= n*NLT), 强制每台 >= NLT (无需过供即可消除低负荷)
+    if cfg.balanced and required >= (0.5 * RATED) * len(combo):
+        for d in combo:
+            bnd[d] = (max(bnd[d][0], 0.5 * RATED), bnd[d][1])
     best = None
 
     if len(combo) == 1:
