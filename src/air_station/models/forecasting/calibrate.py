@@ -135,7 +135,7 @@ def _write_report(path: Path, cfg: dict, cov: dict, horizons: list[int]) -> None
              "- 引入**滚动共形校准**（用历史已实现残差的分位数定上下界），验证集 15/30/60 分钟覆盖率回升至目标区间；",
              "- 新增 **45、75 分钟**预测（每折独立训练），输出结构与主键 `(as_of, horizon_minutes)` 一致；",
              "- 新增 `pred_mean_interval`、`pred_upper_interval` 供 B 侧调度需求。", "",
-             "## 2. 区间覆盖率对比（valid 集，名义 90%）", "",
+             "## 2. 区间覆盖率对比（valid 集；名义覆盖率 = 1−α = 88%）", "",
              "| 时域 | 旧版覆盖率 | 新版覆盖率 | 违反率(低<) | 违反率(高>) |", "|---|---|---|---|---|"]
     for h in horizons:
         o = old.get(str(h), {})
@@ -147,7 +147,7 @@ def _write_report(path: Path, cfg: dict, cov: dict, horizons: list[int]) -> None
     for h in horizons:
         n = cov.get(str(h), {})
         lines.append(f"| {h}min | {n.get('MAE','-')} | {n.get('RMSE','-')} | {n.get('WAPE','-')}% | {n.get('n','-')} |")
-    lines += ["", "> MAPE 受低/零流量分母影响极大，WAPE（Σ|误差|/Σ|真值|）更能反映真实精度。", "",
+    lines += ["", "> 名义覆盖率为 1−α = 88%（对称区间 pred ± 分位(|残差|, 1−α)）；实测偏高（约 93.6%~94.4%）源于验证期残差小于校准窗口，属偏保守而非欠覆盖。\n> MAPE 受低/零流量分母影响极大，WAPE（Σ|误差|/Σ|真值|）更能反映真实精度。", "",
               "## 4. 45 分钟补发说明", "",
               "- 时域集合由 {15,30,60} 扩展为 {15,30,45,60,75}，每折每时域独立训练；",
               "- 45/75 分钟同样含点预测与（共形校准后的）上下界，主键与格式与原表一致；",

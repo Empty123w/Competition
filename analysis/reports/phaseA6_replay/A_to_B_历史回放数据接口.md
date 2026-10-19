@@ -78,3 +78,15 @@ r = rul[(rul.device_id == d) & (rul.time <= T) & (T <= rul.valid_until) &
 
 `forecast_test_predictions.parquet`/`.csv` 仍为**唯一最终测试预测表**，哈希未变；
 本次历史回放产物不替代它，也不作为独立最终测试成绩。
+
+## 12. 区间校准与需求口径（校准版产物）
+
+- 校准产物：`forecast_validation_dispatch_calibrated.parquet`、`forecast_dev_dispatch_calibrated.parquet`
+  （前六列与原表一致，另含两列需求口径）；评分真值 `forecast_scoring_actuals_calibrated.parquet`。
+- 区间：滚动共形校准 `pred ± 分位(|历史残差|, 1−α)`，`α=0.12` → **名义覆盖 1−α = 88%**；
+  验证集实测覆盖率 **0.936~0.944**（偏保守，非欠覆盖）。
+- 时域：**15/30/45/60/75** 分钟（新增 45、75）。
+- **需求口径**：
+  - 四步规划主用**各目标时域**的 `predicted_flow` 与 `upper_bound`（每步局部点预测与上界）；
+  - `pred_mean_interval` / `pred_upper_interval` 为**跨时域累计量**（≤h 累计均值 / 累计上界最大），
+    作为**额外保守需求敏感性**方案，而非每步局部需求。
