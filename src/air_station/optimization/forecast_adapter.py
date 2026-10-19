@@ -73,6 +73,37 @@ class ForecastBundle:
             out[int(h)] = float(row["predicted_flow"])
         return out
 
+    # ---- 多步规划器对齐: 15 分钟步长, n 步 ----
+    def demand_series_for_steps(self, as_of, step_minutes: int, n_steps: int,
+                                missing_policy: str = "hold_previous") -> list[float]:
+        """把 A 的 15/30/60 min 预测对齐到 step_minutes x n_steps 规划器。
+
+        - 第 k 步 (0-based) 的目标时刻 = as_of + (k+1)*step_minutes, 需要的 horizon 即该值;
+        - 若该 horizon 在**同一发出时刻 as_of** 的预测中不存在 (如 step=15,n=4 需要 45min,
+          A 只给 15/30/60), 按 missing_policy 处理, **只使用 as_of 当时已可得的信息**:
+            * "hold_previous": 取 <= 目标 horizon 的最大可用 horizon 的预测 (无未来泄漏);
+            * "strict": 直接 KeyError。
+        - **绝不**使用 `actual_flow` 或未来时刻的数据补齐。
+        """
+        ts = pd.Timestamp(as_of)
+        rows = self.by_issue.get(ts, {})
+        if not rows:
+            raise KeyError(f"as_of={ts} 无任何预测")
+        avail = sorted(h for h, r in rows.items() if r.get("predicted_flow") is not None)
+        out: list[float] = []
+        for k in range(int(n_steps)):
+            target_h = (k + 1) * int(step_minutes)
+            if target_h in rows and rows[target_h].get("predicted_flow") is not None:
+                out.append(float(rows[target_h]["predicted_flow"]))
+                continue
+            if missing_policy == "strict":
+                raise KeyError(f"缺预测: as_of={ts} horizon={target_h}")
+            prev = [h for h in avail if h <= target_h]
+            if not prev:
+                raise KeyError(f"as_of={ts} 无 <= {target_h}min 的可用预测(不可用未来信息补齐)")
+            out.append(float(rows[prev[-1]]["predicted_flow"]))
+        return out
+
     # ---- 评估专用 (actual) ----
     def actual_at_target(self, as_of, horizon_minutes: int) -> Optional[float]:
         tgt = pd.Timestamp(as_of) + pd.Timedelta(minutes=int(horizon_minutes))

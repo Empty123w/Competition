@@ -9,9 +9,15 @@
     拟合 argmin 落在额定点, 故 λ*=1.0(额定加载); 另给"效率平台下界"(SEC 在最优 5% 内的最低 λ)。
   - 偏离度 d_i(t) = (λ* - λ_i)/λ* x 100%  (相对百分比, 非百分点); 超标 = |d| > 10%。
   - 适用工况: 运行且质量有效的机组; 排除停机/无效/流量越界样本。
+
+P0 修正 (SEC 单位):
+  原 `y = power_kw / flow_m3_min`, 量纲为 **kW·min/m³**, 却标注为 kWh/m³ (差 60 倍)。
+  修正为 **SEC[kWh/m³] = power_kw / (flow_m3_min * 60)**; 目标 λ* 与平台下界不受影响
+  (单调缩放不改变 argmin)。原始结果保留于已提交 JSON; 本版输出到 `_v2` 文件。
+
 输出:
-  analysis/reports/b/load_ratio_definition.json
-  analysis/reports/b/load_ratio_ledger.csv
+  analysis/reports/b/load_ratio_definition_v2.json
+  analysis/reports/b/load_ratio_ledger_v2.csv
 """
 from __future__ import annotations
 
@@ -28,8 +34,8 @@ from air_station.optimization import contracts as C
 from air_station.optimization import performance as PERF
 from air_station.optimization.service import load_optimization_config, optimize_dispatch
 
-OUT = Path("analysis/reports/b/load_ratio_definition.json")
-LED = Path("analysis/reports/b/load_ratio_ledger.csv")
+OUT = Path("analysis/reports/b/load_ratio_definition_v2.json")
+LED = Path("analysis/reports/b/load_ratio_ledger_v2.csv")
 
 RATED = 268.9
 MIN_FLOW = 120.0
@@ -49,7 +55,8 @@ def _fit_targets(dev):
     out = {}
     for did, g in dev.groupby("device_id"):
         x = (g["flow_m3_min"] / RATED).to_numpy()
-        y = (g["power_kw"] / g["flow_m3_min"]).to_numpy()   # SEC kWh/m3
+        # SEC[kWh/m3] = power_kw / (flow_m3_min * 60);  (原式缺 *60, 量纲为 kW·min/m3)
+        y = (g["power_kw"] / (g["flow_m3_min"] * 60.0)).to_numpy()
         c = np.polyfit(x, y, 2)
         xs = np.linspace(0.75, 1.0, 300)
         ys = np.polyval(c, xs)
@@ -58,7 +65,8 @@ def _fit_targets(dev):
         plateau = xs[ys <= ybest * 1.05]
         out[did] = {
             "lambda_target": round(1.0 if xstar >= 0.999 else xstar, 4),
-            "sec_min_kwh_per_m3": round(ybest, 4),
+            "sec_min_kwh_per_m3": round(ybest, 6),
+            "sec_min_unit": "kWh/m3",
             "plateau_lo": round(float(plateau.min()), 4),
             "quad_coeff": [round(float(v), 6) for v in c],
             "n_dev_samples": int(len(g)),

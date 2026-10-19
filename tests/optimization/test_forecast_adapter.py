@@ -77,3 +77,32 @@ def test_missing_column_raises(tmp_path):
 def test_meta_quantile_defaults():
     m = ForecastMeta()
     assert m.quantile_lower == 0.05 and m.quantile_upper == 0.95
+
+
+def test_demand_series_for_steps_holds_previous_no_future_leak(tmp_path):
+    # A 只给 15/30/60; 规划器 step=15, n=4 需要 15/30/45/60 -> 45 缺, 回退上一可用(30)
+    p = _write(tmp_path, [
+        ["2026-03-26 00:00:00", 15, 100.0, 90.0, 110.0, 105.0],
+        ["2026-03-26 00:00:00", 30, 120.0, 100.0, 130.0, 125.0],
+        ["2026-03-26 00:00:00", 60, 150.0, 130.0, 170.0, 160.0],
+    ])
+    b = load_forecast_bundle(p)
+    series = b.demand_series_for_steps("2026-03-26 00:00:00", step_minutes=15, n_steps=4)
+    assert series == [100.0, 120.0, 120.0, 150.0]   # 第3步(45min)回退30min预测; 无未来泄漏
+
+
+def test_demand_series_for_steps_strict_raises(tmp_path):
+    p = _write(tmp_path, [["2026-03-26 00:00:00", 15, 100.0, 90.0, 110.0, None]])
+    b = load_forecast_bundle(p)
+    with pytest.raises(KeyError):
+        b.demand_series_for_steps("2026-03-26 00:00:00", step_minutes=15, n_steps=2, missing_policy="strict")
+
+
+def test_horizon_30_alignment(tmp_path):
+    p = _write(tmp_path, [
+        ["2026-03-26 00:00:00", 15, 100.0, 90.0, 110.0, None],
+        ["2026-03-26 00:00:00", 30, 120.0, 100.0, 130.0, None],
+    ])
+    b = load_forecast_bundle(p)
+    # step=30, n=2 -> 需要 30/60; 60 缺 -> 回退 30
+    assert b.demand_series_for_steps("2026-03-26 00:00:00", 30, 2) == [120.0, 120.0]
