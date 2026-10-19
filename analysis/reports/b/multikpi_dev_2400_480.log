@@ -1,0 +1,9 @@
+[start] window=dev n=480 strategies=['b1_rule', 'b3_b4', 'cand', 'bal', 'k0.75', 'k0.50', 'k0.25', 'k0.00', 'bal_k0.75']
+[ckpt] 250/480 steps; best-not-yet; elapsed=43s
+[ckpt] 480/480 steps; best-not-yet; elapsed=79s
+[start] window=dev n=480 strategies=['b1_rule', 'b3_b4', 'bal', 'eab_c05', 'eab_c1', 'eab_c2', 'eab_c5', 'eab_lb06_c1', 'eab_lb06_c3']
+[ckpt] 250/480 steps; best-not-yet; elapsed=43s
+[ckpt] 480/480 steps; best-not-yet; elapsed=79s
+[start] window=dev n=480 strategies=['b1_rule', 'b3_b4', 'bal', 'sbd_t5', 'sbd_t6', 'sbd_t7', 'sbd_t8', 'sbd_t10']
+[ckpt] 250/480 steps; best-not-yet; elapsed=43s
+[ckpt] 480/480 steps; best-not-yet; elapsed=81s

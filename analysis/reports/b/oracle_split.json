@@ -1,0 +1,22 @@
+{
+  "dev": {
+    "sampled": 379,
+    "oracle_E_kwh": 190320.5,
+    "b3_E_kwh": 205311.1,
+    "bal_E_kwh": 205850.4,
+    "b3_excess_pct_mean": 12.1239,
+    "bal_excess_pct_mean": 12.4476,
+    "b3_excess_pct_p95": 62.2762,
+    "oracle_sec_headroom_b3_pct": 7.3014
+  },
+  "valid": {
+    "sampled": 400,
+    "oracle_E_kwh": 236195.8,
+    "b3_E_kwh": 242748.9,
+    "bal_E_kwh": 243159.3,
+    "b3_excess_pct_mean": 3.6301,
+    "bal_excess_pct_mean": 3.8133,
+    "b3_excess_pct_p95": 3.8938,
+    "oracle_sec_headroom_b3_pct": 2.6996
+  }
+}

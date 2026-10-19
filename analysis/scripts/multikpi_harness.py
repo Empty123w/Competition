@@ -43,6 +43,12 @@ CANDS = {
     "k0.25": {"kind": "uc", "k": 0.25}, "k0.00": {"kind": "uc", "k": 0.0},
     "bal_k0.75": {"kind": "bal", "k": 0.75}, "k0.33": {"kind": "uc", "k": 0.33}, "k0.15": {"kind": "uc", "k": 0.15},
     "sbd_t7": {"kind": "sbd", "thr": 7.0}, "sbd_t3": {"kind": "sbd", "thr": 3.0},
+    "sbd_t5": {"kind": "sbd", "thr": 5.0}, "sbd_t6": {"kind": "sbd", "thr": 6.0},
+    "sbd_t8": {"kind": "sbd", "thr": 8.0}, "sbd_t10": {"kind": "sbd", "thr": 10.0},
+    "eab_c05": {"kind": "eab", "cap": 0.5}, "eab_c1": {"kind": "eab", "cap": 1.0},
+    "eab_c2": {"kind": "eab", "cap": 2.0}, "eab_c5": {"kind": "eab", "cap": 5.0},
+    "eab_lb06_c1": {"kind": "eab", "cap": 1.0, "lb": 0.6},
+    "eab_lb06_c3": {"kind": "eab", "cap": 3.0, "lb": 0.6},
 }
 
 
@@ -132,7 +138,7 @@ def run(window, start, n, cands, logpath):
                     combo = bb["seq"][0]; al = bb["alloc0"]; flows = al["flows"]
                     acts = MS._actions(combo, al, caps, cur_on, cur_flows)
                     trans = CONS.transition_feasibility(cur_on, combo, caps, req[0], con.reserve)[1]
-                else:  # uc / bal / sbd
+                elif kind in ("uc", "bal", "sbd"):
                     k = spec.get("k", 1.0)
                     req = [UC.demand_scaled(sr[f"pf{h}"], sr[f"ub{h}"], k) for h in (15, 30, 45, 60)]
                     if kind == "sbd":
@@ -143,6 +149,19 @@ def run(window, start, n, cands, logpath):
                         cfg = UC.UCConfig(demand_basis="upper", balanced=(kind == "bal"))
                         bb = UC.plan(req, caps, con, cur_on, cur_flows, stt[s].last_switch_at, ts,
                                      model_path=model, power_cap=1600.0, cfg=cfg, cache=cache)
+                    if bb is None:
+                        fb[s] += 1; rt[s].append(time.perf_counter() - tt); continue
+                    combo = bb["seq"][0]; al = bb["alloc0"]; flows = al["flows"]
+                    acts = MS._actions(combo, al, caps, cur_on, cur_flows)
+                    trans = CONS.transition_feasibility(cur_on, combo, caps, req[0], con.reserve)[1]
+                elif kind == "eab":
+                    from air_station.optimization import energy_aware_balanced as EAB
+                    req = [UC.demand_scaled(sr[f"pf{h}"], sr[f"ub{h}"], 1.0) for h in (15, 30, 45, 60)]
+                    bb = EAB.plan(req, caps, con, cur_on, cur_flows, stt[s].last_switch_at, ts,
+                                  model_path=model, power_cap=1600.0,
+                                  cfg=EAB.EABConfig(lb_frac=spec.get("lb", 0.5),
+                                                    cost_cap_kwh_per_step=spec.get("cap", float("inf"))),
+                                  cache=cache)
                     if bb is None:
                         fb[s] += 1; rt[s].append(time.perf_counter() - tt); continue
                     combo = bb["seq"][0]; al = bb["alloc0"]; flows = al["flows"]

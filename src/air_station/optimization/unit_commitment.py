@@ -46,8 +46,9 @@ class UCConfig:
     demand_basis: str = "upper"   # upper | pred | mid | pred_plus
     margin_m3min: float = 0.0     # pred_plus 裕量
     grid: float = GRID
-    balanced: bool = False        # 均衡分配: 需求允许时, 每台运行机 >= 134.45 (消除可再平衡低负荷)
+    balanced: bool = False        # 均衡分配: 需求允许时, 每台运行机 >= lb_frac*RATED (消除可再平衡低负荷)
     demand_k: float = 1.0         # 需求在 [pred, upper] 间的位置: demand=pred+k*(upper-pred); k=1 -> upper(基线)
+    lb_frac: float = 0.5          # 均衡下界比例 (0.5 -> 134.45, 脱离低负荷阈值)
 
 
 def demand_scaled(pred, upper, k):
@@ -85,10 +86,10 @@ def best_allocation(combo, required, caps, prev_flows, prev_running, model_path,
     bnd = {}
     for d in combo:
         bnd[d] = _bounds(caps[d], prev_flows.get(d), prev_running.get(d, False), cfg)
-    # 均衡分配: 若需求足够 (>= n*NLT), 强制每台 >= NLT (无需过供即可消除低负荷)
-    if cfg.balanced and required >= (0.5 * RATED) * len(combo):
+    # 均衡分配: 若需求足够 (>= n*lb_frac*RATED), 强制每台 >= lb_frac*RATED (无需过供即可消除低负荷)
+    if cfg.balanced and required >= (cfg.lb_frac * RATED) * len(combo):
         for d in combo:
-            bnd[d] = (max(bnd[d][0], 0.5 * RATED), bnd[d][1])
+            bnd[d] = (max(bnd[d][0], cfg.lb_frac * RATED), bnd[d][1])
     best = None
 
     if len(combo) == 1:
