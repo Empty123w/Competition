@@ -1,0 +1,132 @@
+{
+  "step_minutes": 5,
+  "common_steps": 4735,
+  "duration_h": 394.583,
+  "b1_energy_kwh": 1024288.19,
+  "b3_energy_kwh": 986159.57,
+  "b1_avg_power_kw": 2595.87,
+  "b3_avg_power_kw": 2499.24,
+  "rated_total_kw": 2500.0,
+  "cap_per_device_kw": 1600.0,
+  "per_device_power": {
+    "b1_4#": {
+      "n": 4695,
+      "min": 920.34,
+      "p50": 1376.89,
+      "max": 1376.89,
+      "gt_rated_1250": 4626,
+      "gt_rated_pct": 98.53,
+      "gt_cap_1600": 0,
+      "gt_cap_pct": 0.0
+    },
+    "b1_5#": {
+      "n": 4734,
+      "min": 1119.33,
+      "p50": 1240.66,
+      "max": 1267.05,
+      "gt_rated_1250": 1145,
+      "gt_rated_pct": 24.187,
+      "gt_cap_1600": 0,
+      "gt_cap_pct": 0.0
+    },
+    "b3_4#": {
+      "n": 4735,
+      "min": 920.34,
+      "p50": 1230.82,
+      "max": 1311.66,
+      "gt_rated_1250": 1414,
+      "gt_rated_pct": 29.863,
+      "gt_cap_1600": 0,
+      "gt_cap_pct": 0.0
+    },
+    "b3_5#": {
+      "n": 4671,
+      "min": 1140.85,
+      "p50": 1297.75,
+      "max": 1297.75,
+      "gt_rated_1250": 4624,
+      "gt_rated_pct": 98.994,
+      "gt_cap_1600": 0,
+      "gt_cap_pct": 0.0
+    }
+  },
+  "runtime_s": 595.9,
+  "set_analysis": {
+    "matched_criterion": "|b1_flow - b3_flow| <= 1.0 m3/min (事后选定, 未预注册)",
+    "retained_criterion": "B4 safety_blocked == False",
+    "matched_n": 4712,
+    "retained_n": 4712,
+    "intersection_n": 4707,
+    "matched_only_n": 5,
+    "retained_only_n": 5
+  },
+  "set_metrics": {
+    "matched": {
+      "n": 4712,
+      "b1_energy_kwh": 1020378.83,
+      "b3_energy_kwh": 984254.88,
+      "b1_sec": 0.089543,
+      "b3_sec": 0.086373,
+      "energy_reduction_pct": 3.5402,
+      "sec_reduction_pct": 3.5402
+    },
+    "retained": {
+      "n": 4712,
+      "b1_energy_kwh": 1020141.76,
+      "b3_energy_kwh": 983597.64,
+      "b1_sec": 0.08957,
+      "b3_sec": 0.086384,
+      "energy_reduction_pct": 3.5823,
+      "sec_reduction_pct": 3.5574
+    },
+    "intersection": {
+      "n": 4707,
+      "b1_energy_kwh": 1019291.9,
+      "b3_energy_kwh": 983210.82,
+      "b1_sec": 0.089543,
+      "b3_sec": 0.086373,
+      "energy_reduction_pct": 3.5398,
+      "sec_reduction_pct": 3.5398
+    }
+  },
+  "slope_uncertainty": {
+    "4#": {
+      "coef": [
+        3.0661801922620047,
+        -32.5587441858197,
+        0.6116565130214542,
+        -0.8387672150980884,
+        540.6403549316448
+      ],
+      "se": [
+        0.0063394968120439555,
+        0.608907596091315,
+        0.004257369537259557,
+        0.013818618671132092,
+        1.8563569732155583
+      ],
+      "flow_coef": 3.0661801922620047,
+      "flow_se": 0.0063394968120439555,
+      "n": 154695
+    },
+    "5#": {
+      "coef": [
+        1.1982015094860647,
+        136.0165141938744,
+        2.7752943208089627,
+        -4.524389529690488,
+        817.8650325711731
+      ],
+      "se": [
+        0.003537607470024412,
+        1.1593362098450068,
+        0.0041642656104239435,
+        0.010081988554003421,
+        1.0923611080616937
+      ],
+      "flow_coef": 1.1982015094860647,
+      "flow_se": 0.003537607470024412,
+      "n": 192939
+    }
+  }
+}

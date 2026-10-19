@@ -1,0 +1,122 @@
+{
+  "protocol": {
+    "window": "2026-08-01~08-20 (valid, 重复查看窗口, 非独立最终测试)",
+    "n_steps_total": 1920,
+    "step_minutes": 15,
+    "reserve": "frozen extra 5%",
+    "uses_B5_final_window": false,
+    "pressure_evidence_type": "none (无调度反事实压力预测; 合格带 CAL-05 待确认)",
+    "filter_rules": {
+      "evaluable": "status==success 且 exec=True (未 B4 阻断且过渡供气成立)",
+      "unappraisable": "status!=success (infeasible) 或 blocked=True",
+      "service_matched": "b1_rule/myopic/multi_step 均 success+exec 且 met_actual=True",
+      "met_forecast": "供应量 >= required_forecast (满足预测要求)",
+      "met_actual": "供应量 >= obs_flow (满足实测需求)",
+      "note": "缺供按 max(obs_flow - supply, 0)*step 计; 不得将少供气低电量当同等服务节能"
+    }
+  },
+  "full_window": {
+    "b1_rule": {
+      "steps": 1919,
+      "energy_kwh": 1216727.3,
+      "supply_m3": 12402896.1,
+      "sec": 0.0981,
+      "shortfall_vs_observed_m3": 377408.09,
+      "success": 1920,
+      "executable": 1919,
+      "blocked": 1,
+      "infeasible": 0,
+      "unappraisable": 1,
+      "met_forecast_steps": 1919,
+      "met_actual_steps": 953,
+      "status_counts": {
+        "success": 1920
+      },
+      "supply_diff_vs_b1_m3": 0.0
+    },
+    "myopic": {
+      "steps": 1691,
+      "energy_kwh": 989080.63,
+      "supply_m3": 10951120.9,
+      "sec": 0.090318,
+      "shortfall_vs_observed_m3": 298856.72,
+      "success": 1692,
+      "executable": 1691,
+      "blocked": 1,
+      "infeasible": 228,
+      "unappraisable": 229,
+      "met_forecast_steps": 1691,
+      "met_actual_steps": 834,
+      "status_counts": {
+        "success": 1692,
+        "infeasible": 228
+      },
+      "supply_diff_vs_b1_m3": -1451775.2
+    },
+    "multi_step": {
+      "steps": 1919,
+      "energy_kwh": 1121218.87,
+      "supply_m3": 12386795.0,
+      "sec": 0.090517,
+      "shortfall_vs_observed_m3": 393508.59,
+      "success": 1920,
+      "executable": 1919,
+      "blocked": 1,
+      "infeasible": 0,
+      "unappraisable": 1,
+      "met_forecast_steps": 1919,
+      "met_actual_steps": 953,
+      "status_counts": {
+        "success": 1920
+      },
+      "supply_diff_vs_b1_m3": -16101.1
+    },
+    "oracle": {
+      "steps": 1919,
+      "energy_kwh": 1125946.71,
+      "supply_m3": 12480588.0,
+      "sec": 0.090216,
+      "shortfall_vs_observed_m3": 0.07,
+      "success": 1920,
+      "executable": 1919,
+      "blocked": 1,
+      "infeasible": 0,
+      "unappraisable": 1,
+      "met_forecast_steps": 980,
+      "met_actual_steps": 1919,
+      "status_counts": {
+        "success": 1920
+      },
+      "supply_diff_vs_b1_m3": 77691.9
+    }
+  },
+  "service_matched": {
+    "steps": 834,
+    "b1_rule": {
+      "steps": 834,
+      "energy_kwh": 533942.46,
+      "supply_m3": 5543018.7,
+      "sec": 0.096327,
+      "shortfall_vs_observed_m3": 2.38,
+      "supply_diff_vs_b1_m3": 0.0
+    },
+    "myopic": {
+      "steps": 834,
+      "energy_kwh": 497170.84,
+      "supply_m3": 5543018.6,
+      "sec": 0.089693,
+      "shortfall_vs_observed_m3": 2.56,
+      "supply_diff_vs_b1_m3": -0.1
+    },
+    "multi_step": {
+      "steps": 834,
+      "energy_kwh": 497170.84,
+      "supply_m3": 5543018.6,
+      "sec": 0.089693,
+      "shortfall_vs_observed_m3": 2.56,
+      "supply_diff_vs_b1_m3": -0.1
+    },
+    "myopic_energy_saving_vs_b1_pct": 6.8868,
+    "multi_step_energy_saving_vs_b1_pct": 6.8868
+  }
+}

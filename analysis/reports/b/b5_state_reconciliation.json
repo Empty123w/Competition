@@ -1,0 +1,52 @@
+{
+  "sets": {
+    "common_capacity_feasible": 4735,
+    "b4_risk_retained": 4712,
+    "final_executable": 4710
+  },
+  "rejection_timestamps": {
+    "min_stop_lock": [
+      "2026-08-29 15:30:00",
+      "2026-08-29 15:35:00"
+    ],
+    "transition_gap": [
+      "2026-08-29 15:30:00",
+      "2026-08-29 15:35:00"
+    ],
+    "same_steps": [
+      "2026-08-29 15:30:00",
+      "2026-08-29 15:35:00"
+    ],
+    "note": "最短停机与过渡缺口若为同一步, 拒绝原因不得重复相加"
+  },
+  "medium": {
+    "n_total": 144,
+    "blocked": 0,
+    "executed": 142,
+    "in_common": 144,
+    "in_b4_retained": 144,
+    "in_final_executable": 142
+  },
+  "final_window": {
+    "n": 4710,
+    "b1_energy_kwh": 1022881.52,
+    "b3_energy_kwh": 983248.9,
+    "b1_supply_m3": 11408780.9,
+    "b3_supply_m3": 11383678.9,
+    "b1_shortfall_m3": 28.71,
+    "b3_shortfall_m3": 28.785,
+    "b1_sec": 0.089657,
+    "b3_sec": 0.086374,
+    "energy_reduction_pct": 3.8746,
+    "sec_reduction_pct": 3.6626,
+    "same_timesteps": true,
+    "field_confirmable": "unknown (offline simulation)",
+    "note": "B1 与 B3 使用完全相同的 4710 个时间步"
+  },
+  "b4_retained_window": {
+    "n": 4712,
+    "energy_reduction_pct": 3.8741,
+    "sec_reduction_pct": 3.6622,
+    "note": "含 2 个过渡缺口步, 其 B3 计划不可执行; 仅作对照"
+  }
+}

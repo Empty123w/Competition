@@ -1,0 +1,31 @@
+{
+  "4#": {
+    "test_n": 31350,
+    "resid_mean": 14.469,
+    "resid_std": 14.862,
+    "corr_resid_flow": -0.1778,
+    "resid_tercile_lo_mid_hi": [
+      15.93,
+      15.03,
+      12.45
+    ],
+    "flow_tercile_span_m3min": 19.8,
+    "slope_bias_est_kw_per_m3min": -0.1758,
+    "flow_coef_point": 3.0662
+  },
+  "5#": {
+    "test_n": 31045,
+    "resid_mean": -2.822,
+    "resid_std": 14.736,
+    "corr_resid_flow": 0.2831,
+    "resid_tercile_lo_mid_hi": [
+      -11.76,
+      -1.09,
+      4.38
+    ],
+    "flow_tercile_span_m3min": 19.06,
+    "slope_bias_est_kw_per_m3min": 0.8467,
+    "flow_coef_point": 1.1982
+  },
+  "note": "残差=真实-预测; slope_bias_est 为三分位残差差/流量差的粗略指示, 非标准误"
+}
