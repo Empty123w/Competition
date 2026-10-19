@@ -40,6 +40,9 @@ artifacts/metrics/*
 !artifacts/metrics/forecast_test_predictions.parquet
 !artifacts/metrics/forecast_test_predictions.csv
 !artifacts/metrics/rul_metrics.json
+!artifacts/metrics/forecast_rolling_audit.parquet
+!artifacts/metrics/forecast_rolling_metrics.json
+!artifacts/metrics/forecast_fold_metadata.json
 artifacts/logs/*
 !artifacts/logs/.gitkeep
 
@@ -56,3 +59,5 @@ frontend/dist/
 # 环境
 .env
 .env.*
+
+# A6 历史回放 B 侧交接包(入库)
