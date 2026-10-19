@@ -1,0 +1,77 @@
+{
+  "generated_at": "2026-10-19T17:23:01",
+  "source_commit": "e922de0f37aeee5f77352266c8a1a83f7d4eecb1",
+  "timezone": "Asia/Shanghai",
+  "timestamp_storage": "timezone-naive local wall time",
+  "source_sampling_frequency_minutes": 1,
+  "issue_frequency_minutes": 5,
+  "horizons_minutes": [
+    15,
+    30,
+    60
+  ],
+  "target": {
+    "type": "point_in_time",
+    "unit": "m3/min",
+    "definition": "target_time = as_of + horizon_minutes; 瞬时点流量"
+  },
+  "primary_key": [
+    "as_of",
+    "horizon_minutes"
+  ],
+  "interval": {
+    "level": 0.9,
+    "method": "rolling calibration residual quantiles"
+  },
+  "outputs": {
+    "forecast_dev_dispatch.parquet": {
+      "sha256": "F4E95C2EEF88AB9C1B86C34D5B434F8182784C237423C5234CBDC3D1FCB34646",
+      "rows": 110571,
+      "cols": [
+        "as_of",
+        "target_time",
+        "horizon_minutes",
+        "predicted_flow",
+        "lower_bound",
+        "upper_bound"
+      ]
+    },
+    "forecast_validation_dispatch.parquet": {
+      "sha256": "1917D0D66BBD8F0F388E1A0023C5C05C55F03A4A4CDDFEFDF359804F20F52DE9",
+      "rows": 17259,
+      "cols": [
+        "as_of",
+        "target_time",
+        "horizon_minutes",
+        "predicted_flow",
+        "lower_bound",
+        "upper_bound"
+      ]
+    },
+    "forecast_scoring_actuals.parquet": {
+      "sha256": "2F4EAB163B163ED6EFDCDE46071975F722FB687DDA59B42757CFEDED36DCFAFD",
+      "rows": 127830,
+      "cols": [
+        "split",
+        "as_of",
+        "target_time",
+        "horizon_minutes",
+        "actual_flow",
+        "actual_available"
+      ]
+    }
+  },
+  "actual_flow": {
+    "note": "join 不到真实流量时置 NaN 且 actual_available=False; 不 drop",
+    "unit": "m3/min"
+  },
+  "folds": {
+    "count": 22,
+    "config_sha256": "0ED40D74889CE3289A01B1EA2634A8E509B01861FBD432FB63252408847566C0",
+    "meta_ref": "artifacts/metrics/forecast_fold_metadata.json"
+  },
+  "quality": {
+    "note": "rollig_update_evaluation 用于验证段; 不使用冻结全训练段模型"
+  },
+  "frozen_note": "仅供参考, 不覆盖冻结产物; code_commit 为本地工作副本"
+}

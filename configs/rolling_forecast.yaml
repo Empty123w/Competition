@@ -1,0 +1,79 @@
+# =====================================================================
+# 滚动回放预测配置 (阶段 A6 Replay)
+# - 扩展窗口, 每 7 天重训; 每折前 3 个完整自然日做区间校准
+# - 1 分钟时间轴构建因果特征, 再抽取 5 分钟样本
+# - 不修改冻结产物; 只向新目录写文件
+# =====================================================================
+
+pipeline_version: 3
+seed: 42
+timezone: Asia/Shanghai
+timestamp_storage: timezone-naive local wall time
+source_sampling_frequency_minutes: 1
+issue_frequency_minutes: 5
+horizons_minutes: [15, 30, 60]
+
+target:
+  column: total_flow_m3_min
+  type: point_in_time
+  unit: m3/min
+
+# 时间边界 (Asia/Shanghai 本地时间)
+warmup:
+  start: "2026-03-12 00:00:00"
+  end: "2026-03-25 23:59:00"
+first_as_of: "2026-03-26 00:00:00"
+dev:   { start: "2026-03-26 00:00:00", end: "2026-07-31 23:59:00" }
+valid: { start: "2026-08-01 00:00:00", end: "2026-08-20 23:59:00" }
+refit_interval_days: 7
+calibration_days: 3
+
+# 特征 (全部因果; 依赖时间 <= as_of)
+features:
+  lags_minutes: [1, 5, 15, 30, 60, 1440]
+  rolling_minutes: [5, 15, 30, 60]
+  diff_minutes: [1, 5, 15]
+  calendar: [hour, weekday, month, is_workday]
+  cycle: [hour_sin, hour_cos, weekday_sin, weekday_cos]
+  include_running_count: true
+  include_load_level: true
+  profiles: [full_features, core_no_environment]
+  core_no_environment_drop: [ambient_temp_c, ambient_humidity_pct]
+  causal_fill_limit_minutes: 30
+  environment_missing_rate_fallback_threshold: 0.30
+
+model:
+  type: lightgbm
+  fallback: hist_gbdt
+  random_state: 42
+  n_jobs: 2
+  params: { n_estimators: 300, learning_rate: 0.05, num_leaves: 31,
+            subsample: 0.8, colsample_bytree: 0.7 }
+
+interval:
+  lower_quantile: 0.05
+  upper_quantile: 0.95
+  level: 0.90
+
+qc:
+  min_train_rows: 2500
+  min_calibration_rows: 500
+
+parallel:
+  outer: joblib
+  n_jobs_fold: 3          # 同折三时域受控并行
+  lightgbm_n_jobs: 2      # 每个 LightGBM 任务线程上限
+
+audit:
+  hyperparameter_source: frozen_config_no_fold_tuning
+  model_selection_method: configured_lightgbm_with_dependency_fallback
+  model_selection_data_cutoff: not_applicable_no_fold_selection
+  feature_selection_provenance: existing_phaseA4_ablation
+  feature_selection_data_cutoff: unknown_existing_audit_gap
+
+paths:
+  processed_dir: data/processed
+  model_dir: artifacts/models/rolling_forecast
+  handoff_dir: artifacts/handoff_b
+  metrics_dir: artifacts/metrics
+  report_dir: analysis/reports/phaseA6_replay

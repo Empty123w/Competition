@@ -1,0 +1,122 @@
+{
+  "dev_15min": {
+    "model": {
+      "MAE": 7.219,
+      "RMSE": 26.109,
+      "MAPE": 36.081,
+      "MAPE_mf50": 2.109,
+      "WAPE": 1.759,
+      "coverage": 0.4811,
+      "n": 36861
+    },
+    "baseline_lag_1": {
+      "MAE": 5.896,
+      "RMSE": 25.212,
+      "MAPE": 31.126,
+      "MAPE_mf50": 1.713,
+      "WAPE": 1.437,
+      "coverage": 0.0755,
+      "n": 36861
+    }
+  },
+  "dev_30min": {
+    "model": {
+      "MAE": 8.861,
+      "RMSE": 30.827,
+      "MAPE": 50.719,
+      "MAPE_mf50": 2.568,
+      "WAPE": 2.159,
+      "coverage": 0.4364,
+      "n": 36858
+    },
+    "baseline_lag_1": {
+      "MAE": 7.732,
+      "RMSE": 30.239,
+      "MAPE": 45.73,
+      "MAPE_mf50": 2.229,
+      "WAPE": 1.884,
+      "coverage": 0.054,
+      "n": 36858
+    }
+  },
+  "dev_60min": {
+    "model": {
+      "MAE": 11.053,
+      "RMSE": 36.459,
+      "MAPE": 70.42,
+      "MAPE_mf50": 3.166,
+      "WAPE": 2.693,
+      "coverage": 0.3561,
+      "n": 36852
+    },
+    "baseline_lag_1": {
+      "MAE": 10.136,
+      "RMSE": 36.038,
+      "MAPE": 63.937,
+      "MAPE_mf50": 2.893,
+      "WAPE": 2.47,
+      "coverage": 0.025,
+      "n": 36852
+    }
+  },
+  "valid_15min": {
+    "model": {
+      "MAE": 7.445,
+      "RMSE": 26.254,
+      "MAPE": 34.097,
+      "MAPE_mf50": 2.048,
+      "WAPE": 1.718,
+      "coverage": 0.2937,
+      "n": 5757
+    },
+    "baseline_lag_1": {
+      "MAE": 7.377,
+      "RMSE": 26.22,
+      "MAPE": 34.054,
+      "MAPE_mf50": 2.024,
+      "WAPE": 1.702,
+      "coverage": 0.0003,
+      "n": 5757
+    }
+  },
+  "valid_30min": {
+    "model": {
+      "MAE": 9.087,
+      "RMSE": 29.619,
+      "MAPE": 34.56,
+      "MAPE_mf50": 2.556,
+      "WAPE": 2.097,
+      "coverage": 0.2609,
+      "n": 5754
+    },
+    "baseline_lag_1": {
+      "MAE": 9.028,
+      "RMSE": 29.5,
+      "MAPE": 34.522,
+      "MAPE_mf50": 2.54,
+      "WAPE": 2.083,
+      "coverage": 0.0,
+      "n": 5754
+    }
+  },
+  "valid_60min": {
+    "model": {
+      "MAE": 10.931,
+      "RMSE": 32.399,
+      "MAPE": 35.025,
+      "MAPE_mf50": 3.122,
+      "WAPE": 2.522,
+      "coverage": 0.2194,
+      "n": 5748
+    },
+    "baseline_lag_1": {
+      "MAE": 10.888,
+      "RMSE": 32.344,
+      "MAPE": 35.019,
+      "MAPE_mf50": 3.106,
+      "WAPE": 2.512,
+      "coverage": 0.0,
+      "n": 5748
+    }
+  }
+}
