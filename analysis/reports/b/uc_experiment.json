@@ -1,0 +1,199 @@
+{
+  "block": {
+    "start": "2026-04-20 00:00:00",
+    "n": 480,
+    "window": "dev calibrated"
+  },
+  "metrics": {
+    "fair_steps": 472,
+    "b1_rule": {
+      "exec_steps": 475,
+      "energy_kwh": 254918.53,
+      "supply_m3": 1958669.2,
+      "shortfall_vs_actual_m3": 4744.35,
+      "sec": 0.130149,
+      "big_small_min": 7305.0
+    },
+    "b3_b4": {
+      "exec_steps": 475,
+      "energy_kwh": 244748.71,
+      "supply_m3": 1956213.9,
+      "shortfall_vs_actual_m3": 6562.95,
+      "sec": 0.125113,
+      "big_small_min": 6960.0
+    },
+    "dp_v2": {
+      "exec_steps": 475,
+      "energy_kwh": 244748.81,
+      "supply_m3": 1956213.6,
+      "shortfall_vs_actual_m3": 6562.95,
+      "sec": 0.125114,
+      "big_small_min": 6960.0
+    },
+    "cand": {
+      "exec_steps": 475,
+      "energy_kwh": 244748.81,
+      "supply_m3": 1956213.6,
+      "shortfall_vs_actual_m3": 6562.95,
+      "sec": 0.125114,
+      "big_small_min": 6960.0
+    },
+    "uc_upper": {
+      "exec_steps": 475,
+      "energy_kwh": 244748.81,
+      "supply_m3": 1956213.8,
+      "shortfall_vs_actual_m3": 6562.94,
+      "sec": 0.125114,
+      "big_small_min": 6960.0
+    },
+    "uc_mid": {
+      "exec_steps": 479,
+      "energy_kwh": 244691.7,
+      "supply_m3": 1931913.3,
+      "shortfall_vs_actual_m3": 7803.23,
+      "sec": 0.126658,
+      "big_small_min": 6840.0
+    },
+    "uc_pred": {
+      "exec_steps": 476,
+      "energy_kwh": 222769.27,
+      "supply_m3": 1863016.9,
+      "shortfall_vs_actual_m3": 15402.19,
+      "sec": 0.119574,
+      "big_small_min": 5310.0
+    },
+    "uc_pred20": {
+      "exec_steps": 475,
+      "energy_kwh": 245990.65,
+      "supply_m3": 1989250.2,
+      "shortfall_vs_actual_m3": 6248.84,
+      "sec": 0.12366,
+      "big_small_min": 7005.0
+    },
+    "uc_upper_low2": {
+      "exec_steps": 475,
+      "energy_kwh": 244748.81,
+      "supply_m3": 1956213.8,
+      "shortfall_vs_actual_m3": 6562.94,
+      "sec": 0.125114,
+      "big_small_min": 6960.0
+    },
+    "uc_upper_low6": {
+      "exec_steps": 475,
+      "energy_kwh": 244748.81,
+      "supply_m3": 1956213.8,
+      "shortfall_vs_actual_m3": 6562.94,
+      "sec": 0.125114,
+      "big_small_min": 6960.0
+    },
+    "fair_energy_kwh": {
+      "b1_rule": 253275.32,
+      "b3_b4": 243174.62,
+      "dp_v2": 243174.73,
+      "cand": 243174.73,
+      "uc_upper": 243174.73,
+      "uc_mid": 240566.45,
+      "uc_pred": 220198.95,
+      "uc_pred20": 244411.66,
+      "uc_upper_low2": 243174.73,
+      "uc_upper_low6": 243174.73
+    },
+    "fair_saving_vs_b1_pct": {
+      "b1_rule": 0.0,
+      "b3_b4": 3.988,
+      "dp_v2": 3.988,
+      "cand": 3.988,
+      "uc_upper": 3.988,
+      "uc_mid": 5.0178,
+      "uc_pred": 13.0595,
+      "uc_pred20": 3.4996,
+      "uc_upper_low2": 3.988,
+      "uc_upper_low6": 3.988
+    },
+    "fair_big_small_min": {
+      "b1_rule": 7260.0,
+      "b3_b4": 6915.0,
+      "dp_v2": 6915.0,
+      "cand": 6915.0,
+      "uc_upper": 6915.0,
+      "uc_mid": 6795.0,
+      "uc_pred": 5310.0,
+      "uc_pred20": 6960.0,
+      "uc_upper_low2": 6915.0,
+      "uc_upper_low6": 6915.0
+    },
+    "fair_big_small_reduction_vs_b1_pct": {
+      "b1_rule": 0.0,
+      "b3_b4": 4.7521,
+      "dp_v2": 4.7521,
+      "cand": 4.7521,
+      "uc_upper": 4.7521,
+      "uc_mid": 6.405,
+      "uc_pred": 26.8595,
+      "uc_pred20": 4.1322,
+      "uc_upper_low2": 4.7521,
+      "uc_upper_low6": 4.7521
+    }
+  },
+  "runtime_ms": {
+    "b1_rule": {
+      "p50": 7.58,
+      "p95": 10.44,
+      "max": 19.53
+    },
+    "b3_b4": {
+      "p50": 35.25,
+      "p95": 44.22,
+      "max": 134.24
+    },
+    "dp_v2": {
+      "p50": 21.73,
+      "p95": 32.35,
+      "max": 1693.52
+    },
+    "cand": {
+      "p50": 21.51,
+      "p95": 29.36,
+      "max": 41.45
+    },
+    "uc_upper": {
+      "p50": 10.37,
+      "p95": 15.66,
+      "max": 668.54
+    },
+    "uc_mid": {
+      "p50": 10.31,
+      "p95": 15.79,
+      "max": 366.0
+    },
+    "uc_pred": {
+      "p50": 10.67,
+      "p95": 16.99,
+      "max": 246.68
+    },
+    "uc_pred20": {
+      "p50": 10.15,
+      "p95": 14.72,
+      "max": 179.5
+    },
+    "uc_upper_low2": {
+      "p50": 10.22,
+      "p95": 14.55,
+      "max": 20.23
+    },
+    "uc_upper_low6": {
+      "p50": 10.19,
+      "p95": 14.48,
+      "max": 30.72
+    }
+  },
+  "ideal_lowload_diagnostic": {
+    "steps": 479,
+    "low_min_free_over_supply": 0,
+    "low_min_no_over_supply": 0,
+    "energy_kwh_min_low": 168791.0,
+    "capacity_infeasible_steps": 0,
+    "note": "未来信息诊断, 非可部署; 给出低负荷可行性与过供代价下界"
+  },
+  "runtime_s": 95.8
+}
