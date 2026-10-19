@@ -1,0 +1,527 @@
+{
+  "data": "A6 calibrated dev (15/30/45/60)",
+  "window": "dev 2026-03-26~07-31",
+  "segment_len_steps": 96,
+  "segments": {
+    "normal": {
+      "start": "2026-07-05 09:15:00",
+      "n_steps": 96,
+      "runtime_per_call_ms": {
+        "b1_rule": {
+          "p50": 4.8,
+          "p95": 7.3,
+          "max": 9.95
+        },
+        "b3_b4": {
+          "p50": 36.26,
+          "p95": 47.24,
+          "max": 134.9
+        },
+        "myopic": {
+          "p50": 12.5,
+          "p95": 18.52,
+          "max": 23.38
+        },
+        "multi_step": {
+          "p50": 34.76,
+          "p95": 46.67,
+          "max": 72.51
+        },
+        "v2": {
+          "p50": 14.91,
+          "p95": 236.11,
+          "max": 775.74
+        }
+      },
+      "shortfall_cause": {
+        "b1_rule": {
+          "none": 88,
+          "predicted_underestimate": 8
+        },
+        "b3_b4": {
+          "none": 87,
+          "predicted_underestimate": 9
+        },
+        "myopic": {
+          "none": 87,
+          "predicted_underestimate": 9
+        },
+        "multi_step": {
+          "none": 87,
+          "predicted_underestimate": 9
+        },
+        "v2": {
+          "none": 87,
+          "predicted_underestimate": 9
+        }
+      },
+      "lowload_cause": {
+        "b1_rule": {
+          "minflow_bound": 6,
+          "rebalance_possible": 0,
+          "low_other": 2
+        },
+        "b3_b4": {
+          "minflow_bound": 3,
+          "rebalance_possible": 0,
+          "low_other": 2
+        },
+        "myopic": {
+          "minflow_bound": 3,
+          "rebalance_possible": 0,
+          "low_other": 2
+        },
+        "multi_step": {
+          "minflow_bound": 3,
+          "rebalance_possible": 0,
+          "low_other": 2
+        },
+        "v2": {
+          "minflow_bound": 3,
+          "rebalance_possible": 0,
+          "low_other": 2
+        }
+      },
+      "energy_kwh": {
+        "b1_rule": 61986.37,
+        "b3_b4": 58802.97,
+        "myopic": 58802.97,
+        "multi_step": 58802.97,
+        "v2": 58883.04
+      },
+      "shortfall_m3": {
+        "b1_rule": 3122.97,
+        "b3_b4": 4990.16,
+        "myopic": 4990.26,
+        "multi_step": 4990.26,
+        "v2": 4990.16
+      },
+      "big_small_min": {
+        "b1_rule": 120.0,
+        "b3_b4": 75.0,
+        "myopic": 75.0,
+        "multi_step": 75.0,
+        "v2": 75.0
+      },
+      "ms_vs_myopic_pct": 0.0,
+      "service_equiv_steps": 87,
+      "service_equiv_energy_kwh": {
+        "b1_rule": 56553.39,
+        "b3_b4": 54161.42,
+        "myopic": 54161.42,
+        "multi_step": 54161.42,
+        "v2": 54235.46
+      },
+      "service_equiv_saving_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 4.2296,
+        "myopic": 4.2296,
+        "multi_step": 4.2296,
+        "v2": 4.0986
+      },
+      "pressure": {
+        "b1_rule": {
+          "compliance": 0.9792,
+          "min_pressure": 0.5718,
+          "low_minutes": 0,
+          "fluctuation_std": 0.01698
+        },
+        "b3_b4": {
+          "compliance": 0.9896,
+          "min_pressure": 0.5515,
+          "low_minutes": 0,
+          "fluctuation_std": 0.01966
+        },
+        "multi_step": {
+          "compliance": 0.9896,
+          "min_pressure": 0.5515,
+          "low_minutes": 0,
+          "fluctuation_std": 0.01966
+        }
+      }
+    },
+    "low": {
+      "start": "2026-04-13 16:15:00",
+      "n_steps": 96,
+      "runtime_per_call_ms": {
+        "b1_rule": {
+          "p50": 4.71,
+          "p95": 6.61,
+          "max": 12.96
+        },
+        "b3_b4": {
+          "p50": 41.99,
+          "p95": 52.49,
+          "max": 62.64
+        },
+        "myopic": {
+          "p50": 19.65,
+          "p95": 25.58,
+          "max": 27.53
+        },
+        "multi_step": {
+          "p50": 65.92,
+          "p95": 78.58,
+          "max": 88.95
+        },
+        "v2": {
+          "p50": 10.06,
+          "p95": 13.9,
+          "max": 20.22
+        }
+      },
+      "shortfall_cause": {
+        "b1_rule": {
+          "none": 96
+        },
+        "b3_b4": {
+          "none": 96
+        },
+        "myopic": {
+          "none": 96
+        },
+        "multi_step": {
+          "none": 96
+        },
+        "v2": {
+          "none": 96
+        }
+      },
+      "lowload_cause": {
+        "b1_rule": {
+          "minflow_bound": 96,
+          "rebalance_possible": 0,
+          "low_other": 0
+        },
+        "b3_b4": {
+          "minflow_bound": 96,
+          "rebalance_possible": 0,
+          "low_other": 0
+        },
+        "myopic": {
+          "minflow_bound": 96,
+          "rebalance_possible": 0,
+          "low_other": 0
+        },
+        "multi_step": {
+          "minflow_bound": 96,
+          "rebalance_possible": 0,
+          "low_other": 0
+        },
+        "v2": {
+          "minflow_bound": 96,
+          "rebalance_possible": 0,
+          "low_other": 0
+        }
+      },
+      "energy_kwh": {
+        "b1_rule": 26863.92,
+        "b3_b4": 22088.16,
+        "myopic": 22088.16,
+        "multi_step": 22088.16,
+        "v2": 22088.16
+      },
+      "shortfall_m3": {
+        "b1_rule": 0.0,
+        "b3_b4": 0.0,
+        "myopic": 0.0,
+        "multi_step": 0.0,
+        "v2": 0.0
+      },
+      "big_small_min": {
+        "b1_rule": 1440.0,
+        "b3_b4": 1440.0,
+        "myopic": 1440.0,
+        "multi_step": 1440.0,
+        "v2": 1440.0
+      },
+      "ms_vs_myopic_pct": 0.0,
+      "service_equiv_steps": 96,
+      "service_equiv_energy_kwh": {
+        "b1_rule": 26863.92,
+        "b3_b4": 22088.16,
+        "myopic": 22088.16,
+        "multi_step": 22088.16,
+        "v2": 22088.16
+      },
+      "service_equiv_saving_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 17.7776,
+        "myopic": 17.7776,
+        "multi_step": 17.7776,
+        "v2": 17.7776
+      },
+      "pressure": {
+        "b1_rule": {
+          "compliance": 0.0,
+          "min_pressure": 0.6725,
+          "low_minutes": 0,
+          "fluctuation_std": 0.00587
+        },
+        "b3_b4": {
+          "compliance": 0.0,
+          "min_pressure": 0.6725,
+          "low_minutes": 0,
+          "fluctuation_std": 0.00587
+        },
+        "multi_step": {
+          "compliance": 0.0,
+          "min_pressure": 0.6725,
+          "low_minutes": 0,
+          "fluctuation_std": 0.00587
+        }
+      }
+    },
+    "peak": {
+      "start": "2026-04-08 06:45:00",
+      "n_steps": 96,
+      "runtime_per_call_ms": {
+        "b1_rule": {
+          "p50": 0.12,
+          "p95": 0.17,
+          "max": 0.23
+        },
+        "b3_b4": {
+          "p50": 18.49,
+          "p95": 23.81,
+          "max": 24.68
+        },
+        "myopic": {
+          "p50": 0.03,
+          "p95": 0.04,
+          "max": 0.05
+        },
+        "multi_step": {
+          "p50": 0.04,
+          "p95": 0.06,
+          "max": 0.08
+        },
+        "v2": {
+          "p50": 0.04,
+          "p95": 0.07,
+          "max": 0.08
+        }
+      },
+      "shortfall_cause": {
+        "b1_rule": {
+          "capacity_infeasible": 96
+        },
+        "b3_b4": {
+          "capacity_infeasible": 96
+        },
+        "myopic": {
+          "capacity_infeasible": 96
+        },
+        "multi_step": {
+          "capacity_infeasible": 96
+        },
+        "v2": {
+          "capacity_infeasible": 96
+        }
+      },
+      "lowload_cause": {
+        "b1_rule": {
+          "minflow_bound": 0,
+          "rebalance_possible": 0,
+          "low_other": 0
+        },
+        "b3_b4": {
+          "minflow_bound": 0,
+          "rebalance_possible": 0,
+          "low_other": 0
+        },
+        "myopic": {
+          "minflow_bound": 0,
+          "rebalance_possible": 0,
+          "low_other": 0
+        },
+        "multi_step": {
+          "minflow_bound": 0,
+          "rebalance_possible": 0,
+          "low_other": 0
+        },
+        "v2": {
+          "minflow_bound": 0,
+          "rebalance_possible": 0,
+          "low_other": 0
+        }
+      },
+      "energy_kwh": {
+        "b1_rule": 0.0,
+        "b3_b4": 0.0,
+        "myopic": 0.0,
+        "multi_step": 0.0,
+        "v2": 0.0
+      },
+      "shortfall_m3": {
+        "b1_rule": 0.0,
+        "b3_b4": 0.0,
+        "myopic": 0.0,
+        "multi_step": 0.0,
+        "v2": 0.0
+      },
+      "big_small_min": {
+        "b1_rule": 0.0,
+        "b3_b4": 0.0,
+        "myopic": 0.0,
+        "multi_step": 0.0,
+        "v2": 0.0
+      },
+      "ms_vs_myopic_pct": null,
+      "service_equiv_steps": 0,
+      "pressure": {
+        "b1_rule": {
+          "compliance": 0.4375,
+          "min_pressure": 0.4,
+          "low_minutes": 810,
+          "fluctuation_std": 0.00506
+        },
+        "b3_b4": {
+          "compliance": 0.4375,
+          "min_pressure": 0.4,
+          "low_minutes": 810,
+          "fluctuation_std": 0.00506
+        },
+        "multi_step": {
+          "compliance": 0.4375,
+          "min_pressure": 0.4,
+          "low_minutes": 810,
+          "fluctuation_std": 0.00506
+        }
+      }
+    },
+    "large_error": {
+      "start": "2026-04-01 07:15:00",
+      "n_steps": 96,
+      "runtime_per_call_ms": {
+        "b1_rule": {
+          "p50": 4.63,
+          "p95": 7.43,
+          "max": 10.26
+        },
+        "b3_b4": {
+          "p50": 34.88,
+          "p95": 44.74,
+          "max": 55.08
+        },
+        "myopic": {
+          "p50": 12.48,
+          "p95": 16.58,
+          "max": 18.88
+        },
+        "multi_step": {
+          "p50": 34.51,
+          "p95": 43.56,
+          "max": 55.48
+        },
+        "v2": {
+          "p50": 26.21,
+          "p95": 121.0,
+          "max": 1583.77
+        }
+      },
+      "shortfall_cause": {
+        "b1_rule": {
+          "none": 96
+        },
+        "b3_b4": {
+          "none": 96
+        },
+        "myopic": {
+          "none": 96
+        },
+        "multi_step": {
+          "none": 96
+        },
+        "v2": {
+          "none": 96
+        }
+      },
+      "lowload_cause": {
+        "b1_rule": {
+          "minflow_bound": 96,
+          "rebalance_possible": 0,
+          "low_other": 0
+        },
+        "b3_b4": {
+          "minflow_bound": 96,
+          "rebalance_possible": 0,
+          "low_other": 0
+        },
+        "myopic": {
+          "minflow_bound": 96,
+          "rebalance_possible": 0,
+          "low_other": 0
+        },
+        "multi_step": {
+          "minflow_bound": 96,
+          "rebalance_possible": 0,
+          "low_other": 0
+        },
+        "v2": {
+          "minflow_bound": 96,
+          "rebalance_possible": 0,
+          "low_other": 0
+        }
+      },
+      "energy_kwh": {
+        "b1_rule": 53429.26,
+        "b3_b4": 50701.79,
+        "myopic": 50701.79,
+        "multi_step": 50701.79,
+        "v2": 50701.81
+      },
+      "shortfall_m3": {
+        "b1_rule": 0.0,
+        "b3_b4": 0.0,
+        "myopic": 0.0,
+        "multi_step": 0.0,
+        "v2": 0.0
+      },
+      "big_small_min": {
+        "b1_rule": 1440.0,
+        "b3_b4": 1440.0,
+        "myopic": 1440.0,
+        "multi_step": 1440.0,
+        "v2": 1440.0
+      },
+      "ms_vs_myopic_pct": 0.0,
+      "service_equiv_steps": 96,
+      "service_equiv_energy_kwh": {
+        "b1_rule": 53429.26,
+        "b3_b4": 50701.79,
+        "myopic": 50701.79,
+        "multi_step": 50701.79,
+        "v2": 50701.81
+      },
+      "service_equiv_saving_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 5.1048,
+        "myopic": 5.1048,
+        "multi_step": 5.1048,
+        "v2": 5.1048
+      },
+      "pressure": {
+        "b1_rule": {
+          "compliance": 0.0208,
+          "min_pressure": 0.6264,
+          "low_minutes": 0,
+          "fluctuation_std": 0.00523
+        },
+        "b3_b4": {
+          "compliance": 0.0208,
+          "min_pressure": 0.6264,
+          "low_minutes": 0,
+          "fluctuation_std": 0.00523
+        },
+        "multi_step": {
+          "compliance": 0.0208,
+          "min_pressure": 0.6264,
+          "low_minutes": 0,
+          "fluctuation_std": 0.00523
+        }
+      }
+    }
+  },
+  "runtime_s": 60.0
+}

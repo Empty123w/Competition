@@ -19,6 +19,7 @@ from __future__ import annotations
 import importlib.util
 import itertools
 import json
+import os
 import time
 from collections import Counter
 from pathlib import Path
@@ -36,8 +37,11 @@ from air_station.optimization.service import load_optimization_config, optimize_
 
 ROOT = Path(__file__).resolve().parents[2]
 HB = ROOT / "artifacts" / "handoff_b"
-OUT = ROOT / "analysis/reports/b/a6_b5_continuous.json"
-LED = ROOT / "analysis/reports/b/a6_b5_continuous_ledger.csv"
+# A6BT_CAL=1 -> 使用 A6 校准预测(15/30/45/60/75) + 候选策略 cand; 输出另存, 不覆盖旧结果
+CAL = os.environ.get("A6BT_CAL") == "1"
+OUT = ROOT / ("analysis/reports/b/a6_b5_continuous_cal.json" if CAL else "analysis/reports/b/a6_b5_continuous.json")
+LED = ROOT / ("analysis/reports/b/a6_b5_continuous_cal_ledger.csv" if CAL else "analysis/reports/b/a6_b5_continuous_ledger.csv")
+W_LOW_CAND = 2.0   # 候选(DP v2) 低负荷惩罚权重 (开发段选定)
 
 _spec = importlib.util.spec_from_file_location("ms_v1", ROOT / "analysis/scripts/multistep_optimization.py")
 MS = importlib.util.module_from_spec(_spec); _spec.loader.exec_module(MS)
@@ -50,7 +54,8 @@ HORIZON = 4
 RATED = 268.9
 WINDOWS = {"dev": ("2026-03-26", "2026-07-31 23:45:00"),
            "valid": ("2026-08-01", "2026-08-20 23:40:00")}
-STRATEGIES = ("b1_rule", "b3_b4", "myopic", "multi_step", "v2")
+STRATEGIES = (("b1_rule", "b3_b4", "myopic", "multi_step", "v2", "cand") if CAL
+              else ("b1_rule", "b3_b4", "myopic", "multi_step", "v2"))
 # 加载率目标 (来自 load_ratio_definition_v2)
 TARGET_RATED = 1.0
 TARGET_PLATEAU = {"4#": 0.8537, "5#": 0.9381}
@@ -112,11 +117,12 @@ def run_window(name, bundle, device_df, station_df, oc, con, base_cfg, sensitivi
         ts = str(t)
         hist = PIPE.snapshot_from_frames(device_df, station_df, t)
         obs = bundle.actual_at_target(t, 15)
-        ub = {h: _ub(bundle, t, h) for h in (15, 30, 60)}
-        pf = {h: _pf(bundle, t, h) for h in (15, 30, 60)}
+        ub = {h: _ub(bundle, t, h) for h in (15, 30, 45, 60)}
+        pf = {h: _pf(bundle, t, h) for h in (15, 30, 45, 60)}
         if any(v is None for v in (ub[15], ub[30], ub[60])):
             continue
-        req_main = [ub[15], ub[30], ub[30], ub[60]]           # hold_previous
+        ub45 = ub[45] if ub[45] is not None else ub[30]        # 45min 缺失 -> hold_previous(30)
+        req_main = [ub[15], ub[30], ub45, ub[60]]
         lbs = {h: (bundle.forecast_result(t, h).lower_bound if bundle.forecast_result(t, h) else None)
                for h in (15, 30, 60)}
         row = {"t": ts, "obs_flow": (float(obs) if obs is not None else None),
@@ -157,6 +163,9 @@ def run_window(name, bundle, device_df, station_df, oc, con, base_cfg, sensitivi
                     if s == "v2":
                         b = MS2.plan_v2(req_main, caps, con, est, cur_on, stt[s].last_switch_at, ts,
                                         power_cap, 0.0, MS.SWITCH_PENALTY_KWH)
+                    elif s == "cand":
+                        b = MS2.plan_v2(req_main, caps, con, est, cur_on, stt[s].last_switch_at, ts,
+                                        power_cap, W_LOW_CAND, MS.SWITCH_PENALTY_KWH)
                     else:
                         req = req_main[:1] if s == "myopic" else req_main
                         b = MS.plan(req, caps, con, model, cur_on, stt[s].last_switch_at, ts, power_cap)
@@ -309,7 +318,8 @@ def main():
     con = C.DispatchConstraints.from_config(base_cfg)
     oc = load_optimization_config()
     device_df, station_df = PIPE.load_processed()
-    scor = pd.read_parquet(HB / "forecast_scoring_actuals.parquet")
+    scor = pd.read_parquet(HB / ("forecast_scoring_actuals_calibrated.parquet" if CAL
+                                  else "forecast_scoring_actuals.parquet"))
     rep = {"protocol": {
         "windows": WINDOWS, "step_minutes": STEP, "horizon_steps": HORIZON,
         "demand_basis": "upper_bound (CAL-02 frozen)", "reserve": "extra 5%",
@@ -321,9 +331,11 @@ def main():
         "uses_B5_final_window": False,
         "evidence": "开发/验证窗口; 验证段重复使用, 非独立最终测试"}}
     ledgers = {}
+    suffix = "_calibrated" if CAL else ""
     for name in ("dev", "valid"):
-        b = load_forecast_bundle(HB / f"forecast_{'dev' if name == 'dev' else 'validation'}_dispatch.parquet",
-                                 scoring=scor, scoring_split=("dev" if name == "dev" else "valid"))
+        b = load_forecast_bundle(
+            HB / f"forecast_{'dev' if name == 'dev' else 'validation'}_dispatch{suffix}.parquet",
+            scoring=scor, scoring_split=("dev" if name == "dev" else "valid"))
         df = run_window(name, b, device_df, station_df, oc, con, base_cfg)
         ledgers[name] = df
         rep[name] = metrics(df, name)
