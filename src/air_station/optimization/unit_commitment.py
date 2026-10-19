@@ -47,6 +47,12 @@ class UCConfig:
     margin_m3min: float = 0.0     # pred_plus 裕量
     grid: float = GRID
     balanced: bool = False        # 均衡分配: 需求允许时, 每台运行机 >= 134.45 (消除可再平衡低负荷)
+    demand_k: float = 1.0         # 需求在 [pred, upper] 间的位置: demand=pred+k*(upper-pred); k=1 -> upper(基线)
+
+
+def demand_scaled(pred, upper, k):
+    """校准区间置信度自适应需求: k=1 用 upper(保守), k=0 用 pred; 中间为收缩后需求。"""
+    return float(pred) + float(k) * (float(upper) - float(pred))
 
 
 def _power(device_id, flow, model_path, cache):
