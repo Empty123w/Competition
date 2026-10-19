@@ -5,13 +5,13 @@
 # - 不修改冻结产物; 只向新目录写文件
 # =====================================================================
 
-pipeline_version: 3
+pipeline_version: 4
 seed: 42
 timezone: Asia/Shanghai
 timestamp_storage: timezone-naive local wall time
 source_sampling_frequency_minutes: 1
 issue_frequency_minutes: 5
-horizons_minutes: [15, 30, 60]
+horizons_minutes: [15, 30, 45, 60, 75]
 
 target:
   column: total_flow_m3_min
@@ -77,3 +77,16 @@ paths:
   handoff_dir: artifacts/handoff_b
   metrics_dir: artifacts/metrics
   report_dir: analysis/reports/phaseA6_replay
+
+# 区间校准(滚动共形/分位残差)
+calibration:
+  method: rolling_conformal
+  window_days: 30
+  min_samples: 500
+  alpha: 0.12          # 90% 区间
+  symmetric: true
+
+# B 侧调度需求口径
+demand:
+  mean_interval: cumulative_mean_over_horizons   # 区间均值(<=h 的点预测均值)
+  upper_interval: cumulative_max_upper_bound     # 区间上界(<=h 的上界最大值)
