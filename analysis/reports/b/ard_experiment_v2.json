@@ -1,0 +1,552 @@
+{
+  "task1_attribution": {
+    "pred_underestimate_shortfall": 693,
+    "capacity_infeasible": 4018,
+    "over_conservative_oversupply": 1815,
+    "shortfall_excess_over_b1": 0,
+    "steps": 12284,
+    "shortfall_m3": 301394.12270211463,
+    "oversupply_m3": 1016391.6616068411
+  },
+  "windows": {
+    "normal": {
+      "start": "2026-07-06 03:45:00",
+      "window": "normal",
+      "n": 240,
+      "full": {
+        "b1_rule": {
+          "energy_kwh": 153965.68,
+          "supply_m3": 1626111.7,
+          "gap_vs_actual_m3": 8591.65,
+          "sec": 0.094683,
+          "saving_vs_b1_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0,
+          "big_small_min": 600.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "non_exec_steps": 0
+        },
+        "b3_b4": {
+          "energy_kwh": 144455.84,
+          "supply_m3": 1623603.4,
+          "gap_vs_actual_m3": 10458.84,
+          "sec": 0.088972,
+          "saving_vs_b1_pct": 6.1766,
+          "supply_diff_vs_b1_m3": -2508.3,
+          "big_small_min": 555.0,
+          "big_small_reduction_vs_b1_pct": 7.5,
+          "non_exec_steps": 0
+        },
+        "cand": {
+          "energy_kwh": 144709.61,
+          "supply_m3": 1623602.4,
+          "gap_vs_actual_m3": 10459.29,
+          "sec": 0.089129,
+          "saving_vs_b1_pct": 6.0118,
+          "supply_diff_vs_b1_m3": -2509.3,
+          "big_small_min": 315.0,
+          "big_small_reduction_vs_b1_pct": 47.5,
+          "non_exec_steps": 0
+        },
+        "ard_err": {
+          "energy_kwh": 142654.09,
+          "supply_m3": 1582874.9,
+          "gap_vs_actual_m3": 17658.97,
+          "sec": 0.090123,
+          "saving_vs_b1_pct": 7.3468,
+          "supply_diff_vs_b1_m3": -43236.9,
+          "big_small_min": 585.0,
+          "big_small_reduction_vs_b1_pct": 2.5,
+          "non_exec_steps": 0
+        },
+        "ard_dyn": {
+          "energy_kwh": 143372.67,
+          "supply_m3": 1597609.1,
+          "gap_vs_actual_m3": 13884.8,
+          "sec": 0.089742,
+          "saving_vs_b1_pct": 6.8801,
+          "supply_diff_vs_b1_m3": -28502.6,
+          "big_small_min": 585.0,
+          "big_small_reduction_vs_b1_pct": 2.5,
+          "non_exec_steps": 0
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 143372.67,
+          "supply_m3": 1597609.1,
+          "gap_vs_actual_m3": 13884.8,
+          "sec": 0.089742,
+          "saving_vs_b1_pct": 6.8801,
+          "supply_diff_vs_b1_m3": -28502.6,
+          "big_small_min": 585.0,
+          "big_small_reduction_vs_b1_pct": 2.5,
+          "non_exec_steps": 0
+        }
+      },
+      "common_steps": 240,
+      "common": {
+        "b1_rule": {
+          "energy_kwh": 153965.68,
+          "supply_m3": 1626111.7,
+          "gap_vs_actual_m3": 8591.65,
+          "sec": 0.094683,
+          "saving_vs_b1_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0,
+          "big_small_min": 600.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "pressure": {
+            "compliance": 0.0375,
+            "p_end": 0.75,
+            "net_m3": 57963.6
+          }
+        },
+        "b3_b4": {
+          "energy_kwh": 144455.84,
+          "supply_m3": 1623603.4,
+          "gap_vs_actual_m3": 10458.84,
+          "sec": 0.088972,
+          "saving_vs_b1_pct": 6.1766,
+          "supply_diff_vs_b1_m3": -2508.3,
+          "big_small_min": 555.0,
+          "big_small_reduction_vs_b1_pct": 7.5,
+          "pressure": {
+            "compliance": 0.1208,
+            "p_end": 0.75,
+            "net_m3": 55455.3
+          }
+        },
+        "cand": {
+          "energy_kwh": 144709.61,
+          "supply_m3": 1623602.4,
+          "gap_vs_actual_m3": 10459.29,
+          "sec": 0.089129,
+          "saving_vs_b1_pct": 6.0118,
+          "supply_diff_vs_b1_m3": -2509.3,
+          "big_small_min": 315.0,
+          "big_small_reduction_vs_b1_pct": 47.5,
+          "pressure": {
+            "compliance": 0.1208,
+            "p_end": 0.75,
+            "net_m3": 55454.2
+          }
+        },
+        "ard_err": {
+          "energy_kwh": 142654.09,
+          "supply_m3": 1582874.9,
+          "gap_vs_actual_m3": 17658.97,
+          "sec": 0.090123,
+          "saving_vs_b1_pct": 7.3468,
+          "supply_diff_vs_b1_m3": -43236.9,
+          "big_small_min": 585.0,
+          "big_small_reduction_vs_b1_pct": 2.5,
+          "pressure": {
+            "compliance": 0.5792,
+            "p_end": 0.6665,
+            "net_m3": 14726.7
+          }
+        },
+        "ard_dyn": {
+          "energy_kwh": 143372.67,
+          "supply_m3": 1597609.1,
+          "gap_vs_actual_m3": 13884.8,
+          "sec": 0.089742,
+          "saving_vs_b1_pct": 6.8801,
+          "supply_diff_vs_b1_m3": -28502.6,
+          "big_small_min": 585.0,
+          "big_small_reduction_vs_b1_pct": 2.5,
+          "pressure": {
+            "compliance": 0.1417,
+            "p_end": 0.6802,
+            "net_m3": 29461.0
+          }
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 143372.67,
+          "supply_m3": 1597609.1,
+          "gap_vs_actual_m3": 13884.8,
+          "sec": 0.089742,
+          "saving_vs_b1_pct": 6.8801,
+          "supply_diff_vs_b1_m3": -28502.6,
+          "big_small_min": 585.0,
+          "big_small_reduction_vs_b1_pct": 2.5,
+          "pressure": {
+            "compliance": 0.1417,
+            "p_end": 0.6802,
+            "net_m3": 29461.0
+          }
+        }
+      }
+    },
+    "low": {
+      "start": "2026-04-15 04:15:00",
+      "window": "low",
+      "n": 240,
+      "full": {
+        "b1_rule": {
+          "energy_kwh": 8903.22,
+          "supply_m3": 63229.5,
+          "gap_vs_actual_m3": 1692050.76,
+          "sec": 0.140808,
+          "saving_vs_b1_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0,
+          "big_small_min": 405.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "non_exec_steps": 214
+        },
+        "b3_b4": {
+          "energy_kwh": 7254.65,
+          "supply_m3": 59629.5,
+          "gap_vs_actual_m3": 1693850.76,
+          "sec": 0.121662,
+          "saving_vs_b1_pct": 18.5165,
+          "supply_diff_vs_b1_m3": -3600.0,
+          "big_small_min": 375.0,
+          "big_small_reduction_vs_b1_pct": 7.4074,
+          "non_exec_steps": 214
+        },
+        "cand": {
+          "energy_kwh": 7255.92,
+          "supply_m3": 59629.5,
+          "gap_vs_actual_m3": 1693850.76,
+          "sec": 0.121683,
+          "saving_vs_b1_pct": 18.5023,
+          "supply_diff_vs_b1_m3": -3600.0,
+          "big_small_min": 375.0,
+          "big_small_reduction_vs_b1_pct": 7.4074,
+          "non_exec_steps": 214
+        },
+        "ard_err": {
+          "energy_kwh": 13069.57,
+          "supply_m3": 127549.1,
+          "gap_vs_actual_m3": 1626039.34,
+          "sec": 0.102467,
+          "saving_vs_b1_pct": -46.796,
+          "supply_diff_vs_b1_m3": 64319.6,
+          "big_small_min": 375.0,
+          "big_small_reduction_vs_b1_pct": 7.4074,
+          "non_exec_steps": 205
+        },
+        "ard_dyn": {
+          "energy_kwh": 14995.87,
+          "supply_m3": 149886.7,
+          "gap_vs_actual_m3": 1603427.28,
+          "sec": 0.100048,
+          "saving_vs_b1_pct": -68.4321,
+          "supply_diff_vs_b1_m3": 86657.2,
+          "big_small_min": 375.0,
+          "big_small_reduction_vs_b1_pct": 7.4074,
+          "non_exec_steps": 202
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 14995.87,
+          "supply_m3": 149886.7,
+          "gap_vs_actual_m3": 1603427.28,
+          "sec": 0.100048,
+          "saving_vs_b1_pct": -68.4321,
+          "supply_diff_vs_b1_m3": 86657.2,
+          "big_small_min": 375.0,
+          "big_small_reduction_vs_b1_pct": 7.4074,
+          "non_exec_steps": 202
+        }
+      },
+      "common_steps": 26,
+      "common": {
+        "b1_rule": {
+          "energy_kwh": 8903.22,
+          "supply_m3": 63229.5,
+          "gap_vs_actual_m3": 7685.86,
+          "sec": 0.140808,
+          "saving_vs_b1_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0,
+          "big_small_min": 405.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "pressure": {
+            "compliance": 0.0385,
+            "p_end": 0.4302,
+            "net_m3": 32204.9
+          }
+        },
+        "b3_b4": {
+          "energy_kwh": 7254.65,
+          "supply_m3": 59629.5,
+          "gap_vs_actual_m3": 9485.86,
+          "sec": 0.121662,
+          "saving_vs_b1_pct": 18.5165,
+          "supply_diff_vs_b1_m3": -3600.0,
+          "big_small_min": 375.0,
+          "big_small_reduction_vs_b1_pct": 7.4074,
+          "pressure": {
+            "compliance": 0.0385,
+            "p_end": 0.4,
+            "net_m3": 28604.9
+          }
+        },
+        "cand": {
+          "energy_kwh": 7255.92,
+          "supply_m3": 59629.5,
+          "gap_vs_actual_m3": 9485.86,
+          "sec": 0.121683,
+          "saving_vs_b1_pct": 18.5023,
+          "supply_diff_vs_b1_m3": -3600.0,
+          "big_small_min": 375.0,
+          "big_small_reduction_vs_b1_pct": 7.4074,
+          "pressure": {
+            "compliance": 0.0385,
+            "p_end": 0.4,
+            "net_m3": 28604.9
+          }
+        },
+        "ard_err": {
+          "energy_kwh": 7262.84,
+          "supply_m3": 59279.7,
+          "gap_vs_actual_m3": 9835.65,
+          "sec": 0.122518,
+          "saving_vs_b1_pct": 18.4246,
+          "supply_diff_vs_b1_m3": -3949.8,
+          "big_small_min": 375.0,
+          "big_small_reduction_vs_b1_pct": 7.4074,
+          "pressure": {
+            "compliance": 0.0385,
+            "p_end": 0.4,
+            "net_m3": 28255.1
+          }
+        },
+        "ard_dyn": {
+          "energy_kwh": 7248.98,
+          "supply_m3": 58653.5,
+          "gap_vs_actual_m3": 10171.13,
+          "sec": 0.12359,
+          "saving_vs_b1_pct": 18.5802,
+          "supply_diff_vs_b1_m3": -4576.0,
+          "big_small_min": 375.0,
+          "big_small_reduction_vs_b1_pct": 7.4074,
+          "pressure": {
+            "compliance": 0.0769,
+            "p_end": 0.4,
+            "net_m3": 27628.9
+          }
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 7248.98,
+          "supply_m3": 58653.5,
+          "gap_vs_actual_m3": 10171.13,
+          "sec": 0.12359,
+          "saving_vs_b1_pct": 18.5802,
+          "supply_diff_vs_b1_m3": -4576.0,
+          "big_small_min": 375.0,
+          "big_small_reduction_vs_b1_pct": 7.4074,
+          "pressure": {
+            "compliance": 0.0769,
+            "p_end": 0.4,
+            "net_m3": 27628.9
+          }
+        }
+      }
+    },
+    "peak": {
+      "start": "2026-04-09 06:30:00",
+      "window": "peak",
+      "n": 240,
+      "full": {
+        "b1_rule": {
+          "energy_kwh": 2996.45,
+          "supply_m3": 28856.7,
+          "gap_vs_actual_m3": 1870198.89,
+          "sec": 0.103839,
+          "saving_vs_b1_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0,
+          "big_small_min": 45.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "non_exec_steps": 235
+        },
+        "b3_b4": {
+          "energy_kwh": 2874.33,
+          "supply_m3": 28856.7,
+          "gap_vs_actual_m3": 1870198.89,
+          "sec": 0.099607,
+          "saving_vs_b1_pct": 4.0756,
+          "supply_diff_vs_b1_m3": 0.0,
+          "big_small_min": 45.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "non_exec_steps": 235
+        },
+        "cand": {
+          "energy_kwh": 2877.54,
+          "supply_m3": 28856.7,
+          "gap_vs_actual_m3": 1870198.89,
+          "sec": 0.099718,
+          "saving_vs_b1_pct": 3.9685,
+          "supply_diff_vs_b1_m3": 0.0,
+          "big_small_min": 45.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "non_exec_steps": 235
+        },
+        "ard_err": {
+          "energy_kwh": 3512.59,
+          "supply_m3": 35418.7,
+          "gap_vs_actual_m3": 1863935.41,
+          "sec": 0.099173,
+          "saving_vs_b1_pct": -17.2249,
+          "supply_diff_vs_b1_m3": 6562.0,
+          "big_small_min": 45.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "non_exec_steps": 234
+        },
+        "ard_dyn": {
+          "energy_kwh": 5446.43,
+          "supply_m3": 58155.7,
+          "gap_vs_actual_m3": 1841207.99,
+          "sec": 0.093653,
+          "saving_vs_b1_pct": -81.7626,
+          "supply_diff_vs_b1_m3": 29299.0,
+          "big_small_min": 45.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "non_exec_steps": 231
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 5446.43,
+          "supply_m3": 58155.7,
+          "gap_vs_actual_m3": 1841207.99,
+          "sec": 0.093653,
+          "saving_vs_b1_pct": -81.7626,
+          "supply_diff_vs_b1_m3": 29299.0,
+          "big_small_min": 45.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "non_exec_steps": 231
+        }
+      },
+      "common_steps": 5,
+      "common": {
+        "b1_rule": {
+          "energy_kwh": 2996.46,
+          "supply_m3": 28856.7,
+          "gap_vs_actual_m3": 5714.61,
+          "sec": 0.103839,
+          "saving_vs_b1_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0,
+          "big_small_min": 45.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "pressure": {
+            "compliance": 0.2,
+            "p_end": 0.4077,
+            "net_m3": -5183.9
+          }
+        },
+        "b3_b4": {
+          "energy_kwh": 2874.33,
+          "supply_m3": 28856.7,
+          "gap_vs_actual_m3": 5714.61,
+          "sec": 0.099607,
+          "saving_vs_b1_pct": 4.0756,
+          "supply_diff_vs_b1_m3": 0.0,
+          "big_small_min": 45.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "pressure": {
+            "compliance": 0.2,
+            "p_end": 0.4077,
+            "net_m3": -5183.9
+          }
+        },
+        "cand": {
+          "energy_kwh": 2877.54,
+          "supply_m3": 28856.7,
+          "gap_vs_actual_m3": 5714.61,
+          "sec": 0.099718,
+          "saving_vs_b1_pct": 3.9685,
+          "supply_diff_vs_b1_m3": 0.0,
+          "big_small_min": 45.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "pressure": {
+            "compliance": 0.2,
+            "p_end": 0.4077,
+            "net_m3": -5183.9
+          }
+        },
+        "ard_err": {
+          "energy_kwh": 2866.15,
+          "supply_m3": 27790.8,
+          "gap_vs_actual_m3": 7057.66,
+          "sec": 0.103133,
+          "saving_vs_b1_pct": 4.3485,
+          "supply_diff_vs_b1_m3": -1065.9,
+          "big_small_min": 45.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "pressure": {
+            "compliance": 0.2,
+            "p_end": 0.4,
+            "net_m3": -6249.8
+          }
+        },
+        "ard_dyn": {
+          "energy_kwh": 2861.68,
+          "supply_m3": 27736.8,
+          "gap_vs_actual_m3": 7111.66,
+          "sec": 0.103173,
+          "saving_vs_b1_pct": 4.4979,
+          "supply_diff_vs_b1_m3": -1119.9,
+          "big_small_min": 45.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "pressure": {
+            "compliance": 0.2,
+            "p_end": 0.4,
+            "net_m3": -6303.8
+          }
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 2861.68,
+          "supply_m3": 27736.8,
+          "gap_vs_actual_m3": 7111.66,
+          "sec": 0.103173,
+          "saving_vs_b1_pct": 4.4979,
+          "supply_diff_vs_b1_m3": -1119.9,
+          "big_small_min": 45.0,
+          "big_small_reduction_vs_b1_pct": 0.0,
+          "pressure": {
+            "compliance": 0.2,
+            "p_end": 0.4,
+            "net_m3": -6303.8
+          }
+        }
+      }
+    }
+  },
+  "runtime_ms": {
+    "b1_rule": {
+      "p50": 0.13,
+      "p95": 6.04,
+      "max": 11.36
+    },
+    "b3_b4": {
+      "p50": 20.39,
+      "p95": 41.23,
+      "max": 140.11
+    },
+    "cand": {
+      "p50": 0.12,
+      "p95": 21.07,
+      "max": 1654.99
+    },
+    "ard_err": {
+      "p50": 0.57,
+      "p95": 16.35,
+      "max": 670.0
+    },
+    "ard_dyn": {
+      "p50": 0.92,
+      "p95": 13.24,
+      "max": 366.95
+    },
+    "ard_dyn_peak": {
+      "p50": 0.73,
+      "p95": 11.39,
+      "max": 18.91
+    }
+  },
+  "fallback": {
+    "b1_rule": 0,
+    "b3_b4": 0,
+    "cand": 449,
+    "ard_err": 439,
+    "ard_dyn": 433,
+    "ard_dyn_peak": 433
+  },
+  "runtime_s": 398.2
+}
