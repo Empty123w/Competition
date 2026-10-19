@@ -1,0 +1,97 @@
+{
+  "boundary_version": "surge-proxy-v0.1",
+  "boundary_type": "proxy (历史运行点包络, 非真实喘振线)",
+  "validation_mode": "simulation",
+  "warn_margin": 0.1,
+  "block_on_high": true,
+  "block_on_unknown": true,
+  "real_label_note": "数据无真实喘振正例标签 -> 误报/漏报/真实提前量不可计算",
+  "dev": {
+    "4#": {
+      "minutes": 167043,
+      "level_minutes": {
+        "low": 155747,
+        "medium": 1,
+        "high": 5572,
+        "unknown": 5723
+      },
+      "level_pct": {
+        "low": 93.238,
+        "medium": 0.001,
+        "high": 3.336,
+        "unknown": 3.426
+      },
+      "proxy_events": 25,
+      "proxy_high_events": 25,
+      "proxy_medium_events": 0,
+      "blocked_proxy_steps": 11295,
+      "proxy_median_medium_to_high_lead_min": 1.0,
+      "lead_pairs": 1
+    },
+    "5#": {
+      "minutes": 206113,
+      "level_minutes": {
+        "low": 204890,
+        "medium": 57,
+        "high": 798,
+        "unknown": 368
+      },
+      "level_pct": {
+        "low": 99.407,
+        "medium": 0.028,
+        "high": 0.387,
+        "unknown": 0.179
+      },
+      "proxy_events": 132,
+      "proxy_high_events": 118,
+      "proxy_medium_events": 14,
+      "blocked_proxy_steps": 1166,
+      "proxy_median_medium_to_high_lead_min": 1.0,
+      "lead_pairs": 6
+    }
+  },
+  "valid": {
+    "4#": {
+      "minutes": 29923,
+      "level_minutes": {
+        "low": 29899,
+        "medium": 0,
+        "high": 5,
+        "unknown": 19
+      },
+      "level_pct": {
+        "low": 99.92,
+        "medium": 0.0,
+        "high": 0.017,
+        "unknown": 0.063
+      },
+      "proxy_events": 5,
+      "proxy_high_events": 5,
+      "proxy_medium_events": 0,
+      "blocked_proxy_steps": 24,
+      "proxy_median_medium_to_high_lead_min": null,
+      "lead_pairs": 0
+    },
+    "5#": {
+      "minutes": 29694,
+      "level_minutes": {
+        "low": 29640,
+        "medium": 11,
+        "high": 38,
+        "unknown": 5
+      },
+      "level_pct": {
+        "low": 99.818,
+        "medium": 0.037,
+        "high": 0.128,
+        "unknown": 0.017
+      },
+      "proxy_events": 16,
+      "proxy_high_events": 12,
+      "proxy_medium_events": 4,
+      "blocked_proxy_steps": 43,
+      "proxy_median_medium_to_high_lead_min": null,
+      "lead_pairs": 0
+    }
+  }
+}

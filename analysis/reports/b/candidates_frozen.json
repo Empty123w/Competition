@@ -1,0 +1,51 @@
+{
+  "frozen_at": "2026-10-19",
+  "branch": "feat/b-int-a6",
+  "note": "两个有效候选冻结; 不修改 B1/设备安全边界/赛题指标; 未推送; 不删历史实验",
+  "candidates": {
+    "B3+B4": {
+      "role": "能效优先",
+      "entry": "air_station.optimization.service.optimize_dispatch",
+      "policy_version": "b3-optimizer-v0.1",
+      "code_sha1": {
+        "src/air_station/optimization/service.py": "1c57671d9d522dd089d79e2f4c27d65694686742",
+        "src/air_station/optimization/optimizer.py": "d5b4fb4723cb8d514565964a42530352b342d58b",
+        "src/air_station/optimization/constraints.py": "d41bc70a7abc80f43394327a57bd0912d08248c9",
+        "src/air_station/optimization/performance.py": "a491ee0cd6cb2c9d0b8cd1b8de59703e2bba24f4"
+      },
+      "results": {
+        "dev_full": "analysis/reports/b/multikpi_dev_0_13000.json",
+        "valid": "analysis/reports/b/multikpi_valid_0_2000.json"
+      }
+    },
+    "bal": {
+      "role": "低负荷优先",
+      "entry": "air_station.optimization.unit_commitment.plan(cfg=UCConfig(balanced=True))",
+      "policy_version": "balanced-uc-v0.1",
+      "code_sha1": {
+        "src/air_station/optimization/unit_commitment.py": "dfcadd462e2e21d672c7590566d6cb6cde6f5785",
+        "src/air_station/optimization/performance.py": "a491ee0cd6cb2c9d0b8cd1b8de59703e2bba24f4",
+        "src/air_station/optimization/constraints.py": "d41bc70a7abc80f43394327a57bd0912d08248c9"
+      },
+      "results": {
+        "dev_full": "analysis/reports/b/multikpi_dev_0_13000.json",
+        "valid": "analysis/reports/b/multikpi_valid_0_2000.json"
+      }
+    }
+  },
+  "shared_safety": {
+    "src/air_station/safety/boundaries.py": "2f8b99440ae8587fbf7bb022f5cf96b94bb93822",
+    "src/air_station/safety/surge.py": "24f46fb5e3578d4c8b643ff5eb7cbfcd707d6eaf",
+    "configs/baseline.yaml": "2d129cfb177b4e94ce7306b533c11378e8b52a83",
+    "configs/safety.yaml": "10c99e09c4a7ebdac95c962a3ee98047004017a4"
+  },
+  "frozen_constraints": {
+    "extra_reserve_pct": 0.05,
+    "validated_min_m3min": 120.0,
+    "rated_m3min": 268.9,
+    "non_low_threshold_m3min": 134.45,
+    "single_machine_threshold_m3min": 256.1,
+    "pressure_band_mpa": [0.55, 0.66],
+    "b4_safety": "边界/喘振/过渡供气不变"
+  }
+}

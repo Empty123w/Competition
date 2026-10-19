@@ -15,6 +15,7 @@
 """
 from __future__ import annotations
 
+import functools
 import json
 import time
 from datetime import datetime, timezone
@@ -295,6 +296,11 @@ def train_performance(processed_dir="data/processed", config_path=DEFAULT_CONFIG
 # B3 运行时接口
 # ------------------------------------------------------------------ #
 def _load_artifact(path: str | Path) -> dict:
+    return _load_artifact_cached(str(Path(path)))
+
+
+@functools.lru_cache(maxsize=8)
+def _load_artifact_cached(path: str) -> dict:
     p = Path(path)
     if not p.exists():
         raise FileNotFoundError(f"[performance] 功率模型缺失: {p} (先运行 train_performance)")

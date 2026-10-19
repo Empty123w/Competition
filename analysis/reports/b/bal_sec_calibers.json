@@ -1,0 +1,175 @@
+{
+  "note": "独立重算; 三口径分别报样本数与数值; full_window 各策略自有供气步不同步, 仅作参考",
+  "dev": {
+    "full_window": {
+      "caliber": "full_window",
+      "steps": 12284,
+      "b1": {
+        "E_kwh": 4920538.2,
+        "V_m3": 46684573.3,
+        "SEC": 0.1054,
+        "low_min": 78285.0
+      },
+      "b3_b4": {
+        "E_kwh": 4388440.8,
+        "V_m3": 45956708.7,
+        "SEC": 0.095491,
+        "low_min": 40005.0,
+        "SEC_reduction_pct": 9.4013,
+        "energy_saving_same_supply_pct": 10.8138,
+        "dSEC_vs_b3_pct_point": null
+      },
+      "bal": {
+        "E_kwh": 4255180.1,
+        "V_m3": 44246213.3,
+        "SEC": 0.09617,
+        "low_min": 18255.0,
+        "SEC_reduction_pct": 8.7564,
+        "energy_saving_same_supply_pct": 13.5221,
+        "dSEC_vs_b3_pct_point": 0.6449
+      }
+    },
+    "paired_exec": {
+      "caliber": "paired_exec",
+      "steps": 7600,
+      "b1": {
+        "E_kwh": 4499672.5,
+        "V_m3": 42325078.8,
+        "SEC": 0.106312,
+        "low_min": 76530.0
+      },
+      "b3_b4": {
+        "E_kwh": 4003116.0,
+        "V_m3": 41675467.1,
+        "SEC": 0.096054,
+        "low_min": 38970.0,
+        "SEC_reduction_pct": 9.6487,
+        "energy_saving_same_supply_pct": 11.0354,
+        "dSEC_vs_b3_pct_point": null
+      },
+      "bal": {
+        "E_kwh": 4013899.4,
+        "V_m3": 41673411.5,
+        "SEC": 0.096318,
+        "low_min": 17550.0,
+        "SEC_reduction_pct": 9.4008,
+        "energy_saving_same_supply_pct": 10.7957,
+        "dSEC_vs_b3_pct_point": 0.2479
+      }
+    },
+    "service_equiv": {
+      "caliber": "service_equiv",
+      "steps": 6957,
+      "b1": {
+        "E_kwh": 4116791.2,
+        "V_m3": 38697831.0,
+        "SEC": 0.106383,
+        "low_min": 69240.0
+      },
+      "b3_b4": {
+        "E_kwh": 3674578.0,
+        "V_m3": 38140687.2,
+        "SEC": 0.096343,
+        "low_min": 36405.0,
+        "SEC_reduction_pct": 9.4378,
+        "energy_saving_same_supply_pct": 10.7417,
+        "dSEC_vs_b3_pct_point": null
+      },
+      "bal": {
+        "E_kwh": 3684415.6,
+        "V_m3": 38140645.0,
+        "SEC": 0.096601,
+        "low_min": 16635.0,
+        "SEC_reduction_pct": 9.1953,
+        "energy_saving_same_supply_pct": 10.5027,
+        "dSEC_vs_b3_pct_point": 0.2425
+      }
+    }
+  },
+  "valid": {
+    "full_window": {
+      "caliber": "full_window",
+      "steps": 1916,
+      "b1": {
+        "E_kwh": 1229643.3,
+        "V_m3": 13061396.6,
+        "SEC": 0.094143,
+        "low_min": 2385.0
+      },
+      "b3_b4": {
+        "E_kwh": 1159320.0,
+        "V_m3": 13048071.2,
+        "SEC": 0.08885,
+        "low_min": 2040.0,
+        "SEC_reduction_pct": 5.6227,
+        "energy_saving_same_supply_pct": 5.719,
+        "dSEC_vs_b3_pct_point": null
+      },
+      "bal": {
+        "E_kwh": 1160616.1,
+        "V_m3": 13040165.8,
+        "SEC": 0.089003,
+        "low_min": 450.0,
+        "SEC_reduction_pct": 5.4599,
+        "energy_saving_same_supply_pct": 5.6136,
+        "dSEC_vs_b3_pct_point": 0.1628
+      }
+    },
+    "paired_exec": {
+      "caliber": "paired_exec",
+      "steps": 1914,
+      "b1": {
+        "E_kwh": 1228354.9,
+        "V_m3": 13047713.0,
+        "SEC": 0.094143,
+        "low_min": 2385.0
+      },
+      "b3_b4": {
+        "E_kwh": 1158107.9,
+        "V_m3": 13034387.6,
+        "SEC": 0.08885,
+        "low_min": 2040.0,
+        "SEC_reduction_pct": 5.6224,
+        "energy_saving_same_supply_pct": 5.7188,
+        "dSEC_vs_b3_pct_point": null
+      },
+      "bal": {
+        "E_kwh": 1160049.2,
+        "V_m3": 13034110.0,
+        "SEC": 0.089001,
+        "low_min": 450.0,
+        "SEC_reduction_pct": 5.4622,
+        "energy_saving_same_supply_pct": 5.5607,
+        "dSEC_vs_b3_pct_point": 0.1602
+      }
+    },
+    "service_equiv": {
+      "caliber": "service_equiv",
+      "steps": 1857,
+      "b1": {
+        "E_kwh": 1193946.4,
+        "V_m3": 12729346.2,
+        "SEC": 0.093795,
+        "low_min": 1800.0
+      },
+      "b3_b4": {
+        "E_kwh": 1128773.9,
+        "V_m3": 12726969.0,
+        "SEC": 0.088691,
+        "low_min": 1710.0,
+        "SEC_reduction_pct": 5.4409,
+        "energy_saving_same_supply_pct": 5.4586,
+        "dSEC_vs_b3_pct_point": null
+      },
+      "bal": {
+        "E_kwh": 1130606.9,
+        "V_m3": 12726691.2,
+        "SEC": 0.088837,
+        "low_min": 390.0,
+        "SEC_reduction_pct": 5.2853,
+        "energy_saving_same_supply_pct": 5.3051,
+        "dSEC_vs_b3_pct_point": 0.1556
+      }
+    }
+  }
+}

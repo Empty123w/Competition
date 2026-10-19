@@ -1,0 +1,75 @@
+{
+  "note": "供气与节电分列; dV<0 表示较 B1 少供气, 不得当作能效提升",
+  "dev": {
+    "n_steps": 12284,
+    "obs_m3": 75629137.1,
+    "paired_exec_steps": 7600,
+    "paired_exec_obs_m3": 39955274.3,
+    "b1_rule": {
+      "supply_m3": 46684573.3,
+      "supply_vs_obs_m3": -28944563.8,
+      "gap_m3": 31808702.4,
+      "over_supply_m3": 2864138.6,
+      "infeasible_steps": 4018,
+      "safety_blocked_steps": 443,
+      "executed_steps": 7823,
+      "paired_gap_m3": 190870.5
+    },
+    "b3_b4": {
+      "supply_m3": 45956708.7,
+      "supply_vs_obs_m3": -29672428.4,
+      "gap_m3": 31870706.9,
+      "over_supply_m3": 2198278.5,
+      "infeasible_steps": 4018,
+      "safety_blocked_steps": 442,
+      "executed_steps": 7824,
+      "paired_gap_m3": 244879.9
+    },
+    "bal": {
+      "supply_m3": 44246213.3,
+      "supply_vs_obs_m3": -31382923.8,
+      "gap_m3": 33554682.3,
+      "over_supply_m3": 2171758.5,
+      "infeasible_steps": 4241,
+      "safety_blocked_steps": 442,
+      "executed_steps": 7601,
+      "paired_gap_m3": 246773.9
+    }
+  },
+  "valid": {
+    "n_steps": 1916,
+    "obs_m3": 12457027.0,
+    "paired_exec_steps": 1914,
+    "paired_exec_obs_m3": 12444825.3,
+    "b1_rule": {
+      "supply_m3": 13061396.6,
+      "supply_vs_obs_m3": 604369.6,
+      "gap_m3": 25277.1,
+      "over_supply_m3": 629646.7,
+      "infeasible_steps": 0,
+      "safety_blocked_steps": 1,
+      "executed_steps": 1915,
+      "paired_gap_m3": 25277.1
+    },
+    "b3_b4": {
+      "supply_m3": 13048071.2,
+      "supply_vs_obs_m3": 591044.2,
+      "gap_m3": 33402.1,
+      "over_supply_m3": 624446.3,
+      "infeasible_steps": 0,
+      "safety_blocked_steps": 1,
+      "executed_steps": 1915,
+      "paired_gap_m3": 33402.1
+    },
+    "bal": {
+      "supply_m3": 13040165.8,
+      "supply_vs_obs_m3": 583138.8,
+      "gap_m3": 39889.6,
+      "over_supply_m3": 623028.4,
+      "infeasible_steps": 1,
+      "safety_blocked_steps": 1,
+      "executed_steps": 1914,
+      "paired_gap_m3": 33401.9
+    }
+  }
+}
