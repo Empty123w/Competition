@@ -42,6 +42,7 @@ CANDS = {
     "k0.75": {"kind": "uc", "k": 0.75}, "k0.50": {"kind": "uc", "k": 0.50},
     "k0.25": {"kind": "uc", "k": 0.25}, "k0.00": {"kind": "uc", "k": 0.0},
     "bal_k0.75": {"kind": "bal", "k": 0.75}, "k0.33": {"kind": "uc", "k": 0.33}, "k0.15": {"kind": "uc", "k": 0.15},
+    "sbd_t7": {"kind": "sbd", "thr": 7.0}, "sbd_t3": {"kind": "sbd", "thr": 3.0},
 }
 
 
@@ -131,12 +132,17 @@ def run(window, start, n, cands, logpath):
                     combo = bb["seq"][0]; al = bb["alloc0"]; flows = al["flows"]
                     acts = MS._actions(combo, al, caps, cur_on, cur_flows)
                     trans = CONS.transition_feasibility(cur_on, combo, caps, req[0], con.reserve)[1]
-                else:  # uc / bal
+                else:  # uc / bal / sbd
                     k = spec.get("k", 1.0)
                     req = [UC.demand_scaled(sr[f"pf{h}"], sr[f"ub{h}"], k) for h in (15, 30, 45, 60)]
-                    cfg = UC.UCConfig(demand_basis="upper", balanced=(kind == "bal"))
-                    bb = UC.plan(req, caps, con, cur_on, cur_flows, stt[s].last_switch_at, ts,
-                                 model_path=model, power_cap=1600.0, cfg=cfg, cache=cache)
+                    if kind == "sbd":
+                        bb = SBD.plan_sbd(req, caps, con, cur_on, cur_flows, stt[s].last_switch_at, ts,
+                                          SBD.SBDConfig(max_extra_kwh_per_low_step=spec.get("thr", 7.0)),
+                                          model_path=model, power_cap=1600.0, cache=cache)
+                    else:
+                        cfg = UC.UCConfig(demand_basis="upper", balanced=(kind == "bal"))
+                        bb = UC.plan(req, caps, con, cur_on, cur_flows, stt[s].last_switch_at, ts,
+                                     model_path=model, power_cap=1600.0, cfg=cfg, cache=cache)
                     if bb is None:
                         fb[s] += 1; rt[s].append(time.perf_counter() - tt); continue
                     combo = bb["seq"][0]; al = bb["alloc0"]; flows = al["flows"]
