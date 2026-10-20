@@ -122,6 +122,14 @@ def plan_dispatch(mode: str, snapshot: StationSnapshot, forecast: Optional[Forec
         r = SVC.optimize_dispatch(snapshot, forecast, health, constraints, state=state,
                                   config_path=config_path, power_model_path=pm,
                                   baseline_config_path=bc)
+        # 调用方超时(plan_dispatch 层): service 内部超时阈值可配置, 这里再按 timeout_ms 复检,
+        # 保证三模式 timeout_ms 语义一致 (不改变 service 公共签名/返回字段)。
+        if (time.perf_counter() - t0) * 1000 > to_ms:
+            fb = _fallback(snapshot, forecast, health, constraints, state=state,
+                           reason_codes=[C.RC_TIMEOUT], policy_version=r.policy_version,
+                           power_model_path=pm, baseline_config_path=bc,
+                           required=r.required_flow_m3_min, t0=t0, opt_cfg=opt_cfg, mode="b3")
+            return fb
         out = r.to_dict()
         out["mode"] = "b3"
         # 归一化回退标志: B3 失败时 status!=success 且带 fallback_candidate, 统一标记 is_fallback
