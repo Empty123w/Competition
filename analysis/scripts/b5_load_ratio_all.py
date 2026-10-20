@@ -14,11 +14,13 @@ SEGS = {
     "test": "analysis/reports/b/multikpi_test_0_3000_ledger.csv",
 }
 TGT_A = {"4#": 1.0, "5#": 1.0}
+TGT_B = {"4#": 0.8537, "5#": 0.9381}   # 逐机效率平台下界 (load_ratio_definition_v2, 数据标定)
 
 
 def main():
-    rep = {"definition": {"D1": "相对额定 λ*=1.0 ±10% (单机统计)", "D3": "机组间 |λ4-λ5|<=0.10 (pp)",
-                          "official_status": "官方未给数学定义 (待确认)"}, "segments": {}}
+    rep = {"definition": {"D1": "相对额定 λ*=1.0 ±10% (单机统计)", "D2": "相对效率平台下界 λ*(4#=0.8537,5#=0.9381) ±10%",
+                          "D3": "机组间 |λ4-λ5|<=0.10 (pp)", "official_status": "官方未给数学定义 (待确认)"},
+           "segments": {}}
     for name, f in SEGS.items():
         df = pd.read_csv(ROOT / f)
         m = pd.Series(True, index=df.index)
@@ -27,15 +29,18 @@ def main():
         g = df.loc[m]
         out = {"paired_steps": int(len(g))}
         for s in STRAT:
-            d1 = 0; tot = 0
+            d1 = d2 = 0; tot = 0
             for d in ("4#", "5#"):
                 q = g[f"{s}_f{d[0]}"]
                 q = q[(q >= 120 - 1e-6) & (q <= RATED + 1e-6)]
-                dv = (q / RATED - TGT_A[d]) / TGT_A[d]
-                d1 += int((dv.abs() <= 0.10).sum()); tot += int(len(q))
+                lam = q / RATED
+                d1 += int(((lam - TGT_A[d]).abs() / TGT_A[d] <= 0.10).sum())
+                d2 += int(((lam - TGT_B[d]).abs() / TGT_B[d] <= 0.10).sum())
+                tot += int(len(q))
             on = (g[f"{s}_f4"] > 0) & (g[f"{s}_f5"] > 0)
             sp = ((g[f"{s}_f4"] - g[f"{s}_f5"]).abs() / RATED)[on]
             out[s] = {"D1_meet_ratio": round(d1 / tot, 4) if tot else None,
+                      "D2_meet_ratio": round(d2 / tot, 4) if tot else None,
                       "D3_within10pp_ratio": round(float((sp <= 0.10).mean()), 4) if len(sp) else None,
                       "D3_spread_mean": round(float(sp.mean()), 4) if len(sp) else None}
         rep["segments"][name] = out
