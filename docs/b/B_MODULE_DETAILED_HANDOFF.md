@@ -147,11 +147,12 @@ python -m pytest tests/optimization/test_b01_b20_acceptance.py -v
 ## 6. B1 人工规则调度原理及调用方式
 
 - 入口：`air_station.baseline.rules.decide(snapshot, forecast, health, constraints, config, state) -> DispatchResult`。
-- 原理（`configs/baseline.yaml`）：
-  1. 需求取预测**上界**（`reserve.basis: upper_bound`）；
-  2. `start_priority=["5#","4#"]`，保证容量 ≥ 需求 + 备用；
-  3. `load_allocation`: 4# 基载、5# 调节；
-  4. 压力低于 `hard_lo_mpa` 强制加机；去抖 `confirm_minutes`、`hysteresis_mpa`。
+- 原理（`configs/baseline.yaml` + `baseline/rules.py`）：
+  1. 需求取预测**上界**（`demand.basis: upper_bound`）；
+  2. **备用是"可用容量约束"，不是额外产气**：`need = required + required×5% = 1.05×required`（`reserve.mode=extra`，见 `contracts.ReservePolicy.extra_m3_min` 与 `rules.decide` L267-276）；仅要求**可用容量 ≥ need**，**不等于每时刻必须多生产 5% 的压缩空气**（实际流量由负荷分配决定）；
+  3. 优先级/基载/调节：`start_priority=["5#","4#"]`、`stop_priority=["4#","5#"]`、`load_allocation: base_device=4#, trim_device=5#`（`configs/baseline.yaml` L57-63，`source: inferred`）；
+  4. 压力规则：`band_mpa=[0.55,0.66]`（**待确认示例 CAL-05**）、`hard_lo_mpa=0.50` 触发强制加机、`confirm_minutes=3` 连续确认去抖、`hysteresis_mpa=0.02` 滞环（`rules.py` L327-342）；
+  5. 启停限制：最短开/停机 15min、最大切换 2 次/h（`switching`，`source: engineering`）。
 - 角色：**公平对照基线**；优化失败时作为**安全回退**（`fallback.rule_fallback`）。
 - 调用示例：
 ```python
@@ -170,7 +171,9 @@ r = B1.decide(snapshot, forecast, [], constraints, cfg, PolicyState())
 - 拟合样本：运行且流量∈[120, 268.9]；候选 `linear/poly2/piecewise/multivar`，按 **MAE** 选优。
 - 估计：`PERF.estimate_power(device_id, flow, *, discharge_pressure_mpa, igv_percent, ambient_temp_c, model_path)`。
   - `flow=0`→功率 0；非法→`INVALID_INPUT`；缺模型→`MODEL_UNAVAILABLE`。
-- 数值例子（4#）：Q=120→920.3 kW（SEC 0.1278 kWh/m³）；Q=240→1288.3 kW（SEC 0.0895）。**SEC 随流量下降**（大马拉小车不经济的根因）。
+- 数值例子（4#，实测 B2 模型）：Q=120→920.3 kW（**SEC≈0.1278** kWh/m³）；Q=240→1288.3 kW（**SEC≈0.0895** kWh/m³）。
+  - **关系方向**：在**本模型这两个示例工况**下，流量由 120 增至 240 时，**单位供气电耗降低**（0.1278→0.0895），这是"大马拉小车"不经济的依据。
+  - **不得过度外推**：该方向受模型形式与外推范围影响，**不能断言所有工况下 SEC 与流量严格单调**；区间外结果标记 `extrapolated`。
 - **工程假设**：无厂家性能曲线，`validation_mode=simulation`。
 
 ### 7.2 压力模型
@@ -189,11 +192,18 @@ r = B1.decide(snapshot, forecast, [], constraints, cfg, PolicyState())
 | 关键机制 | 枚举 4 种组合 + 最小功率分配 | 需求≥0.5·额定·台数时强制每台≥134.45 | 双机限制 \|f4−f5\|≤0.10×268.9，容差内取最小功率 |
 | policy_version | `b3-optimizer-v0.1` | `balanced-uc-v0.1` | `load-balanced-lrb-v0.1` |
 | 全历史 service_equiv SEC 降% | 7.71 | 7.50 | **6.39** |
-| 全历史大马拉小车降%（paired） | 48.3 | **77.2** | 61.8 |
-| D3 加载率达标率 | 0–11% | 2–30% | **≈100%** |
+| 全历史大马拉小车降%（**paired_exec**） | 48.3 | **77.2** | 61.8（service_equiv 59.1） |
+| D3 加载率达标率（paired_exec） | 0–11% | 2–30% | **≈100%** |
 
-**共同硬约束**：容量 + 5% extra 备用、最低稳定流量 120、爬坡、最短开/停机 15min、最大切换 2/h、过渡供气连续、压力安全、喘振。**目标函数**（`configs/optimization.yaml: dispatch.weights`）：`w_power·功率 + w_low·低负荷 + w_switch·切换`，权值可配置。
-**推荐**：主方案 **LRB-t10**（三项同时达标，内部口径）；备选 bal / B3。
+**三者目标函数是不同实现，不可混写**：
+| 算法 | 目标函数（真实实现） | 位置 |
+|---|---|---|
+| B3 | `total = w_power·(P/P_ref) + w_switch·(n_sw/N_ref) + w_health·H + w_rul·R`；权重 `power=1.0, switch=0.05, health=0.10, rul=0.0`；归一 `P_ref=2500 kW, N_ref=2`。**不含低负荷项** | `optimizer.evaluate_combo` L128-150、`configs/optimization.yaml` L59-67 |
+| bal | `cost = w_short·shortfall + energy_kwh + w_low·low_steps + w_switch·switches`（`UCConfig` 默认 `w_short=1e6, w_switch=2.0, w_low=0`）；**低负荷通过"每台 ≥134.45"下界约束**消除，而非靠 `w_low` | `unit_commitment.best_allocation` L92-94、`plan` L223-230 |
+| LRB-t10 | 同 bal 的 `UCConfig` 代价，但把"每台≥NLT"换为 **`\|f4−f5\| ≤ 0.10×268.9`** 约束（`spread_balance`+`spread_tol`），**容差内取最小功率** | `unit_commitment.best_allocation` L96-101 / L119、`UCConfig` L52-53 |
+
+**共同硬约束**（三者一致）：容量 + 5% extra 备用（可用容量约束）、最低稳定流量 120、爬坡（4#=77 / 5#=287 m³/min per 15min）、最短开/停机 15min、最大切换 2/h、过渡供气连续、压力安全、喘振阻断。
+**推荐**：主方案 **LRB-t10**（三项在同口径下可同时成立，内部口径；见 §10.2 口径说明）；备选 bal / B3。
 
 ---
 
@@ -216,14 +226,35 @@ r = B1.decide(snapshot, forecast, [], constraints, cfg, PolicyState())
 | valid | 08-01~08-20 | 1916 | 1914 | 1857 |
 | test | 08-21~09-12 | 2113 | 2063 | 1979 |
 
-- `paired_exec`：各策略均 `status=success & exec=True`；`service_equiv`：再要求 `flow ≥ obs−0.05`。**full_window 各策略供气步不同步，不可直接比。**
+- **口径定义**（`multikpi_harness.kpis`）：
+  - `full_window`：全窗，各策略**自有供气步不同步**（不可直接比，仅参考）；
+  - `paired_exec`：**各策略在该步均** `status=='success' 且 exec==True`（共同可执行子集）；
+  - `service_equiv`：在 `paired_exec` 基础上，**逐步**要求每个策略 `flow ≥ obs − 0.05`（单位 **m³/min**，即允许比需求低 0.05 m³/min 的容差）。
+- **注意**：`service_equiv` 是**逐步供气达标筛选**，**不代表各方案累计供气量严格相等**（见 §10.2 的 `Δ供气`）。
 
 ### 10.2 全历史统一汇总（分段求和后重算，不平均百分比）
-| 策略 | service_equiv SEC 降% | 大马拉小车降%（paired） | D3 达标率 |
+**分母**：各口径的步数与 B1 累计供气量（`b5_unified_summary.json`）。
+| 口径 | 步数 | B1 累计供气 m³ | B1 低负荷基准(机分钟×15) |
 |---|---|---|---|
-| B3 | 7.71 | 48.3 | 0–11% |
-| bal | 7.50 | 77.2 | 2–30% |
-| **LRB-t10** | **6.39** | 61.8 | **≈100%** |
+| dev+valid `paired_exec` | 9514 | — | — |
+| dev+valid+test `paired_exec` | 11577 | 70,205,768 | 80,145 |
+| dev+valid+test `service_equiv` | 10793 | 65,694,218.5 | 72,030 |
+
+**LRB-t10 全历史（`dev+valid+test`）分口径数值（勿混写）**：
+| 口径 | SEC 降%（`ΣE/ΣV`） | 累计电耗节电%(`(E_b1−E_x)/E_b1`) | 大马拉小车降% | 累计供气 Δ vs B1 (m³) |
+|---|---|---|---|---|
+| `paired_exec` | 6.60 | 7.52 | **61.8** | −692,970 |
+| `service_equiv` | **6.39** | 7.22 | **59.1** | −585,592 |
+
+> **关键澄清**：`6.39%` 与 `61.8%` **不属于同一子集**——`6.39%` 是 `service_equiv`（10793 步）的 SEC 改善；`61.8%` 是 `paired_exec`（11577 步）的低负荷降幅；**同一 `service_equiv` 子集上的低负荷降幅为 59.1%**。不得写成"在同一批样本中同时达标"。
+> `service_equiv` 仅保证**每步供气 ≥ 需求−0.05**，**不保证累计供气相等**（Δ 见上表）；SEC 改善（除以流量归一）与"累计电耗节电率"（不归一）是**两个不同指标**。
+
+**三策略对照（同口径同子集，全历史）**：
+| 策略 | service_equiv SEC 降% | service_equiv 低负荷降% | paired_exec 低负荷降% | D3 达标率(paired) |
+|---|---|---|---|---|
+| B3 | 7.71 | 46.6 | 48.3 | 0–11% |
+| bal | 7.50 | 76.0 | 77.2 | 2–30% |
+| **LRB-t10** | **6.39** | **59.1** | 61.8 | **≈100%** |
 
 **valid/test 单段服务等价 SEC 为 3.57% / 3.04%（<6%），不省略。**
 
@@ -240,6 +271,7 @@ r = B1.decide(snapshot, forecast, [], constraints, cfg, PolicyState())
 - 组成：独立模拟用气需求、储气等效容积 `K_VOL`、泄漏、质量平衡压力动态、BOV 放空、压力 **PI**、执行延迟、预测噪声、设备故障。
 - **显式记账**：安全泄压 `safety_vent_m3`、未满足缺口 `unserved_deficit_m3`、钳制步；质量守恒 `净入流 − 储气变化 − 泄漏 − 泄压 + 未满足 = 0`（残差≈0）；硬钳制 [0.40,0.75] **在合格带外**。
 
+**下表为 `strategy=b3`（B3）的仿真结果**（`sim_closed_loop.json`）。压力合格率/压力std 在三策略间一致（由压力 PI 决定）；**能效改善为 B3 的数值，不得写成 LRB-t10**。
 | 场景 | 压力合格率 | 压力std | 需求满足度 | 缺供m³ | 放空/未满足m³ | 回退步 | 判定 |
 |---|---|---|---|---|---|---|---|
 | normal | **1.000** | 0.0061 | 0.987 | 7,896 | 0/0 | 0 | 达标 |
@@ -247,6 +279,14 @@ r = B1.decide(snapshot, forecast, [], constraints, cfg, PolicyState())
 | step | 0.622 | 0.0920 | 0.971 | 16,398 | 0/6,842 | 122 | 物理容量不足 |
 | peak | 0.264 | 0.0919 | 0.943 | 41,415 | 0/31,289 | 224 | 物理容量不足 |
 | fault | 0.667 | 0.0864 | 0.931 | 42,521 | 8,056/31,291 | 143 | 单机失效容量不足 |
+
+**同场景三策略对照（SEC kWh/m³，normal/low）**：normal B3 0.0908 / bal 0.0911 / LRB 0.0946；low B3 0.1064 / bal 0.1068 / LRB 0.1072。低负荷机分钟：normal B1 360→B3 360 / bal 0 / LRB 0；low B1 2310→B3 605 / bal 240 / LRB 480。
+
+**定义与澄清**：
+- `压力合格率` = 压力落在 [0.55,0.66] 的步数占比；`压力std` = 全窗压力标准差；`需求满足度` = `1 − Σ缺供/Σ需求`。
+- **压力合格 ≠ 需求满足**：normal 压力合格 100% 但需求满足度仅 0.987（因离散机组的少量缺供/过供）。
+- `safety_vent_m3`（超硬上限安全泄压）、`unserved_deficit_m3`（低于硬下限的未满足缺口）、`clamp`（钳制标志）；质量守恒 `净入流 − 储气变化 − 泄漏 − 泄压 + 未满足 = 0`（残差≈0）。
+- `fault` 场景**B1 的合格率不列入对比**：B1 未筛除 `quality_valid=False` 的失效机组仍继续供气，其"合格"是**运行了失效机组的假象**；优化器正确降载后受单机容量限制。
 
 **限制**：全部为**工程假设下的模拟验证**，**不等同现场 99.5% 达标**；未放宽合格带、未裁剪压力、未编造实测数据。
 
@@ -286,6 +326,8 @@ assess_surge_risk(snapshot, candidate, *, boundary_version=None,
 
 ### 12.4 错误码（`optimization/contracts.py`）
 `INVALID_INPUT / STALE_FORECAST / INFEASIBLE_CAPACITY / INSUFFICIENT_DATA / MODEL_UNAVAILABLE / FORECAST_MISSING_HOLD / HEALTH_DERATE / HEALTH_STOP_REVIEW / RESERVE_VIOLATION / MIN_RUN_LOCK / MIN_STOP_LOCK / MAX_SWITCH_LOCK / TRANSITION_CAPACITY_GAP / TIMEOUT / SURGE_HIGH_BLOCKED / SURGE_UNKNOWN / SURGE_BOUNDARY_UNKNOWN / PRESSURE_COUNTERFACTUAL_UNSUPPORTED / RUL_SIMULATION_PENALTY_ON`。
+
+**状态（`status`）**：`"success"`（仅成功后）与 `"INFEASIBLE"/"INSUFFICIENT_DATA"/"INVALID_INPUT"/"TIMEOUT"`（失败）；回退路径可能返回小写 `"timeout"/"fallback"/"infeasible"`。**判定失败请用 `is_fallback==true` 或 `status!="success"`**，不要假定固定大小写。
 
 ---
 
@@ -337,6 +379,12 @@ C 侧
 | 场景二事件 | `analysis/reports/b/b7/scenario2_events.json` | status/combo/device_actions/surge/reason_codes | simulation_fixture+proxy |
 | 闭环 5 场景 | `analysis/reports/b/simulation/sim_ledger.csv` | scenario,strategy,k,demand,supply,blow,pressure,power_kw,... | simulation |
 
+**场景一数值与来源说明**（`scenario1_summary.json`）：
+- 来自**特定开发段窗口** `2026-07-02 10:45 ~ 07-03 01:30`（60 步，需求 223.8→119.2 m³/min），**非全历史**。
+- 该窗口 **SEC 改善 B3 34.0% / bal·LRB 35.1%**——这是**该窗口的 SEC 改善**（`ΣE/ΣV` 归一），**不是全历史节能率**。
+- 同时**存在供气量差异**：优化供气 −19,727 m³（B1 219,714 → 优化 199,986），故**绝对电耗下降包含供气差异**，不能全部归因于"同供气任务下节电"；口径须并列展示（`sec_reduction_vs_b1_pct` 与 `supply_minus_b1_m3`）。
+- 数据性质：窗口负荷为**真实历史**，功率为**模型估计**；场景二为**受控 fixtures + 代理**。禁止把该窗口数字当作全历史或官方成绩。
+
 **D 需完成**：接入 B 输出 JSON 字段；重放两个场景；正确展示"无解/高危阻断"；三成员使用同一指标文件（见 `docs/b/06_B_TO_D_HANDOFF.md`）。
 
 ---
@@ -361,13 +409,15 @@ fc = b.forecast_result(t, 15)
 out = b_api.plan_dispatch("load_balanced", snap, fc, [], con)   # 三模式：b3/balanced/load_balanced
 print(out["status"], out["target_combination"], out["estimated_power_kw"], out["surge_status"])
 ```
-**异常/阻断**（实侧见 `analysis/reports/b/delivery/c_call_examples.json`）：
-- 非法 mode → `ValueError`；
-- 预测缺失 → `status="INSUFFICIENT_DATA"`, `is_fallback=true`；
-- `timeout_ms<=0` → `status="timeout"`, `is_fallback=true`；
-- 高喘振 → `safety_blocked=true`（`neg_high_surge`）；
-- 容量不足 → `INFEASIBLE`（`neg_capacity_insufficient`）。
-**B 绝不在失败时返回伪装成功的控制动作。**
+**异常/阻断**（实侧见 `analysis/reports/b/delivery/c_call_examples.json`，以下 `status` 为实测字符串）：
+- 非法 mode → 抛 `ValueError`（不返回 dict）；
+- 预测缺失（b3）→ `status="INSUFFICIENT_DATA"`、`is_fallback=true`、`execution_permission="simulation_candidate_only"`；
+- `timeout_ms<=0`（balanced）→ `status="timeout"`、`is_fallback=true`、`reason_codes=["TIMEOUT"]`；
+- 容量不足（b3，需求 700）→ `status="INFEASIBLE"`、`is_fallback=true`、`reason_codes=["INFEASIBLE_CAPACITY"]`；
+- 高喘振 → `safety_blocked=true`（`b7/scenario2_events.json: neg_high_surge`）。
+- **状态字符串大小写**：`contracts` 中 `STATUS_*` 为 `"success"/"INFEASIBLE"/"INSUFFICIENT_DATA"/"INVALID_INPUT"/"TIMEOUT"`；`dispatch_api` 回退历程会返回小写 `"timeout"/"fallback"/"infeasible"` 或大写的 `"INSUFFICIENT_DATA"/"INFEASIBLE"`（C 应以 `is_fallback` + `status != "success"` 判定不成功，勿只按大小写匹配）。
+- **回退绝不标记为成功**：`is_fallback=true` 时 `status != "success"`，回退候选在 `fallback_candidate` 中。
+- **B 绝不在失败时返回伪装成功的控制动作**；`simulation_candidate_only` **不表示允许执行**，而是"仅供仿真/需人工确认"。
 
 ---
 
