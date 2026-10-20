@@ -23,13 +23,38 @@
       "entry": "air_station.optimization.unit_commitment.plan(cfg=UCConfig(balanced=True))",
       "policy_version": "balanced-uc-v0.1",
       "code_sha1": {
-        "src/air_station/optimization/unit_commitment.py": "dfcadd462e2e21d672c7590566d6cb6cde6f5785",
+        "src/air_station/optimization/unit_commitment.py": "34f7b415a7b9db9041e49529f295c8adb582ccca",
         "src/air_station/optimization/performance.py": "a491ee0cd6cb2c9d0b8cd1b8de59703e2bba24f4",
         "src/air_station/optimization/constraints.py": "d41bc70a7abc80f43394327a57bd0912d08248c9"
       },
       "results": {
         "dev_full": "analysis/reports/b/multikpi_dev_0_13000.json",
         "valid": "analysis/reports/b/multikpi_valid_0_2000.json"
+      }
+    },
+    "lrb_t10": {
+      "role": "加载率均衡优先 (D3 机组间 ±10pp)",
+      "entry": "air_station.optimization.unit_commitment.plan(cfg=UCConfig(spread_balance=True, spread_tol=0.10))",
+      "dispatch_api_mode": "load_balanced",
+      "policy_version": "load-balanced-lrb-v0.1",
+      "code_sha1": {
+        "src/air_station/optimization/unit_commitment.py": "34f7b415a7b9db9041e49529f295c8adb582ccca",
+        "src/air_station/optimization/dispatch_api.py": "527592ab53920f7f642de1e9d142a9463b970786"
+      },
+      "results": {
+        "dev_full": "analysis/reports/b/multikpi_dev_tol.json",
+        "valid": "analysis/reports/b/multikpi_valid_tol.json"
+      }
+    },
+    "lrb_t5": {
+      "role": "加载率均衡优先 (D3, 更紧容差)",
+      "entry": "air_station.optimization.unit_commitment.plan(cfg=UCConfig(spread_balance=True, spread_tol=0.05))",
+      "code_sha1": {
+        "src/air_station/optimization/unit_commitment.py": "34f7b415a7b9db9041e49529f295c8adb582ccca"
+      },
+      "results": {
+        "dev_full": "analysis/reports/b/multikpi_dev_tol.json",
+        "valid": "analysis/reports/b/multikpi_valid_tol.json"
       }
     }
   },
