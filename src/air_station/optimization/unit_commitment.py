@@ -49,6 +49,8 @@ class UCConfig:
     balanced: bool = False        # 均衡分配: 需求允许时, 每台运行机 >= lb_frac*RATED (消除可再平衡低负荷)
     demand_k: float = 1.0         # 需求在 [pred, upper] 间的位置: demand=pred+k*(upper-pred); k=1 -> upper(基线)
     lb_frac: float = 0.5          # 均衡下界比例 (0.5 -> 134.45, 脱离低负荷阈值)
+    spread_balance: bool = False  # 机组间负荷均衡: 双机时尽量等分 (最小化 |λ4-λ5|)
+    spread_tol: float = 0.0       # 允许的机组间加载率差 (比例); >0 时仅约束 |λ4-λ5|<=tol, 其余按最小功率
 
 
 def demand_scaled(pred, upper, k):
@@ -90,6 +92,14 @@ def best_allocation(combo, required, caps, prev_flows, prev_running, model_path,
     if cfg.balanced and required >= (cfg.lb_frac * RATED) * len(combo):
         for d in combo:
             bnd[d] = (max(bnd[d][0], cfg.lb_frac * RATED), bnd[d][1])
+    # 机组间负荷均衡: 双机时把两台流量锁到 required/2 (最小化 |λ4-λ5|), 受边界约束
+    if cfg.spread_balance and len(combo) == 2 and cfg.spread_tol <= 0.0:
+        mid = required / 2.0
+        for d in combo:
+            lo = max(bnd[d][0], mid)
+            hi = min(bnd[d][1], mid)
+            if lo - 1e-6 <= hi + 1e-6:
+                bnd[d] = (lo, max(lo, hi))
     best = None
 
     if len(combo) == 1:
@@ -102,28 +112,33 @@ def best_allocation(combo, required, caps, prev_flows, prev_running, model_path,
                 "shortfall": max(0.0, required - f), "low": (f / RATED) < LOW_LIMIT}
     else:
         d1, d2 = combo
-        rngs = []
         # 目标总量: required .. 允许过供(至上限和) 以脱离低负荷/满足下界
         lo_sum = bnd[d1][0] + bnd[d2][0]
         hi_sum = bnd[d1][1] + bnd[d2][1]
         total_lo = max(required, lo_sum)
-        for tot in _lin(total_lo, hi_sum, cfg.grid, 8):
-            extra = tot - lo_sum
-            for r in _lin(0.0, 1.0, cfg.grid, None):
-                e1 = min(extra * r, bnd[d1][1] - bnd[d1][0])
-                f1 = bnd[d1][0] + e1
-                f2 = tot - f1
-                if f2 < bnd[d2][0] - 1e-6 or f2 > bnd[d2][1] + 1e-6:
-                    continue
-                p1 = _power(d1, f1, model_path, cache); p2 = _power(d2, f2, model_path, cache)
-                if p1 is None or p2 is None:
-                    continue
-                cand = {"flows": {d1: f1, d2: f2}, "power_kw": p1 + p2,
-                        "device_power": {d1: p1, d2: p2},
-                        "shortfall": max(0.0, required - tot),
-                        "low": (f1 / RATED < LOW_LIMIT) or (f2 / RATED < LOW_LIMIT)}
-                if best is None or cand["power_kw"] < best["power_kw"] - 1e-9:
-                    best = cand
+        tol = cfg.spread_tol if (cfg.spread_balance and cfg.spread_tol > 0.0) else None
+        for use_tol in ((tol, None) if tol is not None else (None,)):
+            for tot in _lin(total_lo, hi_sum, cfg.grid, 8):
+                extra = tot - lo_sum
+                for r in _lin(0.0, 1.0, cfg.grid, None):
+                    e1 = min(extra * r, bnd[d1][1] - bnd[d1][0])
+                    f1 = bnd[d1][0] + e1
+                    f2 = tot - f1
+                    if f2 < bnd[d2][0] - 1e-6 or f2 > bnd[d2][1] + 1e-6:
+                        continue
+                    if use_tol is not None and abs(f1 - f2) > use_tol * RATED + 1e-6:
+                        continue
+                    p1 = _power(d1, f1, model_path, cache); p2 = _power(d2, f2, model_path, cache)
+                    if p1 is None or p2 is None:
+                        continue
+                    cand = {"flows": {d1: f1, d2: f2}, "power_kw": p1 + p2,
+                            "device_power": {d1: p1, d2: p2},
+                            "shortfall": max(0.0, required - tot),
+                            "low": (f1 / RATED < LOW_LIMIT) or (f2 / RATED < LOW_LIMIT)}
+                    if best is None or cand["power_kw"] < best["power_kw"] - 1e-9:
+                        best = cand
+            if best is not None:
+                break
     if best is None:
         return None
     # 过供保护: 总分不足时短供 (记录)

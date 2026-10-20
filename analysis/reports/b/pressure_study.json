@@ -1,0 +1,117 @@
+{
+  "band_mpa": [
+    0.55,
+    0.66
+  ],
+  "band_source": "工程假设 (任务书 §2.3-5, 甲方未确认)",
+  "dev": {
+    "sampling_seconds_top": {
+      "60": 211680
+    },
+    "n": 211681,
+    "hp_mean_std": [
+      0.562,
+      0.0458
+    ],
+    "hp_min_max": [
+      0.0,
+      0.69
+    ],
+    "compliance_pct": 66.56,
+    "below_band_pct": 33.319,
+    "above_band_pct": 0.121,
+    "corr_hp_tf": -0.1904,
+    "corr_hp_nrunning": 0.0936,
+    "low_pressure_events": 303,
+    "over_pressure_events": 11
+  },
+  "valid": {
+    "sampling_seconds_top": {
+      "60": 30240
+    },
+    "n": 30241,
+    "hp_mean_std": [
+      0.5997,
+      0.0447
+    ],
+    "hp_min_max": [
+      0.0,
+      0.71
+    ],
+    "compliance_pct": 80.575,
+    "below_band_pct": 18.366,
+    "above_band_pct": 1.059,
+    "corr_hp_tf": -0.4215,
+    "corr_hp_nrunning": -0.0594,
+    "low_pressure_events": 53,
+    "over_pressure_events": 15
+  },
+  "model_validation": {
+    "split": {
+      "train": [
+        "2026-03-26",
+        "2026-08-20"
+      ],
+      "test": [
+        "2026-08-21",
+        "2026-09-11"
+      ]
+    },
+    "features": [
+      "hp_lag1",
+      "tf",
+      "tf_lag1",
+      "n_running",
+      "hour"
+    ],
+    "results": {
+      "ridge": {
+        "above_band": {
+          "precision": 0.8968,
+          "recall": 0.4385,
+          "n_actual": 317
+        },
+        "below_band": {
+          "precision": 0.9452,
+          "recall": 0.9927,
+          "n_actual": 5626
+        },
+        "mae_mpa": 0.00434,
+        "persistence_mae_mpa": 0.00322,
+        "beats_persistence": false,
+        "n_train": 211681,
+        "n_test": 30241
+      },
+      "gbr": {
+        "above_band": {
+          "precision": 0.951,
+          "recall": 0.429,
+          "n_actual": 317
+        },
+        "below_band": {
+          "precision": 0.8709,
+          "recall": 0.9973,
+          "n_actual": 5626
+        },
+        "mae_mpa": 0.00388,
+        "persistence_mae_mpa": 0.00322,
+        "beats_persistence": false,
+        "n_train": 211681,
+        "n_test": 30241
+      }
+    },
+    "note": "独立用气需求(Q_demand)未测 -> 仅一步预测, 反事实不可辨识"
+  },
+  "sim_clamp_reason": {
+    "supply_over_demand_m3min": 40.0,
+    "K_VOL_m3_per_MPa": 23700.0,
+    "LEAK_per_min": 0.001,
+    "P0": 0.6,
+    "clamp": [
+      0.4,
+      0.75
+    ],
+    "steady_state_p": 2.238,
+    "explanation": "闭环过供 40 m3/min / K_VOL 需由 LEAK*(p-P_ENV) 平衡 -> 稳态 p 远超上钳制 -> 钳到 0.75 产生超带伪影"
+  }
+}

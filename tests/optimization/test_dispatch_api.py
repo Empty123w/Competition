@@ -49,7 +49,7 @@ REQUIRED_KEYS = {"mode", "status", "device_actions", "total_flow_m3_min",
                  "execution_permission"}
 
 
-@pytest.mark.parametrize("mode", ["b3", "balanced"])
+@pytest.mark.parametrize("mode", ["b3", "balanced", "load_balanced"])
 def test_plan_dispatch_schema(bundle, frames, mode):
     t = _t(bundle, frames)
     snap = _snap(frames, t)

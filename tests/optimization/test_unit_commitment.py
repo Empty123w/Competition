@@ -83,3 +83,21 @@ def test_demand_for_bases():
     cfg2 = UC.UCConfig(demand_basis="pred_plus", margin_m3min=20.0)
     assert UC.demand_for(100.0, 140.0, cfg2) == 120.0
     assert UC.demand_for(100.0, 140.0, UC.UCConfig(demand_basis="upper")) == 140.0
+
+
+def test_spread_balance_equalizes_double():
+    cfg = UC.UCConfig(spread_balance=True)
+    al = UC.best_allocation(("4#", "5#"), 400.0, _caps(), {}, {}, MODEL, cfg, {})
+    f4 = al["flows"]["4#"]; f5 = al["flows"]["5#"]
+    assert abs(f4 - f5) <= 2.0
+
+
+def test_spread_balance_plan_double_sequence():
+    con, caps = _con(), _caps()
+    b = UC.plan([400.0] * 4, caps, con, {"4#", "5#"}, {"4#": 200.0, "5#": 200.0}, {},
+                "2026-08-01 00:00:00", model_path=MODEL, power_cap=1600.0,
+                cfg=UC.UCConfig(spread_balance=True, demand_basis="upper"))
+    assert b is not None
+    a = b["alloc0"]["flows"]
+    if "4#" in a and "5#" in a:
+        assert abs(a["4#"] - a["5#"]) <= 2.0

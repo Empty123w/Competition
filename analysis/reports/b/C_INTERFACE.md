@@ -8,6 +8,7 @@
 |---|---|---|---|
 | `"b3"` | 能效优先 | `service.optimize_dispatch`（B3+B4） | `b3-optimizer-v0.1` |
 | `"balanced"` | 低负荷优先 | `unit_commitment.plan(cfg=UCConfig(balanced=True))` | `balanced-uc-v0.1` |
+| `"load_balanced"` | 加载率均衡优先（D3） | `unit_commitment.plan(cfg=UCConfig(spread_balance=True))` | `load-balanced-lrb-v0.1` |
 
 两者共用同一：输入快照/预测/健康/约束、B4 安全边界、extra 5% 备用、爬坡、最短开停机、过渡供气连续性、回退口径。
 

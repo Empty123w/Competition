@@ -32,7 +32,7 @@ from air_station.optimization.contracts import (
     StationSnapshot,
 )
 
-MODES = ("b3", "balanced")
+MODES = ("b3", "balanced", "load_balanced")
 DEFAULT_MODE = "b3"
 
 # 进程级功率估计缓存 (键: 模型路径 -> {(device, round(flow,1)): kW})。
@@ -106,7 +106,7 @@ def plan_dispatch(mode: str, snapshot: StationSnapshot, forecast: Optional[Forec
                   power_model_path: Optional[str] = None,
                   baseline_config_path: Optional[str] = None,
                   timeout_ms: Optional[float] = None) -> dict:
-    """统一入口。mode ∈ {"b3","balanced"}。返回 JSON 可序列化 dict。"""
+    """统一入口。mode ∈ {"b3","balanced","load_balanced"}。返回 JSON 可序列化 dict。"""
     if mode not in MODES:
         raise ValueError(f"mode must be one of {MODES}, got {mode!r}")
     t0 = time.perf_counter()
@@ -127,11 +127,12 @@ def plan_dispatch(mode: str, snapshot: StationSnapshot, forecast: Optional[Forec
         out["latency_ms"] = round((time.perf_counter() - t0) * 1000, 3)
         return out
 
-    # balanced
+    # balanced / load_balanced
+    pv = "load-balanced-lrb-v0.1" if mode == "load_balanced" else "balanced-uc-v0.1"
     req_seq = _required_seq(forecast, forecast_seq)
     if req_seq is None:
         return _fallback(snapshot, forecast, health, constraints, state=state,
-                         reason_codes=[C.RC_INSUFFICIENT_DATA], policy_version="balanced-uc-v0.1",
+                         reason_codes=[C.RC_INSUFFICIENT_DATA], policy_version=pv,
                          power_model_path=pm, baseline_config_path=bc, required=None, t0=t0, opt_cfg=opt_cfg, mode=mode)
     req0 = req_seq[0]
     caps = CONS.build_capabilities(constraints, snapshot, health, state)
@@ -139,29 +140,30 @@ def plan_dispatch(mode: str, snapshot: StationSnapshot, forecast: Optional[Forec
     cur_on = {d for d in C.DEVICE_IDS if d in dmap and dmap[d].running}
     cur_flows = {d: (dmap[d].flow_m3_min if d in dmap else None) for d in C.DEVICE_IDS}
     try:
+        ucfg = (UC.UCConfig(demand_basis="upper", spread_balance=True)
+                if mode == "load_balanced" else UC.UCConfig(demand_basis="upper", balanced=True))
         bb = UC.plan(req_seq, caps, constraints, cur_on, cur_flows,
                      state.last_switch_at, snapshot.as_of,
-                     model_path=pm, power_cap=0.0,
-                     cfg=UC.UCConfig(demand_basis="upper", balanced=True),
+                     model_path=pm, power_cap=0.0, cfg=ucfg,
                      cache=_POWER_CACHE.setdefault(str(pm), {}))
     except Exception as e:  # noqa
         return _fallback(snapshot, forecast, health, constraints, state=state,
                          reason_codes=[C.RC_MODEL_UNAVAILABLE, f"error:{type(e).__name__}"],
-                         policy_version="balanced-uc-v0.1", power_model_path=pm,
+                         policy_version=pv, power_model_path=pm,
                          baseline_config_path=bc, required=req0, t0=t0, opt_cfg=opt_cfg, mode=mode)
     if (time.perf_counter() - t0) * 1000 > to_ms:
         return _fallback(snapshot, forecast, health, constraints, state=state,
-                         reason_codes=[C.RC_TIMEOUT], policy_version="balanced-uc-v0.1",
+                         reason_codes=[C.RC_TIMEOUT], policy_version=pv,
                          power_model_path=pm, baseline_config_path=bc, required=req0, t0=t0, opt_cfg=opt_cfg, mode=mode)
     if bb is None:
         return _fallback(snapshot, forecast, health, constraints, state=state,
-                         reason_codes=[C.RC_INFEASIBLE_CAPACITY], policy_version="balanced-uc-v0.1",
+                         reason_codes=[C.RC_INFEASIBLE_CAPACITY], policy_version=pv,
                          power_model_path=pm, baseline_config_path=bc, required=req0, t0=t0, opt_cfg=opt_cfg, mode=mode)
 
     combo = tuple(bb["seq"][0])
     alloc = bb["alloc0"]
     trans_ok, steps, trans_rc = CONS.transition_feasibility(cur_on, combo, caps, req0, constraints.reserve)
-    result = DispatchResult(status=C.STATUS_SUCCESS, policy_version="balanced-uc-v0.1",
+    result = DispatchResult(status=C.STATUS_SUCCESS, policy_version=pv,
                             as_of=str(snapshot.as_of), required_flow_m3_min=req0)
     result.target_combination = list(combo)
     result.device_actions = SVC._device_actions(combo, alloc, caps, cur_on,
@@ -180,8 +182,9 @@ def plan_dispatch(mode: str, snapshot: StationSnapshot, forecast: Optional[Forec
     result.requires_field_review = True
     SVC._attach_surge(result, snapshot, dcfg)
     out = result.to_dict()
-    out["mode"] = "balanced"
-    out["balanced"] = True
+    out["mode"] = mode
+    out["balanced"] = (mode == "balanced")
+    out["load_balanced"] = (mode == "load_balanced")
     out["sequence"] = [[d for d in c] for c in bb["seq"]]
     out["horizon_energy_kwh"] = bb.get("energy_kwh")
     out["latency_ms"] = round((time.perf_counter() - t0) * 1000, 3)

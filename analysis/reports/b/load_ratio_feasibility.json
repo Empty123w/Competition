@@ -1,0 +1,32 @@
+{
+  "def": {
+    "oracle_spread": "min |λ4-λ5| (双机)",
+    "oracle_maxdev": "min max|λ-1|",
+    "reserve": 0.05,
+    "min_flow": 120.0,
+    "grid": 2.0,
+    "note": "oracle 在可行集内枚举; 与候选实际对比得出可改善量"
+  },
+  "dev": {
+    "sampled": 291,
+    "oracle_maxdev_mean": 0.214,
+    "oracle_maxdev_ge10pct_ratio": 0.6586,
+    "oracle_spread_mean_double": 0.0041,
+    "b3_spread_mean_double": 0.2463,
+    "bal_spread_mean_double": 0.2176,
+    "b3_gap_vs_oracle_mean": 0.2422,
+    "bal_gap_vs_oracle_mean": 0.2136,
+    "double_steps": 253
+  },
+  "valid": {
+    "sampled": 300,
+    "oracle_maxdev_mean": 0.1833,
+    "oracle_maxdev_ge10pct_ratio": 0.99,
+    "oracle_spread_mean_double": 0.0038,
+    "b3_spread_mean_double": 0.2831,
+    "bal_spread_mean_double": 0.2664,
+    "b3_gap_vs_oracle_mean": 0.2793,
+    "bal_gap_vs_oracle_mean": 0.2626,
+    "double_steps": 293
+  }
+}

@@ -1,0 +1,226 @@
+{
+  "window": "dev",
+  "start": 0,
+  "n": 13000,
+  "cands": [
+    "b1_rule",
+    "b3_b4",
+    "bal",
+    "lrb",
+    "lrb_bal"
+  ],
+  "kpi": {
+    "n_total": 12284,
+    "per": {},
+    "scopes": {
+      "full": {
+        "steps": 12284,
+        "b1_rule": {
+          "energy_kwh": 4920540.52,
+          "supply_m3": 46684573.3,
+          "sec": 0.1054,
+          "saving_pct": 0.0,
+          "sec_reduction_pct": 0.0,
+          "gap_m3": 31808702.37,
+          "low_min": 78285.0,
+          "low_reduction_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 4388441.33,
+          "supply_m3": 45956708.7,
+          "sec": 0.095491,
+          "saving_pct": 10.8138,
+          "sec_reduction_pct": 9.4013,
+          "gap_m3": 31870706.94,
+          "low_min": 40005.0,
+          "low_reduction_pct": 48.8983,
+          "supply_diff_vs_b1_m3": -727864.6
+        },
+        "bal": {
+          "energy_kwh": 4255389.64,
+          "supply_m3": 44246213.3,
+          "sec": 0.096175,
+          "saving_pct": 13.5178,
+          "sec_reduction_pct": 8.7519,
+          "gap_m3": 33554682.28,
+          "low_min": 18285.0,
+          "low_reduction_pct": 76.643,
+          "supply_diff_vs_b1_m3": -2438360.1
+        },
+        "lrb": {
+          "energy_kwh": 4343742.83,
+          "supply_m3": 44248463.5,
+          "sec": 0.098167,
+          "saving_pct": 11.7222,
+          "sec_reduction_pct": 6.8621,
+          "gap_m3": 33553013.37,
+          "low_min": 31155.0,
+          "low_reduction_pct": 60.2031,
+          "supply_diff_vs_b1_m3": -2436109.8
+        },
+        "lrb_bal": {
+          "energy_kwh": 4343742.83,
+          "supply_m3": 44248463.5,
+          "sec": 0.098167,
+          "saving_pct": 11.7222,
+          "sec_reduction_pct": 6.8621,
+          "gap_m3": 33553013.37,
+          "low_min": 31155.0,
+          "low_reduction_pct": 60.2031,
+          "supply_diff_vs_b1_m3": -2436109.8
+        }
+      },
+      "common": {
+        "steps": 7600,
+        "b1_rule": {
+          "energy_kwh": 4499675.12,
+          "supply_m3": 42325078.8,
+          "sec": 0.106312,
+          "saving_pct": 0.0,
+          "sec_reduction_pct": 0.0,
+          "gap_m3": 190870.54,
+          "low_min": 76530.0,
+          "low_reduction_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 4003116.15,
+          "supply_m3": 41675467.0,
+          "sec": 0.096054,
+          "saving_pct": 11.0354,
+          "sec_reduction_pct": 9.6487,
+          "gap_m3": 244879.89,
+          "low_min": 38970.0,
+          "low_reduction_pct": 49.0788,
+          "supply_diff_vs_b1_m3": -649611.8
+        },
+        "bal": {
+          "energy_kwh": 4014107.28,
+          "supply_m3": 41673411.5,
+          "sec": 0.096323,
+          "saving_pct": 10.7912,
+          "sec_reduction_pct": 9.3962,
+          "gap_m3": 246773.85,
+          "low_min": 17580.0,
+          "low_reduction_pct": 77.0286,
+          "supply_diff_vs_b1_m3": -651667.3
+        },
+        "lrb": {
+          "energy_kwh": 4092723.8,
+          "supply_m3": 41674927.9,
+          "sec": 0.098206,
+          "saving_pct": 9.044,
+          "sec_reduction_pct": 7.6251,
+          "gap_m3": 245394.75,
+          "low_min": 30390.0,
+          "low_reduction_pct": 60.2901,
+          "supply_diff_vs_b1_m3": -650150.9
+        },
+        "lrb_bal": {
+          "energy_kwh": 4092723.8,
+          "supply_m3": 41674927.9,
+          "sec": 0.098206,
+          "saving_pct": 9.044,
+          "sec_reduction_pct": 7.6251,
+          "gap_m3": 245394.75,
+          "low_min": 30390.0,
+          "low_reduction_pct": 60.2901,
+          "supply_diff_vs_b1_m3": -650150.9
+        }
+      },
+      "service": {
+        "steps": 6956,
+        "b1_rule": {
+          "energy_kwh": 4116137.55,
+          "supply_m3": 38690390.0,
+          "sec": 0.106387,
+          "saving_pct": 0.0,
+          "sec_reduction_pct": 0.0,
+          "gap_m3": 1.25,
+          "low_min": 69240.0,
+          "low_reduction_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 3673940.14,
+          "supply_m3": 38133246.2,
+          "sec": 0.096345,
+          "saving_pct": 10.743,
+          "sec_reduction_pct": 9.4389,
+          "gap_m3": 1.25,
+          "low_min": 36405.0,
+          "low_reduction_pct": 47.422,
+          "supply_diff_vs_b1_m3": -557143.8
+        },
+        "bal": {
+          "energy_kwh": 3683985.1,
+          "supply_m3": 38133203.9,
+          "sec": 0.096608,
+          "saving_pct": 10.499,
+          "sec_reduction_pct": 9.1912,
+          "gap_m3": 1.24,
+          "low_min": 16665.0,
+          "low_reduction_pct": 75.9315,
+          "supply_diff_vs_b1_m3": -557186.1
+        },
+        "lrb": {
+          "energy_kwh": 3755187.39,
+          "supply_m3": 38133597.9,
+          "sec": 0.098475,
+          "saving_pct": 8.7691,
+          "sec_reduction_pct": 7.4371,
+          "gap_m3": 1.24,
+          "low_min": 29055.0,
+          "low_reduction_pct": 58.0373,
+          "supply_diff_vs_b1_m3": -556792.0
+        },
+        "lrb_bal": {
+          "energy_kwh": 3755187.39,
+          "supply_m3": 38133597.9,
+          "sec": 0.098475,
+          "saving_pct": 8.7691,
+          "sec_reduction_pct": 7.4371,
+          "gap_m3": 1.24,
+          "low_min": 29055.0,
+          "low_reduction_pct": 58.0373,
+          "supply_diff_vs_b1_m3": -556792.0
+        }
+      }
+    }
+  },
+  "runtime_ms": {
+    "b1_rule": {
+      "p50": 4.58,
+      "p95": 6.76,
+      "max": 76.77
+    },
+    "b3_b4": {
+      "p50": 34.02,
+      "p95": 70.92,
+      "max": 600.01
+    },
+    "bal": {
+      "p50": 7.5,
+      "p95": 13.96,
+      "max": 1137.71
+    },
+    "lrb": {
+      "p50": 6.93,
+      "p95": 13.49,
+      "max": 91.64
+    },
+    "lrb_bal": {
+      "p50": 6.91,
+      "p95": 13.46,
+      "max": 286.34
+    }
+  },
+  "fallback": {
+    "b1_rule": 4018,
+    "b3_b4": 4018,
+    "bal": 4241,
+    "lrb": 4241,
+    "lrb_bal": 4241
+  }
+}
