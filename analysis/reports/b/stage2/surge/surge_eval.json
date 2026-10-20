@@ -593,6 +593,975 @@
           }
         }
       }
+    },
+    "gru": {
+      "threshold": 0.1,
+      "valid": {
+        "time_level": {
+          "TP": 663,
+          "FP": 1064,
+          "FN": 612,
+          "TN": 19261,
+          "accuracy": 0.9224,
+          "precision": 0.3839,
+          "recall": 0.52,
+          "f1": 0.4417,
+          "fpr": 0.0523,
+          "fnr": 0.48
+        },
+        "event_level": {
+          "events": 22,
+          "detected": 20,
+          "recall_event_level": 0.9091,
+          "lead_s": [
+            120.0,
+            111.0,
+            74.0,
+            47.0,
+            93.0,
+            102.0,
+            97.0,
+            116.0,
+            123.0,
+            85.0,
+            43.0,
+            68.0,
+            49.0,
+            14.0,
+            118.0,
+            73.0,
+            82.0,
+            67.0,
+            3.0,
+            57.0
+          ],
+          "lead_median_s": 78.0,
+          "lead_min_s": 3.0,
+          "lead_ge30_coverage": 0.8182,
+          "n_alarm_runs": 184,
+          "true_warnings": 76,
+          "precision_event_level": 0.413,
+          "event_f1": 0.549,
+          "fnr_event_level": 0.1818,
+          "false_alarms": 108,
+          "false_alarms_per_hour": 18.0,
+          "by_scenario": {
+            "normal": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "low_stable": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "critical": {
+              "events": 5,
+              "detected": 4,
+              "lead_ge30_coverage": 0.8,
+              "lead_median_s": 92.5
+            },
+            "high_risk": {
+              "events": 8,
+              "detected": 8,
+              "lead_ge30_coverage": 1.0,
+              "lead_median_s": 95.0
+            },
+            "rapid": {
+              "events": 3,
+              "detected": 2,
+              "lead_ge30_coverage": 0.3333,
+              "lead_median_s": 31.5
+            },
+            "noisy": {
+              "events": 6,
+              "detected": 6,
+              "lead_ge30_coverage": 0.8333,
+              "lead_median_s": 70.0
+            }
+          }
+        }
+      },
+      "test": {
+        "time_level": {
+          "TP": 1135,
+          "FP": 1844,
+          "FN": 820,
+          "TN": 28601,
+          "accuracy": 0.9178,
+          "precision": 0.381,
+          "recall": 0.5806,
+          "f1": 0.4601,
+          "fpr": 0.0606,
+          "fnr": 0.4194
+        },
+        "event_level": {
+          "events": 35,
+          "detected": 34,
+          "recall_event_level": 0.9714,
+          "lead_s": [
+            72.0,
+            106.0,
+            33.0,
+            59.0,
+            107.0,
+            102.0,
+            83.0,
+            123.0,
+            48.0,
+            110.0,
+            145.0,
+            120.0,
+            120.0,
+            77.0,
+            2.0,
+            37.0,
+            86.0,
+            78.0,
+            126.0,
+            31.0,
+            55.0,
+            24.0,
+            124.0,
+            82.0,
+            123.0,
+            115.0,
+            111.0,
+            94.0,
+            103.0,
+            79.0,
+            83.0,
+            91.0,
+            111.0,
+            79.0
+          ],
+          "lead_median_s": 88.5,
+          "lead_min_s": 2.0,
+          "lead_ge30_coverage": 0.9143,
+          "n_alarm_runs": 292,
+          "true_warnings": 137,
+          "precision_event_level": 0.4692,
+          "event_f1": 0.6201,
+          "fnr_event_level": 0.0857,
+          "false_alarms": 155,
+          "false_alarms_per_hour": 17.2222,
+          "by_scenario": {
+            "normal": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "low_stable": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "critical": {
+              "events": 7,
+              "detected": 7,
+              "lead_ge30_coverage": 1.0,
+              "lead_median_s": 83.0
+            },
+            "high_risk": {
+              "events": 14,
+              "detected": 14,
+              "lead_ge30_coverage": 0.9286,
+              "lead_median_s": 82.0
+            },
+            "rapid": {
+              "events": 2,
+              "detected": 1,
+              "lead_ge30_coverage": 0.0,
+              "lead_median_s": 24.0
+            },
+            "noisy": {
+              "events": 12,
+              "detected": 12,
+              "lead_ge30_coverage": 1.0,
+              "lead_median_s": 98.5
+            }
+          }
+        }
+      },
+      "torch": true
+    },
+    "gru_and_b4": {
+      "threshold": 0.05,
+      "valid": {
+        "time_level": {
+          "TP": 573,
+          "FP": 708,
+          "FN": 702,
+          "TN": 19617,
+          "accuracy": 0.9347,
+          "precision": 0.4473,
+          "recall": 0.4494,
+          "f1": 0.4484,
+          "fpr": 0.0348,
+          "fnr": 0.5506
+        },
+        "event_level": {
+          "events": 22,
+          "detected": 17,
+          "recall_event_level": 0.7727,
+          "lead_s": [
+            29.0,
+            41.0,
+            47.0,
+            62.0,
+            57.0,
+            18.0,
+            35.0,
+            55.0,
+            6.0,
+            29.0,
+            54.0,
+            27.0,
+            20.0,
+            10.0,
+            28.0,
+            3.0,
+            57.0
+          ],
+          "lead_median_s": 29.0,
+          "lead_min_s": 3.0,
+          "lead_ge30_coverage": 0.3636,
+          "n_alarm_runs": 41,
+          "true_warnings": 22,
+          "precision_event_level": 0.5366,
+          "event_f1": 0.4335,
+          "fnr_event_level": 0.6364,
+          "false_alarms": 19,
+          "false_alarms_per_hour": 3.1667,
+          "by_scenario": {
+            "normal": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "low_stable": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "critical": {
+              "events": 5,
+              "detected": 3,
+              "lead_ge30_coverage": 0.4,
+              "lead_median_s": 41.0
+            },
+            "high_risk": {
+              "events": 8,
+              "detected": 8,
+              "lead_ge30_coverage": 0.625,
+              "lead_median_s": 44.5
+            },
+            "rapid": {
+              "events": 3,
+              "detected": 0,
+              "lead_ge30_coverage": 0.0,
+              "lead_median_s": null
+            },
+            "noisy": {
+              "events": 6,
+              "detected": 6,
+              "lead_ge30_coverage": 0.1667,
+              "lead_median_s": 23.5
+            }
+          }
+        }
+      },
+      "torch": true,
+      "test": {
+        "time_level": {
+          "TP": 939,
+          "FP": 1114,
+          "FN": 1016,
+          "TN": 29331,
+          "accuracy": 0.9343,
+          "precision": 0.4574,
+          "recall": 0.4803,
+          "f1": 0.4686,
+          "fpr": 0.0366,
+          "fnr": 0.5197
+        },
+        "event_level": {
+          "events": 35,
+          "detected": 33,
+          "recall_event_level": 0.9429,
+          "lead_s": [
+            60.0,
+            23.0,
+            9.0,
+            35.0,
+            14.0,
+            9.0,
+            9.0,
+            28.0,
+            17.0,
+            12.0,
+            59.0,
+            7.0,
+            30.0,
+            8.0,
+            2.0,
+            37.0,
+            61.0,
+            33.0,
+            2.0,
+            31.0,
+            55.0,
+            53.0,
+            13.0,
+            60.0,
+            33.0,
+            43.0,
+            19.0,
+            59.0,
+            56.0,
+            7.0,
+            2.0,
+            4.0,
+            61.0
+          ],
+          "lead_median_s": 28.0,
+          "lead_min_s": 2.0,
+          "lead_ge30_coverage": 0.4571,
+          "n_alarm_runs": 55,
+          "true_warnings": 37,
+          "precision_event_level": 0.6727,
+          "event_f1": 0.5444,
+          "fnr_event_level": 0.5429,
+          "false_alarms": 18,
+          "false_alarms_per_hour": 2.0,
+          "by_scenario": {
+            "normal": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "low_stable": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "critical": {
+              "events": 7,
+              "detected": 7,
+              "lead_ge30_coverage": 0.2857,
+              "lead_median_s": 14.0
+            },
+            "high_risk": {
+              "events": 14,
+              "detected": 14,
+              "lead_ge30_coverage": 0.5,
+              "lead_median_s": 29.0
+            },
+            "rapid": {
+              "events": 2,
+              "detected": 0,
+              "lead_ge30_coverage": 0.0,
+              "lead_median_s": null
+            },
+            "noisy": {
+              "events": 12,
+              "detected": 12,
+              "lead_ge30_coverage": 0.5833,
+              "lead_median_s": 38.0
+            }
+          }
+        }
+      }
+    },
+    "lstm": {
+      "threshold": 0.6,
+      "valid": {
+        "time_level": {
+          "TP": 501,
+          "FP": 604,
+          "FN": 774,
+          "TN": 19721,
+          "accuracy": 0.9362,
+          "precision": 0.4534,
+          "recall": 0.3929,
+          "f1": 0.421,
+          "fpr": 0.0297,
+          "fnr": 0.6071
+        },
+        "event_level": {
+          "events": 22,
+          "detected": 19,
+          "recall_event_level": 0.8636,
+          "lead_s": [
+            116.0,
+            34.0,
+            120.0,
+            45.0,
+            58.0,
+            92.0,
+            14.0,
+            37.0,
+            49.0,
+            67.0,
+            32.0,
+            57.0,
+            60.0,
+            27.0,
+            72.0,
+            5.0,
+            61.0,
+            1.0,
+            55.0
+          ],
+          "lead_median_s": 55.0,
+          "lead_min_s": 1.0,
+          "lead_ge30_coverage": 0.6818,
+          "n_alarm_runs": 106,
+          "true_warnings": 52,
+          "precision_event_level": 0.4906,
+          "event_f1": 0.5706,
+          "fnr_event_level": 0.3182,
+          "false_alarms": 54,
+          "false_alarms_per_hour": 9.0,
+          "by_scenario": {
+            "normal": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "low_stable": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "critical": {
+              "events": 5,
+              "detected": 4,
+              "lead_ge30_coverage": 0.8,
+              "lead_median_s": 80.5
+            },
+            "high_risk": {
+              "events": 8,
+              "detected": 8,
+              "lead_ge30_coverage": 0.875,
+              "lead_median_s": 53.0
+            },
+            "rapid": {
+              "events": 3,
+              "detected": 1,
+              "lead_ge30_coverage": 0.3333,
+              "lead_median_s": 60.0
+            },
+            "noisy": {
+              "events": 6,
+              "detected": 6,
+              "lead_ge30_coverage": 0.5,
+              "lead_median_s": 41.0
+            }
+          }
+        }
+      },
+      "test": {
+        "time_level": {
+          "TP": 812,
+          "FP": 917,
+          "FN": 1143,
+          "TN": 29528,
+          "accuracy": 0.9364,
+          "precision": 0.4696,
+          "recall": 0.4153,
+          "f1": 0.4408,
+          "fpr": 0.0301,
+          "fnr": 0.5847
+        },
+        "event_level": {
+          "events": 35,
+          "detected": 33,
+          "recall_event_level": 0.9429,
+          "lead_s": [
+            63.0,
+            111.0,
+            12.0,
+            38.0,
+            74.0,
+            30.0,
+            39.0,
+            109.0,
+            25.0,
+            103.0,
+            91.0,
+            5.0,
+            28.0,
+            0.0,
+            22.0,
+            57.0,
+            53.0,
+            44.0,
+            60.0,
+            31.0,
+            55.0,
+            52.0,
+            8.0,
+            55.0,
+            123.0,
+            46.0,
+            21.0,
+            101.0,
+            114.0,
+            76.0,
+            89.0,
+            76.0,
+            76.0
+          ],
+          "lead_median_s": 55.0,
+          "lead_min_s": 0.0,
+          "lead_ge30_coverage": 0.7143,
+          "n_alarm_runs": 150,
+          "true_warnings": 100,
+          "precision_event_level": 0.6667,
+          "event_f1": 0.6897,
+          "fnr_event_level": 0.2857,
+          "false_alarms": 50,
+          "false_alarms_per_hour": 5.5556,
+          "by_scenario": {
+            "normal": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "low_stable": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "critical": {
+              "events": 7,
+              "detected": 7,
+              "lead_ge30_coverage": 0.8571,
+              "lead_median_s": 39.0
+            },
+            "high_risk": {
+              "events": 14,
+              "detected": 14,
+              "lead_ge30_coverage": 0.6429,
+              "lead_median_s": 48.5
+            },
+            "rapid": {
+              "events": 2,
+              "detected": 0,
+              "lead_ge30_coverage": 0.0,
+              "lead_median_s": null
+            },
+            "noisy": {
+              "events": 12,
+              "detected": 12,
+              "lead_ge30_coverage": 0.8333,
+              "lead_median_s": 76.0
+            }
+          }
+        }
+      },
+      "torch": true
+    },
+    "lstm_and_b4": {
+      "threshold": 0.2,
+      "valid": {
+        "time_level": {
+          "TP": 540,
+          "FP": 535,
+          "FN": 735,
+          "TN": 19790,
+          "accuracy": 0.9412,
+          "precision": 0.5023,
+          "recall": 0.4235,
+          "f1": 0.4596,
+          "fpr": 0.0263,
+          "fnr": 0.5765
+        },
+        "event_level": {
+          "events": 22,
+          "detected": 18,
+          "recall_event_level": 0.8182,
+          "lead_s": [
+            31.0,
+            3.0,
+            41.0,
+            49.0,
+            60.0,
+            59.0,
+            14.0,
+            39.0,
+            51.0,
+            6.0,
+            29.0,
+            54.0,
+            27.0,
+            18.0,
+            7.0,
+            31.0,
+            3.0,
+            57.0
+          ],
+          "lead_median_s": 31.0,
+          "lead_min_s": 3.0,
+          "lead_ge30_coverage": 0.4545,
+          "n_alarm_runs": 32,
+          "true_warnings": 22,
+          "precision_event_level": 0.6875,
+          "event_f1": 0.5473,
+          "fnr_event_level": 0.5455,
+          "false_alarms": 10,
+          "false_alarms_per_hour": 1.6667,
+          "by_scenario": {
+            "normal": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "low_stable": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "critical": {
+              "events": 5,
+              "detected": 4,
+              "lead_ge30_coverage": 0.6,
+              "lead_median_s": 36.0
+            },
+            "high_risk": {
+              "events": 8,
+              "detected": 8,
+              "lead_ge30_coverage": 0.625,
+              "lead_median_s": 45.0
+            },
+            "rapid": {
+              "events": 3,
+              "detected": 0,
+              "lead_ge30_coverage": 0.0,
+              "lead_median_s": null
+            },
+            "noisy": {
+              "events": 6,
+              "detected": 6,
+              "lead_ge30_coverage": 0.3333,
+              "lead_median_s": 22.5
+            }
+          }
+        }
+      },
+      "torch": true,
+      "test": {
+        "time_level": {
+          "TP": 881,
+          "FP": 849,
+          "FN": 1074,
+          "TN": 29596,
+          "accuracy": 0.9406,
+          "precision": 0.5092,
+          "recall": 0.4506,
+          "f1": 0.4782,
+          "fpr": 0.0279,
+          "fnr": 0.5494
+        },
+        "event_level": {
+          "events": 35,
+          "detected": 33,
+          "recall_event_level": 0.9429,
+          "lead_s": [
+            60.0,
+            23.0,
+            13.0,
+            39.0,
+            6.0,
+            9.0,
+            9.0,
+            38.0,
+            26.0,
+            8.0,
+            59.0,
+            6.0,
+            29.0,
+            0.0,
+            1.0,
+            36.0,
+            60.0,
+            45.0,
+            5.0,
+            34.0,
+            58.0,
+            53.0,
+            10.0,
+            57.0,
+            33.0,
+            39.0,
+            15.0,
+            59.0,
+            56.0,
+            7.0,
+            7.0,
+            2.0,
+            61.0
+          ],
+          "lead_median_s": 29.0,
+          "lead_min_s": 0.0,
+          "lead_ge30_coverage": 0.4571,
+          "n_alarm_runs": 56,
+          "true_warnings": 37,
+          "precision_event_level": 0.6607,
+          "event_f1": 0.5404,
+          "fnr_event_level": 0.5429,
+          "false_alarms": 19,
+          "false_alarms_per_hour": 2.1111,
+          "by_scenario": {
+            "normal": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "low_stable": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "critical": {
+              "events": 7,
+              "detected": 7,
+              "lead_ge30_coverage": 0.2857,
+              "lead_median_s": 13.0
+            },
+            "high_risk": {
+              "events": 14,
+              "detected": 14,
+              "lead_ge30_coverage": 0.5,
+              "lead_median_s": 31.5
+            },
+            "rapid": {
+              "events": 2,
+              "detected": 0,
+              "lead_ge30_coverage": 0.0,
+              "lead_median_s": null
+            },
+            "noisy": {
+              "events": 12,
+              "detected": 12,
+              "lead_ge30_coverage": 0.5833,
+              "lead_median_s": 36.0
+            }
+          }
+        }
+      }
+    },
+    "ensemble": {
+      "threshold": 0.3,
+      "valid": {
+        "time_level": {
+          "TP": 630,
+          "FP": 892,
+          "FN": 645,
+          "TN": 19433,
+          "accuracy": 0.9288,
+          "precision": 0.4139,
+          "recall": 0.4941,
+          "f1": 0.4505,
+          "fpr": 0.0439,
+          "fnr": 0.5059
+        },
+        "event_level": {
+          "events": 22,
+          "detected": 20,
+          "recall_event_level": 0.9091,
+          "lead_s": [
+            153.0,
+            50.0,
+            120.0,
+            1.0,
+            57.0,
+            76.0,
+            92.0,
+            14.0,
+            117.0,
+            60.0,
+            100.0,
+            34.0,
+            59.0,
+            60.0,
+            106.0,
+            72.0,
+            11.0,
+            61.0,
+            2.0,
+            56.0
+          ],
+          "lead_median_s": 60.0,
+          "lead_min_s": 1.0,
+          "lead_ge30_coverage": 0.7273,
+          "n_alarm_runs": 129,
+          "true_warnings": 54,
+          "precision_event_level": 0.4186,
+          "event_f1": 0.5314,
+          "fnr_event_level": 0.2727,
+          "false_alarms": 75,
+          "false_alarms_per_hour": 12.5,
+          "by_scenario": {
+            "normal": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "low_stable": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "critical": {
+              "events": 5,
+              "detected": 5,
+              "lead_ge30_coverage": 0.8,
+              "lead_median_s": 57.0
+            },
+            "high_risk": {
+              "events": 8,
+              "detected": 8,
+              "lead_ge30_coverage": 0.875,
+              "lead_median_s": 68.0
+            },
+            "rapid": {
+              "events": 3,
+              "detected": 1,
+              "lead_ge30_coverage": 0.3333,
+              "lead_median_s": 60.0
+            },
+            "noisy": {
+              "events": 6,
+              "detected": 6,
+              "lead_ge30_coverage": 0.6667,
+              "lead_median_s": 58.5
+            }
+          }
+        }
+      },
+      "test": {
+        "time_level": {
+          "TP": 1028,
+          "FP": 1217,
+          "FN": 927,
+          "TN": 29228,
+          "accuracy": 0.9338,
+          "precision": 0.4579,
+          "recall": 0.5258,
+          "f1": 0.4895,
+          "fpr": 0.04,
+          "fnr": 0.4742
+        },
+        "event_level": {
+          "events": 35,
+          "detected": 33,
+          "recall_event_level": 0.9429,
+          "lead_s": [
+            63.0,
+            117.0,
+            16.0,
+            42.0,
+            74.0,
+            37.0,
+            39.0,
+            109.0,
+            28.0,
+            104.0,
+            92.0,
+            5.0,
+            28.0,
+            8.0,
+            22.0,
+            57.0,
+            69.0,
+            51.0,
+            63.0,
+            32.0,
+            56.0,
+            53.0,
+            12.0,
+            59.0,
+            125.0,
+            80.0,
+            21.0,
+            116.0,
+            114.0,
+            76.0,
+            100.0,
+            77.0,
+            76.0
+          ],
+          "lead_median_s": 59.0,
+          "lead_min_s": 5.0,
+          "lead_ge30_coverage": 0.7143,
+          "n_alarm_runs": 196,
+          "true_warnings": 96,
+          "precision_event_level": 0.4898,
+          "event_f1": 0.5811,
+          "fnr_event_level": 0.2857,
+          "false_alarms": 100,
+          "false_alarms_per_hour": 11.1111,
+          "by_scenario": {
+            "normal": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "low_stable": {
+              "events": 0,
+              "detected": 0,
+              "lead_ge30_coverage": null,
+              "lead_median_s": null
+            },
+            "critical": {
+              "events": 7,
+              "detected": 7,
+              "lead_ge30_coverage": 0.8571,
+              "lead_median_s": 42.0
+            },
+            "high_risk": {
+              "events": 14,
+              "detected": 14,
+              "lead_ge30_coverage": 0.6429,
+              "lead_median_s": 53.5
+            },
+            "rapid": {
+              "events": 2,
+              "detected": 0,
+              "lead_ge30_coverage": 0.0,
+              "lead_median_s": null
+            },
+            "noisy": {
+              "events": 12,
+              "detected": 12,
+              "lead_ge30_coverage": 0.8333,
+              "lead_median_s": 76.5
+            }
+          }
+        }
+      }
     }
   }
 }

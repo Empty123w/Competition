@@ -188,6 +188,13 @@ def main():
                     match_w, lead_target)
                 report["models"][arch] = {"threshold": thr_d, "valid": valid_d, "test": test_d,
                                           "torch": True}
+                fn = lambda feats: SNN.predict_proba(feats, hz, window_s)
+                gated = lambda feats: np.asarray(fn(feats)) * np.asarray(rule(feats))
+                thr_g, vm_g = choose_threshold(valid, gated, splits["valid"])
+                report["models"][arch + "_and_b4"] = {
+                    "threshold": thr_g, "valid": vm_g, "torch": True,
+                    "test": eval_predictor(gated, splits["test"], hz, window_s, horizon_s, thr_g,
+                                           match_w, lead_target, min_alarm_s)}
             # ensemble: lgb + gru mean prob
             report["models"]["ensemble"] = _ensemble(report, clf, splits, hz, window_s, horizon_s,
                                                      thr_grid, match_w, lead_target, eval_predictor)
