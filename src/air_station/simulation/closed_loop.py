@@ -89,11 +89,40 @@ def demand_series(sc: Scenario) -> np.ndarray:
     return np.clip(base, 0.0, 2 * RATED)
 
 
-def pressure_step(p: float, q_sup: float, q_dem: float, q_blow: float, params: SimParams) -> float:
-    """质量平衡单步压力更新 (含泄漏与硬钳制)。"""
+def pressure_step_accounted(p: float, q_sup: float, q_dem: float, q_blow: float,
+                            params: SimParams) -> tuple[float, float, float, str]:
+    """质量平衡单步(显式记账). 返回 (p_new, vent_m3, unmet_m3, clamp_flag)。
+
+    - 未钳制: p_new=p+dp, vent=unmet=0, flag="none";
+    - 超硬上限: 溢出空气由**安全泄压**排出, vent=(p_raw-hard_hi)*K_VOL, flag="high";
+    - 低于硬下限: 供气不足以维持压力, 缺口记为**未满足需求** unmet=(hard_lo-p_raw)*K_VOL, flag="low"。
+    硬上下限(0.40/0.75)均在合格带(0.55/0.66)**之外**, 钳制不会产生带内点, 不能制造合格率。
+    """
     dp = params.dt_min * ((q_sup - q_dem - q_blow) / params.k_vol_m3_per_mpa
                           - params.leak_per_min * (p - params.p_env_mpa))
-    return float(np.clip(p + dp, params.p_hard_lo, params.p_hard_hi))
+    p_raw = p + dp
+    vent = unmet = 0.0
+    flag = "none"
+    if p_raw > params.p_hard_hi:
+        vent = (p_raw - params.p_hard_hi) * params.k_vol_m3_per_mpa
+        p_new = params.p_hard_hi; flag = "high"
+    elif p_raw < params.p_hard_lo:
+        unmet = (params.p_hard_lo - p_raw) * params.k_vol_m3_per_mpa
+        p_new = params.p_hard_lo; flag = "low"
+    else:
+        p_new = p_raw
+    return float(p_new), float(vent), float(unmet), flag
+
+
+def pressure_step(p: float, q_sup: float, q_dem: float, q_blow: float, params: SimParams) -> float:
+    """质量平衡单步压力更新 (兼容包装; 仅返回压力)。"""
+    return pressure_step_accounted(p, q_sup, q_dem, q_blow, params)[0]
+
+
+def clamp_within_band_check(params: SimParams) -> None:
+    """断言硬钳制不在合格带内 (防止用钳制制造合格率)。"""
+    assert params.p_hard_lo < params.band_lo_mpa, "hard_lo 必须在合格带下界之下"
+    assert params.p_hard_hi > params.band_hi_mpa, "hard_hi 必须在合格带上界之上"
 
 
 def blowoff_flow(p: float, q_sup: float, params: SimParams) -> float:
@@ -209,17 +238,18 @@ def simulate(strategy: str, sc: Scenario, params: SimParams = None,
             applied = acts
         running, flows = _apply(applied, snap)
 
-        # 供气/需求/放空/压力
+        # 供气/需求/放空/压力 (显式记账)
         q_sup = sum(flows[d] for d in DEVICES if running[d])
         q_dem = float(dem[k])
         q_blow = blowoff_flow(pressure, q_sup, p)
-        pressure = pressure_step(pressure, q_sup, q_dem, q_blow, p)
+        p_before = pressure
+        pressure, vent, unmet, clamp_flag = pressure_step_accounted(pressure, q_sup, q_dem, q_blow, p)
 
         power = _power({d: flows[d] for d in DEVICES if running[d]}, model, cache)
         recs.append({"k": k, "t": str(t), "demand": q_dem, "supply": q_sup, "blow": q_blow,
-                     "pressure": pressure, "power_kw": power,
+                     "pressure": pressure, "pressure_prev": p_before, "power_kw": power,
                      "f4": flows.get("4#", 0.0), "f5": flows.get("5#", 0.0),
-                     "fallback": fb})
+                     "fallback": fb, "vent_m3": vent, "unmet_m3": unmet, "clamp": clamp_flag})
     return {"strategy": strategy, "scenario": sc.name, "params": asdict(p), "records": recs,
             "metrics": _metrics(recs, p)}
 
@@ -232,11 +262,13 @@ def _metrics(recs, p: SimParams) -> dict:
     D = float(df["demand"].sum()) * p.dt_min
     comp = float(((df["pressure"] >= p.band_lo_mpa) & (df["pressure"] <= p.band_hi_mpa)).mean())
     low = float((((df.f4 > 0) & (df.f4 / RATED < 0.5)).sum() + ((df.f5 > 0) & (df.f5 / RATED < 0.5)).sum()) * p.dt_min)
-    # 质量守恒: 净入流(m3) - 储气变化(m3) - 泄漏项(m3) ~ 0
+    # 质量守恒(含显式泄压/未满足): 净入流 - 储气变化 - 泄漏 - 泄压 + 未满足 ~ 0
     inflow = (float(df.supply.sum()) - float(df.demand.sum()) - float(df.blow.sum())) * p.dt_min
-    store = p.k_vol_m3_per_mpa * (float(df.pressure.iloc[-1]) - float(df.pressure.iloc[0]))
-    leak = p.k_vol_m3_per_mpa * p.leak_per_min * float((df.pressure - p.p_env_mpa).sum()) * p.dt_min
-    residual = inflow - store - leak
+    store = p.k_vol_m3_per_mpa * (float(df.pressure.iloc[-1]) - float(df.pressure_prev.iloc[0]))
+    leak = p.k_vol_m3_per_mpa * p.leak_per_min * float((df.pressure_prev - p.p_env_mpa).sum()) * p.dt_min
+    vent = float(df.get("vent_m3", pd.Series(dtype=float)).sum()) if "vent_m3" in df else 0.0
+    unmet = float(df.get("unmet_m3", pd.Series(dtype=float)).sum()) if "unmet_m3" in df else 0.0
+    residual = inflow - store - leak - vent + unmet
     return {
         "steps": int(len(df)),
         "pressure_compliance": round(comp, 4),
@@ -247,10 +279,16 @@ def _metrics(recs, p: SimParams) -> dict:
         "energy_kwh": round(E, 1), "supply_m3": round(V, 1), "demand_m3": round(D, 1),
         "sec_kwh_per_m3": round(E / V, 6) if V else None,
         "supply_gap_m3": round(float((df.demand - df.supply).clip(lower=0).sum()) * p.dt_min, 1),
+        "demand_satisfaction": round(1 - float((df.demand - df.supply).clip(lower=0).sum()) / float(df.demand.sum()), 4) if df.demand.sum() else None,
         "over_supply_m3": round(float((df.supply - df.demand).clip(lower=0).sum()) * p.dt_min, 1),
         "blowoff_m3": round(float(df.blow.sum()) * p.dt_min, 1),
+        "safety_vent_m3": round(vent, 1),
+        "unserved_deficit_m3": round(unmet, 1),
+        "clamp_high_steps": int((df.get("clamp", pd.Series(dtype=object)) == "high").sum()),
+        "clamp_low_steps": int((df.get("clamp", pd.Series(dtype=object)) == "low").sum()),
         "low_load_min": low,
         "fallback_steps": int(df.fallback.sum()),
-        "mass_balance_residual_m3": round(residual, 1),
+        "mass_balance_residual_m3": round(residual, 3),
+        "pressure_initial": round(float(df.pressure_prev.iloc[0]), 4),
         "pressure_terminal": round(float(df.pressure.iloc[-1]), 4),
     }
