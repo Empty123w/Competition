@@ -1,0 +1,288 @@
+{
+  "meta": {
+    "validation_mode": "simulation",
+    "pressure_model": {
+      "lightgbm": {
+        "valid": {
+          "MAE": 0.00171,
+          "RMSE": 0.002148,
+          "R2": 0.99764
+        },
+        "test": {
+          "MAE": 0.001698,
+          "RMSE": 0.002139,
+          "R2": 0.99769
+        }
+      },
+      "linear": {
+        "valid": {
+          "MAE": 0.003314,
+          "RMSE": 0.004632,
+          "R2": 0.98901
+        },
+        "test": {
+          "MAE": 0.003203,
+          "RMSE": 0.004406,
+          "R2": 0.9902
+        }
+      }
+    }
+  },
+  "scenarios": {
+    "normal": {
+      "reactive_pi": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00613,
+        "pressure_min": 0.5863,
+        "pressure_max": 0.6198,
+        "energy_kwh": 58734.2,
+        "supply_m3": 620862.6,
+        "demand_m3": 619200.0,
+        "sec_kwh_per_m3": 0.094601,
+        "supply_gap_m3": 7896.2,
+        "demand_satisfaction": 0.9872,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0
+      },
+      "mpc": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00215,
+        "pressure_min": 0.5939,
+        "pressure_max": 0.6051,
+        "energy_kwh": 58735.4,
+        "supply_m3": 620900.0,
+        "demand_m3": 619200.0,
+        "sec_kwh_per_m3": 0.094597,
+        "supply_gap_m3": 3691.4,
+        "demand_satisfaction": 0.994,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0,
+        "pressure_std_reduction_pct": 64.93,
+        "pressure_compliance_gain_pp": 0.0
+      },
+      "mpc_ml": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00206,
+        "pressure_min": 0.5933,
+        "pressure_max": 0.6045,
+        "energy_kwh": 58733.6,
+        "supply_m3": 620850.0,
+        "demand_m3": 619200.0,
+        "sec_kwh_per_m3": 0.094602,
+        "supply_gap_m3": 3731.2,
+        "demand_satisfaction": 0.994,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0,
+        "pressure_std_reduction_pct": 66.39,
+        "pressure_compliance_gain_pp": 0.0
+      }
+    },
+    "low": {
+      "reactive_pi": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00391,
+        "pressure_min": 0.592,
+        "pressure_max": 0.6131,
+        "energy_kwh": 35542.8,
+        "supply_m3": 361693.7,
+        "demand_m3": 360000.0,
+        "sec_kwh_per_m3": 0.098268,
+        "supply_gap_m3": 4263.0,
+        "demand_satisfaction": 0.9882,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0
+      },
+      "mpc": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00321,
+        "pressure_min": 0.5885,
+        "pressure_max": 0.603,
+        "energy_kwh": 32473.6,
+        "supply_m3": 361625.0,
+        "demand_m3": 360000.0,
+        "sec_kwh_per_m3": 0.089799,
+        "supply_gap_m3": 2894.6,
+        "demand_satisfaction": 0.992,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0,
+        "pressure_std_reduction_pct": 17.9,
+        "pressure_compliance_gain_pp": 0.0
+      },
+      "mpc_ml": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00312,
+        "pressure_min": 0.5883,
+        "pressure_max": 0.6026,
+        "energy_kwh": 32605.3,
+        "supply_m3": 361600.0,
+        "demand_m3": 360000.0,
+        "sec_kwh_per_m3": 0.09017,
+        "supply_gap_m3": 2770.1,
+        "demand_satisfaction": 0.9923,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0,
+        "pressure_std_reduction_pct": 20.2,
+        "pressure_compliance_gain_pp": 0.0
+      }
+    },
+    "peak": {
+      "reactive_pi": {
+        "steps": 288,
+        "pressure_compliance": 0.4028,
+        "pressure_std": 0.10253,
+        "pressure_min": 0.4,
+        "pressure_max": 0.6235,
+        "energy_kwh": 44744.9,
+        "supply_m3": 519390.2,
+        "demand_m3": 720000.0,
+        "sec_kwh_per_m3": 0.086149,
+        "supply_gap_m3": 205103.4,
+        "demand_satisfaction": 0.7151,
+        "unserved_deficit_m3": 193682.7,
+        "blowoff_m3": 0.0
+      },
+      "mpc": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00236,
+        "pressure_min": 0.5933,
+        "pressure_max": 0.6058,
+        "energy_kwh": 62316.6,
+        "supply_m3": 721675.0,
+        "demand_m3": 720000.0,
+        "sec_kwh_per_m3": 0.08635,
+        "supply_gap_m3": 4348.2,
+        "demand_satisfaction": 0.994,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0,
+        "pressure_std_reduction_pct": 97.7,
+        "pressure_compliance_gain_pp": 59.72
+      },
+      "mpc_ml": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.0024,
+        "pressure_min": 0.5922,
+        "pressure_max": 0.6058,
+        "energy_kwh": 62316.6,
+        "supply_m3": 721675.0,
+        "demand_m3": 720000.0,
+        "sec_kwh_per_m3": 0.08635,
+        "supply_gap_m3": 4450.8,
+        "demand_satisfaction": 0.9938,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0,
+        "pressure_std_reduction_pct": 97.66,
+        "pressure_compliance_gain_pp": 59.72
+      }
+    },
+    "step": {
+      "reactive_pi": {
+        "steps": 288,
+        "pressure_compliance": 0.7639,
+        "pressure_std": 0.08637,
+        "pressure_min": 0.4,
+        "pressure_max": 0.6149,
+        "energy_kwh": 49315.2,
+        "supply_m3": 493654.4,
+        "demand_m3": 568325.2,
+        "sec_kwh_per_m3": 0.099898,
+        "supply_gap_m3": 80737.7,
+        "demand_satisfaction": 0.8579,
+        "unserved_deficit_m3": 70188.3,
+        "blowoff_m3": 0.0
+      },
+      "mpc": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00395,
+        "pressure_min": 0.5895,
+        "pressure_max": 0.6318,
+        "energy_kwh": 54926.8,
+        "supply_m3": 570000.0,
+        "demand_m3": 568325.2,
+        "sec_kwh_per_m3": 0.096363,
+        "supply_gap_m3": 4860.2,
+        "demand_satisfaction": 0.9914,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0,
+        "pressure_std_reduction_pct": 95.43,
+        "pressure_compliance_gain_pp": 23.61
+      },
+      "mpc_ml": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00409,
+        "pressure_min": 0.5889,
+        "pressure_max": 0.6331,
+        "energy_kwh": 55059.2,
+        "supply_m3": 569975.0,
+        "demand_m3": 568325.2,
+        "sec_kwh_per_m3": 0.096599,
+        "supply_gap_m3": 4820.7,
+        "demand_satisfaction": 0.9915,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0,
+        "pressure_std_reduction_pct": 95.26,
+        "pressure_compliance_gain_pp": 23.61
+      }
+    },
+    "fault": {
+      "reactive_pi": {
+        "steps": 288,
+        "pressure_compliance": 0.5035,
+        "pressure_std": 0.10333,
+        "pressure_min": 0.4,
+        "pressure_max": 0.6198,
+        "energy_kwh": 45892.2,
+        "supply_m3": 504110.8,
+        "demand_m3": 619200.0,
+        "sec_kwh_per_m3": 0.091036,
+        "supply_gap_m3": 119875.2,
+        "demand_satisfaction": 0.8064,
+        "unserved_deficit_m3": 108838.2,
+        "blowoff_m3": 0.0
+      },
+      "mpc": {
+        "steps": 288,
+        "pressure_compliance": 0.5035,
+        "pressure_std": 0.09964,
+        "pressure_min": 0.4,
+        "pressure_max": 0.6045,
+        "energy_kwh": 45884.1,
+        "supply_m3": 503883.0,
+        "demand_m3": 619200.0,
+        "sec_kwh_per_m3": 0.091061,
+        "supply_gap_m3": 118105.0,
+        "demand_satisfaction": 0.8093,
+        "unserved_deficit_m3": 108939.5,
+        "blowoff_m3": 0.0,
+        "pressure_std_reduction_pct": 3.57,
+        "pressure_compliance_gain_pp": 0.0
+      },
+      "mpc_ml": {
+        "steps": 288,
+        "pressure_compliance": 0.5035,
+        "pressure_std": 0.09946,
+        "pressure_min": 0.4,
+        "pressure_max": 0.6039,
+        "energy_kwh": 45883.3,
+        "supply_m3": 503858.0,
+        "demand_m3": 619200.0,
+        "sec_kwh_per_m3": 0.091064,
+        "supply_gap_m3": 118081.0,
+        "demand_satisfaction": 0.8093,
+        "unserved_deficit_m3": 108957.9,
+        "blowoff_m3": 0.0,
+        "pressure_std_reduction_pct": 3.75,
+        "pressure_compliance_gain_pp": 0.0
+      }
+    }
+  }
+}
