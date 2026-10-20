@@ -39,7 +39,7 @@ sa  = b_api.assess_surge_risk(snap, r)                             # 喘振评�
 ## 5. JSON 调用（异常/正常样例）
 见 `analysis/reports/b/delivery/c_call_examples.json`：
 - 正常：`status="success"`、`device_actions`、`estimated_power_kw`、`surge_status`、`latency_ms`；
-- 非法 mode → `ValueError`；缺失预测 → `status=INSUFFICIENT_DATA,is_fallback=true`；`timeout_ms<=0` → `status=timeout,is_fallback=true`。
+- 非法 mode → 抛 `ValueError`；缺失预测 → `status="INSUFFICIENT_DATA", is_fallback=true`；`timeout_ms<=0`（**三模式一致生效**）→ `status="timeout", is_fallback=true, reason_codes=["TIMEOUT"]`；容量超出 → `status="INFEASIBLE", reason_codes=["INFEASIBLE_CAPACITY"]`。
 
 ## 6. 输入输出字段（单位/类型）
 **输入**：`snapshot.as_of: str(Asia/Shanghai, tz-naive)`；`device.flow_m3_min: float`（m³/min）；`discharge_pressure_mpa/header_pressure_mpa: float`(MPa)；`igv_percent/bov_closed_percent: float`(%)；`quality_valid: bool`。`forecast.predicted_flow/upper_bound: float`(m³/min)。
@@ -50,8 +50,15 @@ sa  = b_api.assess_surge_risk(snap, r)                             # 喘振评�
 
 ## 8. 安全检查 / 超时 / 回退
 - 喘振 high/unknown → `safety_blocked=true`，不自动执行。
-- 任意失败/超时（`timeout_ms`，默认取 `optimization.yaml: dispatch.timeout_seconds`）→ **回退 B1 规则 + 复检**，`is_fallback=true`，`status∈{timeout,insufficient_data,infeasible,fallback}`（**非 success**）。
+- 任意失败/超时（`timeout_ms`，默认取 `optimization.yaml: dispatch.timeout_seconds`）→ **回退 B1 规则 + 复检**，`is_fallback=true`，回退候选在 `fallback_candidate`，**非 success**。
 - 全程 `execution_permission="simulation_candidate_only"`。
+
+## 8b. 状态判定规则（统一，勿按大小写自行匹配）
+使用 `air_station.optimization.b_api` 的判定函数（不改返回字段/取值）：
+`is_success`（成功且非回退）/ `is_fallback_result`（回退）/ `is_blocked`（`safety_blocked`）/ `is_infeasible`（不可行）/ `candidate_usable`（可展示的**仿真候选**，非执行许可）/ `needs_human_review`（失败/回退/阻断）/ `execution_allowed`（**恒 False**）。
+
+- 状态取值现状（保留）：成功 `"success"`；失败 `"INFEASIBLE"/"INSUFFICIENT_DATA"/"INVALID_INPUT"`（大写在语义分支）与回退的 `"timeout"/"fallback"/"infeasible"`（小写）。`reason_codes` 为大写常量。
+- **四类结果**：正常 / 容量不可行 / 安全回退 / 安全阻断；**后三类不得解释为可正常执行**；`safety_blocked=true` **禁止下发**。
 
 ## 9. A→B→C 数据流
 `A 预测/健康(artifacts/handoff_b)` → `B 调度(b_api/plan_dispatch)` → `C Agent 编排 + MCP 工具` → `PLC/SCADA`（**由 C 负责，B 不实现**）。

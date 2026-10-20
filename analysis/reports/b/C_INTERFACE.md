@@ -3,14 +3,14 @@
 代码：`src/air_station/optimization/dispatch_api.py`
 入口：`plan_dispatch(mode, snapshot, forecast, health, constraints, *, state=None, forecast_seq=None, config_path=..., timeout_ms=None) -> dict`
 
-## 1. 两种可选模式
+## 1. 三种可选模式
 | mode | 语义 | 底层实现 | policy_version |
 |---|---|---|---|
 | `"b3"` | 能效优先 | `service.optimize_dispatch`（B3+B4） | `b3-optimizer-v0.1` |
 | `"balanced"` | 低负荷优先 | `unit_commitment.plan(cfg=UCConfig(balanced=True))` | `balanced-uc-v0.1` |
 | `"load_balanced"` | 加载率均衡优先（D3） | `unit_commitment.plan(cfg=UCConfig(spread_balance=True))` | `load-balanced-lrb-v0.1` |
 
-两者共用同一：输入快照/预测/健康/约束、B4 安全边界、extra 5% 备用、爬坡、最短开停机、过渡供气连续性、回退口径。
+三者共用同一：输入快照/预测/健康/约束、B4 安全边界、extra 5% 备用、爬坡、最短开停机、过渡供气连续性、回退口径。
 
 ## 2. 统一输入
 - `snapshot: StationSnapshot`（`as_of` + 逐设备 `running/flow/pressure/igv/quality_valid`）
@@ -31,6 +31,24 @@
 - `is_fallback=true`，`execution_permission="simulation_candidate_only"`，`status ∈ {timeout, insufficient_data, infeasible, fallback}`（**非 success**）；
 - 回退候选为 **B1 规则 + 复检**，放入 `fallback_candidate`，同样附 B4 喘振评估；
 - 超时由 `timeout_ms` 控制（`timeout_ms<=0` 视为必触发），保证 ≤30s 目标。
+
+## 4b. 状态判定规则（统一，推荐 C 直接使用）
+**不要按 `status` 字符串大小写自行匹配**；用 `b_api` 提供的判定函数（已导出，不改返回字段/取值）：
+
+| 判定 | 函数 | 语义 |
+|---|---|---|
+| 求解成功且非回退 | `b_api.is_success(out)` | `status.lower()=="success"` 且 `is_fallback==false`（大小写不敏感） |
+| 是否回退 | `b_api.is_fallback_result(out)` | `is_fallback==true`（失败后回退 B1，**不得视为优化成功**） |
+| 安全阻断 | `b_api.is_blocked(out)` | `safety_blocked==true`（喘振 high/unknown，**禁止执行**） |
+| 容量/状态不可行 | `b_api.is_infeasible(out)` | `status.lower()=="infeasible"` |
+| 可展示的仿真候选 | `b_api.candidate_usable(out)` | `is_success && !is_blocked`（仍**非执行许可**） |
+| 需人工复核 | `b_api.needs_human_review(out)` | 失败/回退/阻断任一为真 |
+| 执行许可 | `b_api.execution_allowed(out)` | **恒为 False**（B 不提供真实设备执行许可） |
+
+**状态取值现状（保留，不重命名）**：`"success"`；失败态为 `"INFEASIBLE"`/`"INSUFFICIENT_DATA"`/`"INVALID_INPUT"`（大写）与回退路径的 `"timeout"/"fallback"/"infeasible"`（小写）。原因码（`reason_codes`）为大写常量（如 `TIMEOUT`/`INFEASIBLE_CAPACITY`/`FORECAST_MISSING_HOLD`）。**`status` 与 `reason_codes` 是两个不同字段，勿混用。**
+
+**四类结果**：正常调度(`is_success && !is_blocked`) / 容量不可行(`is_infeasible`) / 安全回退(`is_fallback_result`) / 安全阻断(`is_blocked`)；**后三类均不得解释为可正常执行**。
+- `timeout_ms` 现对**三模式一致生效**（b3 亦遵守）。
 
 ## 5. 运行命令
 ```bash

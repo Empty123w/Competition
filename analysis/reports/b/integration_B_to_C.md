@@ -23,3 +23,10 @@
 
 ## C 侧待做（未完成）
 MCP 包装、"预测→健康→调度→喘振→安全"协议级联调、端到端时延实测、PLC 放行策略。**B 侧不得声称已完成。**
+
+## 状态判定规则（统一）
+不要按 `status` 大小写自行匹配；用 `b_api` 判定函数：
+`is_success` / `is_fallback_result` / `is_blocked` / `is_infeasible` / `candidate_usable` / `needs_human_review` / `execution_allowed`（恒 False）。
+- 四类结果：正常 / 容量不可行(`is_infeasible`) / 安全回退(`is_fallback_result`) / 安全阻断(`is_blocked`)；后三类不得视为可执行。
+- `timeout_ms` 已对三模式一致生效（含 `b3`）。
+- `execution_permission="simulation_candidate_only"` 保持不变（非执行许可）。
