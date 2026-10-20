@@ -1,0 +1,109 @@
+{
+  "scenario": {
+    "as_of": "2026-08-01 00:00:00",
+    "note": "valid 段真实快照 + A6 校准预测"
+  },
+  "modes": {
+    "b3": {
+      "status": "success",
+      "is_fallback": false,
+      "execution_permission": "simulation_candidate_only",
+      "target_combination": [
+        "4#",
+        "5#"
+      ],
+      "total_flow_m3_min": 428.54,
+      "estimated_power_kw": 2339.62,
+      "surge_status": "medium",
+      "safety_blocked": false,
+      "latency_ms": 41.138,
+      "device_actions": [
+        {
+          "device_id": "4#",
+          "action": "adjust",
+          "target_flow_m3_min": 159.64,
+          "running_after": true
+        },
+        {
+          "device_id": "5#",
+          "action": "adjust",
+          "target_flow_m3_min": 268.9,
+          "running_after": true
+        }
+      ]
+    },
+    "balanced": {
+      "status": "success",
+      "is_fallback": false,
+      "execution_permission": "simulation_candidate_only",
+      "target_combination": [
+        "4#",
+        "5#"
+      ],
+      "total_flow_m3_min": 428.54,
+      "estimated_power_kw": 2343.41,
+      "surge_status": "medium",
+      "safety_blocked": false,
+      "latency_ms": 404.1,
+      "device_actions": [
+        {
+          "device_id": "4#",
+          "action": "adjust",
+          "target_flow_m3_min": 161.66,
+          "running_after": true
+        },
+        {
+          "device_id": "5#",
+          "action": "adjust",
+          "target_flow_m3_min": 266.87,
+          "running_after": true
+        }
+      ]
+    },
+    "load_balanced": {
+      "status": "success",
+      "is_fallback": false,
+      "execution_permission": "simulation_candidate_only",
+      "target_combination": [
+        "4#",
+        "5#"
+      ],
+      "total_flow_m3_min": 428.54,
+      "estimated_power_kw": 2441.7,
+      "surge_status": "medium",
+      "safety_blocked": false,
+      "latency_ms": 18.865,
+      "device_actions": [
+        {
+          "device_id": "4#",
+          "action": "adjust",
+          "target_flow_m3_min": 214.27,
+          "running_after": true
+        },
+        {
+          "device_id": "5#",
+          "action": "adjust",
+          "target_flow_m3_min": 214.27,
+          "running_after": true
+        }
+      ]
+    }
+  },
+  "error_cases": {
+    "invalid_mode": "ValueError:mode must be one of ('b3', 'balanced', 'load_balanced'), got 'bad_mode'",
+    "missing_forecast": {
+      "status": "INSUFFICIENT_DATA",
+      "is_fallback": true,
+      "permission": "simulation_candidate_only"
+    },
+    "timeout": {
+      "status": "timeout",
+      "is_fallback": true,
+      "reason_codes": [
+        "TIMEOUT"
+      ],
+      "permission": "simulation_candidate_only"
+    }
+  },
+  "plc_control_note": "所有结果 execution_permission=simulation_candidate_only; 无任何 PLC 写指令路径"
+}

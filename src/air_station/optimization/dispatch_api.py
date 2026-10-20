@@ -124,6 +124,9 @@ def plan_dispatch(mode: str, snapshot: StationSnapshot, forecast: Optional[Forec
                                   baseline_config_path=bc)
         out = r.to_dict()
         out["mode"] = "b3"
+        # 归一化回退标志: B3 失败时 status!=success 且带 fallback_candidate, 统一标记 is_fallback
+        if out.get("fallback_candidate") or out.get("status") != C.STATUS_SUCCESS:
+            out["is_fallback"] = True
         out["latency_ms"] = round((time.perf_counter() - t0) * 1000, 3)
         return out
 

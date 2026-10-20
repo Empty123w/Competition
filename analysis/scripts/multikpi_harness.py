@@ -82,10 +82,17 @@ def run(window, start, n, cands, logpath):
     base = B1.load_config(B1.DEFAULT_CONFIG); con = C.DispatchConstraints.from_config(base)
     oc = load_optimization_config(); model = oc["paths"]["power_model"]
     dev, st = PIPE.load_processed()
-    scor = pd.read_parquet(HB / f"forecast_scoring_actuals_calibrated.parquet")
-    fn = "forecast_dev_dispatch_calibrated.parquet" if window == "dev" else "forecast_validation_dispatch_calibrated.parquet"
-    split = "dev" if window == "dev" else "valid"
-    b = load_forecast_bundle(HB / fn, scoring=scor, scoring_split=split)
+    if window == "test":
+        hb = ROOT / "artifacts" / "handoff_b_test"
+        scor = pd.read_parquet(hb / "forecast_test_scoring_actuals_calibrated.parquet")
+        fn = "forecast_test_dispatch_calibrated.parquet"; split = "test"
+    else:
+        hb = HB
+        scor = pd.read_parquet(hb / "forecast_scoring_actuals_calibrated.parquet")
+        fn = ("forecast_dev_dispatch_calibrated.parquet" if window == "dev"
+              else "forecast_validation_dispatch_calibrated.parquet")
+        split = "dev" if window == "dev" else "valid"
+    b = load_forecast_bundle(hb / fn, scoring=scor, scoring_split=split)
     grid = [t for t in sorted(b.by_issue) if t.minute % STEP == 0 and all(h in b.by_issue[t] for h in (15, 30, 45, 60))]
     bd = pd.DataFrame({"t": grid}); bd["obs"] = [b.actual_at_target(t, 15) for t in grid]
     for h in (15, 30, 45, 60):

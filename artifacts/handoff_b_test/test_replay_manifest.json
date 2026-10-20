@@ -1,0 +1,55 @@
+{
+  "generated_at": "2026-10-20T12:09:18",
+  "isolation_note": "B 侧隔离生成; 不覆盖 A 的 dev/valid 交付; test 段曾被 B5 早期使用(非盲测)",
+  "config": "configs/rolling_forecast_test.yaml",
+  "horizons_minutes": [
+    15,
+    30,
+    45,
+    60,
+    75
+  ],
+  "issue_frequency_minutes": 5,
+  "range": {
+    "as_of_min": "2026-08-21 00:00:00",
+    "as_of_max": "2026-09-12 00:00:00",
+    "target_max": "2026-09-12 01:15:00"
+  },
+  "folds": 4,
+  "interval_method": "rolling conformal (A6 identical)",
+  "alpha": 0.12,
+  "nominal_coverage": 0.88,
+  "coverage_test": {
+    "15": 0.9099,
+    "30": 0.9003,
+    "45": 0.8984,
+    "60": 0.8977,
+    "75": 0.8935
+  },
+  "grid_steps_all_horizons": 2113,
+  "grid_first_last": [
+    "2026-08-21 00:00:00",
+    "2026-09-12 00:00:00"
+  ],
+  "outputs": {
+    "forecast_test_dispatch_calibrated.parquet": {
+      "sha256": "A4AD857EB387703C675A0AD72C737F7A1A3BFBF994FDF5E3B94D6BD6575CB020",
+      "rows": 31685,
+      "cols": [
+        "as_of",
+        "target_time",
+        "horizon_minutes",
+        "predicted_flow",
+        "lower_bound",
+        "upper_bound",
+        "pred_mean_interval",
+        "pred_upper_interval"
+      ]
+    },
+    "forecast_test_scoring_actuals_calibrated.parquet": {
+      "sha256": "588B27D4DB81965FC4E6B59CA281D4FB4A0E75D1DB366123BE40730954FAFA8E",
+      "rows": 31685
+    }
+  },
+  "runtime_s": 95.8
+}
