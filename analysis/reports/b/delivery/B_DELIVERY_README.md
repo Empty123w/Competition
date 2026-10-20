@@ -11,6 +11,9 @@
 | `OPEN_ITEMS.md` | 待外部确认事项（A/C/D/官方） |
 | `c_call_examples.json` | 三模式真实调用输出 + 异常/回退用例 |
 | `load_ratio_all.json` | 三段×4 策略加载率 D1/D2/D3 |
+| `../MAIN_STRATEGY_RECOMMENDATION.md` | 比赛主方案推荐（LRB-t10 + 备选） |
+| `../SIM_CLOSED_LOOP_STUDY.md` | 闭环仿真验证（工程假设；含 5 场景与敏感性） |
+| `DEMO_SCENARIOS.md` | C/D 演示场景与复现命令 |
 | `../B5_UNIFIED_SUMMARY.md` | dev+valid+test 统一汇总（含 pooled） |
 | `../B_KPI_FINAL_ACCEPTANCE.md` | KPI 最终验收表 |
 | `../C_INTERFACE.md` | C 接口交付说明 |
