@@ -1,0 +1,169 @@
+{
+  "window": "valid 2026-08-01~08-20",
+  "n_steps": 1916,
+  "thresholds": {
+    "rated": 268.9,
+    "non_low_flow": 134.45,
+    "note": "低负荷=运行且 flow/268.9<0.5; NLT=134.45"
+  },
+  "per_strategy": {
+    "b1_rule": {
+      "low_machine_steps": 146,
+      "classification": {
+        "single_forced": 4,
+        "double_forced": 42,
+        "reducible": 100,
+        "other": 0
+      },
+      "extra_supply_to_lift_m3": 22646.1,
+      "low_minutes_total": 2385.0
+    },
+    "b3_b4": {
+      "low_machine_steps": 136,
+      "classification": {
+        "single_forced": 3,
+        "double_forced": 36,
+        "reducible": 94,
+        "other": 3
+      },
+      "extra_supply_to_lift_m3": 15773.1,
+      "low_minutes_total": 2040.0
+    },
+    "myopic": {
+      "low_machine_steps": 136,
+      "classification": {
+        "single_forced": 3,
+        "double_forced": 36,
+        "reducible": 94,
+        "other": 3
+      },
+      "extra_supply_to_lift_m3": 15773.1,
+      "low_minutes_total": 2040.0
+    },
+    "multi_step": {
+      "low_machine_steps": 136,
+      "classification": {
+        "single_forced": 3,
+        "double_forced": 36,
+        "reducible": 94,
+        "other": 3
+      },
+      "extra_supply_to_lift_m3": 15773.1,
+      "low_minutes_total": 2040.0
+    },
+    "v2": {
+      "low_machine_steps": 119,
+      "classification": {
+        "single_forced": 3,
+        "double_forced": 36,
+        "reducible": 77,
+        "other": 3
+      },
+      "extra_supply_to_lift_m3": 15773.1,
+      "low_minutes_total": 1785.0
+    },
+    "cand": {
+      "low_machine_steps": 93,
+      "classification": {
+        "single_forced": 2,
+        "double_forced": 36,
+        "reducible": 52,
+        "other": 3
+      },
+      "extra_supply_to_lift_m3": 15427.5,
+      "low_minutes_total": 1395.0
+    }
+  },
+  "reduction_vs_b1_pct": {
+    "b1_rule": 0.0,
+    "b3_b4": 14.4654,
+    "myopic": 14.4654,
+    "multi_step": 14.4654,
+    "v2": 25.1572,
+    "cand": 41.5094
+  },
+  "forced_low_machine_steps": {
+    "b1_rule": 46,
+    "b3_b4": 39,
+    "myopic": 39,
+    "multi_step": 39,
+    "v2": 39,
+    "cand": 38
+  },
+  "max_reduction_if_eliminate_reducible_pct": {
+    "b1_rule": 98.0713,
+    "b3_b4": 98.0882,
+    "myopic": 98.0882,
+    "multi_step": 98.0882,
+    "v2": 97.8151,
+    "cand": 97.276
+  },
+  "load_ratio": {
+    "b1_rule": {
+      "rated": {
+        "exceed_ratio": 0.5185,
+        "mean_abs_dev_pct": 15.495
+      },
+      "plateau": {
+        "exceed_ratio": 0.9658,
+        "mean_abs_dev_pct": 21.221
+      }
+    },
+    "b3_b4": {
+      "rated": {
+        "exceed_ratio": 0.5164,
+        "mean_abs_dev_pct": 15.253
+      },
+      "plateau": {
+        "exceed_ratio": 0.2409,
+        "mean_abs_dev_pct": 12.346
+      }
+    },
+    "myopic": {
+      "rated": {
+        "exceed_ratio": 0.5164,
+        "mean_abs_dev_pct": 15.261
+      },
+      "plateau": {
+        "exceed_ratio": 0.2406,
+        "mean_abs_dev_pct": 12.346
+      }
+    },
+    "multi_step": {
+      "rated": {
+        "exceed_ratio": 0.5164,
+        "mean_abs_dev_pct": 15.258
+      },
+      "plateau": {
+        "exceed_ratio": 0.241,
+        "mean_abs_dev_pct": 12.35
+      }
+    },
+    "v2": {
+      "rated": {
+        "exceed_ratio": 0.5164,
+        "mean_abs_dev_pct": 15.261
+      },
+      "plateau": {
+        "exceed_ratio": 0.23,
+        "mean_abs_dev_pct": 11.548
+      }
+    },
+    "cand": {
+      "rated": {
+        "exceed_ratio": 0.5164,
+        "mean_abs_dev_pct": 15.261
+      },
+      "plateau": {
+        "exceed_ratio": 0.23,
+        "mean_abs_dev_pct": 11.53
+      }
+    }
+  },
+  "feasibility_60pct": {
+    "cand_low_minutes": 1395.0,
+    "cand_reduction_vs_b1_pct": 41.5094,
+    "cand_forced_minutes": 570,
+    "verdict": "可能在消除可再平衡后接近"
+  }
+}

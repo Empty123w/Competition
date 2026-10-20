@@ -1,0 +1,102 @@
+# =====================================================================
+# B2 机组性能与管网压力模型配置
+# - 阈值外部化; source 标记 real|inferred|engineering|simulation|pending
+# - 无厂家性能曲线/喘振曲线, 模型为工程近似, validation_mode=simulation
+# =====================================================================
+
+version: "b2.0"
+
+meta:
+  validation_mode: "simulation"
+  note: "无厂家性能/压力曲线, 本模型为工程近似, 不用于真实设备控制"
+
+time:
+  local_timezone: "Asia/Shanghai"
+
+# ---- 时间切分 (沿用 A forecasting.yaml) ----
+split:
+  train: { start: "2026-03-12 00:00:00", end: "2026-07-31 23:59:00" }
+  valid: { start: "2026-08-01 00:00:00", end: "2026-08-20 23:59:00" }
+  test:  { start: "2026-08-21 00:00:00", end: "2026-09-12 00:00:00" }
+
+# ---- 单机性能模型 ----
+performance:
+  model_version: "b2-power-v0.1"
+  # 仅用运行且流量落在 [lo, hi] 的样本拟合
+  fit_flow_lo_m3min: 120.0            # validated_min (engineering, AS-02)
+  fit_flow_hi_m3min: 268.9            # validated_operating_max (保守, 不主动超额)
+  rated_capacity_m3min: 268.9         # 铭牌 (real, AS-17)
+  validated_operating_max_m3min: 268.9  # 持续上限 (conservative)
+  # observed_max 由数据统计得到, 仅参考, 不作为持续安全容量
+  feature_columns: [flow_m3_min, discharge_pressure_mpa, igv_percent, ambient_temp_c]
+  candidates: [linear, poly2, piecewise, multivar]
+  selection_metric: "MAE"
+  mape_floor_kw: 1.0
+  source_flags:
+    rated_capacity_m3min: real
+    validated_operating_max_m3min: engineering
+    fit_flow_lo_m3min: engineering
+
+# ---- 管网压力近似模型 ----
+pressure:
+  model_version: "b2-pressure-v0.1"
+  horizon_minutes: 1                  # 预测下一分钟母管压力
+  candidates: [persistence, linear_dynamics]
+  selection_metric: "MAE"
+  # 说明: 母管压力近似随机游走; 调度反事实预测能力不足, 报告中明确局限
+  reference_band_mpa: [0.55, 0.66]    # 待确认示例 (CAL-05), 非厂家安全标准
+  source_flags:
+    reference_band_mpa: pending
+    dynamics: simulation
+
+# ---- B3 多机优化调度 ----
+dispatch:
+  policy_version: "b3-optimizer-v0.1"
+  combo_enumeration: explicit_four      # 停机 / 仅4# / 仅5# / 双机
+  allocation: greedy_marginal           # 边际功率贪心分配
+  selection: min_total_normalized_objective
+  # 目标项权重 (分项先归一化再加权, 不同量纲不直接相加)
+  weights:
+    power: 1.0
+    switch: 0.05
+    health: 0.10
+    rul: 0.0                            # 默认关闭寿命惩罚
+  normalization:
+    power_ref_kw: 2500.0                # = 2 x rated_power
+    switch_ref: 2.0
+  health_penalty_map: { normal: 0.0, attention: 0.2, warning: 0.5, critical: 1.0 }
+  health_source: "unsupervised"          # 无监督软惩罚, 非真实故障概率
+  rul:
+    enabled: false                      # 默认不开启
+    simulation: true
+    threshold_hours: 500.0
+    source: "simulation"
+  timeout_seconds: 30.0
+  # 单机功率硬上限 (工程假设: 基于实测瞬时最大功率约 1497 kW 取裕度)
+  power_cap_kw_per_device: 1600.0
+  step_minutes: 1.0                    # 评估步长 (数据为 1 分钟粒度)
+  surge:
+    assessor: "B4"
+    enabled: true
+    boundary_version: "surge-proxy-v0.1"
+    config_path: "configs/safety.yaml"
+    boundary_path: "artifacts/models/surge_boundary.json"
+    status_when_unavailable: "not_assessed_b4"
+  execution_permission: "simulation_candidate_only"   # 永不为 authorized
+  fallback:
+    enabled: true
+  source_flags:
+    demand_basis: pending
+    reserve: pending
+    pressure_band: pending
+    health_penalty: engineering
+    switch_cost: engineering
+
+# ---- 产物路径 ----
+paths:
+  processed_dir: data/processed
+  model_dir: artifacts/models
+  metrics_dir: artifacts/metrics
+  power_model: artifacts/models/power_model.json
+  pressure_model: artifacts/models/pressure_model.json
+  baseline_config: configs/baseline.yaml

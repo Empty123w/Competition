@@ -1,0 +1,251 @@
+{
+  "model_version": "b2-power-v0.1",
+  "generated_at": "2026-10-18T14:17:29Z",
+  "validation_mode": "simulation",
+  "split": {
+    "train": {
+      "start": "2026-03-12 00:00:00",
+      "end": "2026-07-31 23:59:00"
+    },
+    "valid": {
+      "start": "2026-08-01 00:00:00",
+      "end": "2026-08-20 23:59:00"
+    },
+    "test": {
+      "start": "2026-08-21 00:00:00",
+      "end": "2026-09-12 00:00:00"
+    }
+  },
+  "devices": {
+    "4#": {
+      "device_id": "4#",
+      "method": "LinearRegression(flow,pressure,igv,ambient)",
+      "method_key": "multivar",
+      "params": {
+        "type": "multivar",
+        "features": [
+          "flow_m3_min",
+          "discharge_pressure_mpa",
+          "igv_percent",
+          "ambient_temp_c"
+        ],
+        "coef": [
+          3.0661801922620047,
+          -32.5587441858197,
+          0.6116565130214542,
+          -0.8387672150980884
+        ],
+        "intercept": 540.6403549316448,
+        "feature_means": [
+          242.9717537048827,
+          0.5475123927494228,
+          93.53025424221471,
+          32.934056618761225
+        ]
+      },
+      "features": [
+        "flow_m3_min",
+        "discharge_pressure_mpa",
+        "igv_percent",
+        "ambient_temp_c"
+      ],
+      "fit_flow_range_m3min": [
+        120.0,
+        268.9
+      ],
+      "validated_operating_max_m3min": 268.9,
+      "rated_capacity_m3min": 268.9,
+      "observed_max_m3min": 299.7,
+      "sample_counts": {
+        "total": 264961,
+        "stopped": 46705,
+        "running_zero_flow": 5568,
+        "below_validated_min": 148,
+        "above_validated_max": 26492,
+        "nonfinite": 0,
+        "used": 186045,
+        "overload_share_running": 0.1246,
+        "overload_max_flow": 299.7,
+        "train": 126075,
+        "valid": 28620,
+        "test": 31350
+      },
+      "candidate_valid_metrics": {
+        "linear": {
+          "MAE": 23.626,
+          "RMSE": 27.023,
+          "MAPE": 1.874,
+          "R2": 0.4058,
+          "n": 28620
+        },
+        "poly2": {
+          "MAE": 23.34,
+          "RMSE": 27.116,
+          "MAPE": 1.853,
+          "R2": 0.4017,
+          "n": 28620
+        },
+        "multivar": {
+          "MAE": 20.08,
+          "RMSE": 23.381,
+          "MAPE": 1.592,
+          "R2": 0.5551,
+          "n": 28620
+        },
+        "piecewise": {
+          "MAE": 21.968,
+          "RMSE": 26.813,
+          "MAPE": 1.752,
+          "R2": 0.415,
+          "n": 28620
+        }
+      },
+      "metrics": {
+        "train": {
+          "MAE": 10.402,
+          "RMSE": 15.5,
+          "MAPE": 0.82,
+          "R2": 0.935,
+          "n": 126075
+        },
+        "valid": {
+          "MAE": 13.191,
+          "RMSE": 16.638,
+          "MAPE": 1.048,
+          "R2": 0.7747,
+          "n": 28620
+        },
+        "test": {
+          "MAE": 16.497,
+          "RMSE": 20.742,
+          "MAPE": 1.273,
+          "R2": 0.6089,
+          "n": 31350
+        }
+      },
+      "residual": {
+        "mean": 14.469,
+        "std": 14.862,
+        "p95_abs": 35.675
+      },
+      "validation_mode": "simulation",
+      "model_version": "b2-power-v0.1",
+      "notes": "工程近似模型, 无厂家性能曲线; 不用于真实设备控制"
+    },
+    "5#": {
+      "device_id": "5#",
+      "method": "LinearRegression(flow,pressure,igv,ambient)",
+      "method_key": "multivar",
+      "params": {
+        "type": "multivar",
+        "features": [
+          "flow_m3_min",
+          "discharge_pressure_mpa",
+          "igv_percent",
+          "ambient_temp_c"
+        ],
+        "coef": [
+          1.1982015094860647,
+          136.0165141938744,
+          2.7752943208089627,
+          -4.524389529690488
+        ],
+        "intercept": 817.8650325711731,
+        "feature_means": [
+          231.87219008156578,
+          0.583186610895881,
+          79.58713536425158,
+          31.499602586600453
+        ]
+      },
+      "features": [
+        "flow_m3_min",
+        "discharge_pressure_mpa",
+        "igv_percent",
+        "ambient_temp_c"
+      ],
+      "fit_flow_range_m3min": [
+        120.0,
+        268.9
+      ],
+      "validated_operating_max_m3min": 268.9,
+      "rated_capacity_m3min": 268.9,
+      "observed_max_m3min": 297.47,
+      "sample_counts": {
+        "total": 264961,
+        "stopped": 7878,
+        "running_zero_flow": 301,
+        "below_validated_min": 2183,
+        "above_validated_max": 30611,
+        "nonfinite": 0,
+        "used": 223984,
+        "overload_share_running": 0.1192,
+        "overload_max_flow": 297.47,
+        "train": 165029,
+        "valid": 27910,
+        "test": 31045
+      },
+      "candidate_valid_metrics": {
+        "linear": {
+          "MAE": 27.327,
+          "RMSE": 33.449,
+          "MAPE": 2.368,
+          "R2": 0.9263,
+          "n": 27910
+        },
+        "poly2": {
+          "MAE": 35.169,
+          "RMSE": 40.692,
+          "MAPE": 2.824,
+          "R2": 0.891,
+          "n": 27910
+        },
+        "multivar": {
+          "MAE": 19.959,
+          "RMSE": 23.215,
+          "MAPE": 1.679,
+          "R2": 0.9645,
+          "n": 27910
+        },
+        "piecewise": {
+          "MAE": 37.293,
+          "RMSE": 43.301,
+          "MAPE": 3.065,
+          "R2": 0.8765,
+          "n": 27910
+        }
+      },
+      "metrics": {
+        "train": {
+          "MAE": 11.146,
+          "RMSE": 16.911,
+          "MAPE": 0.935,
+          "R2": 0.9814,
+          "n": 165029
+        },
+        "valid": {
+          "MAE": 11.358,
+          "RMSE": 16.715,
+          "MAPE": 1.003,
+          "R2": 0.9816,
+          "n": 27910
+        },
+        "test": {
+          "MAE": 10.939,
+          "RMSE": 15.003,
+          "MAPE": 0.847,
+          "R2": 0.8042,
+          "n": 31045
+        }
+      },
+      "residual": {
+        "mean": -2.822,
+        "std": 14.736,
+        "p95_abs": 21.035
+      },
+      "validation_mode": "simulation",
+      "model_version": "b2-power-v0.1",
+      "notes": "工程近似模型, 无厂家性能曲线; 不用于真实设备控制"
+    }
+  }
+}

@@ -1,0 +1,146 @@
+{
+  "data_source": "controlled fixture (4#/5#); surrogate=proxy",
+  "cases": {
+    "normal_redispatch": {
+      "note": "两台正常, 中等需求",
+      "status": "success",
+      "is_fallback": false,
+      "target_combination": [
+        "4#",
+        "5#"
+      ],
+      "total_flow_m3_min": 430.0,
+      "estimated_power_kw": 2344.11,
+      "required_flow_m3_min": 430.0,
+      "device_actions": [
+        {
+          "device_id": "4#",
+          "action": "adjust",
+          "target_flow_m3_min": 161.1,
+          "running_after": true
+        },
+        {
+          "device_id": "5#",
+          "action": "adjust",
+          "target_flow_m3_min": 268.9,
+          "running_after": true
+        }
+      ],
+      "reason_codes": [
+        "PRESSURE_COUNTERFACTUAL_UNSUPPORTED"
+      ],
+      "surge": {
+        "status": "success",
+        "safety_blocked": false,
+        "counts": {
+          "low": 2,
+          "medium": 0,
+          "high": 0,
+          "unknown": 0
+        },
+        "boundary_source": "engineering_assumed",
+        "validation_mode": "simulation"
+      },
+      "execution_permission": "simulation_candidate_only"
+    },
+    "unit5_derate": {
+      "note": "5# 不可用 -> 单机 4# 重分配 (需求 250 <= 单机可用容量)",
+      "status": "success",
+      "is_fallback": false,
+      "target_combination": [
+        "4#"
+      ],
+      "total_flow_m3_min": 250.0,
+      "estimated_power_kw": 1318.94,
+      "required_flow_m3_min": 250.0,
+      "device_actions": [
+        {
+          "device_id": "4#",
+          "action": "hold",
+          "target_flow_m3_min": 250.0,
+          "running_after": true
+        },
+        {
+          "device_id": "5#",
+          "action": "hold",
+          "target_flow_m3_min": 0.0,
+          "running_after": false
+        }
+      ],
+      "reason_codes": [
+        "PRESSURE_COUNTERFACTUAL_UNSUPPORTED"
+      ],
+      "surge": {
+        "status": "success",
+        "safety_blocked": false,
+        "counts": {
+          "low": 1,
+          "medium": 0,
+          "high": 0,
+          "unknown": 0
+        },
+        "boundary_source": "engineering_assumed",
+        "validation_mode": "simulation"
+      },
+      "execution_permission": "simulation_candidate_only"
+    },
+    "neg_capacity_insufficient": {
+      "note": "5# 不可用且需求 520 > 单机 268.9 -> 不可行",
+      "status": "INFEASIBLE",
+      "is_fallback": false,
+      "target_combination": [],
+      "total_flow_m3_min": null,
+      "estimated_power_kw": null,
+      "required_flow_m3_min": 520.0,
+      "device_actions": [],
+      "reason_codes": [
+        "INFEASIBLE_CAPACITY",
+        "DEVICE_UNAVAILABLE"
+      ],
+      "surge": {
+        "status": "no_active_devices",
+        "safety_blocked": false,
+        "counts": {
+          "low": 0,
+          "medium": 0,
+          "high": 0,
+          "unknown": 0
+        },
+        "boundary_source": "engineering_assumed",
+        "validation_mode": "simulation"
+      },
+      "execution_permission": "simulation_candidate_only"
+    },
+    "neg_high_surge": {
+      "note": "候选流量贴近代理边界(低流量) -> high 阻断",
+      "problem_flow_m3min": 40.0,
+      "surge": {
+        "status": "success",
+        "safety_blocked": true,
+        "counts": {
+          "low": 0,
+          "medium": 0,
+          "high": 1,
+          "unknown": 0
+        },
+        "boundary_source": "engineering_assumed"
+      }
+    },
+    "neg_transition_gap": {
+      "note": "双机->单机但需求 430 > 单机容量 -> 过渡供气不足",
+      "transition_ok": false,
+      "reason_codes": [
+        "TRANSITION_CAPACITY_GAP"
+      ],
+      "steps_sample": [
+        {
+          "step": "stop",
+          "device_id": "5#",
+          "capacity_after_m3min": 268.9,
+          "supply_ok": false,
+          "note": "替代容量就绪后停机"
+        }
+      ]
+    }
+  }
+}

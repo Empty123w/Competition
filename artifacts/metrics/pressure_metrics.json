@@ -1,0 +1,61 @@
+{
+  "model_version": "b2-pressure-v0.1",
+  "method": "persistence",
+  "metrics": {
+    "train": {
+      "MAE": 0.00078,
+      "RMSE": 0.00585,
+      "R2": 0.9756,
+      "n": 203994
+    },
+    "valid": {
+      "MAE": 0.00212,
+      "RMSE": 0.01163,
+      "R2": 0.8026,
+      "n": 28788
+    },
+    "test": {
+      "MAE": 0.00296,
+      "RMSE": 0.01005,
+      "R2": 0.9509,
+      "n": 31671
+    }
+  },
+  "candidate_valid_metrics": {
+    "persistence": {
+      "MAE": 0.00212,
+      "RMSE": 0.01163,
+      "R2": 0.8026,
+      "n": 28788
+    },
+    "linear_dynamics": {
+      "MAE": 0.00292,
+      "RMSE": 0.01157,
+      "R2": 0.8046,
+      "n": 28788
+    }
+  },
+  "residual_std_mpa": 0.010053529729175397,
+  "uncertainty_1.96sigma_mpa": 0.0197,
+  "evidence": {
+    "lag1_autocorr": 0.9866,
+    "dp_flow_delta_corr": -0.0174,
+    "p_std_mpa": 0.04459,
+    "within_reference_band_share": 0.6545,
+    "reference_band_mpa": [
+      0.55,
+      0.66
+    ]
+  },
+  "capability_statement": {
+    "historical_short_horizon": "supported (persistence-dominated)",
+    "counterfactual_after_dispatch": "NOT supported by current data",
+    "reason": "压力近似随机游走, 变化与流量/运行台数相关性弱, 无法可靠识别调度动作对压力的因果影响"
+  },
+  "sample_counts": {
+    "train": 203994,
+    "valid": 28788,
+    "test": 31671
+  },
+  "validation_mode": "simulation"
+}

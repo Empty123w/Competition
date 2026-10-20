@@ -1,0 +1,93 @@
+{
+  "storage_leak_normal_b3": {
+    "kvol=12000,leak=0.0": {
+      "pressure_compliance": 1.0,
+      "pressure_std": 0.00795,
+      "pressure_mean": 0.6035,
+      "energy_kwh": 56300.3,
+      "supply_m3": 619113.0,
+      "blowoff_m3": 0.0
+    },
+    "kvol=12000,leak=0.001": {
+      "pressure_compliance": 1.0,
+      "pressure_std": 0.00787,
+      "pressure_mean": 0.6034,
+      "energy_kwh": 56343.9,
+      "supply_m3": 620037.6,
+      "blowoff_m3": 0.0
+    },
+    "kvol=12000,leak=0.003": {
+      "pressure_compliance": 1.0,
+      "pressure_std": 0.0077,
+      "pressure_mean": 0.6033,
+      "energy_kwh": 56431.3,
+      "supply_m3": 621878.7,
+      "blowoff_m3": 0.0
+    },
+    "kvol=23700,leak=0.0": {
+      "pressure_compliance": 1.0,
+      "pressure_std": 0.00633,
+      "pressure_mean": 0.6036,
+      "energy_kwh": 56289.6,
+      "supply_m3": 619037.6,
+      "blowoff_m3": 0.0
+    },
+    "kvol=23700,leak=0.001": {
+      "pressure_compliance": 1.0,
+      "pressure_std": 0.00613,
+      "pressure_mean": 0.6034,
+      "energy_kwh": 56376.2,
+      "supply_m3": 620862.6,
+      "blowoff_m3": 0.0
+    },
+    "kvol=23700,leak=0.003": {
+      "pressure_compliance": 1.0,
+      "pressure_std": 0.00577,
+      "pressure_mean": 0.6031,
+      "energy_kwh": 56550.1,
+      "supply_m3": 624480.8,
+      "blowoff_m3": 0.0
+    },
+    "kvol=45000,leak=0.0": {
+      "pressure_compliance": 1.0,
+      "pressure_std": 0.00556,
+      "pressure_mean": 0.6036,
+      "energy_kwh": 56281.3,
+      "supply_m3": 618951.5,
+      "blowoff_m3": 0.0
+    },
+    "kvol=45000,leak=0.001": {
+      "pressure_compliance": 1.0,
+      "pressure_std": 0.00517,
+      "pressure_mean": 0.6033,
+      "energy_kwh": 56446.7,
+      "supply_m3": 622410.2,
+      "blowoff_m3": 0.0
+    },
+    "kvol=45000,leak=0.003": {
+      "pressure_compliance": 1.0,
+      "pressure_std": 0.00445,
+      "pressure_mean": 0.6027,
+      "energy_kwh": 56781.5,
+      "supply_m3": 629212.6,
+      "blowoff_m3": 0.0
+    }
+  },
+  "band_statistics_only": {
+    "band=[0.55,0.66]": {
+      "pressure_compliance": 1.0,
+      "pressure_mean": 0.6034,
+      "pressure_std": 0.00613
+    },
+    "band=[0.54,0.67]": {
+      "pressure_compliance": 1.0,
+      "pressure_mean": 0.6034,
+      "pressure_std": 0.00613
+    },
+    "band=[0.5,0.7]": {
+      "pressure_compliance": 1.0,
+      "pressure_mean": 0.6034,
+      "pressure_std": 0.00613
+    }
+  }
+}

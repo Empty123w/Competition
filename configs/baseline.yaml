@@ -1,0 +1,109 @@
+# =====================================================================
+# B1 传统人工规则调度基线配置
+# - 所有阈值外部化, 代码不硬编码
+# - source 标记: real | inferred | engineering | simulation | pending
+#   pending/engineering/simulation 表示未取得依据的假设, 触发 validation_mode=simulation
+# - 未冻结参数不得视为真实工业控制安全范围 (任务书 V1.1 §2.3, §5)
+# =====================================================================
+
+version: "b1.0"
+
+meta:
+  policy_version: "baseline-rule-v0.1"
+  description: "传统人工规则调度基线: 运行机组优先保持 + 压力迟滞 + 固定启停优先级"
+  note: "所有 engineering/simulation/pending 参数为工程/仿真假设, 未冻结前不得用于真实设备控制"
+
+# ---- 时间口径 (CAL-01 待确认) ----
+time:
+  local_timezone: "Asia/Shanghai"     # 历史无时区时间按此解释; 不得静默混用 UTC
+  sample_minutes: 1
+  max_forecast_age_minutes: 15        # 预测过期阈值 (B11)
+
+# ---- 供气需求 (CAL-02 待确认) ----
+demand:
+  basis: "upper_bound"                # predicted_flow | lower_bound | upper_bound
+  horizon_minutes: 60                 # 使用指定预测时域
+  hold_when_forecast_missing: true    # 预测缺失时守恒保持, 不新增启停
+  source: pending
+
+# ---- 备用容量 (CAL-03 待确认) ----
+reserve:
+  mode: "extra"                       # extra | n_minus_one | none
+  value: 0.05
+  unit: "percent"                     # percent | m3_min
+  source: pending
+
+# ---- 压力 (CAL-05 待确认示例) ----
+pressure:
+  band_mpa: [0.55, 0.66]              # 待确认示例, 非厂家确认安全范围
+  setpoint_mpa: 0.60
+  hard_lo_mpa: 0.50                   # 安全下限, 立即响应 (AS-06)
+  confirm_minutes: 3                  # 连续确认去抖
+  hysteresis_mpa: 0.02
+  source: pending
+
+# ---- 容量 (额定与实测超额分开; AS-17/AS-18) ----
+capacity:
+  rated_capacity_m3min: 268.9         # 铭牌 (real)
+  validated_operating_max_m3min: 268.9  # 优化/计划允许的持续上限 (保守, 不主动超额)
+  validated_min_m3min: 120.0          # 最低稳定流量工程假设 (AS-02)
+  observed_max_m3min: 299.7           # 历史实测瞬时最大, 仅参考, 不作为持续安全容量
+  source_flags:
+    rated: real
+    validated_operating_max: engineering
+    validated_min: engineering
+
+# ---- 启停优先级 (inferred, 依据运行占比与 IGV 调节行为) ----
+priority:
+  start_priority: ["5#", "4#"]        # 5# 调节机, 4# 基载
+  stop_priority: ["4#", "5#"]
+  load_allocation:
+    base_device: "4#"
+    trim_device: "5#"
+  source: inferred
+
+# ---- 启停限制 (CAL-06 / AS-22~24, 工程假设) ----
+switching:
+  min_run_minutes: 15
+  min_stop_minutes: 15
+  max_switches_per_hour: 2
+  source: engineering
+
+# ---- 健康限载 (CAL-06 / AS-19, 待确认) ----
+health:
+  mode: "observe"                     # observe=仅记录建议不改容量 | derate=按系数限载
+  status: "pending"
+  derate_map:                         # 未冻结前全部 1.0, 不执行硬降容
+    normal: 1.0
+    attention: 1.0
+    warning: 1.0
+    critical: 1.0
+  critical_action: "recommend_stop_no_auto"   # 严重仅建议停机, 不自动停机
+  source: pending
+
+# ---- 功率估算 (B1 无性能模型, 默认关闭; B2 再接入) ----
+power_estimate:
+  mode: "none"                        # none | constant
+  constant_specific_power_kw_per_m3min: 5.30   # simulation 占位
+  source: simulation
+
+# ---- 加载率口径 (CAL-04 未冻结, 仅输出实际值) ----
+load_ratio:
+  target: null
+  tolerance: null
+  source: pending
+
+# ---- 物理约束 (real) ----
+constraints:
+  rated_power_kw: 1250.0
+  source_flags:
+    rated_power_kw: real
+
+# ---- 评估口径 (B5 复用) ----
+evaluation:
+  metrics: [energy_kwh, volume_m3, sec_kwh_per_m3, pressure_compliance_rate,
+            overload_rate, switch_count, supply_shortfall_m3, running_share]
+  exclude:
+    zero_pressure: true               # 剔除站级压力为 0 的掉点
+    running_zero_flow: true           # 剔除运行但流量为 0
+    short_segment_minutes: 5          # 启停统计剔除 <5min 遥测毛刺段

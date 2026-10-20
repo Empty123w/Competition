@@ -1,0 +1,91 @@
+{
+  "definition": {
+    "D1": "相对额定 λ*=1.0 ±10% (单机统计)",
+    "D2": "相对效率平台下界 λ*(4#=0.8537,5#=0.9381) ±10%",
+    "D3": "机组间 |λ4-λ5|<=0.10 (pp)",
+    "official_status": "官方未给数学定义 (待确认)"
+  },
+  "segments": {
+    "dev": {
+      "paired_steps": 7600,
+      "b1_rule": {
+        "D1_meet_ratio": 0.2749,
+        "D2_meet_ratio": 0.0796,
+        "D3_within10pp_ratio": 0.2828,
+        "D3_spread_mean": 0.1938
+      },
+      "b3_b4": {
+        "D1_meet_ratio": 0.3564,
+        "D2_meet_ratio": 0.5364,
+        "D3_within10pp_ratio": 0.1121,
+        "D3_spread_mean": 0.2355
+      },
+      "bal": {
+        "D1_meet_ratio": 0.3606,
+        "D2_meet_ratio": 0.5357,
+        "D3_within10pp_ratio": 0.2974,
+        "D3_spread_mean": 0.204
+      },
+      "lrb_t10": {
+        "D1_meet_ratio": 0.2543,
+        "D2_meet_ratio": 0.4709,
+        "D3_within10pp_ratio": 0.9974,
+        "D3_spread_mean": 0.0874
+      }
+    },
+    "valid": {
+      "paired_steps": 1914,
+      "b1_rule": {
+        "D1_meet_ratio": 0.4815,
+        "D2_meet_ratio": 0.034,
+        "D3_within10pp_ratio": 0.0204,
+        "D3_spread_mean": 0.2793
+      },
+      "b3_b4": {
+        "D1_meet_ratio": 0.4836,
+        "D2_meet_ratio": 0.7591,
+        "D3_within10pp_ratio": 0.0137,
+        "D3_spread_mean": 0.2811
+      },
+      "bal": {
+        "D1_meet_ratio": 0.4826,
+        "D2_meet_ratio": 0.7685,
+        "D3_within10pp_ratio": 0.02,
+        "D3_spread_mean": 0.2647
+      },
+      "lrb_t10": {
+        "D1_meet_ratio": 0.2999,
+        "D2_meet_ratio": 0.6537,
+        "D3_within10pp_ratio": 0.9989,
+        "D3_spread_mean": 0.0849
+      }
+    },
+    "test": {
+      "paired_steps": 2063,
+      "b1_rule": {
+        "D1_meet_ratio": 0.4898,
+        "D2_meet_ratio": 0.1655,
+        "D3_within10pp_ratio": 0.017,
+        "D3_spread_mean": 0.197
+      },
+      "b3_b4": {
+        "D1_meet_ratio": 0.4968,
+        "D2_meet_ratio": 0.8306,
+        "D3_within10pp_ratio": 0.0005,
+        "D3_spread_mean": 0.2003
+      },
+      "bal": {
+        "D1_meet_ratio": 0.5005,
+        "D2_meet_ratio": 0.8649,
+        "D3_within10pp_ratio": 0.0429,
+        "D3_spread_mean": 0.1847
+      },
+      "lrb_t10": {
+        "D1_meet_ratio": 0.4819,
+        "D2_meet_ratio": 0.9878,
+        "D3_within10pp_ratio": 0.999,
+        "D3_spread_mean": 0.0842
+      }
+    }
+  }
+}

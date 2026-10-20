@@ -1,0 +1,60 @@
+{
+  "tag": "default_extra5pct_upper",
+  "n_steps": 6325,
+  "step_minutes": 5,
+  "b1_feasible": 4735,
+  "b3_feasible": 4735,
+  "common": 4735,
+  "b1_only": 0,
+  "b3_only": 0,
+  "required_m3": 11407722.7,
+  "b1_supply_m3": 11422957.3,
+  "b3_supply_m3": 11411910.8,
+  "obs_supply_m3": 10972009.4,
+  "b1_shortfall_m3": 28.84,
+  "b3_shortfall_m3": 28.95,
+  "b1_energy_kwh": 1024288.2,
+  "b3_energy_kwh": 986159.6,
+  "obs_energy_kwh": 1000207.3,
+  "b1_sec": 0.08967,
+  "b3_sec": 0.08641,
+  "obs_sec": 0.09116,
+  "energy_reduction_pct": 3.722,
+  "sec_reduction_pct": 3.629,
+  "obs_pressure_mean": 0.6124,
+  "obs_pressure_std": 0.0395,
+  "obs_pressure_compliance": 0.9153,
+  "b1_single_share": 0.0087,
+  "b3_single_share": 0.0135,
+  "b3_blocked_share": 0.0049,
+  "by_level": {
+    "high": {
+      "n": 1578,
+      "required_mean": 503.0,
+      "b1_energy_kwh": 346224.8,
+      "b3_energy_kwh": 337667.2,
+      "reduction_pct": 2.472,
+      "b1_single_share": 0.0,
+      "b3_single_share": 0.0
+    },
+    "low": {
+      "n": 1579,
+      "required_mean": 452.5,
+      "b1_energy_kwh": 333869.6,
+      "b3_energy_kwh": 316022.2,
+      "reduction_pct": 5.346,
+      "b1_single_share": 0.026,
+      "b3_single_share": 0.041
+    },
+    "mid": {
+      "n": 1578,
+      "required_mean": 490.1,
+      "b1_energy_kwh": 344193.8,
+      "b3_energy_kwh": 332470.2,
+      "reduction_pct": 3.406,
+      "b1_single_share": 0.0,
+      "b3_single_share": 0.0
+    }
+  },
+  "runtime_s": 594.0
+}

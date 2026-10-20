@@ -1,0 +1,154 @@
+{
+  "block": {
+    "start": "2026-04-20 00:00:00",
+    "n": 480,
+    "fair_steps": 475
+  },
+  "per_strategy": {
+    "b1_rule": {
+      "exec_steps": 475,
+      "energy_kwh": 254918.53,
+      "supply_m3": 1958669.2,
+      "shortfall_vs_actual_m3": 4744.35,
+      "sec": 0.130149,
+      "big_small_min": 7305.0,
+      "pressure_eval": {
+        "compliance": 0.9853,
+        "below_band_min": 45,
+        "above_band_min": 60,
+        "p_start": 0.6048,
+        "p_end": 0.6256
+      }
+    },
+    "b3_b4": {
+      "exec_steps": 475,
+      "energy_kwh": 244748.71,
+      "supply_m3": 1956213.9,
+      "shortfall_vs_actual_m3": 6562.95,
+      "sec": 0.125113,
+      "big_small_min": 6960.0,
+      "pressure_eval": {
+        "compliance": 0.9916,
+        "below_band_min": 45,
+        "above_band_min": 15,
+        "p_start": 0.6048,
+        "p_end": 0.6256
+      }
+    },
+    "uc_upper": {
+      "exec_steps": 475,
+      "energy_kwh": 244749.06,
+      "supply_m3": 1956213.8,
+      "shortfall_vs_actual_m3": 6562.94,
+      "sec": 0.125114,
+      "big_small_min": 6960.0,
+      "pressure_eval": {
+        "compliance": 0.9916,
+        "below_band_min": 45,
+        "above_band_min": 15,
+        "p_start": 0.6048,
+        "p_end": 0.6256
+      }
+    },
+    "cand": {
+      "exec_steps": 475,
+      "energy_kwh": 244749.06,
+      "supply_m3": 1956213.6,
+      "shortfall_vs_actual_m3": 6562.95,
+      "sec": 0.125114,
+      "big_small_min": 6960.0,
+      "pressure_eval": {
+        "compliance": 0.9916,
+        "below_band_min": 45,
+        "above_band_min": 15,
+        "p_start": 0.6048,
+        "p_end": 0.6256
+      }
+    },
+    "mpc": {
+      "exec_steps": 475,
+      "energy_kwh": 242568.36,
+      "supply_m3": 1847050.2,
+      "shortfall_vs_actual_m3": 13599.74,
+      "sec": 0.131327,
+      "big_small_min": 7905.0,
+      "pressure_eval": {
+        "compliance": 0.9895,
+        "below_band_min": 60,
+        "above_band_min": 15,
+        "p_start": 0.5936,
+        "p_end": 0.5996
+      }
+    }
+  },
+  "runtime_ms": {
+    "b1_rule": {
+      "p50": 7.61,
+      "p95": 10.91,
+      "max": 15.92
+    },
+    "b3_b4": {
+      "p50": 35.04,
+      "p95": 45.15,
+      "max": 135.77
+    },
+    "uc_upper": {
+      "p50": 10.2,
+      "p95": 16.66,
+      "max": 1636.14
+    },
+    "cand": {
+      "p50": 20.94,
+      "p95": 33.15,
+      "max": 735.14
+    },
+    "mpc": {
+      "p50": 8.17,
+      "p95": 13.79,
+      "max": 210.92
+    }
+  },
+  "fallback_steps": {
+    "b1_rule": 5,
+    "b3_b4": 5,
+    "uc_upper": 5,
+    "cand": 5,
+    "mpc": 5
+  },
+  "fair_energy_kwh": {
+    "b1_rule": 254918.53,
+    "b3_b4": 244748.71,
+    "uc_upper": 244749.06,
+    "cand": 244749.06,
+    "mpc": 242568.36
+  },
+  "fair_saving_vs_b1_pct": {
+    "b1_rule": 0.0,
+    "b3_b4": 3.9894,
+    "uc_upper": 3.9893,
+    "cand": 3.9893,
+    "mpc": 4.8448
+  },
+  "fair_big_small_min": {
+    "b1_rule": 7305.0,
+    "b3_b4": 6960.0,
+    "uc_upper": 6960.0,
+    "cand": 6960.0,
+    "mpc": 7905.0
+  },
+  "fair_big_small_reduction_vs_b1_pct": {
+    "b1_rule": 0.0,
+    "b3_b4": 4.7228,
+    "uc_upper": 4.7228,
+    "cand": 4.7228,
+    "mpc": -8.2136
+  },
+  "fair_shortfall_m3": {
+    "b1_rule": 4744.35,
+    "b3_b4": 6562.95,
+    "uc_upper": 6562.94,
+    "cand": 6562.95,
+    "mpc": 13599.74
+  },
+  "runtime_s": 61.7
+}

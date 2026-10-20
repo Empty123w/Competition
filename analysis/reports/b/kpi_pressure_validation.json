@@ -1,0 +1,67 @@
+{
+  "band_mpa": [
+    0.55,
+    0.66
+  ],
+  "band_source": "simulation assumption (CAL-05 pending)",
+  "note": "历史为 SCADA 实测母管压力; 仿真压力为模型反事实, 上界钳制会引起超带伪影",
+  "dev": {
+    "n_all_min": 211681,
+    "all": {
+      "mean": 0.5608,
+      "min": 0.0,
+      "max": 0.69,
+      "compliance_pct": 66.324,
+      "below_band_pct": 33.54,
+      "above_band_pct": 0.136
+    },
+    "station_running": {
+      "n": 207042,
+      "mean": 0.562,
+      "min": 0.0,
+      "max": 0.69,
+      "compliance_pct": 66.56
+    },
+    "nonzero": {
+      "n": 211186,
+      "mean": 0.5621,
+      "compliance_pct": 66.48
+    }
+  },
+  "valid": {
+    "n_all_min": 30241,
+    "all": {
+      "mean": 0.599,
+      "min": 0.0,
+      "max": 0.71,
+      "compliance_pct": 80.348,
+      "below_band_pct": 18.604,
+      "above_band_pct": 1.048
+    },
+    "station_running": {
+      "n": 29920,
+      "mean": 0.5997,
+      "min": 0.0,
+      "max": 0.71,
+      "compliance_pct": 80.575
+    },
+    "nonzero": {
+      "n": 30233,
+      "mean": 0.5992,
+      "compliance_pct": 80.369
+    }
+  },
+  "simulation": {
+    "clamp": [
+      0.4,
+      0.75
+    ],
+    "p0": 0.6,
+    "band": [
+      0.55,
+      0.66
+    ],
+    "source_file": "pressure_sim_dynamics_v2.json",
+    "note": "过供 push 压力至上钳制 0.75 (>0.66) 产生超带伪影; 非真实越限"
+  }
+}

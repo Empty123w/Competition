@@ -1,0 +1,68 @@
+{
+  "protocol": {
+    "valid_window": "2026-08-01~2026-08-20",
+    "step_minutes": 15,
+    "task": "observed station total_flow (nowcast, 仅实验)",
+    "reserve": "frozen extra 5%",
+    "uses_B5_final_window": false,
+    "evidence_scope": "开发/验证窗口 + 临时过去信息预测; 非 A 冻结口径, 非达标证据"
+  },
+  "e1_model": {
+    "4#": {
+      "base_valid": {
+        "MAE": 13.191,
+        "RMSE": 16.638,
+        "MAPE": 1.048,
+        "n": 28620
+      },
+      "piecewise_valid": {
+        "MAE": 21.968,
+        "RMSE": 26.813,
+        "MAPE": 1.752,
+        "n": 28620
+      }
+    },
+    "5#": {
+      "base_valid": {
+        "MAE": 11.358,
+        "RMSE": 16.715,
+        "MAPE": 1.003,
+        "n": 27910
+      },
+      "piecewise_valid": {
+        "MAE": 37.293,
+        "RMSE": 43.301,
+        "MAPE": 3.065,
+        "n": 27910
+      }
+    }
+  },
+  "energy_by_plan": {
+    "b3_energy": {
+      "n": 1919,
+      "energy_kwh": 1126392.17
+    },
+    "e1_energy": {
+      "n": 1919,
+      "energy_kwh": 1126254.25
+    },
+    "myopic_energy": {
+      "n": 1918,
+      "energy_kwh": 1120973.01
+    },
+    "rolling_energy": {
+      "n": 1918,
+      "energy_kwh": 1125079.03
+    },
+    "oracle_energy": {
+      "n": 1919,
+      "energy_kwh": 1130360.27
+    }
+  },
+  "n_steps": 1919,
+  "runtime_s": 208.6,
+  "e1_vs_b3_pct": 0.0122,
+  "rolling_vs_myopic_pct": -0.3663,
+  "rolling_changed_combo_steps": 18,
+  "oracle_vs_myopic_pct": -0.7864
+}

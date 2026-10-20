@@ -1,0 +1,72 @@
+{
+  "protocol": {
+    "window": "2026-08-01~2026-08-20",
+    "step_minutes": 15,
+    "horizon_steps": 4,
+    "grid_res": 0.02,
+    "w_low_list": [
+      0.0,
+      0.5,
+      2.0
+    ],
+    "switch_penalty": 2.0,
+    "reserve": "frozen extra 5%",
+    "uses_B5_final_window": false,
+    "evidence_scope": "开发/验证窗口 + 仅过去信息预测; 新算法独立版本, 非达标证据"
+  },
+  "per_planner": {
+    "b1_rule": {
+      "evaluable_steps": 1919,
+      "energy_kwh": 1216726.88,
+      "supply_m3": 12402896.1,
+      "sec": 0.0981,
+      "shortfall_vs_observed_m3": 377408.09,
+      "low_load_minutes": 10260
+    },
+    "v2_w0.0": {
+      "evaluable_steps": 1919,
+      "energy_kwh": 1122786.87,
+      "supply_m3": 12386792.4,
+      "sec": 0.090644,
+      "shortfall_vs_observed_m3": 393509.39,
+      "low_load_minutes": 8505
+    },
+    "v2_w0.5": {
+      "evaluable_steps": 1919,
+      "energy_kwh": 1122786.87,
+      "supply_m3": 12386792.4,
+      "sec": 0.090644,
+      "shortfall_vs_observed_m3": 393509.39,
+      "low_load_minutes": 8505
+    },
+    "v2_w2.0": {
+      "evaluable_steps": 1919,
+      "energy_kwh": 1122903.47,
+      "supply_m3": 12386792.6,
+      "sec": 0.090653,
+      "shortfall_vs_observed_m3": 393508.79,
+      "low_load_minutes": 7320
+    }
+  },
+  "fair_steps": 1919,
+  "fair_energy_kwh": {
+    "b1_rule": 1216726.88,
+    "v2_w0.0": 1122786.87,
+    "v2_w0.5": 1122786.87,
+    "v2_w2.0": 1122903.47
+  },
+  "fair_low_load_minutes": {
+    "b1_rule": 10260,
+    "v2_w0.0": 8505,
+    "v2_w0.5": 8505,
+    "v2_w2.0": 7320
+  },
+  "v2_w0.0_energy_saving_vs_b1_pct": 7.7207,
+  "v2_w0.0_low_load_reduction_vs_b1_pct": 17.1053,
+  "v2_w0.5_energy_saving_vs_b1_pct": 7.7207,
+  "v2_w0.5_low_load_reduction_vs_b1_pct": 17.1053,
+  "v2_w2.0_energy_saving_vs_b1_pct": 7.7111,
+  "v2_w2.0_low_load_reduction_vs_b1_pct": 28.655,
+  "n_steps": 1920,
+  "runtime_s": 211.7
+}

@@ -1,0 +1,339 @@
+{
+  "definitions": {
+    "D1_vs_rated": {
+      "target": {
+        "4#": 1.0,
+        "5#": 1.0
+      },
+      "basis": "工程假设 (赛题未注明确目标)"
+    },
+    "D2_vs_best_eff": {
+      "target": {
+        "4#": 0.9985,
+        "5#": 0.9985
+      },
+      "basis": "B2 功率模型 argmin SEC",
+      "detail": {
+        "4#": {
+          "lambda_star": 0.9985,
+          "sec_min_kwh_per_m3": 5.123538,
+          "sec_monotone_decreasing": null
+        },
+        "5#": {
+          "lambda_star": 0.9985,
+          "sec_min_kwh_per_m3": 4.831546,
+          "sec_monotone_decreasing": null
+        }
+      }
+    },
+    "D3_inter_machine_spread": {
+      "target": 0.0,
+      "unit": "pp",
+      "basis": "机组间均衡性; 目标 0 为工程解释"
+    },
+    "tolerance_pct": 10.0,
+    "official_status": "三项均未经甲方确认 (任务书 §2.3-4)"
+  },
+  "feasibility": {
+    "D1": {
+      "feasible_ratio_over_0_2R": 0.0833,
+      "feasible_ranges": [
+        [
+          245.0,
+          255.0
+        ],
+        [
+          485.0,
+          510.0
+        ]
+      ]
+    },
+    "D2": {
+      "feasible_ratio_over_0_2R": 0.0833,
+      "feasible_ranges": [
+        [
+          245.0,
+          255.0
+        ],
+        [
+          485.0,
+          510.0
+        ]
+      ]
+    }
+  },
+  "dev": {
+    "b1_rule": {
+      "D1": {
+        "4#": {
+          "n": 7600,
+          "lambda_mean": 0.7873,
+          "dev_mean_pct": -21.273,
+          "dev_absmax_pct": 55.374,
+          "exceed_ratio": 0.4501,
+          "meet_ratio": 0.5499
+        },
+        "5#": {
+          "n": 7600,
+          "lambda_mean": 0.5934,
+          "dev_mean_pct": -40.656,
+          "dev_absmax_pct": 55.374,
+          "exceed_ratio": 1.0,
+          "meet_ratio": 0.0
+        }
+      },
+      "D2": {
+        "4#": {
+          "n": 7600,
+          "lambda_mean": 0.7873,
+          "dev_mean_pct": -21.154,
+          "dev_absmax_pct": 55.307,
+          "exceed_ratio": 0.4501,
+          "meet_ratio": 0.5499
+        },
+        "5#": {
+          "n": 7600,
+          "lambda_mean": 0.5934,
+          "dev_mean_pct": -40.567,
+          "dev_absmax_pct": 55.307,
+          "exceed_ratio": 0.9997,
+          "meet_ratio": 0.0003
+        }
+      },
+      "D3": {
+        "n_double": 7600,
+        "spread_mean": 0.1938,
+        "spread_p95": 0.4855,
+        "spread_max": 0.5536,
+        "within_10pp_ratio": 0.2828
+      }
+    },
+    "b3_b4": {
+      "D1": {
+        "4#": {
+          "n": 6822,
+          "lambda_mean": 0.6324,
+          "dev_mean_pct": -36.759,
+          "dev_absmax_pct": 55.374,
+          "exceed_ratio": 0.9842,
+          "meet_ratio": 0.0158
+        },
+        "5#": {
+          "n": 6917,
+          "lambda_mean": 0.87,
+          "dev_mean_pct": -12.997,
+          "dev_absmax_pct": 49.383,
+          "exceed_ratio": 0.3078,
+          "meet_ratio": 0.6922
+        }
+      },
+      "D2": {
+        "4#": {
+          "n": 6822,
+          "lambda_mean": 0.6324,
+          "dev_mean_pct": -36.664,
+          "dev_absmax_pct": 55.307,
+          "exceed_ratio": 0.983,
+          "meet_ratio": 0.017
+        },
+        "5#": {
+          "n": 6917,
+          "lambda_mean": 0.87,
+          "dev_mean_pct": -12.866,
+          "dev_absmax_pct": 49.307,
+          "exceed_ratio": 0.3072,
+          "meet_ratio": 0.6928
+        }
+      },
+      "D3": {
+        "n_double": 6139,
+        "spread_mean": 0.2355,
+        "spread_p95": 0.4956,
+        "spread_max": 0.5536,
+        "within_10pp_ratio": 0.1121
+      }
+    },
+    "bal": {
+      "D1": {
+        "4#": {
+          "n": 6478,
+          "lambda_mean": 0.6346,
+          "dev_mean_pct": -36.542,
+          "dev_absmax_pct": 55.374,
+          "exceed_ratio": 0.9796,
+          "meet_ratio": 0.0204
+        },
+        "5#": {
+          "n": 7261,
+          "lambda_mean": 0.8568,
+          "dev_mean_pct": -14.323,
+          "dev_absmax_pct": 50.0,
+          "exceed_ratio": 0.3358,
+          "meet_ratio": 0.6642
+        }
+      },
+      "D2": {
+        "4#": {
+          "n": 6478,
+          "lambda_mean": 0.6346,
+          "dev_mean_pct": -36.447,
+          "dev_absmax_pct": 55.307,
+          "exceed_ratio": 0.9755,
+          "meet_ratio": 0.0245
+        },
+        "5#": {
+          "n": 7261,
+          "lambda_mean": 0.8568,
+          "dev_mean_pct": -14.194,
+          "dev_absmax_pct": 49.925,
+          "exceed_ratio": 0.3341,
+          "meet_ratio": 0.6659
+        }
+      },
+      "D3": {
+        "n_double": 6139,
+        "spread_mean": 0.204,
+        "spread_p95": 0.4661,
+        "spread_max": 0.4996,
+        "within_10pp_ratio": 0.2973
+      }
+    }
+  },
+  "valid": {
+    "b1_rule": {
+      "D1": {
+        "4#": {
+          "n": 1914,
+          "lambda_mean": 0.9847,
+          "dev_mean_pct": -1.531,
+          "dev_absmax_pct": 55.374,
+          "exceed_ratio": 0.0371,
+          "meet_ratio": 0.9629
+        },
+        "5#": {
+          "n": 1914,
+          "lambda_mean": 0.7054,
+          "dev_mean_pct": -29.46,
+          "dev_absmax_pct": 55.374,
+          "exceed_ratio": 1.0,
+          "meet_ratio": 0.0
+        }
+      },
+      "D2": {
+        "4#": {
+          "n": 1914,
+          "lambda_mean": 0.9847,
+          "dev_mean_pct": -1.383,
+          "dev_absmax_pct": 55.307,
+          "exceed_ratio": 0.0371,
+          "meet_ratio": 0.9629
+        },
+        "5#": {
+          "n": 1914,
+          "lambda_mean": 0.7054,
+          "dev_mean_pct": -29.354,
+          "dev_absmax_pct": 55.307,
+          "exceed_ratio": 1.0,
+          "meet_ratio": 0.0
+        }
+      },
+      "D3": {
+        "n_double": 1914,
+        "spread_mean": 0.2793,
+        "spread_p95": 0.4944,
+        "spread_max": 0.5534,
+        "within_10pp_ratio": 0.0204
+      }
+    },
+    "b3_b4": {
+      "D1": {
+        "4#": {
+          "n": 1913,
+          "lambda_mean": 0.7066,
+          "dev_mean_pct": -29.336,
+          "dev_absmax_pct": 55.374,
+          "exceed_ratio": 0.9995,
+          "meet_ratio": 0.0005
+        },
+        "5#": {
+          "n": 1902,
+          "lambda_mean": 0.9883,
+          "dev_mean_pct": -1.171,
+          "dev_absmax_pct": 49.193,
+          "exceed_ratio": 0.0305,
+          "meet_ratio": 0.9695
+        }
+      },
+      "D2": {
+        "4#": {
+          "n": 1913,
+          "lambda_mean": 0.7066,
+          "dev_mean_pct": -29.23,
+          "dev_absmax_pct": 55.307,
+          "exceed_ratio": 0.9995,
+          "meet_ratio": 0.0005
+        },
+        "5#": {
+          "n": 1902,
+          "lambda_mean": 0.9883,
+          "dev_mean_pct": -1.022,
+          "dev_absmax_pct": 49.117,
+          "exceed_ratio": 0.0305,
+          "meet_ratio": 0.9695
+        }
+      },
+      "D3": {
+        "n_double": 1901,
+        "spread_mean": 0.2811,
+        "spread_p95": 0.4945,
+        "spread_max": 0.5534,
+        "within_10pp_ratio": 0.0137
+      }
+    },
+    "bal": {
+      "D1": {
+        "4#": {
+          "n": 1911,
+          "lambda_mean": 0.7146,
+          "dev_mean_pct": -28.536,
+          "dev_absmax_pct": 55.374,
+          "exceed_ratio": 1.0,
+          "meet_ratio": 0.0
+        },
+        "5#": {
+          "n": 1904,
+          "lambda_mean": 0.9799,
+          "dev_mean_pct": -2.007,
+          "dev_absmax_pct": 49.643,
+          "exceed_ratio": 0.0331,
+          "meet_ratio": 0.9669
+        }
+      },
+      "D2": {
+        "4#": {
+          "n": 1911,
+          "lambda_mean": 0.7146,
+          "dev_mean_pct": -28.429,
+          "dev_absmax_pct": 55.307,
+          "exceed_ratio": 1.0,
+          "meet_ratio": 0.0
+        },
+        "5#": {
+          "n": 1904,
+          "lambda_mean": 0.9799,
+          "dev_mean_pct": -1.86,
+          "dev_absmax_pct": 49.568,
+          "exceed_ratio": 0.0331,
+          "meet_ratio": 0.9669
+        }
+      },
+      "D3": {
+        "n_double": 1901,
+        "spread_mean": 0.2647,
+        "spread_p95": 0.4784,
+        "spread_max": 0.4996,
+        "within_10pp_ratio": 0.02
+      }
+    }
+  }
+}

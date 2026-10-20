@@ -1,0 +1,173 @@
+{
+  "formula": "E=ΣP·Δt_h; V=ΣQ·Δt_min; SEC=E/V; 节电率=(E_b1-E_opt)/E_b1 (任务书 §268/274)",
+  "valid_window": [
+    "2026-08-01",
+    "2026-08-20 23:59:00"
+  ],
+  "n_steps": 1916,
+  "full_exec_steps": 1914,
+  "full_exec": {
+    "b1_rule": {
+      "energy_kwh": 1228354.22,
+      "supply_m3": 13047713.0,
+      "sec_kwh_per_m3": 0.094143,
+      "energy_saving_vs_b1_pct": 0.0,
+      "sec_reduction_vs_b1_pct": 0.0,
+      "supply_diff_vs_b1_m3": 0.0
+    },
+    "b3_b4": {
+      "energy_kwh": 1158109.52,
+      "supply_m3": 13034387.6,
+      "sec_kwh_per_m3": 0.08885,
+      "energy_saving_vs_b1_pct": 5.7186,
+      "sec_reduction_vs_b1_pct": 5.6223,
+      "supply_diff_vs_b1_m3": -13325.4
+    },
+    "myopic": {
+      "energy_kwh": 1158096.68,
+      "supply_m3": 13034389.6,
+      "sec_kwh_per_m3": 0.088849,
+      "energy_saving_vs_b1_pct": 5.7196,
+      "sec_reduction_vs_b1_pct": 5.6234,
+      "supply_diff_vs_b1_m3": -13323.4
+    },
+    "multi_step": {
+      "energy_kwh": 1158109.52,
+      "supply_m3": 13034389.6,
+      "sec_kwh_per_m3": 0.08885,
+      "energy_saving_vs_b1_pct": 5.7186,
+      "sec_reduction_vs_b1_pct": 5.6223,
+      "supply_diff_vs_b1_m3": -13323.4
+    },
+    "v2": {
+      "energy_kwh": 1159994.35,
+      "supply_m3": 13034388.3,
+      "sec_kwh_per_m3": 0.088995,
+      "energy_saving_vs_b1_pct": 5.5652,
+      "sec_reduction_vs_b1_pct": 5.4683,
+      "supply_diff_vs_b1_m3": -13324.7
+    },
+    "cand": {
+      "energy_kwh": 1160033.69,
+      "supply_m3": 13034388.6,
+      "sec_kwh_per_m3": 0.088998,
+      "energy_saving_vs_b1_pct": 5.562,
+      "sec_reduction_vs_b1_pct": 5.4651,
+      "supply_diff_vs_b1_m3": -13324.4
+    }
+  },
+  "common_steps": 1914,
+  "common": {
+    "b1_rule": {
+      "energy_kwh": 1228354.22,
+      "supply_m3": 13047713.0,
+      "sec_kwh_per_m3": 0.094143,
+      "energy_saving_vs_b1_pct": 0.0,
+      "sec_reduction_vs_b1_pct": 0.0,
+      "supply_diff_vs_b1_m3": 0.0
+    },
+    "b3_b4": {
+      "energy_kwh": 1158109.52,
+      "supply_m3": 13034387.6,
+      "sec_kwh_per_m3": 0.08885,
+      "energy_saving_vs_b1_pct": 5.7186,
+      "sec_reduction_vs_b1_pct": 5.6223,
+      "supply_diff_vs_b1_m3": -13325.4
+    },
+    "myopic": {
+      "energy_kwh": 1158096.68,
+      "supply_m3": 13034389.6,
+      "sec_kwh_per_m3": 0.088849,
+      "energy_saving_vs_b1_pct": 5.7196,
+      "sec_reduction_vs_b1_pct": 5.6234,
+      "supply_diff_vs_b1_m3": -13323.4
+    },
+    "multi_step": {
+      "energy_kwh": 1158109.52,
+      "supply_m3": 13034389.6,
+      "sec_kwh_per_m3": 0.08885,
+      "energy_saving_vs_b1_pct": 5.7186,
+      "sec_reduction_vs_b1_pct": 5.6223,
+      "supply_diff_vs_b1_m3": -13323.4
+    },
+    "v2": {
+      "energy_kwh": 1159994.35,
+      "supply_m3": 13034388.3,
+      "sec_kwh_per_m3": 0.088995,
+      "energy_saving_vs_b1_pct": 5.5652,
+      "sec_reduction_vs_b1_pct": 5.4683,
+      "supply_diff_vs_b1_m3": -13324.7
+    },
+    "cand": {
+      "energy_kwh": 1160033.69,
+      "supply_m3": 13034388.6,
+      "sec_kwh_per_m3": 0.088998,
+      "energy_saving_vs_b1_pct": 5.562,
+      "sec_reduction_vs_b1_pct": 5.4651,
+      "supply_diff_vs_b1_m3": -13324.4
+    }
+  },
+  "service_equiv_steps": 1857,
+  "service_equiv": {
+    "b1_rule": {
+      "energy_kwh": 1193945.71,
+      "supply_m3": 12729346.2,
+      "sec_kwh_per_m3": 0.093795,
+      "energy_saving_vs_b1_pct": 0.0,
+      "sec_reduction_vs_b1_pct": 0.0,
+      "supply_diff_vs_b1_m3": 0.0
+    },
+    "b3_b4": {
+      "energy_kwh": 1128775.65,
+      "supply_m3": 12726969.0,
+      "sec_kwh_per_m3": 0.088692,
+      "energy_saving_vs_b1_pct": 5.4584,
+      "sec_reduction_vs_b1_pct": 5.4406,
+      "supply_diff_vs_b1_m3": -2377.2
+    },
+    "myopic": {
+      "energy_kwh": 1128775.65,
+      "supply_m3": 12726970.9,
+      "sec_kwh_per_m3": 0.088692,
+      "energy_saving_vs_b1_pct": 5.4584,
+      "sec_reduction_vs_b1_pct": 5.4406,
+      "supply_diff_vs_b1_m3": -2375.3
+    },
+    "multi_step": {
+      "energy_kwh": 1128775.65,
+      "supply_m3": 12726970.9,
+      "sec_kwh_per_m3": 0.088692,
+      "energy_saving_vs_b1_pct": 5.4584,
+      "sec_reduction_vs_b1_pct": 5.4406,
+      "supply_diff_vs_b1_m3": -2375.3
+    },
+    "v2": {
+      "energy_kwh": 1130630.58,
+      "supply_m3": 12726969.6,
+      "sec_kwh_per_m3": 0.088837,
+      "energy_saving_vs_b1_pct": 5.303,
+      "sec_reduction_vs_b1_pct": 5.286,
+      "supply_diff_vs_b1_m3": -2376.6
+    },
+    "cand": {
+      "energy_kwh": 1130668.46,
+      "supply_m3": 12726969.9,
+      "sec_kwh_per_m3": 0.08884,
+      "energy_saving_vs_b1_pct": 5.2998,
+      "sec_reduction_vs_b1_pct": 5.2828,
+      "supply_diff_vs_b1_m3": -2376.3
+    }
+  },
+  "historical_scada": {
+    "n_minutes": 28784,
+    "energy_kwh": 1167666.73,
+    "supply_m3": 12477892.9,
+    "sec_kwh_per_m3": 0.093579
+  },
+  "historical_vs_b1_sim": {
+    "sec_obs": 0.093579,
+    "sec_b1_sim": 0.094143,
+    "note": "历史为真实运行(含人工调度/停机/扰动), 与仿真基线口径不同, 仅对照"
+  },
+  "what_was_5_46": "此前的 5.46% = 验证段**服务等价步**上 B3+B4 相对 B1 的**电量降幅**(各策略均满足实测需求的子集); 见 service_equiv.b3_b4.energy_saving_vs_b1_pct"
+}

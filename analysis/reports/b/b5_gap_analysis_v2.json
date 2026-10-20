@@ -1,0 +1,158 @@
+{
+  "meta": {
+    "sample_seconds": [
+      300
+    ],
+    "opt_power_model": "artifacts/models/power_model.json",
+    "step_minutes": 5,
+    "n_samples": 6325,
+    "runtime_s": 594.0,
+    "window": [
+      "2026-08-21 00:00:00",
+      "2026-09-11 23:00:00"
+    ]
+  },
+  "overall": {
+    "label": "all_steps",
+    "n": 6325,
+    "required_m3": 15535785.2,
+    "common": 4735,
+    "b1_supply_m3": 11422957.3,
+    "b3_supply_m3": 11411910.8,
+    "supply_diff_pct": 0.0967,
+    "b1_energy_kwh": 1024288.19,
+    "b3_energy_kwh": 986159.57,
+    "b1_sec": 0.089669,
+    "b3_sec": 0.086415,
+    "energy_reduction_pct": 3.7225,
+    "sec_reduction_pct": 3.6293,
+    "b1_shortfall_m3": 28.84,
+    "b3_shortfall_m3": 28.95
+  },
+  "common_feasible": {
+    "label": "common_feasible",
+    "n": 4735,
+    "required_m3": 11407722.7,
+    "common": 4735,
+    "b1_supply_m3": 11422957.3,
+    "b3_supply_m3": 11411910.8,
+    "supply_diff_pct": 0.0967,
+    "b1_energy_kwh": 1024288.19,
+    "b3_energy_kwh": 986159.57,
+    "b1_sec": 0.089669,
+    "b3_sec": 0.086415,
+    "energy_reduction_pct": 3.7225,
+    "sec_reduction_pct": 3.6293,
+    "b1_shortfall_m3": 28.84,
+    "b3_shortfall_m3": 28.95
+  },
+  "infeasible": {
+    "n": 1590,
+    "required_m3_not_evaluable": 4128062.5,
+    "note": "B1/B3 均返回 INFEASIBLE, 无供气动作, 任务量不可评估"
+  },
+  "b4_blocked": {
+    "n": 23,
+    "share_of_common_pct": 0.4857,
+    "required_m3_blocked": 25123.3
+  },
+  "retained_after_b4": {
+    "label": "retained_after_b4",
+    "n": 4712,
+    "required_m3": 11382599.4,
+    "common": 4712,
+    "b1_supply_m3": 11389289.5,
+    "b3_supply_m3": 11386355.0,
+    "supply_diff_pct": 0.0258,
+    "b1_energy_kwh": 1020141.76,
+    "b3_energy_kwh": 983597.64,
+    "b1_sec": 0.08957,
+    "b3_sec": 0.086384,
+    "energy_reduction_pct": 3.5823,
+    "sec_reduction_pct": 3.5574,
+    "b1_shortfall_m3": 28.775,
+    "b3_shortfall_m3": 28.79
+  },
+  "recompute_check": {
+    "energy_kwh_formula": "sum(power_kw)*step_minutes/60",
+    "volume_m3_formula": "sum(flow_m3min)*step_minutes",
+    "b1_energy_kwh": 1024288.19,
+    "b3_energy_kwh": 986159.57,
+    "b1_supply_m3": 11422957.3,
+    "b3_supply_m3": 11411910.8,
+    "b1_sec": 0.089669,
+    "b3_sec": 0.086415,
+    "energy_reduction_pct": 3.7225,
+    "sec_reduction_pct": 3.6293
+  },
+  "same_supply_tol_1": {
+    "label": "same_supply_tol_1m3min",
+    "n": 4712,
+    "required_m3": 11391783.5,
+    "common": 4712,
+    "b1_supply_m3": 11395357.3,
+    "b3_supply_m3": 11395357.3,
+    "supply_diff_pct": 0.0,
+    "b1_energy_kwh": 1020378.83,
+    "b3_energy_kwh": 984254.88,
+    "b1_sec": 0.089543,
+    "b3_sec": 0.086373,
+    "energy_reduction_pct": 3.5402,
+    "sec_reduction_pct": 3.5402,
+    "b1_shortfall_m3": 28.84,
+    "b3_shortfall_m3": 28.84
+  },
+  "same_supply_tol_5": {
+    "label": "same_supply_tol_5m3min",
+    "n": 4712,
+    "required_m3": 11391783.5,
+    "common": 4712,
+    "b1_supply_m3": 11395357.3,
+    "b3_supply_m3": 11395357.3,
+    "supply_diff_pct": 0.0,
+    "b1_energy_kwh": 1020378.83,
+    "b3_energy_kwh": 984254.88,
+    "b1_sec": 0.089543,
+    "b3_sec": 0.086373,
+    "energy_reduction_pct": 3.5402,
+    "sec_reduction_pct": 3.5402,
+    "b1_shortfall_m3": 28.84,
+    "b3_shortfall_m3": 28.84
+  },
+  "demand_classes_common": {
+    "thresholds": {
+      "single_with_extra": 256.095,
+      "single_rated": 268.9
+    },
+    "D1_req_le_256_095": {
+      "n": 64,
+      "share_pct": 1.352,
+      "b3_single_share": 1.0
+    },
+    "D2_256_095_lt_req_le_268_9": {
+      "n": 6,
+      "share_pct": 0.127,
+      "b3_single_share": 0.0,
+      "note": "需求在单机额定内, 仅因 5% 备用无法单机"
+    },
+    "D3_req_gt_268_9": {
+      "n": 4665,
+      "share_pct": 98.522,
+      "b3_single_share": 0.0,
+      "note": "需求超单机额定, 结构性必须双机"
+    }
+  },
+  "lock_effect": {
+    "stateful_replay": false,
+    "note": "回测逐步独立调用, 未跨步传递 PolicyState, 最小运行/停机与最大切换锁定未生效",
+    "b3_lock_rc_count": 0,
+    "b1_lock_rc_count": 0
+  },
+  "observed_reference": {
+    "n": 4735,
+    "obs_supply_m3": 10972009.4,
+    "obs_energy_kwh": 1000207.31,
+    "obs_sec": 0.09116,
+    "note": "历史实测为不同供气任务, 不作为公平现场节能成绩; 压力为初始观测"
+  }
+}

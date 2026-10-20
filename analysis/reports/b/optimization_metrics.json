@@ -1,0 +1,43 @@
+{
+  "validation_mode": "simulation",
+  "basis": "model_estimate",
+  "day": "2026-09-01",
+  "time_range": [
+    "2026-09-01 00:00:00",
+    "2026-09-01 23:59:00"
+  ],
+  "n_steps": 1440,
+  "step_minutes": 1.0,
+  "power_unit": "kW",
+  "energy_unit": "kWh",
+  "common_feasible_steps": 983,
+  "b1_only_feasible": 0,
+  "b3_only_feasible": 0,
+  "b1_feasible": 983,
+  "b3_feasible": 983,
+  "horizon_hours_common": 16.383,
+  "b1_energy_kwh": 42931.56,
+  "b3_energy_kwh": 41547.51,
+  "b1_avg_power_kw": 2620.44,
+  "b3_avg_power_kw": 2535.96,
+  "energy_reduction_pct": 3.224,
+  "switches": {
+    "b1": 0,
+    "b3": 0
+  },
+  "power_over_cap_count": 0,
+  "reason_codes": {
+    "INFEASIBLE_CAPACITY": 457,
+    "PRESSURE_COUNTERFACTUAL_UNSUPPORTED": 983,
+    "SURGE_NOT_ASSESSED_B4": 983
+  },
+  "combo_histogram": {
+    "('4#', '5#')": 983
+  },
+  "elapsed_seconds": {
+    "min": 0.0131,
+    "median": 0.0256,
+    "max": 0.0722
+  },
+  "note": "同工况(相同需求/备用/压力/约束/预测)模型估计; 仅为仿真, 非现场实测节能"
+}

@@ -1,0 +1,37 @@
+# Pressure-Aware MPC 配置 (新增; 不修改冻结 B1-B4)
+# 压力动态为**独立仿真假设** (无厂家管网参数); 合格带仍为 CAL-05 待确认示例。
+
+version: "b-mpc-v0.1"
+validation_mode: "simulation"
+
+pressure:
+  band_mpa: [0.55, 0.66]          # 不变 (CAL-05 待确认示例)
+  setpoint_mpa: 0.60
+  # 独立"供气-耗气-储气-延迟"一阶模型 (simulation 假设, 与 pressure_sim_dynamics_v2 一致)
+  dynamics:
+    K_VOL_m3_per_mpa: 23700.0
+    leak_per_min: 0.001
+    p_env_mpa: 0.55
+    p_min_clip_mpa: 0.40
+    p_max_clip_mpa: 0.75
+    p_setpoint_mpa: 0.60
+    source: "simulation_assumed"
+
+mpc:
+  horizon_steps: 4
+  step_minutes: 15
+  demand_basis: "pred"            # 期望需求(供气下限); 允许过供至 upper_bound 抬压力
+  supply_levels: ["pred", "upper"]  # 每步候选供气水平
+  terminal_pressure_non_decreasing: true
+  allowed_p_end_drop_mpa: 0.005   # 终止压力不得比初值低超过此值 (防消耗储气冒充节能)
+  weights:
+    energy_kwh: 1.0
+    low_load_step: 1.0
+    switch_event: 2.0
+    pressure_violation: 5000.0     # 压力越界软罚 (/MPa/步)
+    shortfall_m3min: 1.0e6
+  ramp:
+    # m3/min per 15-min step (数据驱动 p99 x STEP); engineering 假设
+    "4#": 77.0
+    "5#": 287.0
+  timeout_seconds: 60.0

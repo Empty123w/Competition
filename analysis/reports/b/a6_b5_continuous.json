@@ -1,0 +1,624 @@
+{
+  "protocol": {
+    "windows": {
+      "dev": [
+        "2026-03-26",
+        "2026-07-31 23:45:00"
+      ],
+      "valid": [
+        "2026-08-01",
+        "2026-08-20 23:40:00"
+      ]
+    },
+    "step_minutes": 15,
+    "horizon_steps": 4,
+    "demand_basis": "upper_bound (CAL-02 frozen)",
+    "reserve": "extra 5%",
+    "planner_horizon_demand": "['ub15','ub30','ub45->ub30 (hold_previous)','ub60']",
+    "point_vs_interval": "A6 瞬时点作为该步供气计划工程近似; 非区间平均",
+    "state": "各策略独立继承开停/锁定/切换 (同一初态/约束/B4)",
+    "truth": "A6 scoring actual 仅事后评估; 不进入决策",
+    "rul_penalty": "主对照不启用; 健康/RUL 另作附加实验",
+    "uses_B5_final_window": false,
+    "evidence": "开发/验证窗口; 验证段重复使用, 非独立最终测试"
+  },
+  "dev": {
+    "protocol_window": "dev",
+    "n_steps": 12284,
+    "a6_quality_vs_actual": {
+      "15min": {
+        "n": 12284,
+        "MAE_vs_actual": 9.6823,
+        "MAPE_floor1": 38.025,
+        "WAPE": 2.359,
+        "coverage_90": 0.4779,
+        "underestimate_rate": 0.2437
+      },
+      "30min": {
+        "n": 12284,
+        "MAE_vs_actual": 9.1766,
+        "MAPE_floor1": 37.13,
+        "WAPE": 2.236,
+        "coverage_90": 0.4816,
+        "underestimate_rate": 0.2444
+      },
+      "60min": {
+        "n": 12284,
+        "MAE_vs_actual": 8.9168,
+        "MAPE_floor1": 38.278,
+        "WAPE": 2.172,
+        "coverage_90": 0.4705,
+        "underestimate_rate": 0.2377
+      }
+    },
+    "interval_violation_vs_shortfall": {
+      "b1_rule": {
+        "viol_and_shortfall": 2882,
+        "viol_no_shortfall": 112,
+        "shortfall_no_viol": 3144
+      },
+      "b3_b4": {
+        "viol_and_shortfall": 2989,
+        "viol_no_shortfall": 5,
+        "shortfall_no_viol": 3144
+      },
+      "myopic": {
+        "viol_and_shortfall": 2990,
+        "viol_no_shortfall": 4,
+        "shortfall_no_viol": 3145
+      },
+      "multi_step": {
+        "viol_and_shortfall": 2990,
+        "viol_no_shortfall": 4,
+        "shortfall_no_viol": 3169
+      },
+      "v2": {
+        "viol_and_shortfall": 2989,
+        "viol_no_shortfall": 5,
+        "shortfall_no_viol": 3170
+      }
+    },
+    "per_strategy": {
+      "b1_rule": {
+        "success_steps": 8478,
+        "executable_steps": 8035,
+        "exec_rate": 0.6541,
+        "energy_kwh": 4763334.53,
+        "supply_m3": 44975999.1,
+        "shortfall_vs_actual_m3": 300638.41,
+        "sec": 0.105908,
+        "big_small_minutes": 86715.0,
+        "big_small_f4": 24450.0,
+        "big_small_f5": 62265.0,
+        "switches": 0,
+        "load_ratio_rated": {
+          "dev_absmean_pct": 30.612,
+          "exceed_ratio": 0.7068
+        },
+        "load_ratio_plateau": {
+          "dev_absmean_pct": 31.435,
+          "exceed_ratio": 0.8986
+        }
+      },
+      "b3_b4": {
+        "success_steps": 8478,
+        "executable_steps": 8036,
+        "exec_rate": 0.6542,
+        "energy_kwh": 4187562.27,
+        "supply_m3": 44254179.8,
+        "shortfall_vs_actual_m3": 360054.36,
+        "sec": 0.094625,
+        "big_small_minutes": 39570.0,
+        "big_small_f4": 39570.0,
+        "big_small_f5": 0.0,
+        "switches": 330,
+        "load_ratio_rated": {
+          "dev_absmean_pct": 23.676,
+          "exceed_ratio": 0.5983
+        },
+        "load_ratio_plateau": {
+          "dev_absmean_pct": 19.848,
+          "exceed_ratio": 0.4062
+        }
+      },
+      "myopic": {
+        "success_steps": 8474,
+        "executable_steps": 8036,
+        "exec_rate": 0.6542,
+        "energy_kwh": 4186381.97,
+        "supply_m3": 44254170.9,
+        "shortfall_vs_actual_m3": 360057.37,
+        "sec": 0.094599,
+        "big_small_minutes": 39570.0,
+        "big_small_f4": 39570.0,
+        "big_small_f5": 0.0,
+        "switches": 398,
+        "load_ratio_rated": {
+          "dev_absmean_pct": 23.835,
+          "exceed_ratio": 0.5984
+        },
+        "load_ratio_plateau": {
+          "dev_absmean_pct": 19.906,
+          "exceed_ratio": 0.4025
+        }
+      },
+      "multi_step": {
+        "success_steps": 8436,
+        "executable_steps": 7998,
+        "exec_rate": 0.6511,
+        "energy_kwh": 4162859.79,
+        "supply_m3": 43962453.0,
+        "shortfall_vs_actual_m3": 359854.96,
+        "sec": 0.094691,
+        "big_small_minutes": 39660.0,
+        "big_small_f4": 39660.0,
+        "big_small_f5": 0.0,
+        "switches": 412,
+        "load_ratio_rated": {
+          "dev_absmean_pct": 24.01,
+          "exceed_ratio": 0.6021
+        },
+        "load_ratio_plateau": {
+          "dev_absmean_pct": 20.048,
+          "exceed_ratio": 0.4054
+        }
+      },
+      "v2": {
+        "success_steps": 8436,
+        "executable_steps": 7998,
+        "exec_rate": 0.6511,
+        "energy_kwh": 4167379.08,
+        "supply_m3": 43962460.0,
+        "shortfall_vs_actual_m3": 359851.0,
+        "sec": 0.094794,
+        "big_small_minutes": 39195.0,
+        "big_small_f4": 39195.0,
+        "big_small_f5": 0.0,
+        "switches": 412,
+        "load_ratio_rated": {
+          "dev_absmean_pct": 23.973,
+          "exceed_ratio": 0.5721
+        },
+        "load_ratio_plateau": {
+          "dev_absmean_pct": 19.723,
+          "exceed_ratio": 0.4021
+        }
+      }
+    },
+    "scope_full": {
+      "n_steps": 12284,
+      "energy_kwh": {
+        "b1_rule": 5034534.41,
+        "b3_b4": 4423446.35,
+        "myopic": 4420189.14,
+        "multi_step": 4396666.96,
+        "v2": 4401481.62
+      },
+      "energy_saving_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 12.1379,
+        "myopic": 12.2026,
+        "multi_step": 12.6698,
+        "v2": 12.5742
+      },
+      "big_small_minutes": {
+        "b1_rule": 91275.0,
+        "b3_b4": 43410.0,
+        "myopic": 43350.0,
+        "multi_step": 43440.0,
+        "v2": 42675.0
+      },
+      "big_small_reduction_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 52.4404,
+        "myopic": 52.5062,
+        "multi_step": 52.4076,
+        "v2": 53.2457
+      },
+      "supply_m3": {
+        "b1_rule": 47516371.7,
+        "b3_b4": 46719599.6,
+        "myopic": 46703325.3,
+        "multi_step": 46411607.3,
+        "v2": 46411614.8
+      },
+      "shortfall_vs_actual_m3": {
+        "b1_rule": 337236.66,
+        "b3_b4": 402384.07,
+        "myopic": 402387.55,
+        "multi_step": 402185.14,
+        "v2": 402180.87
+      }
+    },
+    "scope_common": {
+      "n_steps": 7994,
+      "energy_kwh": {
+        "b1_rule": 4736609.37,
+        "b3_b4": 4162597.28,
+        "myopic": 4161416.98,
+        "multi_step": 4162546.16,
+        "v2": 4167065.46
+      },
+      "energy_saving_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 12.1186,
+        "myopic": 12.1435,
+        "multi_step": 12.1197,
+        "v2": 12.0243
+      },
+      "big_small_minutes": {
+        "b1_rule": 86670.0,
+        "b3_b4": 39570.0,
+        "myopic": 39570.0,
+        "multi_step": 39660.0,
+        "v2": 39195.0
+      },
+      "big_small_reduction_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 54.3441,
+        "myopic": 54.3441,
+        "multi_step": 54.2402,
+        "v2": 54.7767
+      },
+      "supply_m3": {
+        "b1_rule": 44671867.0,
+        "b3_b4": 43958969.7,
+        "myopic": 43958960.6,
+        "multi_step": 43958960.6,
+        "v2": 43958967.6
+      },
+      "shortfall_vs_actual_m3": {
+        "b1_rule": 300435.97,
+        "b3_b4": 357295.32,
+        "myopic": 357298.32,
+        "multi_step": 357298.32,
+        "v2": 357294.4
+      }
+    },
+    "scope_service": {
+      "n_steps": 5874,
+      "energy_kwh": {
+        "b1_rule": 3454036.2,
+        "b3_b4": 3021482.69,
+        "myopic": 3020660.29,
+        "multi_step": 3021403.59,
+        "v2": 3024501.49
+      },
+      "energy_saving_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 12.5231,
+        "myopic": 12.5469,
+        "multi_step": 12.5254,
+        "v2": 12.4357
+      },
+      "big_small_minutes": {
+        "b1_rule": 65625.0,
+        "b3_b4": 29625.0,
+        "myopic": 29625.0,
+        "multi_step": 29685.0,
+        "v2": 29325.0
+      },
+      "big_small_reduction_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 54.8571,
+        "myopic": 54.8571,
+        "multi_step": 54.7657,
+        "v2": 55.3143
+      },
+      "supply_m3": {
+        "b1_rule": 32210746.5,
+        "b3_b4": 31586030.2,
+        "myopic": 31586023.5,
+        "multi_step": 31586023.5,
+        "v2": 31586026.5
+      },
+      "shortfall_vs_actual_m3": {
+        "b1_rule": 12.27,
+        "b3_b4": 13.13,
+        "myopic": 13.74,
+        "multi_step": 13.74,
+        "v2": 13.86
+      }
+    }
+  },
+  "valid": {
+    "protocol_window": "valid",
+    "n_steps": 1916,
+    "a6_quality_vs_actual": {
+      "15min": {
+        "n": 1916,
+        "MAE_vs_actual": 7.6409,
+        "MAPE_floor1": 23.912,
+        "WAPE": 1.763,
+        "coverage_90": 0.2881,
+        "underestimate_rate": 0.3335
+      },
+      "30min": {
+        "n": 1916,
+        "MAE_vs_actual": 7.5924,
+        "MAPE_floor1": 23.893,
+        "WAPE": 1.752,
+        "coverage_90": 0.2876,
+        "underestimate_rate": 0.3351
+      },
+      "60min": {
+        "n": 1916,
+        "MAE_vs_actual": 7.6113,
+        "MAPE_floor1": 23.901,
+        "WAPE": 1.756,
+        "coverage_90": 0.3032,
+        "underestimate_rate": 0.3372
+      }
+    },
+    "interval_violation_vs_shortfall": {
+      "b1_rule": {
+        "viol_and_shortfall": 634,
+        "viol_no_shortfall": 5,
+        "shortfall_no_viol": 0
+      },
+      "b3_b4": {
+        "viol_and_shortfall": 639,
+        "viol_no_shortfall": 0,
+        "shortfall_no_viol": 0
+      },
+      "myopic": {
+        "viol_and_shortfall": 639,
+        "viol_no_shortfall": 0,
+        "shortfall_no_viol": 0
+      },
+      "multi_step": {
+        "viol_and_shortfall": 639,
+        "viol_no_shortfall": 0,
+        "shortfall_no_viol": 0
+      },
+      "v2": {
+        "viol_and_shortfall": 639,
+        "viol_no_shortfall": 0,
+        "shortfall_no_viol": 0
+      }
+    },
+    "per_strategy": {
+      "b1_rule": {
+        "success_steps": 1916,
+        "executable_steps": 1915,
+        "exec_rate": 0.9995,
+        "energy_kwh": 1217510.34,
+        "supply_m3": 12524902.8,
+        "shortfall_vs_actual_m3": 69795.6,
+        "sec": 0.097207,
+        "big_small_minutes": 8325.0,
+        "big_small_f4": 660.0,
+        "big_small_f5": 7665.0,
+        "switches": 0,
+        "load_ratio_rated": {
+          "dev_absmean_pct": 18.924,
+          "exceed_ratio": 0.5193
+        },
+        "load_ratio_plateau": {
+          "dev_absmean_pct": 24.687,
+          "exceed_ratio": 0.9945
+        }
+      },
+      "b3_b4": {
+        "success_steps": 1916,
+        "executable_steps": 1915,
+        "exec_rate": 0.9995,
+        "energy_kwh": 1126225.33,
+        "supply_m3": 12508909.7,
+        "shortfall_vs_actual_m3": 79601.39,
+        "sec": 0.090034,
+        "big_small_minutes": 7080.0,
+        "big_small_f4": 7080.0,
+        "big_small_f5": 0.0,
+        "switches": 18,
+        "load_ratio_rated": {
+          "dev_absmean_pct": 18.161,
+          "exceed_ratio": 0.5091
+        },
+        "load_ratio_plateau": {
+          "dev_absmean_pct": 15.576,
+          "exceed_ratio": 0.455
+        }
+      },
+      "myopic": {
+        "success_steps": 1916,
+        "executable_steps": 1915,
+        "exec_rate": 0.9995,
+        "energy_kwh": 1126220.09,
+        "supply_m3": 12508909.8,
+        "shortfall_vs_actual_m3": 79601.7,
+        "sec": 0.090033,
+        "big_small_minutes": 7080.0,
+        "big_small_f4": 7080.0,
+        "big_small_f5": 0.0,
+        "switches": 20,
+        "load_ratio_rated": {
+          "dev_absmean_pct": 18.17,
+          "exceed_ratio": 0.5091
+        },
+        "load_ratio_plateau": {
+          "dev_absmean_pct": 15.582,
+          "exceed_ratio": 0.455
+        }
+      },
+      "multi_step": {
+        "success_steps": 1916,
+        "executable_steps": 1915,
+        "exec_rate": 0.9995,
+        "energy_kwh": 1126220.09,
+        "supply_m3": 12508909.8,
+        "shortfall_vs_actual_m3": 79601.7,
+        "sec": 0.090033,
+        "big_small_minutes": 7080.0,
+        "big_small_f4": 7080.0,
+        "big_small_f5": 0.0,
+        "switches": 20,
+        "load_ratio_rated": {
+          "dev_absmean_pct": 18.17,
+          "exceed_ratio": 0.5091
+        },
+        "load_ratio_plateau": {
+          "dev_absmean_pct": 15.582,
+          "exceed_ratio": 0.455
+        }
+      },
+      "v2": {
+        "success_steps": 1916,
+        "executable_steps": 1915,
+        "exec_rate": 0.9995,
+        "energy_kwh": 1127929.75,
+        "supply_m3": 12508905.5,
+        "shortfall_vs_actual_m3": 79602.14,
+        "sec": 0.09017,
+        "big_small_minutes": 6675.0,
+        "big_small_f4": 6675.0,
+        "big_small_f5": 0.0,
+        "switches": 20,
+        "load_ratio_rated": {
+          "dev_absmean_pct": 18.166,
+          "exceed_ratio": 0.5091
+        },
+        "load_ratio_plateau": {
+          "dev_absmean_pct": 14.776,
+          "exceed_ratio": 0.3908
+        }
+      }
+    },
+    "scope_full": {
+      "n_steps": 1916,
+      "energy_kwh": {
+        "b1_rule": 1218132.54,
+        "b3_b4": 1126779.13,
+        "myopic": 1126773.89,
+        "multi_step": 1126773.89,
+        "v2": 1128483.57
+      },
+      "energy_saving_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 7.4995,
+        "myopic": 7.4999,
+        "multi_step": 7.4999,
+        "v2": 7.3595
+      },
+      "big_small_minutes": {
+        "b1_rule": 8340.0,
+        "b3_b4": 7095.0,
+        "myopic": 7095.0,
+        "multi_step": 7095.0,
+        "v2": 6690.0
+      },
+      "big_small_reduction_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 14.9281,
+        "myopic": 14.9281,
+        "multi_step": 14.9281,
+        "v2": 19.7842
+      },
+      "supply_m3": {
+        "b1_rule": 12530700.0,
+        "b3_b4": 12514706.8,
+        "myopic": 12514706.9,
+        "multi_step": 12514706.9,
+        "v2": 12514702.7
+      },
+      "shortfall_vs_actual_m3": {
+        "b1_rule": 69795.6,
+        "b3_b4": 79601.39,
+        "myopic": 79601.7,
+        "multi_step": 79601.7,
+        "v2": 79602.14
+      }
+    },
+    "scope_common": {
+      "n_steps": 1915,
+      "energy_kwh": {
+        "b1_rule": 1217510.34,
+        "b3_b4": 1126225.33,
+        "myopic": 1126220.09,
+        "multi_step": 1126220.09,
+        "v2": 1127929.75
+      },
+      "energy_saving_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 7.4977,
+        "myopic": 7.4981,
+        "multi_step": 7.4981,
+        "v2": 7.3577
+      },
+      "big_small_minutes": {
+        "b1_rule": 8325.0,
+        "b3_b4": 7080.0,
+        "myopic": 7080.0,
+        "multi_step": 7080.0,
+        "v2": 6675.0
+      },
+      "big_small_reduction_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 14.955,
+        "myopic": 14.955,
+        "multi_step": 14.955,
+        "v2": 19.8198
+      },
+      "supply_m3": {
+        "b1_rule": 12524902.8,
+        "b3_b4": 12508909.7,
+        "myopic": 12508909.8,
+        "multi_step": 12508909.8,
+        "v2": 12508905.5
+      },
+      "shortfall_vs_actual_m3": {
+        "b1_rule": 69795.6,
+        "b3_b4": 79601.39,
+        "myopic": 79601.7,
+        "multi_step": 79601.7,
+        "v2": 79602.14
+      }
+    },
+    "scope_service": {
+      "n_steps": 1285,
+      "energy_kwh": {
+        "b1_rule": 818225.8,
+        "b3_b4": 758349.7,
+        "myopic": 758349.7,
+        "multi_step": 758349.7,
+        "v2": 759562.7
+      },
+      "energy_saving_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 7.3178,
+        "myopic": 7.3178,
+        "multi_step": 7.3178,
+        "v2": 7.1695
+      },
+      "big_small_minutes": {
+        "b1_rule": 4845.0,
+        "b3_b4": 3975.0,
+        "myopic": 3975.0,
+        "multi_step": 3975.0,
+        "v2": 3660.0
+      },
+      "big_small_reduction_vs_b1_pct": {
+        "b1_rule": 0.0,
+        "b3_b4": 17.9567,
+        "myopic": 17.9567,
+        "multi_step": 17.9567,
+        "v2": 24.4582
+      },
+      "supply_m3": {
+        "b1_rule": 8453790.9,
+        "b3_b4": 8450449.9,
+        "myopic": 8450450.3,
+        "multi_step": 8450450.3,
+        "v2": 8450446.2
+      },
+      "shortfall_vs_actual_m3": {
+        "b1_rule": 3.17,
+        "b3_b4": 3.32,
+        "myopic": 3.39,
+        "multi_step": 3.39,
+        "v2": 3.62
+      }
+    }
+  },
+  "runtime_s": 1835.0
+}

@@ -1,0 +1,79 @@
+{
+  "common_set_equal": {
+    "equal": true,
+    "indep_n": 4735,
+    "cont_n": 4735,
+    "inter": 4735,
+    "note": "可行集合由需求/备用/容量决定, 与状态无关, 故可评估步仍为 4735"
+  },
+  "exec_rule": {
+    "success_steps": 4735,
+    "success_with_transition_gap": 2,
+    "gap_timestamps": [
+      "2026-08-29 15:30:00",
+      "2026-08-29 15:35:00"
+    ],
+    "blocked_steps": 23,
+    "executed_steps": 4710
+  },
+  "rejections": {
+    "b1": {
+      "capacity_infeasible": 1590,
+      "insufficient_or_invalid_data": 357,
+      "min_run_lock": 0,
+      "min_stop_lock": 0,
+      "max_switch_lock": 0,
+      "transition_gap": 0,
+      "surge_blocked": 0,
+      "surge_medium_review": 0
+    },
+    "b3": {
+      "capacity_infeasible": 1590,
+      "insufficient_or_invalid_data": 0,
+      "min_run_lock": 0,
+      "min_stop_lock": 2,
+      "max_switch_lock": 0,
+      "transition_gap": 2,
+      "surge_blocked": 23,
+      "surge_medium_review": 144
+    }
+  },
+  "executed_switches": {
+    "b1_4#": 0,
+    "b1_5#": 0,
+    "b3_4#": 2,
+    "b3_5#": 2
+  },
+  "initial_state": {
+    "4#_running": true,
+    "5#_running": true
+  },
+  "decomposition": {
+    "b1": {
+      "indep_energy_kwh": 1024288.19,
+      "cont_energy_kwh": 1027382.01,
+      "delta_kwh": 3093.82,
+      "indep_supply_m3": 11422957.3,
+      "cont_supply_m3": 11445124.8
+    },
+    "b3": {
+      "indep_energy_kwh": 986159.57,
+      "cont_energy_kwh": 986156.29,
+      "delta_kwh": -3.28,
+      "indep_supply_m3": 11411910.8,
+      "cont_supply_m3": 11411910.8
+    },
+    "reduction_indep_pct": 3.7225,
+    "reduction_cont_pct": 4.0127,
+    "attribution": "同一步集; 变化来自状态演化: B1 与 B3 的计划随模拟开停/流量反馈改变(非窗口/分母/供气任务/筛选变化)"
+  },
+  "pressure": {
+    "station_header_unknown_steps": 2,
+    "station_header_unknown_ts": [
+      "2026-08-23 20:10:00",
+      "2026-09-02 05:15:00"
+    ],
+    "device_discharge_missing_causing_b4_unknown": 23,
+    "note": "两者口径不同: 前者为站级母管压力缺失; 后者为机组排气压力缺失导致 B4 风险 unknown; 动作后压力反事实未知不计为已验证安全"
+  }
+}

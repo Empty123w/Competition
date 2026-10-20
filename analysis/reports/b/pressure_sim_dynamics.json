@@ -1,0 +1,383 @@
+{
+  "protocol": {
+    "window": "2026-08-01~08-20 (valid, 重复查看窗口)",
+    "step_minutes": 15,
+    "band_mpa": [
+      0.55,
+      0.66
+    ],
+    "uses_B5_final_window": false,
+    "supply_definition": "调度计划流量 (B1 / 优化)",
+    "demand_definition": "站级实测总流量 (耗气代理; 非理想耗电测点), 与 supply 为不同序列",
+    "params_fixed_before_comparison": {
+      "K_VOL": 1580.0,
+      "LEAK_PER_MIN": 0.001,
+      "P_ENV": 0.55,
+      "P0": 0.6,
+      "NOISE": 0.003,
+      "P_SET": 0.6,
+      "KC": 500.0,
+      "closed_loop": true,
+      "source": "simulation 假设; K_VOL 由历史 |dq|~30->|dp|~0.019 反推; KC=控制器补偿(代表现场调压)"
+    },
+    "evidence_scope": "独立动态仿真; 非现场; 不改冻结 B2/B5"
+  },
+  "lag_analysis": {
+    "lag_corr_dp_dq": {
+      "k0": 0.1483,
+      "k1": -0.0174,
+      "k2": -0.015,
+      "k3": -0.0167,
+      "k4": 0.0012,
+      "k5": -0.0013
+    },
+    "large_dq_mean_absdp": 0.01906,
+    "overall_mean_absdp": 0.00119,
+    "pressure_lag1_autocorr": 0.9866
+  },
+  "base_case": {
+    "b1_rule": {
+      "compliance_rate": 0.8401,
+      "min_pressure_mpa": 0.4,
+      "max_pressure_mpa": 0.75,
+      "low_pressure_steps": 198,
+      "low_pressure_minutes": 2970,
+      "fluctuation_std_mpa": 0.01409,
+      "peak_to_peak_mpa": 0.35,
+      "shortfall_m3": 377408.1,
+      "supply_m3": 12408853.7
+    },
+    "multi_step": {
+      "compliance_rate": 0.838,
+      "min_pressure_mpa": 0.4,
+      "max_pressure_mpa": 0.75,
+      "low_pressure_steps": 203,
+      "low_pressure_minutes": 3045,
+      "fluctuation_std_mpa": 0.01518,
+      "peak_to_peak_mpa": 0.35,
+      "shortfall_m3": 393508.6,
+      "supply_m3": 12392752.6
+    },
+    "delta_vs_b1": {
+      "compliance_rate_diff": -0.0021,
+      "fluctuation_std_diff": 0.00109
+    }
+  },
+  "sensitivity": {
+    "K800.0_L0.0_N0.0": {
+      "b1_rule": {
+        "compliance_rate": 0.8354,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8349,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K800.0_L0.0_N0.003": {
+      "b1_rule": {
+        "compliance_rate": 0.8354,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8349,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K800.0_L0.0_N0.006": {
+      "b1_rule": {
+        "compliance_rate": 0.8354,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8349,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K800.0_L0.001_N0.0": {
+      "b1_rule": {
+        "compliance_rate": 0.8359,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8354,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K800.0_L0.001_N0.003": {
+      "b1_rule": {
+        "compliance_rate": 0.8354,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8349,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K800.0_L0.001_N0.006": {
+      "b1_rule": {
+        "compliance_rate": 0.8354,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8349,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K800.0_L0.003_N0.0": {
+      "b1_rule": {
+        "compliance_rate": 0.8359,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8354,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K800.0_L0.003_N0.003": {
+      "b1_rule": {
+        "compliance_rate": 0.8354,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8349,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K800.0_L0.003_N0.006": {
+      "b1_rule": {
+        "compliance_rate": 0.8354,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8349,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K1580.0_L0.0_N0.0": {
+      "b1_rule": {
+        "compliance_rate": 0.838,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8375,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K1580.0_L0.0_N0.003": {
+      "b1_rule": {
+        "compliance_rate": 0.8391,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8385,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K1580.0_L0.0_N0.006": {
+      "b1_rule": {
+        "compliance_rate": 0.8385,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.838,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K1580.0_L0.001_N0.0": {
+      "b1_rule": {
+        "compliance_rate": 0.838,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8375,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K1580.0_L0.001_N0.003": {
+      "b1_rule": {
+        "compliance_rate": 0.8391,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8385,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K1580.0_L0.001_N0.006": {
+      "b1_rule": {
+        "compliance_rate": 0.8391,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8385,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K1580.0_L0.003_N0.0": {
+      "b1_rule": {
+        "compliance_rate": 0.838,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8375,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K1580.0_L0.003_N0.003": {
+      "b1_rule": {
+        "compliance_rate": 0.8396,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8391,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K1580.0_L0.003_N0.006": {
+      "b1_rule": {
+        "compliance_rate": 0.8401,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8396,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": true
+    },
+    "K3000.0_L0.0_N0.0": {
+      "b1_rule": {
+        "compliance_rate": 0.8385,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8365,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": false
+    },
+    "K3000.0_L0.0_N0.003": {
+      "b1_rule": {
+        "compliance_rate": 0.8443,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8417,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": false
+    },
+    "K3000.0_L0.0_N0.006": {
+      "b1_rule": {
+        "compliance_rate": 0.8464,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8443,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": false
+    },
+    "K3000.0_L0.001_N0.0": {
+      "b1_rule": {
+        "compliance_rate": 0.8401,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.838,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": false
+    },
+    "K3000.0_L0.001_N0.003": {
+      "b1_rule": {
+        "compliance_rate": 0.8453,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8427,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": false
+    },
+    "K3000.0_L0.001_N0.006": {
+      "b1_rule": {
+        "compliance_rate": 0.8464,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8443,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": false
+    },
+    "K3000.0_L0.003_N0.0": {
+      "b1_rule": {
+        "compliance_rate": 0.8417,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8396,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": false
+    },
+    "K3000.0_L0.003_N0.003": {
+      "b1_rule": {
+        "compliance_rate": 0.8458,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8432,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": false
+    },
+    "K3000.0_L0.003_N0.006": {
+      "b1_rule": {
+        "compliance_rate": 0.8464,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step": {
+        "compliance_rate": 0.8443,
+        "min_pressure_mpa": 0.4
+      },
+      "multi_step_compliance_ge_b1": false
+    }
+  },
+  "sensitivity_robust_sign": {
+    "multi_step_compliance_ge_b1_share": 0.667
+  },
+  "pressure_feedback_candidate": {
+    "definition": "独立候选(仅仿真): 仿真 p<0.58 时提升供气 +40 m3/min (封顶双机额定)",
+    "metrics": {
+      "compliance_rate": 0.812,
+      "min_pressure_mpa": 0.5804,
+      "max_pressure_mpa": 0.75,
+      "low_pressure_steps": 0,
+      "low_pressure_minutes": 0,
+      "fluctuation_std_mpa": 0.01124,
+      "peak_to_peak_mpa": 0.1696,
+      "shortfall_m3": 393508.6,
+      "supply_m3": 12392752.6
+    },
+    "note": "压力阈值不放松(仍 0.55 下限); 仅仿真, 非现场; 需现场验证"
+  }
+}

@@ -1,0 +1,58 @@
+# =====================================================================
+# B4 喘振风险代理与安全边界配置
+# - 无厂家喘振曲线、无真实喘振正例; 所有边界/阈值为工程或统计假设
+# - 不得称为真实喘振线; validation_mode=simulation
+# =====================================================================
+
+version: "b4.0"
+
+meta:
+  boundary_version: "surge-proxy-v0.1"
+  validation_mode: "simulation"
+  note: "代理评分与统计边界, 非厂家真实喘振线; 低风险不等于现场安全认证"
+
+# ---- 代理边界 ----
+boundary:
+  source: "engineering_assumed"       # engineering_assumed | historical_envelope
+  unit: "-"                            # margin = (planned_flow - boundary_flow)/boundary_flow
+  warn_margin: 0.10                    # margin < 0 -> high; [0, warn) -> medium; >= warn -> low
+  engineering:
+    reference_pressure_mpa: 0.66
+    reference_flow_m3min: 90.0         # 假设最低稳定流量(低于 validated_min 120), 工程假设
+    slope_m3min_per_mpa: 350.0         # 边界流量随压力单调上升
+    pressure_domain_mpa: [0.45, 0.75]
+    source: "engineering"
+  historical:
+    low_percentile: 0.02               # 按压力分箱的低分位(历史少见点), 仅作证据, 非喘振线
+    min_bin_samples: 500
+    bins_mpa: [0.0, 0.55, 0.58, 0.60, 0.62, 0.65, 1.0]
+    artifact: "artifacts/models/surge_boundary.json"
+    source: "inferred"
+
+# ---- 触发因素阈值 (证据来自实测运行参数, 阈值工程假设) ----
+triggers:
+  igv_low_percent: 35.0                # IGV 开度低于此 -> 低负荷区
+  bov_open_closed_percent: 95.0        # BOV 闭度低于此 -> 放空阀开启(低负荷/防喘)
+  rapid_load_change_m3min: 60.0        # 与当前流量变化超过此 -> 快速变负荷(过渡证据)
+  below_historical_envelope: true      # 计划流量低于历史少见区 -> 证据因子
+  start_transition: true               # 启动过渡 -> 因子
+  # 严重度: 只有 igv_low / bov_open 会把低风险提升为 medium; 其余仅作证据记录
+  severity:
+    below_historical_envelope: "low"
+    igv_low: "medium"
+    bov_open: "medium"
+    rapid_change: "low"
+    start_transition: "low"
+
+risk_levels: [low, medium, high, unknown]
+
+evaluation:
+  block_on_high: true                  # high -> safety_blocked=true
+  block_on_unknown: true               # unknown -> 需人工复核, 不视为安全通过
+  request_review_on_medium: true
+
+source_flags:
+  engineering_boundary: "engineering"
+  historical_envelope: "inferred"
+  trigger_thresholds: "engineering"
+  reference_band_mpa: "pending"

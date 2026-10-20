@@ -1,0 +1,266 @@
+{
+  "window": "dev",
+  "start": 0,
+  "n": 13000,
+  "cands": [
+    "b1_rule",
+    "b3_b4",
+    "cand",
+    "bal",
+    "k0.50",
+    "sbd_t7"
+  ],
+  "kpi": {
+    "n_total": 12284,
+    "per": {},
+    "scopes": {
+      "full": {
+        "steps": 12284,
+        "b1_rule": {
+          "energy_kwh": 4920538.18,
+          "supply_m3": 46684573.3,
+          "sec": 0.1054,
+          "saving_pct": 0.0,
+          "sec_reduction_pct": 0.0,
+          "gap_m3": 31808702.37,
+          "low_min": 78285.0,
+          "low_reduction_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 4388440.8,
+          "supply_m3": 45956708.7,
+          "sec": 0.095491,
+          "saving_pct": 10.8138,
+          "sec_reduction_pct": 9.4013,
+          "gap_m3": 31870706.94,
+          "low_min": 40005.0,
+          "low_reduction_pct": 48.8983,
+          "supply_diff_vs_b1_m3": -727864.6
+        },
+        "cand": {
+          "energy_kwh": 4246610.13,
+          "supply_m3": 44247474.6,
+          "sec": 0.095974,
+          "saving_pct": 13.6962,
+          "sec_reduction_pct": 8.9427,
+          "gap_m3": 33553437.49,
+          "low_min": 38835.0,
+          "low_reduction_pct": 50.3928,
+          "supply_diff_vs_b1_m3": -2437098.8
+        },
+        "bal": {
+          "energy_kwh": 4255180.15,
+          "supply_m3": 44246213.3,
+          "sec": 0.09617,
+          "saving_pct": 13.5221,
+          "sec_reduction_pct": 8.7564,
+          "gap_m3": 33554682.28,
+          "low_min": 18255.0,
+          "low_reduction_pct": 76.6814,
+          "supply_diff_vs_b1_m3": -2438360.1
+        },
+        "k0.50": {
+          "energy_kwh": 4413063.44,
+          "supply_m3": 46237705.9,
+          "sec": 0.095443,
+          "saving_pct": 10.3134,
+          "sec_reduction_pct": 9.4466,
+          "gap_m3": 31015962.86,
+          "low_min": 41445.0,
+          "low_reduction_pct": 47.0588,
+          "supply_diff_vs_b1_m3": -446867.4
+        },
+        "sbd_t7": {
+          "energy_kwh": 4255422.08,
+          "supply_m3": 44245966.0,
+          "sec": 0.096176,
+          "saving_pct": 13.5171,
+          "sec_reduction_pct": 8.7507,
+          "gap_m3": 33554650.03,
+          "low_min": 18240.0,
+          "low_reduction_pct": 76.7005,
+          "supply_diff_vs_b1_m3": -2438607.3
+        }
+      },
+      "common": {
+        "steps": 7600,
+        "b1_rule": {
+          "energy_kwh": 4499672.52,
+          "supply_m3": 42325078.8,
+          "sec": 0.106312,
+          "saving_pct": 0.0,
+          "sec_reduction_pct": 0.0,
+          "gap_m3": 190870.54,
+          "low_min": 76530.0,
+          "low_reduction_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 4003115.96,
+          "supply_m3": 41675467.0,
+          "sec": 0.096054,
+          "saving_pct": 11.0354,
+          "sec_reduction_pct": 9.6487,
+          "gap_m3": 244879.89,
+          "low_min": 38970.0,
+          "low_reduction_pct": 49.0788,
+          "supply_diff_vs_b1_m3": -649611.8
+        },
+        "cand": {
+          "energy_kwh": 4005478.68,
+          "supply_m3": 41675461.5,
+          "sec": 0.096111,
+          "saving_pct": 10.9829,
+          "sec_reduction_pct": 9.5953,
+          "gap_m3": 244879.74,
+          "low_min": 37815.0,
+          "low_reduction_pct": 50.588,
+          "supply_diff_vs_b1_m3": -649617.3
+        },
+        "bal": {
+          "energy_kwh": 4013899.42,
+          "supply_m3": 41673411.5,
+          "sec": 0.096318,
+          "saving_pct": 10.7957,
+          "sec_reduction_pct": 9.4008,
+          "gap_m3": 246773.85,
+          "low_min": 17550.0,
+          "low_reduction_pct": 77.0678,
+          "supply_diff_vs_b1_m3": -651667.3
+        },
+        "k0.50": {
+          "energy_kwh": 3951672.8,
+          "supply_m3": 41094909.3,
+          "sec": 0.09616,
+          "saving_pct": 12.1787,
+          "sec_reduction_pct": 9.5497,
+          "gap_m3": 305488.85,
+          "low_min": 39660.0,
+          "low_reduction_pct": 48.1772,
+          "supply_diff_vs_b1_m3": -1230169.5
+        },
+        "sbd_t7": {
+          "energy_kwh": 4014107.46,
+          "supply_m3": 41673292.7,
+          "sec": 0.096323,
+          "saving_pct": 10.7911,
+          "sec_reduction_pct": 9.3959,
+          "gap_m3": 246753.0,
+          "low_min": 17535.0,
+          "low_reduction_pct": 77.0874,
+          "supply_diff_vs_b1_m3": -651786.1
+        }
+      },
+      "service": {
+        "steps": 6363,
+        "b1_rule": {
+          "energy_kwh": 3760982.44,
+          "supply_m3": 35299912.6,
+          "sec": 0.106544,
+          "saving_pct": 0.0,
+          "sec_reduction_pct": 0.0,
+          "gap_m3": 0.0,
+          "low_min": 63345.0,
+          "low_reduction_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 3361788.78,
+          "supply_m3": 34756444.8,
+          "sec": 0.096724,
+          "saving_pct": 10.6141,
+          "sec_reduction_pct": 9.2164,
+          "gap_m3": 0.0,
+          "low_min": 34515.0,
+          "low_reduction_pct": 45.5127,
+          "supply_diff_vs_b1_m3": -543467.9
+        },
+        "cand": {
+          "energy_kwh": 3363817.22,
+          "supply_m3": 34756440.8,
+          "sec": 0.096783,
+          "saving_pct": 10.5601,
+          "sec_reduction_pct": 9.1616,
+          "gap_m3": 0.0,
+          "low_min": 33690.0,
+          "low_reduction_pct": 46.8151,
+          "supply_diff_vs_b1_m3": -543471.9
+        },
+        "bal": {
+          "energy_kwh": 3370987.24,
+          "supply_m3": 34756313.7,
+          "sec": 0.096989,
+          "saving_pct": 10.3695,
+          "sec_reduction_pct": 8.9677,
+          "gap_m3": 0.0,
+          "low_min": 15975.0,
+          "low_reduction_pct": 74.781,
+          "supply_diff_vs_b1_m3": -543598.9
+        },
+        "k0.50": {
+          "energy_kwh": 3316424.67,
+          "supply_m3": 34262963.1,
+          "sec": 0.096793,
+          "saving_pct": 11.8203,
+          "sec_reduction_pct": 9.1515,
+          "gap_m3": 6.46,
+          "low_min": 34515.0,
+          "low_reduction_pct": 45.5127,
+          "supply_diff_vs_b1_m3": -1036949.5
+        },
+        "sbd_t7": {
+          "energy_kwh": 3371185.04,
+          "supply_m3": 34756131.3,
+          "sec": 0.096995,
+          "saving_pct": 10.3642,
+          "sec_reduction_pct": 8.9618,
+          "gap_m3": 0.0,
+          "low_min": 15975.0,
+          "low_reduction_pct": 74.781,
+          "supply_diff_vs_b1_m3": -543781.3
+        }
+      }
+    }
+  },
+  "runtime_ms": {
+    "b1_rule": {
+      "p50": 4.53,
+      "p95": 6.5,
+      "max": 66.82
+    },
+    "b3_b4": {
+      "p50": 34.79,
+      "p95": 48.81,
+      "max": 189.74
+    },
+    "cand": {
+      "p50": 12.7,
+      "p95": 26.37,
+      "max": 1437.41
+    },
+    "bal": {
+      "p50": 7.68,
+      "p95": 14.07,
+      "max": 530.07
+    },
+    "k0.50": {
+      "p50": 8.38,
+      "p95": 14.13,
+      "max": 296.45
+    },
+    "sbd_t7": {
+      "p50": 10.4,
+      "p95": 22.24,
+      "max": 234.62
+    }
+  },
+  "fallback": {
+    "b1_rule": 4018,
+    "b3_b4": 4018,
+    "cand": 4241,
+    "bal": 4241,
+    "k0.50": 3896,
+    "sbd_t7": 4241
+  }
+}

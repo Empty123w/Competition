@@ -1,0 +1,723 @@
+{
+  "source": "ard_experiment_v2_ledger.csv",
+  "fixes": {
+    "no_zero_energy_as_saving": "未执行步不计为节能; 节电率仅在配对可执行/服务等价子集计算",
+    "classes": [
+      "executed",
+      "blocked_not_exec",
+      "infeasible"
+    ]
+  },
+  "windows": {
+    "normal": {
+      "n": 240,
+      "class_counts": {
+        "b1_rule": {
+          "executed": 240,
+          "blocked_not_exec": 0,
+          "infeasible": 0
+        },
+        "b3_b4": {
+          "executed": 240,
+          "blocked_not_exec": 0,
+          "infeasible": 0
+        },
+        "cand": {
+          "executed": 240,
+          "blocked_not_exec": 0,
+          "infeasible": 0
+        },
+        "ard_err": {
+          "executed": 240,
+          "blocked_not_exec": 0,
+          "infeasible": 0
+        },
+        "ard_dyn": {
+          "executed": 240,
+          "blocked_not_exec": 0,
+          "infeasible": 0
+        },
+        "ard_dyn_peak": {
+          "executed": 240,
+          "blocked_not_exec": 0,
+          "infeasible": 0
+        }
+      },
+      "paired_exec": {
+        "b3_b4": 240,
+        "cand": 240,
+        "ard_err": 240,
+        "ard_dyn": 240,
+        "ard_dyn_peak": 240
+      },
+      "service_equiv": {
+        "b3_b4": 216,
+        "cand": 216,
+        "ard_err": 158,
+        "ard_dyn": 196,
+        "ard_dyn_peak": 196
+      },
+      "full_window_energy_only": {
+        "b1_rule": {
+          "energy_kwh": 153965.68,
+          "supply_m3": 1626111.8,
+          "gap_vs_actual_m3": 8591.65,
+          "sec": 0.094683,
+          "saving_vs_b1_pct": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 144455.84,
+          "supply_m3": 1623603.4,
+          "gap_vs_actual_m3": 10458.84,
+          "sec": 0.088972,
+          "saving_vs_b1_pct": 6.1766
+        },
+        "cand": {
+          "energy_kwh": 144709.61,
+          "supply_m3": 1623602.4,
+          "gap_vs_actual_m3": 10459.29,
+          "sec": 0.089129,
+          "saving_vs_b1_pct": 6.0118
+        },
+        "ard_err": {
+          "energy_kwh": 142654.09,
+          "supply_m3": 1582874.9,
+          "gap_vs_actual_m3": 17658.97,
+          "sec": 0.090123,
+          "saving_vs_b1_pct": 7.3468
+        },
+        "ard_dyn": {
+          "energy_kwh": 143372.67,
+          "supply_m3": 1597609.1,
+          "gap_vs_actual_m3": 13884.8,
+          "sec": 0.089742,
+          "saving_vs_b1_pct": 6.8801
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 143372.67,
+          "supply_m3": 1597609.1,
+          "gap_vs_actual_m3": 13884.8,
+          "sec": 0.089742,
+          "saving_vs_b1_pct": 6.8801
+        }
+      },
+      "paired_exec_steps": 240,
+      "paired_exec_saving": {
+        "b1_rule": {
+          "energy_kwh": 153965.68,
+          "supply_m3": 1626111.8,
+          "gap_vs_actual_m3": 8591.65,
+          "sec": 0.094683,
+          "saving_vs_b1_pct": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 144455.84,
+          "supply_m3": 1623603.4,
+          "gap_vs_actual_m3": 10458.84,
+          "sec": 0.088972,
+          "saving_vs_b1_pct": 6.1766
+        },
+        "cand": {
+          "energy_kwh": 144709.61,
+          "supply_m3": 1623602.4,
+          "gap_vs_actual_m3": 10459.29,
+          "sec": 0.089129,
+          "saving_vs_b1_pct": 6.0118
+        },
+        "ard_err": {
+          "energy_kwh": 142654.09,
+          "supply_m3": 1582874.9,
+          "gap_vs_actual_m3": 17658.97,
+          "sec": 0.090123,
+          "saving_vs_b1_pct": 7.3468
+        },
+        "ard_dyn": {
+          "energy_kwh": 143372.67,
+          "supply_m3": 1597609.1,
+          "gap_vs_actual_m3": 13884.8,
+          "sec": 0.089742,
+          "saving_vs_b1_pct": 6.8801
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 143372.67,
+          "supply_m3": 1597609.1,
+          "gap_vs_actual_m3": 13884.8,
+          "sec": 0.089742,
+          "saving_vs_b1_pct": 6.8801
+        }
+      },
+      "service_equiv_steps": 158,
+      "service_equiv_saving": {
+        "b1_rule": {
+          "energy_kwh": 101833.57,
+          "supply_m3": 1085816.9,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.093785,
+          "saving_vs_b1_pct": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 96046.22,
+          "supply_m3": 1085817.1,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.088455,
+          "saving_vs_b1_pct": 5.6831
+        },
+        "cand": {
+          "energy_kwh": 96222.02,
+          "supply_m3": 1085816.5,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.088617,
+          "saving_vs_b1_pct": 5.5105
+        },
+        "ard_err": {
+          "energy_kwh": 94865.01,
+          "supply_m3": 1059639.0,
+          "gap_vs_actual_m3": 0.44,
+          "sec": 0.089526,
+          "saving_vs_b1_pct": 6.8431
+        },
+        "ard_dyn": {
+          "energy_kwh": 95321.48,
+          "supply_m3": 1068922.3,
+          "gap_vs_actual_m3": 0.44,
+          "sec": 0.089175,
+          "saving_vs_b1_pct": 6.3948
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 95321.48,
+          "supply_m3": 1068922.3,
+          "gap_vs_actual_m3": 0.44,
+          "sec": 0.089175,
+          "saving_vs_b1_pct": 6.3948
+        }
+      },
+      "pressure": {
+        "b1_rule": {
+          "compliance": 0.0375,
+          "pinned_upper_frac": 0.6708,
+          "pinned_lower_frac": 0.0,
+          "p_end": 0.75,
+          "net_supply_minus_demand_m3": 57963.6
+        },
+        "b3_b4": {
+          "compliance": 0.1208,
+          "pinned_upper_frac": 0.625,
+          "pinned_lower_frac": 0.0,
+          "p_end": 0.75,
+          "net_supply_minus_demand_m3": 55455.3
+        },
+        "cand": {
+          "compliance": 0.1208,
+          "pinned_upper_frac": 0.625,
+          "pinned_lower_frac": 0.0,
+          "p_end": 0.75,
+          "net_supply_minus_demand_m3": 55454.2
+        },
+        "ard_err": {
+          "compliance": 0.5792,
+          "pinned_upper_frac": 0.0417,
+          "pinned_lower_frac": 0.0,
+          "p_end": 0.6665,
+          "net_supply_minus_demand_m3": 14726.7
+        },
+        "ard_dyn": {
+          "compliance": 0.1417,
+          "pinned_upper_frac": 0.2,
+          "pinned_lower_frac": 0.0,
+          "p_end": 0.6802,
+          "net_supply_minus_demand_m3": 29461.0
+        },
+        "ard_dyn_peak": {
+          "compliance": 0.1417,
+          "pinned_upper_frac": 0.2,
+          "pinned_lower_frac": 0.0,
+          "p_end": 0.6802,
+          "net_supply_minus_demand_m3": 29461.0
+        }
+      }
+    },
+    "low": {
+      "n": 240,
+      "class_counts": {
+        "b1_rule": {
+          "executed": 26,
+          "blocked_not_exec": 0,
+          "infeasible": 214
+        },
+        "b3_b4": {
+          "executed": 26,
+          "blocked_not_exec": 0,
+          "infeasible": 214
+        },
+        "cand": {
+          "executed": 26,
+          "blocked_not_exec": 0,
+          "infeasible": 214
+        },
+        "ard_err": {
+          "executed": 35,
+          "blocked_not_exec": 0,
+          "infeasible": 205
+        },
+        "ard_dyn": {
+          "executed": 38,
+          "blocked_not_exec": 0,
+          "infeasible": 202
+        },
+        "ard_dyn_peak": {
+          "executed": 38,
+          "blocked_not_exec": 0,
+          "infeasible": 202
+        }
+      },
+      "paired_exec": {
+        "b3_b4": 26,
+        "cand": 26,
+        "ard_err": 26,
+        "ard_dyn": 26,
+        "ard_dyn_peak": 26
+      },
+      "service_equiv": {
+        "b3_b4": 22,
+        "cand": 22,
+        "ard_err": 22,
+        "ard_dyn": 21,
+        "ard_dyn_peak": 21
+      },
+      "full_window_energy_only": {
+        "b1_rule": {
+          "energy_kwh": 8903.22,
+          "supply_m3": 63229.5,
+          "gap_vs_actual_m3": 1692050.76,
+          "sec": 0.140808,
+          "saving_vs_b1_pct": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 7254.65,
+          "supply_m3": 59629.5,
+          "gap_vs_actual_m3": 1693850.76,
+          "sec": 0.121662,
+          "saving_vs_b1_pct": 18.5165
+        },
+        "cand": {
+          "energy_kwh": 7255.92,
+          "supply_m3": 59629.5,
+          "gap_vs_actual_m3": 1693850.76,
+          "sec": 0.121683,
+          "saving_vs_b1_pct": 18.5023
+        },
+        "ard_err": {
+          "energy_kwh": 13069.57,
+          "supply_m3": 127549.1,
+          "gap_vs_actual_m3": 1626039.34,
+          "sec": 0.102467,
+          "saving_vs_b1_pct": -46.796
+        },
+        "ard_dyn": {
+          "energy_kwh": 14995.87,
+          "supply_m3": 149886.7,
+          "gap_vs_actual_m3": 1603427.28,
+          "sec": 0.100048,
+          "saving_vs_b1_pct": -68.4321
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 14995.87,
+          "supply_m3": 149886.7,
+          "gap_vs_actual_m3": 1603427.28,
+          "sec": 0.100048,
+          "saving_vs_b1_pct": -68.4321
+        }
+      },
+      "paired_exec_steps": 26,
+      "paired_exec_saving": {
+        "b1_rule": {
+          "energy_kwh": 8903.22,
+          "supply_m3": 63229.5,
+          "gap_vs_actual_m3": 7685.86,
+          "sec": 0.140808,
+          "saving_vs_b1_pct": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 7254.65,
+          "supply_m3": 59629.5,
+          "gap_vs_actual_m3": 9485.86,
+          "sec": 0.121662,
+          "saving_vs_b1_pct": 18.5165
+        },
+        "cand": {
+          "energy_kwh": 7255.92,
+          "supply_m3": 59629.5,
+          "gap_vs_actual_m3": 9485.86,
+          "sec": 0.121683,
+          "saving_vs_b1_pct": 18.5023
+        },
+        "ard_err": {
+          "energy_kwh": 7262.84,
+          "supply_m3": 59279.7,
+          "gap_vs_actual_m3": 9835.65,
+          "sec": 0.122518,
+          "saving_vs_b1_pct": 18.4246
+        },
+        "ard_dyn": {
+          "energy_kwh": 7248.98,
+          "supply_m3": 58653.5,
+          "gap_vs_actual_m3": 10171.13,
+          "sec": 0.12359,
+          "saving_vs_b1_pct": 18.5802
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 7248.98,
+          "supply_m3": 58653.5,
+          "gap_vs_actual_m3": 10171.13,
+          "sec": 0.12359,
+          "saving_vs_b1_pct": 18.5802
+        }
+      },
+      "service_equiv_steps": 21,
+      "service_equiv_saving": {
+        "b1_rule": {
+          "energy_kwh": 6106.57,
+          "supply_m3": 39600.0,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.154206,
+          "saving_vs_b1_pct": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 4831.78,
+          "supply_m3": 37800.0,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.127825,
+          "saving_vs_b1_pct": 20.8756
+        },
+        "cand": {
+          "energy_kwh": 4831.78,
+          "supply_m3": 37800.0,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.127825,
+          "saving_vs_b1_pct": 20.8756
+        },
+        "ard_err": {
+          "energy_kwh": 4831.78,
+          "supply_m3": 37800.0,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.127825,
+          "saving_vs_b1_pct": 20.8756
+        },
+        "ard_dyn": {
+          "energy_kwh": 4831.78,
+          "supply_m3": 37800.0,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.127825,
+          "saving_vs_b1_pct": 20.8756
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 4831.78,
+          "supply_m3": 37800.0,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.127825,
+          "saving_vs_b1_pct": 20.8756
+        }
+      },
+      "pressure": {
+        "b1_rule": {
+          "compliance": 0.0385,
+          "pinned_upper_frac": 0.7308,
+          "pinned_lower_frac": 0.0,
+          "p_end": 0.4302,
+          "net_supply_minus_demand_m3": 32204.9
+        },
+        "b3_b4": {
+          "compliance": 0.0385,
+          "pinned_upper_frac": 0.7308,
+          "pinned_lower_frac": 0.0769,
+          "p_end": 0.4,
+          "net_supply_minus_demand_m3": 28604.9
+        },
+        "cand": {
+          "compliance": 0.0385,
+          "pinned_upper_frac": 0.7308,
+          "pinned_lower_frac": 0.0769,
+          "p_end": 0.4,
+          "net_supply_minus_demand_m3": 28604.9
+        },
+        "ard_err": {
+          "compliance": 0.0385,
+          "pinned_upper_frac": 0.7308,
+          "pinned_lower_frac": 0.0769,
+          "p_end": 0.4,
+          "net_supply_minus_demand_m3": 28255.1
+        },
+        "ard_dyn": {
+          "compliance": 0.0769,
+          "pinned_upper_frac": 0.7308,
+          "pinned_lower_frac": 0.0769,
+          "p_end": 0.4,
+          "net_supply_minus_demand_m3": 27628.9
+        },
+        "ard_dyn_peak": {
+          "compliance": 0.0769,
+          "pinned_upper_frac": 0.7308,
+          "pinned_lower_frac": 0.0769,
+          "p_end": 0.4,
+          "net_supply_minus_demand_m3": 27628.9
+        }
+      }
+    },
+    "peak": {
+      "n": 240,
+      "class_counts": {
+        "b1_rule": {
+          "executed": 5,
+          "blocked_not_exec": 0,
+          "infeasible": 235
+        },
+        "b3_b4": {
+          "executed": 5,
+          "blocked_not_exec": 0,
+          "infeasible": 235
+        },
+        "cand": {
+          "executed": 5,
+          "blocked_not_exec": 0,
+          "infeasible": 235
+        },
+        "ard_err": {
+          "executed": 6,
+          "blocked_not_exec": 0,
+          "infeasible": 234
+        },
+        "ard_dyn": {
+          "executed": 9,
+          "blocked_not_exec": 0,
+          "infeasible": 231
+        },
+        "ard_dyn_peak": {
+          "executed": 9,
+          "blocked_not_exec": 0,
+          "infeasible": 231
+        }
+      },
+      "paired_exec": {
+        "b3_b4": 5,
+        "cand": 5,
+        "ard_err": 5,
+        "ard_dyn": 5,
+        "ard_dyn_peak": 5
+      },
+      "service_equiv": {
+        "b3_b4": 3,
+        "cand": 3,
+        "ard_err": 1,
+        "ard_dyn": 1,
+        "ard_dyn_peak": 1
+      },
+      "full_window_energy_only": {
+        "b1_rule": {
+          "energy_kwh": 2996.46,
+          "supply_m3": 28856.7,
+          "gap_vs_actual_m3": 1870198.89,
+          "sec": 0.103839,
+          "saving_vs_b1_pct": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 2874.33,
+          "supply_m3": 28856.7,
+          "gap_vs_actual_m3": 1870198.89,
+          "sec": 0.099607,
+          "saving_vs_b1_pct": 4.0756
+        },
+        "cand": {
+          "energy_kwh": 2877.54,
+          "supply_m3": 28856.7,
+          "gap_vs_actual_m3": 1870198.89,
+          "sec": 0.099718,
+          "saving_vs_b1_pct": 3.9685
+        },
+        "ard_err": {
+          "energy_kwh": 3512.59,
+          "supply_m3": 35418.7,
+          "gap_vs_actual_m3": 1863935.41,
+          "sec": 0.099173,
+          "saving_vs_b1_pct": -17.2249
+        },
+        "ard_dyn": {
+          "energy_kwh": 5446.43,
+          "supply_m3": 58155.7,
+          "gap_vs_actual_m3": 1841207.99,
+          "sec": 0.093653,
+          "saving_vs_b1_pct": -81.7626
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 5446.43,
+          "supply_m3": 58155.7,
+          "gap_vs_actual_m3": 1841207.99,
+          "sec": 0.093653,
+          "saving_vs_b1_pct": -81.7626
+        }
+      },
+      "paired_exec_steps": 5,
+      "paired_exec_saving": {
+        "b1_rule": {
+          "energy_kwh": 2996.46,
+          "supply_m3": 28856.7,
+          "gap_vs_actual_m3": 5714.61,
+          "sec": 0.103839,
+          "saving_vs_b1_pct": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 2874.33,
+          "supply_m3": 28856.7,
+          "gap_vs_actual_m3": 5714.61,
+          "sec": 0.099607,
+          "saving_vs_b1_pct": 4.0756
+        },
+        "cand": {
+          "energy_kwh": 2877.54,
+          "supply_m3": 28856.7,
+          "gap_vs_actual_m3": 5714.61,
+          "sec": 0.099718,
+          "saving_vs_b1_pct": 3.9685
+        },
+        "ard_err": {
+          "energy_kwh": 2866.16,
+          "supply_m3": 27790.8,
+          "gap_vs_actual_m3": 7057.66,
+          "sec": 0.103133,
+          "saving_vs_b1_pct": 4.3485
+        },
+        "ard_dyn": {
+          "energy_kwh": 2861.68,
+          "supply_m3": 27736.8,
+          "gap_vs_actual_m3": 7111.66,
+          "sec": 0.103173,
+          "saving_vs_b1_pct": 4.4979
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 2861.68,
+          "supply_m3": 27736.8,
+          "gap_vs_actual_m3": 7111.66,
+          "sec": 0.103173,
+          "saving_vs_b1_pct": 4.4979
+        }
+      },
+      "service_equiv_steps": 1,
+      "service_equiv_saving": {
+        "b1_rule": {
+          "energy_kwh": 550.12,
+          "supply_m3": 4386.6,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.125408,
+          "saving_vs_b1_pct": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 525.63,
+          "supply_m3": 4386.6,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.119826,
+          "saving_vs_b1_pct": 4.4513
+        },
+        "cand": {
+          "energy_kwh": 525.63,
+          "supply_m3": 4386.6,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.119826,
+          "saving_vs_b1_pct": 4.4513
+        },
+        "ard_err": {
+          "energy_kwh": 568.24,
+          "supply_m3": 4741.2,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.11985,
+          "saving_vs_b1_pct": -3.2939
+        },
+        "ard_dyn": {
+          "energy_kwh": 568.24,
+          "supply_m3": 4741.2,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.11985,
+          "saving_vs_b1_pct": -3.2939
+        },
+        "ard_dyn_peak": {
+          "energy_kwh": 568.24,
+          "supply_m3": 4741.2,
+          "gap_vs_actual_m3": 0.0,
+          "sec": 0.11985,
+          "saving_vs_b1_pct": -3.2939
+        }
+      },
+      "pressure": {
+        "b1_rule": {
+          "compliance": 0.2,
+          "pinned_upper_frac": 0.0,
+          "pinned_lower_frac": 0.2,
+          "p_end": 0.4077,
+          "net_supply_minus_demand_m3": -5183.9
+        },
+        "b3_b4": {
+          "compliance": 0.2,
+          "pinned_upper_frac": 0.0,
+          "pinned_lower_frac": 0.2,
+          "p_end": 0.4077,
+          "net_supply_minus_demand_m3": -5183.9
+        },
+        "cand": {
+          "compliance": 0.2,
+          "pinned_upper_frac": 0.0,
+          "pinned_lower_frac": 0.2,
+          "p_end": 0.4077,
+          "net_supply_minus_demand_m3": -5183.9
+        },
+        "ard_err": {
+          "compliance": 0.2,
+          "pinned_upper_frac": 0.0,
+          "pinned_lower_frac": 0.6,
+          "p_end": 0.4,
+          "net_supply_minus_demand_m3": -6249.8
+        },
+        "ard_dyn": {
+          "compliance": 0.2,
+          "pinned_upper_frac": 0.0,
+          "pinned_lower_frac": 0.6,
+          "p_end": 0.4,
+          "net_supply_minus_demand_m3": -6303.8
+        },
+        "ard_dyn_peak": {
+          "compliance": 0.2,
+          "pinned_upper_frac": 0.0,
+          "pinned_lower_frac": 0.6,
+          "p_end": 0.4,
+          "net_supply_minus_demand_m3": -6303.8
+        }
+      }
+    }
+  },
+  "pressure_dynamics_field_inventory": {
+    "station_timeseries": [
+      "header_pressure_mpa",
+      "total_flow_m3_min",
+      "total_power_kw",
+      "station_temperature_c",
+      "station_humidity_percent",
+      "load_rate",
+      "load_level"
+    ],
+    "device_timeseries": [
+      "discharge_pressure_mpa",
+      "flow_m3_min",
+      "power_kw",
+      "igv_percent",
+      "bov_closed_percent",
+      "current_proxy_a",
+      "vibration_stage_*_mm_s",
+      "runtime_hours",
+      "load_hours"
+    ],
+    "usable": "header_pressure(状态), total_flow(吞吐), 逐机状态/IGV/BOV/排气压力 -> 可做短时可辨识",
+    "missing_assumptions": [
+      "独立耗气(demand)测点",
+      "管网储气容积/时延",
+      "阀门响应时间"
+    ],
+    "marked": "K_VOL/LEAK/延迟 均为 simulation 假设, 无厂家依据"
+  }
+}

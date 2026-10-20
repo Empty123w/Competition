@@ -1,0 +1,172 @@
+{
+  "definition": {
+    "load_ratio": "flow_m3_min / rated_capacity_m3min (rated=268.9)",
+    "lambda_target": 1.0,
+    "target_source": "开发期设备性能数据 (SEC-λ 拟合 argmin); 非优化器输出",
+    "deviation_formula": "(lambda - lambda_target)/lambda_target * 100%  (相对百分比, 有符号)",
+    "relative_vs_percentage_point": "相对百分比",
+    "target_variants": {
+      "A_rated": "λ*=1.0",
+      "B_plateau_lo": "逐机效率平台下界(SEC 在最优5%内的最低λ)"
+    },
+    "note_target_choice": "CAL-04 未确认; 目标口径未定, A/B 两种都报; 不得据验证结果改目标",
+    "tolerance_pct": 10.0,
+    "applicable": "运行且质量有效、flow 在 [120,268.9]; 排除停机/无效/越界/瞬态启停样本",
+    "cal04_status": "pending (B 工程提案, 待 C/工艺确认)"
+  },
+  "targets_by_device": {
+    "4#": {
+      "lambda_target": 1.0,
+      "sec_min_kwh_per_m3": 5.1567,
+      "plateau_lo": 0.8537,
+      "quad_coeff": [
+        -1.943702,
+        1.844204,
+        5.256217
+      ],
+      "n_dev_samples": 126075,
+      "source": "development_performance_data (设备性能, 非优化器输出)"
+    },
+    "5#": {
+      "lambda_target": 1.0,
+      "sec_min_kwh_per_m3": 4.9971,
+      "plateau_lo": 0.9381,
+      "quad_coeff": [
+        -2.878347,
+        1.548895,
+        6.326557
+      ],
+      "n_dev_samples": 165029,
+      "source": "development_performance_data (设备性能, 非优化器输出)"
+    }
+  },
+  "A_target_rated": {
+    "observed_valid": {
+      "label": "observed_valid_1min",
+      "per_device": [
+        {
+          "device_id": "4#",
+          "n": 28620,
+          "lambda_target": 1.0,
+          "lambda_mean": 0.8519,
+          "dev_mean_pct": -14.8145,
+          "dev_absmax_pct": 55.2012,
+          "underload_ratio": 0.9954,
+          "overload_ratio": 0.0,
+          "exceed_ratio": 0.9954,
+          "exceed_minutes": 28488.0
+        },
+        {
+          "device_id": "5#",
+          "n": 27910,
+          "lambda_target": 1.0,
+          "lambda_mean": 0.7831,
+          "dev_mean_pct": -21.6923,
+          "dev_absmax_pct": 55.3578,
+          "underload_ratio": 0.9811,
+          "overload_ratio": 0.0,
+          "exceed_ratio": 0.9811,
+          "exceed_minutes": 27382.0
+        }
+      ],
+      "exceed_ratio_overall": 0.9883,
+      "exceed_minutes_overall": 55870.0
+    },
+    "b3_plan_valid": {
+      "label": "b3_plan_valid_15min",
+      "per_device": [
+        {
+          "device_id": "4#",
+          "n": 1908,
+          "lambda_target": 1.0,
+          "lambda_mean": 0.6423,
+          "dev_mean_pct": -35.7662,
+          "dev_absmax_pct": 55.3737,
+          "underload_ratio": 0.9958,
+          "overload_ratio": 0.0,
+          "exceed_ratio": 0.9958,
+          "exceed_minutes": 28500.0
+        },
+        {
+          "device_id": "5#",
+          "n": 1883,
+          "lambda_target": 1.0,
+          "lambda_mean": 0.9921,
+          "dev_mean_pct": -0.7857,
+          "dev_absmax_pct": 46.6679,
+          "underload_ratio": 0.0186,
+          "overload_ratio": 0.0,
+          "exceed_ratio": 0.0186,
+          "exceed_minutes": 525.0
+        }
+      ],
+      "exceed_ratio_overall": 0.5104,
+      "exceed_minutes_overall": 29025.0
+    }
+  },
+  "B_target_plateau_lo": {
+    "observed_valid": {
+      "label": "observed_valid_1min",
+      "per_device": [
+        {
+          "device_id": "4#",
+          "n": 28620,
+          "lambda_target": 0.8537,
+          "lambda_mean": 0.8519,
+          "dev_mean_pct": -0.2162,
+          "dev_absmax_pct": 47.5239,
+          "underload_ratio": 0.0187,
+          "overload_ratio": 0.0,
+          "exceed_ratio": 0.0187,
+          "exceed_minutes": 535.0
+        },
+        {
+          "device_id": "5#",
+          "n": 27910,
+          "lambda_target": 0.9381,
+          "lambda_mean": 0.7831,
+          "dev_mean_pct": -16.5252,
+          "dev_absmax_pct": 52.4121,
+          "underload_ratio": 0.3841,
+          "overload_ratio": 0.0,
+          "exceed_ratio": 0.3841,
+          "exceed_minutes": 10721.0
+        }
+      ],
+      "exceed_ratio_overall": 0.1991,
+      "exceed_minutes_overall": 11256.0
+    },
+    "b3_plan_valid": {
+      "label": "b3_plan_valid_15min",
+      "per_device": [
+        {
+          "device_id": "4#",
+          "n": 1908,
+          "lambda_target": 0.8537,
+          "lambda_mean": 0.6423,
+          "dev_mean_pct": -24.7584,
+          "dev_absmax_pct": 47.7261,
+          "underload_ratio": 0.9219,
+          "overload_ratio": 0.0,
+          "exceed_ratio": 0.9219,
+          "exceed_minutes": 26385.0
+        },
+        {
+          "device_id": "5#",
+          "n": 1883,
+          "lambda_target": 0.9381,
+          "lambda_mean": 0.9921,
+          "dev_mean_pct": 5.7609,
+          "dev_absmax_pct": 43.1488,
+          "underload_ratio": 0.0133,
+          "overload_ratio": 0.0,
+          "exceed_ratio": 0.0133,
+          "exceed_minutes": 375.0
+        }
+      ],
+      "exceed_ratio_overall": 0.4706,
+      "exceed_minutes_overall": 26760.0
+    }
+  },
+  "runtime_s": 140.8
+}

@@ -1,0 +1,82 @@
+{
+  "model": {
+    "K_VOL": 23700.0,
+    "LEAK": 0.001,
+    "P_ENV": 0.55,
+    "P0": 0.6,
+    "clamp": [
+      0.4,
+      0.75
+    ],
+    "dt_min": 15.0,
+    "band": [
+      0.55,
+      0.66
+    ],
+    "validation_mode": "simulation",
+    "identifiability": "demand 未测; 反事实不可辨识, 结果仅示意"
+  },
+  "over_supply_extra_m3min": 40.0,
+  "dev": {
+    "b1_rule": {
+      "in_band_pct": 9.474,
+      "above_band_pct": 87.026,
+      "below_band_pct": 3.5,
+      "mean_over_supply_m3min": 22.462,
+      "mean_p": 0.7174,
+      "at_upper_clamp_pct": 51.132
+    },
+    "b3_b4": {
+      "in_band_pct": 13.132,
+      "above_band_pct": 82.513,
+      "below_band_pct": 4.355,
+      "mean_over_supply_m3min": 17.237,
+      "mean_p": 0.7076,
+      "at_upper_clamp_pct": 47.053
+    },
+    "bal": {
+      "in_band_pct": 12.961,
+      "above_band_pct": 82.592,
+      "below_band_pct": 4.447,
+      "mean_over_supply_m3min": 17.236,
+      "mean_p": 0.7075,
+      "at_upper_clamp_pct": 47.066
+    },
+    "no_oversupply": {
+      "in_band_pct": 100.0,
+      "mean_p": 0.5504,
+      "at_upper_clamp_pct": 0.0
+    }
+  },
+  "valid": {
+    "b1_rule": {
+      "in_band_pct": 0.784,
+      "above_band_pct": 99.216,
+      "below_band_pct": 0.0,
+      "mean_over_supply_m3min": 21.88,
+      "mean_p": 0.7475,
+      "at_upper_clamp_pct": 91.902
+    },
+    "b3_b4": {
+      "in_band_pct": 1.724,
+      "above_band_pct": 98.276,
+      "below_band_pct": 0.0,
+      "mean_over_supply_m3min": 21.699,
+      "mean_p": 0.7456,
+      "at_upper_clamp_pct": 90.439
+    },
+    "bal": {
+      "in_band_pct": 1.724,
+      "above_band_pct": 98.276,
+      "below_band_pct": 0.0,
+      "mean_over_supply_m3min": 21.689,
+      "mean_p": 0.7456,
+      "at_upper_clamp_pct": 90.439
+    },
+    "no_oversupply": {
+      "in_band_pct": 100.0,
+      "mean_p": 0.5517,
+      "at_upper_clamp_pct": 0.0
+    }
+  }
+}

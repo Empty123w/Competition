@@ -1,0 +1,93 @@
+{
+  "protocol": {
+    "dev_window": "2026-03-12~07-31",
+    "valid_window": "2026-08-01~2026-08-20",
+    "step_minutes": 15,
+    "task": "observed station total_flow (nowcast)",
+    "reserve": "frozen extra 5%",
+    "uses_B5_final_window": false
+  },
+  "s2_model_comparison": {
+    "4#": {
+      "base_valid": {
+        "MAE": 13.191,
+        "RMSE": 16.638,
+        "MAPE": 1.048,
+        "n": 28620
+      },
+      "refined_valid": {
+        "MAE": 19.783,
+        "RMSE": 23.682,
+        "MAPE": 1.573,
+        "n": 28620
+      }
+    },
+    "5#": {
+      "base_valid": {
+        "MAE": 11.358,
+        "RMSE": 16.715,
+        "MAPE": 1.003,
+        "n": 27910
+      },
+      "refined_valid": {
+        "MAE": 10.211,
+        "RMSE": 14.079,
+        "MAPE": 0.864,
+        "n": 27910
+      }
+    }
+  },
+  "supply_task_summary": {
+    "n_valid_steps": 1919,
+    "b1": {
+      "n": 1919,
+      "energy_kwh": 1213041.57,
+      "supply_m3": 12497708.8,
+      "sec": 0.097061,
+      "shortfall_m3": 34.49
+    },
+    "b3": {
+      "n": 1919,
+      "energy_kwh": 1126392.17,
+      "supply_m3": 12484529.1,
+      "sec": 0.090223,
+      "shortfall_m3": 35.27
+    },
+    "s2": {
+      "n": 1919,
+      "energy_kwh": 1126254.25,
+      "supply_m3": 12484530.9,
+      "sec": 0.090212,
+      "shortfall_m3": 0.07
+    },
+    "common_n": 1919,
+    "common_b1_energy": 1213041.57,
+    "common_b3_energy": 1126392.17,
+    "common_s2_energy": 1126254.25,
+    "common_reduction_b3_pct": 7.143,
+    "common_reduction_s2_pct": 7.155
+  },
+  "runtime_s": 159.9,
+  "feasibility": {
+    "n": 1919,
+    "b1_ok": 1919,
+    "b3_ok": 1919,
+    "s2_ok": 1919,
+    "b3_blocked": 1,
+    "all_ok": 1919
+  },
+  "switches": {
+    "b1": 0,
+    "b3": 0,
+    "s2": 0
+  },
+  "pressure": {
+    "observed_mean": 0.6178,
+    "observed_compliance": 0.9833,
+    "b3_surge": {
+      "medium": 692,
+      "low": 1226,
+      "unknown": 1
+    }
+  }
+}

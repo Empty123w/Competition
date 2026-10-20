@@ -33,6 +33,9 @@ artifacts/models/*
 !artifacts/models/rul_upper.pkl
 !artifacts/models/rul_split.json
 !artifacts/models/rul_meta.json
+!artifacts/models/power_model.json
+!artifacts/models/pressure_model.json
+!artifacts/models/surge_boundary.json
 artifacts/metrics/*
 !artifacts/metrics/.gitkeep
 !artifacts/metrics/forecast_metrics.json
@@ -40,6 +43,8 @@ artifacts/metrics/*
 !artifacts/metrics/forecast_test_predictions.parquet
 !artifacts/metrics/forecast_test_predictions.csv
 !artifacts/metrics/rul_metrics.json
+!artifacts/metrics/performance_metrics.json
+!artifacts/metrics/pressure_metrics.json
 !artifacts/metrics/forecast_rolling_audit.parquet
 !artifacts/metrics/forecast_rolling_metrics.json
 !artifacts/metrics/forecast_fold_metadata.json

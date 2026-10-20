@@ -1,0 +1,191 @@
+{
+  "block": {
+    "start": "2026-04-20 00:00:00",
+    "n": 480,
+    "fair_steps": 471
+  },
+  "resid_margin_m3min": 6.09,
+  "constraint_sources": {
+    "reserve_extra_5pct": {
+      "value": 0.05,
+      "mode": "extra",
+      "source": "pending",
+      "CAL": "CAL-03"
+    },
+    "single_machine_threshold_m3min": 256.1,
+    "single_threshold_basis": "268.9/1.05 (= validated_max/(1+extra5%))",
+    "min_stable_flow_m3min": 120.0,
+    "min_stable_source": "engineering",
+    "demand_basis": "upper_bound",
+    "demand_source": "pending",
+    "CAL": {
+      "demand": "CAL-02",
+      "reserve": "CAL-03",
+      "min_flow": "AS-02"
+    }
+  },
+  "strategies": {
+    "b1_rule": {
+      "exec_steps": 475,
+      "energy_kwh_fair": 252765.4,
+      "supply_m3_fair": 1942049.1,
+      "sec_fair": 0.130154,
+      "saving_vs_b1_pct": 0.0,
+      "shortfall_vs_actual_m3_fair": 4242.18,
+      "big_small_min_fair": 7230.0,
+      "pressure": {
+        "compliance": 0.9873,
+        "below_band_min": 30,
+        "above_band_min": 60,
+        "p_start": 0.6,
+        "p_end": 0.627,
+        "net_supply_minus_demand_m3": 111993.8,
+        "delta_p_observed": 0.027,
+        "no_net_storage_depletion": true
+      },
+      "big_small_reduction_vs_b1_pct": 0.0
+    },
+    "b3_b4": {
+      "exec_steps": 475,
+      "energy_kwh_fair": 242944.53,
+      "supply_m3_fair": 1941393.7,
+      "sec_fair": 0.125139,
+      "saving_vs_b1_pct": 3.8854,
+      "shortfall_vs_actual_m3_fair": 4260.78,
+      "big_small_min_fair": 6900.0,
+      "pressure": {
+        "compliance": 0.9894,
+        "below_band_min": 30,
+        "above_band_min": 45,
+        "p_start": 0.6,
+        "p_end": 0.627,
+        "net_supply_minus_demand_m3": 111338.5,
+        "delta_p_observed": 0.027,
+        "no_net_storage_depletion": true
+      },
+      "big_small_reduction_vs_b1_pct": 4.5643
+    },
+    "uc_upper": {
+      "exec_steps": 475,
+      "energy_kwh_fair": 242944.54,
+      "supply_m3_fair": 1941393.7,
+      "sec_fair": 0.125139,
+      "saving_vs_b1_pct": 3.8854,
+      "shortfall_vs_actual_m3_fair": 4260.77,
+      "big_small_min_fair": 6900.0,
+      "pressure": {
+        "compliance": 0.9894,
+        "below_band_min": 30,
+        "above_band_min": 45,
+        "p_start": 0.6,
+        "p_end": 0.627,
+        "net_supply_minus_demand_m3": 111338.4,
+        "delta_p_observed": 0.027,
+        "no_net_storage_depletion": true
+      },
+      "big_small_reduction_vs_b1_pct": 4.5643
+    },
+    "uc_pred": {
+      "exec_steps": 476,
+      "energy_kwh_fair": 220198.9,
+      "supply_m3_fair": 1832885.6,
+      "sec_fair": 0.120138,
+      "saving_vs_b1_pct": 12.8841,
+      "shortfall_vs_actual_m3_fair": 11297.57,
+      "big_small_min_fair": 5310.0,
+      "pressure": {
+        "compliance": 0.9851,
+        "below_band_min": 60,
+        "above_band_min": 45,
+        "p_start": 0.6,
+        "p_end": 0.601,
+        "net_supply_minus_demand_m3": 2830.3,
+        "delta_p_observed": 0.001,
+        "no_net_storage_depletion": true
+      },
+      "big_small_reduction_vs_b1_pct": 26.556
+    },
+    "uc_mid": {
+      "exec_steps": 479,
+      "energy_kwh_fair": 240336.05,
+      "supply_m3_fair": 1887495.2,
+      "sec_fair": 0.127331,
+      "saving_vs_b1_pct": 4.9174,
+      "shortfall_vs_actual_m3_fair": 4982.69,
+      "big_small_min_fair": 6780.0,
+      "pressure": {
+        "compliance": 0.9873,
+        "below_band_min": 45,
+        "above_band_min": 45,
+        "p_start": 0.6,
+        "p_end": 0.614,
+        "net_supply_minus_demand_m3": 57439.9,
+        "delta_p_observed": 0.014,
+        "no_net_storage_depletion": true
+      },
+      "big_small_reduction_vs_b1_pct": 6.2241
+    },
+    "uc_resid": {
+      "exec_steps": 479,
+      "energy_kwh_fair": 239917.31,
+      "supply_m3_fair": 1876262.7,
+      "sec_fair": 0.12787,
+      "saving_vs_b1_pct": 5.083,
+      "shortfall_vs_actual_m3_fair": 5363.78,
+      "big_small_min_fair": 6765.0,
+      "pressure": {
+        "compliance": 0.9873,
+        "below_band_min": 45,
+        "above_band_min": 45,
+        "p_start": 0.6,
+        "p_end": 0.6126,
+        "net_supply_minus_demand_m3": 46207.4,
+        "delta_p_observed": 0.0126,
+        "no_net_storage_depletion": true
+      },
+      "big_small_reduction_vs_b1_pct": 6.4315
+    },
+    "sens_norreserve": {
+      "exec_steps": 480,
+      "energy_kwh_fair": 233237.59,
+      "supply_m3_fair": 1941393.7,
+      "sec_fair": 0.120139,
+      "saving_vs_b1_pct": 7.7257,
+      "shortfall_vs_actual_m3_fair": 4260.77,
+      "big_small_min_fair": 6150.0,
+      "pressure": {
+        "compliance": 0.9894,
+        "below_band_min": 30,
+        "above_band_min": 45,
+        "p_start": 0.6,
+        "p_end": 0.627,
+        "net_supply_minus_demand_m3": 111338.4,
+        "delta_p_observed": 0.027,
+        "no_net_storage_depletion": true
+      },
+      "big_small_reduction_vs_b1_pct": 14.9378
+    },
+    "sens_minflow60": {
+      "exec_steps": 474,
+      "energy_kwh_fair": 230055.58,
+      "supply_m3_fair": 1941393.7,
+      "sec_fair": 0.1185,
+      "saving_vs_b1_pct": 8.9845,
+      "shortfall_vs_actual_m3_fair": 4260.77,
+      "big_small_min_fair": 6900.0,
+      "pressure": {
+        "compliance": 0.9894,
+        "below_band_min": 30,
+        "above_band_min": 45,
+        "p_start": 0.6,
+        "p_end": 0.627,
+        "net_supply_minus_demand_m3": 111338.4,
+        "delta_p_observed": 0.027,
+        "no_net_storage_depletion": true
+      },
+      "big_small_reduction_vs_b1_pct": 4.5643
+    }
+  },
+  "b1_shortfall_m3_fair": 4242.18,
+  "runtime_s": 82.4
+}

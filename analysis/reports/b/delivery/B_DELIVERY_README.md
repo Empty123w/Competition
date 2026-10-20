@@ -1,0 +1,73 @@
+# B 组交付总入口（空压站多机协同智能调度）
+
+本目录是 B 部分的统一交付入口；详细报告在上级 `analysis/reports/b/`。分支 `feat/b-int-a6`，**未推送**。
+
+## 交付包索引
+| 文件 | 内容 |
+|---|---|
+| `B_DELIVERY_README.md` | 本入口（成果、KPI、缺口、复现） |
+| `ALGORITHMS_AND_API.md` | 算法清单 + 统一调度 API（`dispatch_api`）说明与样例 |
+| `RUNBOOK.md` | 环境依赖、复现命令、长任务与进度 |
+| `OPEN_ITEMS.md` | 待外部确认事项（A/C/D/官方） |
+| `c_call_examples.json` | 三模式真实调用输出 + 异常/回退用例 |
+| `load_ratio_all.json` | 三段×4 策略加载率 D1/D2/D3 |
+| `../MAIN_STRATEGY_RECOMMENDATION.md` | 比赛主方案推荐（LRB-t10 + 备选） |
+| `../SIM_CLOSED_LOOP_STUDY.md` | 闭环仿真验证（工程假设；含 5 场景与敏感性） |
+| `DEMO_SCENARIOS.md` | C/D 演示场景与复现命令 |
+| `../B5_UNIFIED_SUMMARY.md` | dev+valid+test 统一汇总（含 pooled） |
+| `../B_KPI_FINAL_ACCEPTANCE.md` | KPI 最终验收表 |
+| `../C_INTERFACE.md` | C 接口交付说明 |
+| `../LOAD_RATIO_PRESSURE_STUDY.md` | 加载率/压力专项 |
+| `../PRESSURE_DATA_AUDIT.md` / `../A6_TEST_DATA_AUDIT.md` / `../A6_SPLIT_VERIFICATION.md` / `../SAITI_KPI_VERIFICATION.md` | 数据来源与官方口径核查 |
+
+## A. 算法（冻结 B1/B4 未改）
+| 模块 | 入口 | 文件 |
+|---|---|---|
+| B1 人工规则基线 | `baseline.rules.decide` | `src/air_station/baseline/{rules,evaluator,pipeline}.py` |
+| B2 设备功率模型 | `optimization.performance.estimate_power` | `src/air_station/optimization/performance.py`、`artifacts/models/power_model.json` |
+| B3+B4 能效优先 | `optimization.service.optimize_dispatch` | `optimization/{service,optimizer,constraints}.py`、`safety/{boundaries,surge}.py` |
+| bal 低负荷优先 | `unit_commitment.plan(UCConfig(balanced=True))` | `optimization/unit_commitment.py` |
+| LRB-t10 加载率均衡 | `unit_commitment.plan(UCConfig(spread_balance=True, spread_tol=0.10))` | 同上 |
+| 统一 API | `optimization.dispatch_api.plan_dispatch(mode,…)` | `optimization/dispatch_api.py` |
+
+## B. 实验
+- **三段回测**：`multikpi_dev_tol.json`（dev 12284）、`multikpi_valid_tol.json`（valid 1916）、`multikpi_test_0_3000.json`（test 2113）。
+- **统一汇总**：`b5_unified_summary.json` + `../B5_UNIFIED_SUMMARY.md`（dev+valid 与 dev+valid+test 两总表）。
+- **test 预测**：`artifacts/handoff_b_test/forecast_test_dispatch_calibrated.parquet`（2113 步，15/30/45/60/75）。
+- **Pareto**：B3(能效) ↔ bal(低负荷) ↔ LRB-t10(加载率均衡)（见汇总 §3）。
+- **回退/服务可比**：`fallback_audit.json`、`bal_sec_calibers.json`、`kpi_supply_service.json`。
+
+## C. 工程验证
+- **测试**：`tests/optimization` 136 passed（含 `test_dispatch_api.py` 三模式、`test_unit_commitment.py` spread）。
+- **时延**：B3 p50 33.9–41ms、bal p50 7–18ms、LRB-t10 p50 7.8–19ms；max ≤0.5s（`kpi_latency.json`）。
+- **安全回退**：`dispatch_api._fallback` 统一探回 B1，`execution_permission=simulation_candidate_only`，无 PLC 写路径。
+- **压力/喘振可验证范围**：见 `PRESSURE_DATA_AUDIT.md`、`kpi_surge_events.json`（代理事件、无真实标签、1min 分辨率）。
+
+## D. 集成交付（给 C）
+- `C_INTERFACE.md`；`/workspace/analysis/reports/b/delivery/c_call_examples.json`（三模式调用样例与异常用例）；`RUNBOOK.md`（依赖与命令）。
+- 模式：`b3` / `balanced` / `load_balanced`；**仅仿真候选，不含控制下发**。
+
+## E. 待外部确认
+见 `OPEN_ITEMS.md`（官方能效公式与基线、加载率定义、压力带/数据、CAL/AS 参数、真实喘振标签、C 端到端时延）。
+
+## 状态分类（诚实边界）
+- **已实现且经真实回测**：B1/B3/bal/LRB-t10 的 dev/valid/test 逐步状态连续调度；SEC/节电/低负荷/加载率/回退/时延。
+- **内部工程假设下验证**：压力仿真、喘振代理分级。
+- **当前数据不足、无法正式评价**：压力合格率 99.5%、压力波动下降 30%、喘振真实准确率/30s、官方能效得分。
+- **需 C 集成后才能验证**：端到端 Agent 时延 ≤60s、PLC 指令链路。
+
+## F. KPI 公式与数据性质（速查）
+| KPI | 公式 | 基线 | 窗口 | 数据性质 | 达标限制 |
+|---|---|---|---|---|---|
+| 综合能效 | `(SEC_b1−SEC_x)/SEC_b1`, `SEC=ΣE(kWh)/ΣV(m³)` | B1 规则（**内部，非官方人工基线**） | dev/valid/test/全历史 | 离线模型估计 | 官方无公式；单段 valid/test <6% |
+| 同供气节电 | `(E_b1−E_x)/E_b1` | B1 | 同上 | 离线模型估计 | 供气量需可比（服务等价） |
+| 加载率 D1/D2/D3 | 见 `../delivery/load_ratio_all.json` | 额定/效率平台/机组间 | dev/valid/test | 离线模型估计 | 官方**无定义**；D3 非官方 |
+| 大马拉小车 | `(low_b1−low_x)/low_b1`, low=运行且 λ<0.5 的机分钟 | B1 | 同上 | 离线模型估计 | 加分项 |
+| 压力合格率 | 实测：`合格点/总点`（带为假设）；仿真：闭环 `p∈带` | — | 实测 + 模拟场景 | 实测(基线)/工程仿真 | 官方无带；不申报 99.5% |
+| 压力波动下降 | `(std_b1−std_x)/std_b1` | — | 模拟场景 | 工程仿真 | 需可信反事实 |
+| 调度时延 | 函数入口→输出耗时 | — | valid/test 抽测 | 实测 | 算法侧；端到端待 C |
+| 喘振 | 代理裕度分级 | — | 历史逐分钟 | 工程仿真/代理 | 无真实标签/1min 分辨率 |
+
+**质量守恒（仿真）**：`净入流 − 储气变化 − 泄漏 − 安全泄压 + 未满足缺口 = 0`（`closed_loop.py`，残差≈0）。
+
+**执行权限**：所有 B 侧调度输出 `execution_permission="simulation_candidate_only"`；**无真实设备控制路径**。

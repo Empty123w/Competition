@@ -1,0 +1,90 @@
+{
+  "model_version": "b2-power-v0.1",
+  "validation_mode": "simulation",
+  "devices": {
+    "4#": {
+      "method": "LinearRegression(flow,pressure,igv,ambient)",
+      "metrics": {
+        "train": {
+          "MAE": 10.402,
+          "RMSE": 15.5,
+          "MAPE": 0.82,
+          "R2": 0.935,
+          "n": 126075
+        },
+        "valid": {
+          "MAE": 13.191,
+          "RMSE": 16.638,
+          "MAPE": 1.048,
+          "R2": 0.7747,
+          "n": 28620
+        },
+        "test": {
+          "MAE": 16.497,
+          "RMSE": 20.742,
+          "MAPE": 1.273,
+          "R2": 0.6089,
+          "n": 31350
+        }
+      },
+      "sample_counts": {
+        "total": 264961,
+        "stopped": 46705,
+        "running_zero_flow": 5568,
+        "below_validated_min": 148,
+        "above_validated_max": 26492,
+        "nonfinite": 0,
+        "used": 186045,
+        "overload_share_running": 0.1246,
+        "overload_max_flow": 299.7,
+        "train": 126075,
+        "valid": 28620,
+        "test": 31350
+      },
+      "validated_operating_max_m3min": 268.9,
+      "observed_max_m3min": 299.7
+    },
+    "5#": {
+      "method": "LinearRegression(flow,pressure,igv,ambient)",
+      "metrics": {
+        "train": {
+          "MAE": 11.146,
+          "RMSE": 16.911,
+          "MAPE": 0.935,
+          "R2": 0.9814,
+          "n": 165029
+        },
+        "valid": {
+          "MAE": 11.358,
+          "RMSE": 16.715,
+          "MAPE": 1.003,
+          "R2": 0.9816,
+          "n": 27910
+        },
+        "test": {
+          "MAE": 10.939,
+          "RMSE": 15.003,
+          "MAPE": 0.847,
+          "R2": 0.8042,
+          "n": 31045
+        }
+      },
+      "sample_counts": {
+        "total": 264961,
+        "stopped": 7878,
+        "running_zero_flow": 301,
+        "below_validated_min": 2183,
+        "above_validated_max": 30611,
+        "nonfinite": 0,
+        "used": 223984,
+        "overload_share_running": 0.1192,
+        "overload_max_flow": 297.47,
+        "train": 165029,
+        "valid": 27910,
+        "test": 31045
+      },
+      "validated_operating_max_m3min": 268.9,
+      "observed_max_m3min": 297.47
+    }
+  }
+}
