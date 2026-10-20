@@ -1,0 +1,49 @@
+{
+  "window": {
+    "t0": "2026-07-02 10:45:00",
+    "t1": "2026-07-03 01:30:00",
+    "steps": 60,
+    "demand_start": 223.8,
+    "demand_end": 119.2,
+    "demand_drop": 104.6
+  },
+  "data_source": "real_history(开发段) + model_estimate(power)",
+  "strategies": {
+    "b1_rule": {
+      "energy_kwh": 30785.0,
+      "supply_m3": 219714.0,
+      "sec": 0.140114,
+      "sec_reduction_vs_b1_pct": 0.0,
+      "low_load_min": 1800,
+      "low_reduction_vs_b1_pct": 0.0,
+      "supply_minus_b1_m3": 0.0
+    },
+    "b3_b4": {
+      "energy_kwh": 18506.2,
+      "supply_m3": 199987.5,
+      "sec": 0.092537,
+      "sec_reduction_vs_b1_pct": 33.956,
+      "low_load_min": 15,
+      "low_reduction_vs_b1_pct": 99.167,
+      "supply_minus_b1_m3": -19726.5
+    },
+    "bal": {
+      "energy_kwh": 18184.1,
+      "supply_m3": 199986.0,
+      "sec": 0.090927,
+      "sec_reduction_vs_b1_pct": 35.105,
+      "low_load_min": 15,
+      "low_reduction_vs_b1_pct": 99.167,
+      "supply_minus_b1_m3": -19728.0
+    },
+    "lrb_t10": {
+      "energy_kwh": 18184.1,
+      "supply_m3": 199986.0,
+      "sec": 0.090927,
+      "sec_reduction_vs_b1_pct": 35.105,
+      "low_load_min": 15,
+      "low_reduction_vs_b1_pct": 99.167,
+      "supply_minus_b1_m3": -19728.0
+    }
+  }
+}
