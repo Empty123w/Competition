@@ -349,7 +349,8 @@ assess_surge_risk(snapshot, candidate, *, boundary_version=None,
 ### 12.4 错误码（`optimization/contracts.py`）
 `INVALID_INPUT / STALE_FORECAST / INFEASIBLE_CAPACITY / INSUFFICIENT_DATA / MODEL_UNAVAILABLE / FORECAST_MISSING_HOLD / HEALTH_DERATE / HEALTH_STOP_REVIEW / RESERVE_VIOLATION / MIN_RUN_LOCK / MIN_STOP_LOCK / MAX_SWITCH_LOCK / TRANSITION_CAPACITY_GAP / TIMEOUT / SURGE_HIGH_BLOCKED / SURGE_UNKNOWN / SURGE_BOUNDARY_UNKNOWN / PRESSURE_COUNTERFACTUAL_UNSUPPORTED / RUL_SIMULATION_PENALTY_ON`。
 
-**状态（`status`）**：`"success"`（仅成功后）与 `"INFEASIBLE"/"INSUFFICIENT_DATA"/"INVALID_INPUT"/"TIMEOUT"`（失败）；回退路径可能返回小写 `"timeout"/"fallback"/"infeasible"`。**判定失败请用 `is_fallback==true` 或 `status!="success"`**，不要假定固定大小写。
+**状态（`status`）**：`"success"`（仅成功后）与 `"INFEASIBLE"/"INSUFFICIENT_DATA"/"INVALID_INPUT"/"TIMEOUT"`（失败）；回退路径可能返回小写 `"timeout"/"fallback"/"infeasible"`。
+**统一判定（推荐 C 直接调用，避免大小写/语义歧义；不改返回字段/取值）**：`b_api.is_success(o)`（成功且非回退，大小写不敏感）、`b_api.is_fallback_result(o)`（回退）、`b_api.is_blocked(o)`（`safety_blocked`）、`b_api.is_infeasible(o)`（不可行）、`b_api.candidate_usable(o)`（可展示的**仿真候选**，非执行许可）、`b_api.needs_human_review(o)`（失败/回退/阻断）、`b_api.execution_allowed(o)`（**恒 False**）。**判定失败请用这些函数或 `is_fallback==true`/`status!="success"`**，不要假定固定大小写。`timeout_ms` 对三模式一致生效。
 
 ---
 
@@ -447,7 +448,8 @@ print(out["status"], out["target_combination"], out["estimated_power_kw"], out["
 - `timeout_ms<=0`（balanced）→ `status="timeout"`、`is_fallback=true`、`reason_codes=["TIMEOUT"]`；
 - 容量不足（b3，需求 700）→ `status="INFEASIBLE"`、`is_fallback=true`、`reason_codes=["INFEASIBLE_CAPACITY"]`；
 - 高喘振 → `safety_blocked=true`（`b7/scenario2_events.json: neg_high_surge`）。
-- **状态字符串大小写**：`contracts` 中 `STATUS_*` 为 `"success"/"INFEASIBLE"/"INSUFFICIENT_DATA"/"INVALID_INPUT"/"TIMEOUT"`；`dispatch_api` 回退历程会返回小写 `"timeout"/"fallback"/"infeasible"` 或大写的 `"INSUFFICIENT_DATA"/"INFEASIBLE"`（C 应以 `is_fallback` + `status != "success"` 判定不成功，勿只按大小写匹配）。
+- **状态字符串大小写**：`contracts` 中 `STATUS_*` 为 `"success"/"INFEASIBLE"/"INSUFFICIENT_DATA"/"INVALID_INPUT"/"TIMEOUT"`；`dispatch_api` 回退历程会返回小写 `"timeout"/"fallback"/"infeasible"` 或大写的 `"INSUFFICIENT_DATA"/"INFEASIBLE"`。**统一用 `b_api` 判定函数**（`is_success/is_fallback_result/is_blocked/is_infeasible/candidate_usable/needs_human_review/execution_allowed`），勿按大小写自行匹配。
+- **`timeout_ms` 三模式一致生效**（含 `b3`）：超时返回回退结果（`is_fallback=true`、`reason_codes` 含 `TIMEOUT`）。
 - **回退绝不标记为成功**：`is_fallback=true` 时 `status != "success"`，回退候选在 `fallback_candidate` 中。
 - **B 绝不在失败时返回伪装成功的控制动作**；`simulation_candidate_only` **不表示允许执行**，而是"仅供仿真/需人工确认"。
 
