@@ -86,3 +86,17 @@
     - KPI 汇总：`python3 analysis/scripts/stage2_kpi_summary.py`
   - stage2 产物写入 `analysis/reports/b/stage2/{surge,pressure,rl}/`；stage2 代码在 `src/air_station/stage2/`
   - 计时类测试（如 `tests/optimization/test_pressure_mpc.py::test_runtime_under_one_second`）在 CPU 被后台训练占满时会误报失败，需在负载解除后复跑
+
+[B 组第三阶段运行命令与联合闭环]
+- Date: 2026-10-21
+- Context: Agent 在完成 B 组第三阶段（联合优化与指标验收）时发现
+- Category: 构建方法/工作流协作
+- Instructions:
+  - 联合闭环实现在 `src/air_station/stage2/joint_dispatch.py`（复制阶段一 closed_loop 循环并 import 其物理函数，保证物理一致）；策略：b1/b3/balanced/load_balanced/mpc/joint
+  - 阶段三命令：
+    - 一致性核查：`python3 analysis/scripts/stage3_pressure_consistency.py`
+    - 多策略对照：`python3 analysis/scripts/stage3_joint_eval.py`（约 5-10 分钟）
+    - GRU 优化：`python3 analysis/scripts/stage3_surge_optimize.py`（约 5-8 分钟）
+    - 指标验收：`python3 analysis/scripts/stage3_acceptance.py`（test 种子 3,4；约 10 分钟）
+  - 产物：`analysis/reports/b/stage3/`；评价协议 `.cosmocode/docs/b_stage2/EVAL_PROTOCOL.md`
+  - 推荐策略 `joint`：MPC 压力控制 + 加载率均衡分配(spread_balance, tol=0.10) + 低负荷目标，单一运行同时满足能效/加载率/低负荷/压力
