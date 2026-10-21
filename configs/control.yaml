@@ -1,0 +1,29 @@
+# =====================================================================
+# 阶段 C: 模拟 PLC / SCADA / EAM 与执行闭环配置
+# - 赛题明确控制与工单接口为模拟接口, 不连接真实设备;
+# - 所有下发指令先经安全约束校验, 再写入模拟执行环境。
+# =====================================================================
+
+paths:
+  processed_dir: data/processed
+  db_url: "sqlite:///artifacts/air_station.db"
+
+# ---- 模拟执行环境 ----
+simulation:
+  latency_ms: 80                   # 模拟指令下发网络/PLC 时延
+  feedback_delay_ms: 120           # 模拟执行反馈回传时延
+  scada_stale_seconds: 60          # 数据新鲜度阈值
+  allow_real_device: false         # 硬开关: 永不允许连接真实 PLC
+
+# ---- 执行 SLA(赛题要求) ----
+sla:
+  command_generate_s: 5            # 控制指令生成 <= 5s
+  command_dispatch_s: 3            # 指令下发 <= 3s
+  feedback_return_s: 10            # 执行反馈 <= 10s
+  workorder_generate_s: 30         # 工单生成 <= 30s
+
+# ---- 安全联锁(硬约束, 任何指令不得绕过) ----
+safety_interlock:
+  require_pressure_within: [0.55, 0.75]   # 设定压力绝对安全区间 MPa
+  forbid_stop_all_under_load: true        # 高负荷下禁止全部停机
+  min_running_units: 1                    # 至少保留 1 台运行

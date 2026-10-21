@@ -1,0 +1,36 @@
+# =====================================================================
+# 空压站多机协同智能调度 Agent - 一体化编排 (阶段 C)
+#   docker compose -f deployment/docker-compose.yml up --build
+# API: http://localhost:8000    MCP(streamable-http): http://localhost:8765
+# =====================================================================
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    image: air-station-agent:latest
+    command: air-station-api
+    environment:
+      - AIRSTATION_HOST=0.0.0.0
+      - AIRSTATION_PORT=8000
+      - AIRSTATION_DB_URL=sqlite:////app/artifacts/air_station.db
+    ports:
+      - "8000:8000"
+    volumes:
+      - air_station_db:/app/artifacts
+
+  mcp:
+    build:
+      context: ..
+      dockerfile: deployment/Dockerfile
+    image: air-station-agent:latest
+    command: python -m air_station.mcp_servers.server --http
+    environment:
+      - AIRSTATION_DB_URL=sqlite:////app/artifacts/air_station.db
+    ports:
+      - "8765:8765"
+    volumes:
+      - air_station_db:/app/artifacts
+
+volumes:
+  air_station_db:

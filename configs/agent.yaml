@@ -1,0 +1,38 @@
+# =====================================================================
+# 阶段 C: Agent 工作流配置
+# - 默认使用确定性规则意图引擎(离线可测);
+# - 配置 OpenAI 兼容 LLM 后自动启用大模型意图理解与自然语言生成, 失败自动回退规则。
+# =====================================================================
+
+paths:
+  forecasting_config: configs/forecasting.yaml
+  dispatch_config: configs/dispatch.yaml
+  surge_config: configs/surge.yaml
+  control_config: configs/control.yaml
+  health_thresholds: configs/health_thresholds.yaml
+  db_url: "sqlite:///artifacts/air_station.db"
+
+# ---- 意图引擎 ----
+intent:
+  engine: "auto"                   # auto | rule | llm
+  max_dialog_rounds: 10            # 赛题: 多轮对话 >= 10 轮
+
+# ---- 大模型(OpenAI 兼容). 留空则仅用规则引擎 ----
+llm:
+  base_url: ""                     # 例: https://api.openai.com/v1
+  api_key: ""                      # 建议通过环境变量 AIRSTATION_LLM_API_KEY 注入
+  model: "gpt-4o-mini"
+  temperature: 0.2
+  timeout_s: 20
+
+# ---- 编排策略: 每个意图调用的工具链 ----
+pipelines:
+  status_overview: [scada_query, health_diagnose, rul_estimation, surge_warning]
+  forecast_query: [forecast_load]
+  health_query: [health_diagnose, rul_estimation]
+  rul_query: [rul_estimation]
+  surge_query: [surge_warning]
+  dispatch_optimize: [forecast_load, health_diagnose, rul_estimation, surge_warning, dispatch_optimize]
+  control_execute: [dispatch_optimize, control_command]
+  workorder: [health_diagnose, create_work_order]
+  unknown: [scada_query]

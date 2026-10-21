@@ -25,13 +25,16 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0", "python-docx>=1.1"]
+dev = ["pytest>=8.0", "python-docx>=1.1", "mcp>=1.0"]
 
 [project.scripts]
 air-station-pipeline = "air_station.data.pipeline:main"
 air-station-forecast-train = "air_station.models.forecasting.train:main"
 air-station-forecast-eval = "air_station.models.forecasting.evaluate:main"
 air-station-health = "air_station.models.health.evaluate:main"
+air-station-api = "air_station.api.app:run"
+air-station-mcp = "air_station.mcp_servers.server:main"
+air-station-agent = "air_station.agent.workflow:cli"
 
 [tool.setuptools.packages.find]
 where = ["src"]
