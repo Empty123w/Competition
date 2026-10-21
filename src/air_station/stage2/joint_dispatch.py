@@ -28,6 +28,7 @@ from air_station.optimization import performance as PERF
 from air_station.optimization import unit_commitment as UC
 from air_station.safety import surge as SURGE
 from air_station.simulation import closed_loop as CL
+from air_station.stage2.causal_forecast import CausalForecaster
 
 RATED = 268.9
 DEVICES = ("4#", "5#")
@@ -208,8 +209,15 @@ def simulate(strategy: str, sc: "CL.Scenario", sim: CL.SimParams = None,
              config_path: str = "configs/optimization.yaml",
              base_config: str = "configs/baseline.yaml",
              weights: JointWeights = None,
+             forecast_mode: str = "causal",
+             forecast_method: str = "persistence",
              risk_hint_fn=None) -> dict:
-    """统一闭环仿真。strategy ∈ DISPATCH_MODES ∪ MPC_MODES。"""
+    """统一闭环仿真。strategy ∈ DISPATCH_MODES ∪ MPC_MODES。
+
+    forecast_mode:
+      - "causal": MPC 前瞻仅用当前观测 + 因果预测 (无未来泄漏) —— 默认
+      - "ideal" : 使用未来的仿真真值+噪声 (仅作**理想预测对照**, 存在信息泄漏)
+    """
     if strategy not in DISPATCH_MODES | MPC_MODES:
         raise ValueError(f"unknown strategy {strategy}")
     p = sim or CL.SimParams()
@@ -232,6 +240,7 @@ def simulate(strategy: str, sc: "CL.Scenario", sim: CL.SimParams = None,
     cache = {}
     prev_S = float(sc.base_m3min)
     recs = []
+    fcaster = CausalForecaster(method=forecast_method, period=288)
     for k in range(sc.n_steps):
         t = pd.Timestamp("2026-01-01 00:00:00") + pd.Timedelta(minutes=p.dt_min * k)
         snap = CL._snapshot(t, pressure, running, flows)
@@ -272,14 +281,17 @@ def simulate(strategy: str, sc: "CL.Scenario", sim: CL.SimParams = None,
                 fb = True; status = out.get("status", "fallback")
         else:  # mpc / joint
             caps = CONS.build_capabilities(con, snap, [], state)
-            # 前瞻需求序列: 用**带噪预测** (非真值); 仅用当前压力反馈
-            pred_seq, ub_seq = [], []
-            for j in range(w.horizon):
-                kk = min(sc.n_steps - 1, k + j)
-                pj = float(dem[kk]) + rng.normal(0, p.forecast_noise_frac * max(50.0, dem[kk]))
-                pj = max(0.0, pj + bias)
-                pred_seq.append(pj)
-                ub_seq.append(pj * (1 + p.forecast_ub_margin_frac) + p.forecast_ub_const)
+            # 需求观测 = 顶部已计算的当前带噪预测 (与阶段一同源, 不额外抽样)
+            obs_now = max(0.0, float(pred))
+            fcaster.observe(obs_now)
+            if forecast_mode == "ideal":
+                fut_raw = [max(0.0, float(dem[min(sc.n_steps - 1, k + j)]) + rng.normal(
+                    0, p.forecast_noise_frac * max(50.0, dem[min(sc.n_steps - 1, k + j)])))
+                    for j in range(w.horizon)]
+            else:  # causal: 无未来泄漏
+                fut_raw = fcaster.predict_with_nowcast(w.horizon, obs_now)
+            pred_seq = [max(0.0, f + bias) for f in fut_raw]
+            ub_seq = [pv * (1 + p.forecast_ub_margin_frac) + p.forecast_ub_const for pv in pred_seq]
             cur_on = {d for d in DEVICES if d in snap.device_map() and snap.device_map()[d].running}
             cur_flows = {d: (snap.device_map()[d].flow_m3_min if d in snap.device_map() else None)
                          for d in DEVICES}
