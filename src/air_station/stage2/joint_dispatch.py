@@ -48,8 +48,9 @@ class JointWeights:
     w_switch: float = 2.0
     w_short: float = 500.0
     horizon: int = 4
-    balance_mode: str = "min_power"   # min_power | spread (|lr4-lr5|<=tol)
+    balance_mode: str = "min_power"   # min_power | spread (|lr4-lr5|<=tol) | soft
     spread_tol: float = 0.10
+    balance_cost_cap_kwh: float = None   # soft: 均衡仅在功率增量 <= cap(kWh/步) 时采用
     levels: tuple = ("pred", "upper")
     ramp: dict = field(default_factory=lambda: {"4#": 77.0, "5#": 287.0})
 
@@ -71,11 +72,24 @@ def _power(flows, model, cache):
     return tot
 
 
-def _alloc(combo, required, caps, prev_flows, prev_running, model, cache, balance=False, tol=0.10):
-    cfg = UC.UCConfig(demand_basis="upper", ramp_enabled=False,
-                      spread_balance=bool(balance), spread_tol=float(tol) if balance else 0.0)
-    return UC.best_allocation(tuple(combo), float(required), caps, prev_flows, prev_running,
-                              model, cfg, cache)
+def _alloc(combo, required, caps, prev_flows, prev_running, model, cache,
+           balance=False, tol=0.10, mode="spread", cost_cap=None):
+    cfg_min = UC.UCConfig(demand_basis="upper", ramp_enabled=False)
+    al_min = UC.best_allocation(tuple(combo), float(required), caps, prev_flows, prev_running,
+                                model, cfg_min, cache)
+    if not balance:
+        return al_min
+    cfg_bal = UC.UCConfig(demand_basis="upper", ramp_enabled=False,
+                          spread_balance=True, spread_tol=float(tol))
+    al_bal = UC.best_allocation(tuple(combo), float(required), caps, prev_flows, prev_running,
+                                model, cfg_bal, cache)
+    if al_bal is None:
+        return al_min
+    if mode == "soft" and cost_cap is not None and al_min is not None:
+        # 仅当均衡带来的功率增量在允许范围内才采用均衡
+        if (al_bal["power_kw"] - al_min["power_kw"]) > float(cost_cap):
+            return al_min
+    return al_bal
 
 
 def _imbalance(flows):
@@ -131,7 +145,8 @@ def mpc_decide(p, pred_seq, ub_seq, caps, con, cur_on, cur_flows, model, cache,
                 lvl_req["cap"] = cap            # 需求上界超容量 -> 用满容量 (降级)
             for lvl, req in lvl_req.items():
                 al = _alloc(combo, req, caps, pf, pr, model, cache,
-                            balance=(w.balance_mode == "spread"), tol=w.spread_tol)
+                            balance=(w.balance_mode in ("spread", "soft")), tol=w.spread_tol,
+                            mode=w.balance_mode, cost_cap=w.balance_cost_cap_kwh)
                 if al is None:
                     continue
                 if power_cap > 0 and any(_power({d: al["flows"][d]}, model, cache) > power_cap + 1e-6
@@ -211,6 +226,8 @@ def simulate(strategy: str, sc: "CL.Scenario", sim: CL.SimParams = None,
              weights: JointWeights = None,
              forecast_mode: str = "causal",
              forecast_method: str = "persistence",
+             demand_override=None,
+             p_init: float = None,
              risk_hint_fn=None) -> dict:
     """统一闭环仿真。strategy ∈ DISPATCH_MODES ∪ MPC_MODES。
 
@@ -228,7 +245,10 @@ def simulate(strategy: str, sc: "CL.Scenario", sim: CL.SimParams = None,
     opt_cfg = load_optimization_config(config_path)
     model = opt_cfg["paths"]["power_model"]
     rng = np.random.default_rng(p.seed)
-    dem = CL.demand_series(sc)
+    dem = (np.asarray(demand_override, dtype=float) if demand_override is not None
+           else CL.demand_series(sc))
+    if p_init is not None:
+        p.p_init_mpa = float(p_init)
     _DIAG["no_step_opts"] = 0; _DIAG["no_feasible_seq"] = 0; _DIAG["decide_ms"] = []
 
     state = C.PolicyState()
