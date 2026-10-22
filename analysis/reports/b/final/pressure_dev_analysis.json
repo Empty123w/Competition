@@ -1,0 +1,148 @@
+{
+  "dev": {
+    "window": "dev",
+    "steps": 40609,
+    "p_init": 0.58,
+    "band": [
+      0.55,
+      0.66
+    ],
+    "capacity": 537.8,
+    "compliance": 0.8592,
+    "compliant_steps": 34892,
+    "noncompliant_steps": 5717,
+    "noncompliant_below_lo": 5347,
+    "noncompliant_above_hi": 370,
+    "over_capacity_steps": 5321,
+    "over_capacity_share": 0.131,
+    "over_capacity_runs": 112,
+    "over_capacity_run_len_max": 741,
+    "over_capacity_minutes_max": 3705,
+    "excess_flow_m3": 489228.2,
+    "necessity_intersection_steps": 4642,
+    "noncompliant_capacity_feasible": 1075,
+    "recovery_noncompliant_steps": 1303,
+    "recovery_max_steps": 24,
+    "class_counts": {
+      "ok": 34892,
+      "over_capacity": 4642,
+      "recovery": 391,
+      "steady_control": 684
+    },
+    "compliance_capacity_feasible": 0.9695,
+    "compliance_feasible_continuous": 0.9903,
+    "feasible_continuous_segments": 46,
+    "feasible_continuous_steps": 25672,
+    "supply_capped_steps": 9535,
+    "fallback_steps": 8714
+  },
+  "sensitivity": {
+    "valid": {
+      "p_init_real": 0.59,
+      "runs": [
+        {
+          "tag": "baseline",
+          "p_init": 0.59,
+          "k_vol": 23700.0,
+          "compliance": 0.9995,
+          "std": 0.00576,
+          "energy_kwh": 385215.9
+        },
+        {
+          "tag": "p_init_056",
+          "p_init": 0.56,
+          "k_vol": 23700.0,
+          "compliance": 0.9995,
+          "std": 0.00583,
+          "energy_kwh": 385341.1
+        },
+        {
+          "tag": "p_init_060",
+          "p_init": 0.6,
+          "k_vol": 23700.0,
+          "compliance": 0.9995,
+          "std": 0.00576,
+          "energy_kwh": 385207.5
+        },
+        {
+          "tag": "p_init_062",
+          "p_init": 0.62,
+          "k_vol": 23700.0,
+          "compliance": 0.9995,
+          "std": 0.00581,
+          "energy_kwh": 385286.5
+        },
+        {
+          "tag": "kvol_half",
+          "p_init": 0.59,
+          "k_vol": 11850.0,
+          "compliance": 0.9925,
+          "std": 0.01068,
+          "energy_kwh": 384924.8
+        },
+        {
+          "tag": "kvol_double",
+          "p_init": 0.59,
+          "k_vol": 47400.0,
+          "compliance": 1.0,
+          "std": 0.00331,
+          "energy_kwh": 386437.3
+        }
+      ]
+    },
+    "test": {
+      "p_init_real": 0.63,
+      "runs": [
+        {
+          "tag": "baseline",
+          "p_init": 0.63,
+          "k_vol": 23700.0,
+          "compliance": 1.0,
+          "std": 0.0039,
+          "energy_kwh": 415903.0
+        },
+        {
+          "tag": "p_init_056",
+          "p_init": 0.56,
+          "k_vol": 23700.0,
+          "compliance": 1.0,
+          "std": 0.00389,
+          "energy_kwh": 415973.1
+        },
+        {
+          "tag": "p_init_060",
+          "p_init": 0.6,
+          "k_vol": 23700.0,
+          "compliance": 1.0,
+          "std": 0.00385,
+          "energy_kwh": 415932.2
+        },
+        {
+          "tag": "p_init_062",
+          "p_init": 0.62,
+          "k_vol": 23700.0,
+          "compliance": 1.0,
+          "std": 0.00387,
+          "energy_kwh": 415913.1
+        },
+        {
+          "tag": "kvol_half",
+          "p_init": 0.63,
+          "k_vol": 11850.0,
+          "compliance": 1.0,
+          "std": 0.00677,
+          "energy_kwh": 415758.7
+        },
+        {
+          "tag": "kvol_double",
+          "p_init": 0.63,
+          "k_vol": 47400.0,
+          "compliance": 1.0,
+          "std": 0.00283,
+          "energy_kwh": 416315.2
+        }
+      ]
+    }
+  },
+  "note": "demand = 真实 SCADA 站级总供气量 (5min 均值) 作为历史代理需求; 非独立实测用户侧需求"
+}
