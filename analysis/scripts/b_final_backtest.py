@@ -34,7 +34,7 @@ from air_station.stage2 import joint_dispatch as JD  # noqa: E402
 MS = MH.MS
 STEP, RATED = 15, 268.9
 HB = ROOT / "artifacts" / "handoff_b"
-STRATEGIES = ("b1_rule", "b3_b4", "bal", "lrb_t10", "mpc_hist", "joint")
+STRATEGIES = ("b1_rule", "b3_b4", "bal", "lrb_t10", "b3_lrb", "joint_nompc", "mpc_hist", "joint")
 
 
 PRESETS = {
@@ -48,6 +48,11 @@ PRESETS = {
 
 
 def _weights(kind, preset="full"):
+    if kind == "joint_nompc":
+        return JD.JointWeights(w_energy=1.0, w_switch=2.0, w_short=800.0,
+                               balance_mode="spread", spread_tol=0.10,
+                               w_low=1.5, w_imbalance=40.0, w_pressure=0.0, w_center=0.0,
+                               horizon=1)
     if kind == "joint":
         kw = dict(PRESETS[preset])
         if preset.endswith("_minp"):
@@ -89,7 +94,7 @@ def run(window, start, n, logpath, preset="full", basis="pred"):
         bd = bd.iloc[start:start + n].reset_index(drop=True) if n else bd.iloc[start:].reset_index(drop=True)
     cache = {}
     simp = CL.SimParams()
-    W = {s: _weights(s, preset) for s in ("joint", "mpc_hist")}
+    W = {s: _weights(s, preset) for s in ("joint", "mpc_hist", "joint_nompc")}
     init = PIPE.snapshot_from_frames(dev, st, bd["t"].iloc[0])
     sim = {s: {d.device_id: {"running": bool(d.running), "flow": d.flow_m3_min} for d in init.devices}
            for s in STRATEGIES}
@@ -135,7 +140,24 @@ def run(window, start, n, logpath, preset="full", basis="pred"):
                     combo = bb["seq"][0]; al = bb["alloc0"]; flows = al["flows"]
                     acts = MS._actions(combo, al, caps, cur_on, cur_flows)
                     trans = CONS.transition_feasibility(cur_on, combo, caps, req[0], con.reserve)[1]
-                else:  # joint / mpc_hist : 多目标 MPC, 用 A6 真实滚动预测 (因果)
+                elif s == "b3_lrb":
+                    # 简单组合: B3 决定运行组合与总供气, LRB 层做 <=10pp 均衡再分配
+                    rr = optimize_dispatch(snap, fr, [], con, state=stt[s])
+                    if rr.status != "success":
+                        r[f"{s}_status"] = rr.status; fb[s] += 1; rt[s].append(time.perf_counter() - tt); continue
+                    combo = tuple(rr.target_combination) if rr.target_combination else \
+                        tuple(a.device_id for a in rr.device_actions if a.running_after)
+                    total = float(sum((a.target_flow_m3_min or 0.0) for a in rr.device_actions if a.running_after))
+                    pr = {d: (d in cur_on) for d in ("4#", "5#")}
+                    al = UC.best_allocation(combo, total, caps, cur_flows, pr, model,
+                                            UC.UCConfig(demand_basis="upper", spread_balance=True,
+                                                        spread_tol=0.10), cache)
+                    if al is None:
+                        fb[s] += 1; rt[s].append(time.perf_counter() - tt); continue
+                    flows = al["flows"]
+                    acts = MS._actions(combo, al, caps, cur_on, cur_flows)
+                    trans = CONS.transition_feasibility(cur_on, combo, caps, total, con.reserve)[1]
+                else:  # joint / joint_nompc / mpc_hist : 多目标 MPC (joint_nompc 为 horizon=1 无压力项消融)
                     ub = [sr["ub15"], sr["ub30"], sr["ub45"], sr["ub60"]]
                     pred = (ub if basis == "upper" else [sr["pf15"], sr["pf30"], sr["pf45"], sr["pf60"]])
                     got = JD.mpc_decide(p_now, pred, ub, caps, con, cur_on, cur_flows,

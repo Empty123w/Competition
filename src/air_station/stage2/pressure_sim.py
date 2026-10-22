@@ -122,14 +122,18 @@ def mpc_decide(p, dem_future, ccfg: CtrlParams, sim: CL.SimParams, model, cache,
 
 def simulate(strategy: str, sc: CL.Scenario, ccfg: CtrlParams = None,
              sim: CL.SimParams = None, config_path: str = "configs/optimization.yaml",
-             pmodel: Optional[PM.PressureModel] = None) -> dict:
+             pmodel: Optional[PM.PressureModel] = None,
+             demand_override=None, p_init: float = None) -> dict:
     ccfg = ccfg or CtrlParams()
     sim = sim or CL.SimParams()
     ccfg.dt_min = sim.dt_min
+    if p_init is not None:
+        sim.p_init_mpa = float(p_init)
     from air_station.optimization.service import load_optimization_config
     model = load_optimization_config(config_path)["paths"]["power_model"]
     rng = np.random.default_rng(ccfg.seed)
-    dem = CL.demand_series(sc)
+    dem = (np.asarray(demand_override, dtype=float) if demand_override is not None
+           else CL.demand_series(sc))
     n = sc.n_steps
 
     p = sim.p_init_mpa

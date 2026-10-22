@@ -52,3 +52,17 @@ def test_ar_recursive_uses_past_only():
     fut = fc.predict_future(5)
     assert len(fut) == 5
     assert all(np.isfinite(fut))
+
+
+def test_pressure_sim_demand_override():
+    """压力闭环支持真实需求驱动 (chain 真实历史工况); 长度正确且可复现。"""
+    import numpy as np
+    from air_station.simulation import closed_loop as CL
+    from air_station.stage2 import pressure_sim as PS
+    dem = 400.0 + 20.0 * np.sin(np.linspace(0, 3, 40))
+    sc = CL.Scenario("t", n_steps=40, base_m3min=float(dem.mean()))
+    r = PS.simulate("reactive_pi", sc, sim=CL.SimParams(dt_min=5.0, seed=0),
+                    demand_override=dem, p_init=0.60)
+    assert len(r["records"]) == 40
+    assert 0.0 <= r["metrics"]["pressure_compliance"] <= 1.0
+    assert len(r["records"]) == len(dem)

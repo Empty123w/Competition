@@ -10,3 +10,10 @@
 [ckpt] 1000/1916 elapsed=180s
 [ckpt] 1500/1916 elapsed=248s
 [ckpt] 1916/1916 elapsed=305s
+[start] window=valid n=150
+[ckpt] 150/150 elapsed=34s
+[start] window=valid n=1916
+[ckpt] 500/1916 elapsed=124s
+[ckpt] 1000/1916 elapsed=227s
+[ckpt] 1500/1916 elapsed=345s
+[ckpt] 1916/1916 elapsed=522s

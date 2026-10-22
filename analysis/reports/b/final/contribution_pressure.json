@@ -1,0 +1,253 @@
+{
+  "meta": {
+    "validation_mode": "simulation",
+    "capacity": 537.8,
+    "band": [
+      0.55,
+      0.66
+    ],
+    "note": "demand = 真实 SCADA 总供气量(历史代理); 非独立实测用户侧需求"
+  },
+  "pressure_model_metrics": {
+    "valid": {
+      "MAE": 0.00171,
+      "RMSE": 0.002148,
+      "R2": 0.99764
+    },
+    "test": {
+      "MAE": 0.001698,
+      "RMSE": 0.002139,
+      "R2": 0.99769
+    }
+  },
+  "windows": {
+    "valid": {
+      "steps": 2000,
+      "p_init": 0.59,
+      "reactive_pi": {
+        "compliance": 1.0,
+        "std": 0.0041,
+        "min": 0.5876,
+        "max": 0.62,
+        "energy_kwh": 389586.6,
+        "supply_m3": 3896119.7,
+        "demand_satisfaction": 0.9876,
+        "unmet_flow_m3": 48020.3,
+        "cap_step_share": 0.0,
+        "decide_ms_per_step": 0.86
+      },
+      "mpc_simple": {
+        "compliance": 1.0,
+        "std": 0.0043,
+        "min": 0.5525,
+        "max": 0.6493,
+        "energy_kwh": 389305.1,
+        "supply_m3": 3896050.0,
+        "demand_satisfaction": 0.9908,
+        "unmet_flow_m3": 35648.3,
+        "cap_step_share": 0.0,
+        "decide_ms_per_step": 2.66
+      },
+      "mpc_ml": {
+        "compliance": 1.0,
+        "std": 0.0043,
+        "min": 0.5525,
+        "max": 0.6493,
+        "energy_kwh": 389305.1,
+        "supply_m3": 3896050.0,
+        "demand_satisfaction": 0.9908,
+        "unmet_flow_m3": 35648.3,
+        "cap_step_share": 0.0,
+        "decide_ms_per_step": 2.55
+      },
+      "b1": {
+        "compliance": 0.9885,
+        "std": 0.013,
+        "min": 0.5602,
+        "max": 0.7352,
+        "energy_kwh": 412906.5,
+        "supply_m3": 3902107.9,
+        "demand_satisfaction": 0.9863,
+        "unmet_flow_m3": 53330.2,
+        "cap_step_share": 0.0,
+        "decide_ms_per_step": 0.7
+      },
+      "joint_nompc": {
+        "compliance": 1.0,
+        "std": 0.00449,
+        "min": 0.5875,
+        "max": 0.655,
+        "energy_kwh": 386250.3,
+        "supply_m3": 3895995.9,
+        "demand_satisfaction": 0.9874,
+        "unmet_flow_m3": 49085.7,
+        "cap_step_share": 0.0025,
+        "decide_ms_per_step": 10.59
+      },
+      "joint": {
+        "compliance": 0.9995,
+        "std": 0.00576,
+        "min": 0.5873,
+        "max": 0.6608,
+        "energy_kwh": 385215.9,
+        "supply_m3": 3895992.4,
+        "demand_satisfaction": 0.9855,
+        "unmet_flow_m3": 56364.6,
+        "cap_step_share": 0.0045,
+        "decide_ms_per_step": 23.57
+      }
+    },
+    "test": {
+      "steps": 2000,
+      "p_init": 0.63,
+      "reactive_pi": {
+        "compliance": 1.0,
+        "std": 0.0047,
+        "min": 0.5857,
+        "max": 0.6265,
+        "energy_kwh": 419352.9,
+        "supply_m3": 4634533.2,
+        "demand_satisfaction": 0.9874,
+        "unmet_flow_m3": 58407.6,
+        "cap_step_share": 0.0,
+        "decide_ms_per_step": 0.55
+      },
+      "mpc_simple": {
+        "compliance": 1.0,
+        "std": 0.00239,
+        "min": 0.5884,
+        "max": 0.62,
+        "energy_kwh": 419348.5,
+        "supply_m3": 4634400.0,
+        "demand_satisfaction": 0.9938,
+        "unmet_flow_m3": 28440.6,
+        "cap_step_share": 0.0,
+        "decide_ms_per_step": 2.52
+      },
+      "mpc_ml": {
+        "compliance": 1.0,
+        "std": 0.00239,
+        "min": 0.5884,
+        "max": 0.62,
+        "energy_kwh": 419348.5,
+        "supply_m3": 4634400.0,
+        "demand_satisfaction": 0.9938,
+        "unmet_flow_m3": 28440.6,
+        "cap_step_share": 0.0,
+        "decide_ms_per_step": 2.65
+      },
+      "b1": {
+        "compliance": 1.0,
+        "std": 0.00472,
+        "min": 0.5857,
+        "max": 0.6265,
+        "energy_kwh": 430910.7,
+        "supply_m3": 4634533.2,
+        "demand_satisfaction": 0.9875,
+        "unmet_flow_m3": 57965.3,
+        "cap_step_share": 0.0,
+        "decide_ms_per_step": 0.61
+      },
+      "joint_nompc": {
+        "compliance": 1.0,
+        "std": 0.00401,
+        "min": 0.5857,
+        "max": 0.6203,
+        "energy_kwh": 415890.7,
+        "supply_m3": 4634389.0,
+        "demand_satisfaction": 0.988,
+        "unmet_flow_m3": 55328.0,
+        "cap_step_share": 0.0,
+        "decide_ms_per_step": 10.2
+      },
+      "joint": {
+        "compliance": 1.0,
+        "std": 0.0039,
+        "min": 0.5885,
+        "max": 0.6203,
+        "energy_kwh": 415903.0,
+        "supply_m3": 4634382.3,
+        "demand_satisfaction": 0.9874,
+        "unmet_flow_m3": 58187.6,
+        "cap_step_share": 0.0015,
+        "decide_ms_per_step": 21.53
+      }
+    },
+    "dev": {
+      "steps": 2000,
+      "p_init": 0.58,
+      "reactive_pi": {
+        "compliance": 0.0015,
+        "std": 0.08736,
+        "min": 0.4,
+        "max": 0.74,
+        "energy_kwh": 224311.9,
+        "supply_m3": 2584232.0,
+        "demand_satisfaction": 0.4733,
+        "unmet_flow_m3": 2772628.5,
+        "cap_step_share": 0.0,
+        "decide_ms_per_step": 0.07
+      },
+      "mpc_simple": {
+        "compliance": 0.075,
+        "std": 0.05301,
+        "min": 0.4,
+        "max": 0.6116,
+        "energy_kwh": 29689.6,
+        "supply_m3": 354550.0,
+        "demand_satisfaction": 0.0657,
+        "unmet_flow_m3": 4918010.3,
+        "cap_step_share": 0.0,
+        "decide_ms_per_step": 2.62
+      },
+      "mpc_ml": {
+        "compliance": 0.075,
+        "std": 0.05301,
+        "min": 0.4,
+        "max": 0.6116,
+        "energy_kwh": 29689.6,
+        "supply_m3": 354550.0,
+        "demand_satisfaction": 0.0657,
+        "unmet_flow_m3": 4918010.3,
+        "cap_step_share": 0.0,
+        "decide_ms_per_step": 2.63
+      },
+      "b1": {
+        "compliance": 0.0035,
+        "std": 0.09115,
+        "min": 0.4,
+        "max": 0.75,
+        "energy_kwh": 433751.1,
+        "supply_m3": 4996059.2,
+        "demand_satisfaction": 0.9146,
+        "unmet_flow_m3": 449511.2,
+        "cap_step_share": 0.0,
+        "decide_ms_per_step": 0.15
+      },
+      "joint_nompc": {
+        "compliance": 0.0405,
+        "std": 0.0696,
+        "min": 0.4,
+        "max": 0.7057,
+        "energy_kwh": 413518.7,
+        "supply_m3": 4986031.1,
+        "demand_satisfaction": 0.9452,
+        "unmet_flow_m3": 288539.7,
+        "cap_step_share": 0.925,
+        "decide_ms_per_step": 1.46
+      },
+      "joint": {
+        "compliance": 0.0415,
+        "std": 0.06949,
+        "min": 0.4,
+        "max": 0.7045,
+        "energy_kwh": 413536.6,
+        "supply_m3": 4986154.8,
+        "demand_satisfaction": 0.9452,
+        "unmet_flow_m3": 288539.7,
+        "cap_step_share": 0.9255,
+        "decide_ms_per_step": 11.75
+      }
+    }
+  }
+}
