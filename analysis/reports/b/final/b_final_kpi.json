@@ -72,7 +72,7 @@
   "pressure": {
     "valid": {
       "window": "valid",
-      "steps_5min": 1000,
+      "steps_5min": 5473,
       "p_init": 0.59,
       "band_CAL05": [
         0.55,
@@ -80,61 +80,185 @@
       ],
       "band_data_p5_p95": [
         0.59,
-        0.602
+        0.64
       ],
       "real_baseline": {
         "CAL05": {
-          "compliance": 0.996,
-          "mean": 0.5939,
-          "std": 0.01281,
+          "compliance": 0.9812,
+          "mean": 0.6168,
+          "std": 0.0261,
           "p05": 0.59,
-          "p95": 0.602
+          "p95": 0.64
         },
         "data_band": {
-          "compliance": 0.943,
-          "mean": 0.5939,
-          "std": 0.01281,
+          "compliance": 0.9496,
+          "mean": 0.6168,
+          "std": 0.0261,
           "p05": 0.59,
-          "p95": 0.602
+          "p95": 0.64
         }
       },
       "model_validation": {
-        "n": 999,
-        "MAE_mpa": 0.00238,
-        "std_dp_obs": 0.01565,
-        "corr": 0.22,
+        "n": 5472,
+        "MAE_mpa": 0.00334,
+        "std_dp_obs": 0.01424,
+        "corr": 0.123,
         "note": "缺独立需求, 动态压力项不可辨识; 仅校验量级"
       },
       "counterfactual": {
         "b1": {
-          "compliance_CAL05": 0.98,
-          "std": 0.01734,
-          "mean": 0.6009,
-          "energy_kwh": 205025.4,
-          "supply_m3": 1921889.7,
-          "demand_satisfaction": 0.9862,
+          "compliance_CAL05": 0.9958,
+          "std": 0.00878,
+          "mean": 0.6002,
+          "energy_kwh": 1156880.7,
+          "supply_m3": 11851919.4,
+          "demand_satisfaction": 0.9872,
           "unserved_deficit_m3": 0.0,
           "storage_neutral": true,
           "p_start": 0.59,
-          "p_end": 0.6021
+          "p_end": 0.6002
         },
         "joint": {
-          "compliance_CAL05": 0.999,
-          "std": 0.00742,
-          "mean": 0.5999,
-          "energy_kwh": 189714.6,
-          "supply_m3": 1916076.2,
-          "demand_satisfaction": 0.9833,
+          "compliance_CAL05": 0.9998,
+          "std": 0.0046,
+          "mean": 0.6,
+          "energy_kwh": 1098373.3,
+          "supply_m3": 11845787.1,
+          "demand_satisfaction": 0.9869,
           "unserved_deficit_m3": 0.0,
           "storage_neutral": true,
           "p_start": 0.59,
-          "p_end": 0.6016,
-          "std_reduction_vs_b1_pct": 57.21
+          "p_end": 0.5999,
+          "std_reduction_vs_b1_pct": 47.61
         }
       }
     },
-    "test": null,
-    "dev": null
+    "test": {
+      "window": "test",
+      "steps_5min": 6337,
+      "p_init": 0.63,
+      "band_CAL05": [
+        0.55,
+        0.66
+      ],
+      "band_data_p5_p95": [
+        0.51,
+        0.64
+      ],
+      "real_baseline": {
+        "CAL05": {
+          "compliance": 0.8089,
+          "mean": 0.5998,
+          "std": 0.04512,
+          "p05": 0.51,
+          "p95": 0.64
+        },
+        "data_band": {
+          "compliance": 0.9312,
+          "mean": 0.5998,
+          "std": 0.04512,
+          "p05": 0.51,
+          "p95": 0.64
+        }
+      },
+      "model_validation": {
+        "n": 6336,
+        "MAE_mpa": 0.00383,
+        "std_dp_obs": 0.01238,
+        "corr": 0.088,
+        "note": "缺独立需求, 动态压力项不可辨识; 仅校验量级"
+      },
+      "counterfactual": {
+        "b1": {
+          "compliance_CAL05": 0.49,
+          "std": 0.10105,
+          "mean": 0.5176,
+          "energy_kwh": 1355785.4,
+          "supply_m3": 14349673.4,
+          "demand_satisfaction": 0.9455,
+          "unserved_deficit_m3": 654397.7,
+          "storage_neutral": false,
+          "p_start": 0.63,
+          "p_end": 0.4
+        },
+        "joint": {
+          "compliance_CAL05": 0.9957,
+          "std": 0.00745,
+          "mean": 0.6,
+          "energy_kwh": 1318629.3,
+          "supply_m3": 14992711.2,
+          "demand_satisfaction": 0.9868,
+          "unserved_deficit_m3": 0.0,
+          "storage_neutral": false,
+          "p_start": 0.63,
+          "p_end": 0.5962,
+          "std_reduction_vs_b1_pct": 92.63
+        }
+      }
+    },
+    "dev": {
+      "window": "dev",
+      "steps_5min": 20000,
+      "p_init": 0.58,
+      "band_CAL05": [
+        0.55,
+        0.66
+      ],
+      "band_data_p5_p95": [
+        0.498,
+        0.58
+      ],
+      "real_baseline": {
+        "CAL05": {
+          "compliance": 0.5326,
+          "mean": 0.5453,
+          "std": 0.03452,
+          "p05": 0.498,
+          "p95": 0.58
+        },
+        "data_band": {
+          "compliance": 0.9273,
+          "mean": 0.5453,
+          "std": 0.03452,
+          "p05": 0.498,
+          "p95": 0.58
+        }
+      },
+      "model_validation": {
+        "n": 19999,
+        "MAE_mpa": 0.00233,
+        "std_dp_obs": 0.00963,
+        "corr": 0.062,
+        "note": "缺独立需求, 动态压力项不可辨识; 仅校验量级"
+      },
+      "counterfactual": {
+        "b1": {
+          "compliance_CAL05": 0.377,
+          "std": 0.11609,
+          "mean": 0.5074,
+          "energy_kwh": 3897156.6,
+          "supply_m3": 36339119.1,
+          "demand_satisfaction": 0.884,
+          "unserved_deficit_m3": 4149360.5,
+          "storage_neutral": false,
+          "p_start": 0.58,
+          "p_end": 0.4
+        },
+        "joint": {
+          "compliance_CAL05": 0.7145,
+          "std": 0.08113,
+          "mean": 0.5568,
+          "energy_kwh": 3309543.4,
+          "supply_m3": 38812257.4,
+          "demand_satisfaction": 0.9781,
+          "unserved_deficit_m3": 349317.0,
+          "storage_neutral": true,
+          "p_start": 0.58,
+          "p_end": 0.6002,
+          "std_reduction_vs_b1_pct": 30.11
+        }
+      }
+    }
   },
   "surge": {
     "meta": {
@@ -797,18 +921,18 @@
     {
       "指标": "供气压力合格率",
       "目标": "≥99.5%",
-      "结果": "joint 0.999 (基线 b1 0.98; 真实压力带内 0.996)",
-      "判定": "达标(joint 反事实)",
+      "结果": "min(joint)=0.7145 (valid: joint 0.9998/b1 0.9958/真实基线 0.9812; test: joint 0.9957/b1 0.49/真实基线 0.8089; dev: joint 0.7145/b1 0.377/真实基线 0.5326)",
+      "判定": "未达标",
       "数据来源": "真实压力基线 + 真实需求驱动闭环(工程)",
-      "评价范围": "valid 窗口, CAL-05 带[0.55,0.66]"
+      "评价范围": "窗口=valid,test,dev, CAL-05 带[0.55,0.66]"
     },
     {
       "指标": "压力波动下降率",
       "目标": "≥30%",
-      "结果": "57.21% (joint vs b1)",
+      "结果": "min=30.11% (valid: 47.61%; test: 92.63%; dev: 30.11%)",
       "判定": "达标",
       "数据来源": "真实需求驱动闭环(工程)",
-      "评价范围": "同窗口标准差降幅"
+      "评价范围": "各窗口 joint vs b1 标准差降幅"
     },
     {
       "指标": "喘振预警准确率",

@@ -1,0 +1,63 @@
+{
+  "window": "dev",
+  "steps_5min": 20000,
+  "p_init": 0.58,
+  "band_CAL05": [
+    0.55,
+    0.66
+  ],
+  "band_data_p5_p95": [
+    0.498,
+    0.58
+  ],
+  "real_baseline": {
+    "CAL05": {
+      "compliance": 0.5326,
+      "mean": 0.5453,
+      "std": 0.03452,
+      "p05": 0.498,
+      "p95": 0.58
+    },
+    "data_band": {
+      "compliance": 0.9273,
+      "mean": 0.5453,
+      "std": 0.03452,
+      "p05": 0.498,
+      "p95": 0.58
+    }
+  },
+  "model_validation": {
+    "n": 19999,
+    "MAE_mpa": 0.00233,
+    "std_dp_obs": 0.00963,
+    "corr": 0.062,
+    "note": "缺独立需求, 动态压力项不可辨识; 仅校验量级"
+  },
+  "counterfactual": {
+    "b1": {
+      "compliance_CAL05": 0.377,
+      "std": 0.11609,
+      "mean": 0.5074,
+      "energy_kwh": 3897156.6,
+      "supply_m3": 36339119.1,
+      "demand_satisfaction": 0.884,
+      "unserved_deficit_m3": 4149360.5,
+      "storage_neutral": false,
+      "p_start": 0.58,
+      "p_end": 0.4
+    },
+    "joint": {
+      "compliance_CAL05": 0.7145,
+      "std": 0.08113,
+      "mean": 0.5568,
+      "energy_kwh": 3309543.4,
+      "supply_m3": 38812257.4,
+      "demand_satisfaction": 0.9781,
+      "unserved_deficit_m3": 349317.0,
+      "storage_neutral": true,
+      "p_start": 0.58,
+      "p_end": 0.6002,
+      "std_reduction_vs_b1_pct": 30.11
+    }
+  }
+}

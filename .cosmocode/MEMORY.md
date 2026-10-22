@@ -100,3 +100,14 @@
     - 指标验收：`python3 analysis/scripts/stage3_acceptance.py`（test 种子 3,4；约 10 分钟）
   - 产物：`analysis/reports/b/stage3/`；评价协议 `.cosmocode/docs/b_stage2/EVAL_PROTOCOL.md`
   - 推荐策略 `joint`：MPC 压力控制 + 加载率均衡分配(spread_balance, tol=0.10) + 低负荷目标，单一运行同时满足能效/加载率/低负荷/压力
+
+[B 组最终指标评价体系运行命令]
+- Date: 2026-10-22
+- Context: Agent 在建立 B 组最终比赛指标评价体系时发现
+- Category: 构建方法/排错调试
+- Instructions:
+  - 最终回测: `python3 analysis/scripts/b_final_backtest.py --window {dev|valid|test} --basis upper --preset full`（dev 约 20 分钟, valid/test 约 5-6 分钟）
+  - 真实压力评价: `python3 analysis/scripts/final_pressure_real.py --window {valid|test|dev} --max-steps N`
+  - 指标总表: `python3 analysis/scripts/final_kpi_table.py` → `analysis/reports/b/final/B_FINAL_KPI_TABLE.md`
+  - 关键结论: 真实历史 pooled 上 joint SEC −7.73%、D3=1.0、低负荷 −68.4%；压力 KPI 在 valid/test（需求≤容量）达标 0.9998/0.9957，dev 因 13.1% 步需求超 2×额定容量而仅 0.71（物理容量不足，不可伪造）
+  - 真实历史需求口径用 A6 真实滚动预测 (upper bound) 与 harness 一致；不得用未来真值
