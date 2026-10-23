@@ -49,11 +49,12 @@ def build_server():
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Air Station MCP Server")
     parser.add_argument("--http", action="store_true", help="使用 streamable-http 传输")
+    parser.add_argument("--host", default="0.0.0.0", help="HTTP 监听地址 (仅 --http)")
     parser.add_argument("--port", type=int, default=8765, help="HTTP 端口 (仅 --http)")
     args = parser.parse_args(argv)
     server = build_server()
     if args.http:
-        server.run("streamable-http")
+        server.run("streamable-http", host=args.host, port=args.port)
     else:
         server.run("stdio")
 
