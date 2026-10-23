@@ -53,6 +53,10 @@ artifacts/metrics/*
 artifacts/logs/*
 !artifacts/logs/.gitkeep
 
+# C 模块运行时数据库(不入库)
+artifacts/*.db
+artifacts/*.db-journal
+
 # 前端
 node_modules/
 frontend/node_modules/

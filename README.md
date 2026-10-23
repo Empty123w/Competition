@@ -64,12 +64,15 @@ API / MCP / Agent 协同编排
 | A3 特征工程 | A | ✅ 完成 | 预测特征和健康特征 |
 | A4 负荷预测 | A | ✅ 完成 | 15/30/60 分钟预测、区间和评估 |
 | A5 健康诊断 | A | ✅ 完成 | 无监督评分、风险等级和建议 |
-| 历史人工基线 | B | ⏳ 待开发 | 历史策略还原、能耗和压力指标 |
-| 优化与安全 | B | ⏳ 待开发 | 多机调度、能耗目标、压力与安全约束 |
-| 后端与 MCP | C | ⏳ 待开发 | API、MCP、Agent、控制和数据库 |
+| 历史人工基线 | B | ✅ 完成 | 历史策略还原、能耗和压力指标 |
+| 优化与安全 | B | ✅ 完成 | 多机调度(b3/balanced/load_balanced)、能耗目标、压力与喘振安全约束 |
+| 后端与 MCP | C | ✅ 完成 | API、MCP（含 RUL）、Agent、模拟控制闭环、数据库；调度/喘振调用 B 接口 |
 | 前端与演示 | D | ⏳ 待开发 | 可视化页面、场景演示、PPT和视频 |
 
 > README 只将已经实现并验证的内容标记为完成，未完成模块不会提前宣称具备正式效果。
+> C 的调度与喘振直接调用 B 的稳定接口 `air_station.optimization.b_api`
+> （`plan_dispatch` / `assess_surge_risk`），B 输出恒为 `simulation_candidate_only`；
+> 端到端执行经 C 的准入闸门，仅 `candidate_usable` 的方案才在模拟环境下发。
 
 ## 5. 数据说明
 
@@ -266,6 +269,28 @@ artifacts/metrics/health_metrics.json
 analysis/reports/phaseA5/health_report.md
 ```
 
+### 9.6 启动后端 / MCP / Agent（C 模块）
+
+```bash
+# 启动后端 API (根路径 / 返回能力清单, /docs 为接口文档)
+air-station-api
+
+# 启动 MCP 服务 (stdio; --http 为 streamable-http, 默认端口 8765)
+air-station-mcp
+
+# 命令行 Agent 编排 (调度与喘振调用 B 接口)
+air-station-agent "优化调度并执行"
+```
+
+容器化：
+
+```bash
+docker compose -f deployment/docker-compose.yml up --build
+```
+
+C 模块 API、MCP 工具、控制闭环与安全边界详见
+[`analysis/reports/phaseC/README.md`](analysis/reports/phaseC/README.md)。
+
 ## 10. 负荷预测接口
 
 唯一对外入口：
@@ -355,16 +380,25 @@ suggestion
 运行：
 
 ```bash
+# A/A6
 python -m pytest tests/data tests/models -q
+# B
+python -m pytest tests/baseline tests/optimization tests/safety -q
+# C
+python -m pytest tests/control tests/mcp tests/agent tests/db tests/api -q
 ```
 
-当前交付基准：
+当前交付基准（分块运行以避开内存峰值）：
 
 ```text
-47 passed，0 skipped
+A/A6: 79 passed，0 skipped
+B   : 215 passed，0 skipped
+C   : 29 passed，0 skipped
+合计: 323 passed，0 skipped
 ```
 
 接收环境必须重新运行测试。如果出现大量 `skip`，应检查 Parquet、模型和依赖是否完整，不能把跳过测试当作通过。
+注意：一次性运行全部测试在内存受限环境可能触发 OOM（进程被 SIGKILL，退出码 137），建议分块运行。
 
 ## 13. 当前模型指标
 
@@ -469,6 +503,9 @@ feat/d-frontend-demo
 | [`analysis/reports/phaseA0/接口字段清单.md`](analysis/reports/phaseA0/接口字段清单.md) | 预测与健康输出标准 |
 | [`analysis/reports/phaseA5/health_report.md`](analysis/reports/phaseA5/health_report.md) | 健康诊断方法、指标和局限 |
 | [`项目协作与A模块详细交接说明.md`](项目协作与A模块详细交接说明.md) | 四人协作与验收流程 |
+| [`analysis/reports/phaseC/README.md`](analysis/reports/phaseC/README.md) | C 模块总览（API/MCP/Agent/控制） |
+| [`analysis/reports/phaseC/API接口说明.md`](analysis/reports/phaseC/API接口说明.md) | 后端 REST 接口 |
+| [`analysis/reports/b/integration_B_to_C.md`](analysis/reports/b/integration_B_to_C.md) | B→C 调度接口与 C 侧接入 |
 
 ## 17. 安全边界
 
@@ -489,4 +526,4 @@ feat/d-frontend-demo
 
 ---
 
-项目当前处于：**A模块完成，B/C并行开发，D可基于样例接口提前开发前端**。
+项目当前处于：**A、B、C 三模块完成；C 的调度/喘振已接入 B 的稳定接口，端到端闭环可用；D 待开发**。
