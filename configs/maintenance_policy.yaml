@@ -1,0 +1,31 @@
+# =====================================================================
+# 预测性维护策略仿真配置 (阶段 A7)
+# 目标: 在模拟退化闭环下, 自证三项指标
+#   - 非计划停机次数下降率 ≥50%
+#   - MTBF 提升率 ≥30%
+#   - 异常预警提前时间 ≥24h
+# 性质: 模拟闭环自证 (validation_mode=simulation), 不代表现场效果
+# =====================================================================
+
+seed: 123
+devices: [4, 5]
+episodes_per_device: 120        # 每个设备模拟的退化 episode 数(配对)
+
+# 退化与失效口径 (复用 RUL 模拟器: 初始 2000h -> 退化到 fail_rul_hours 视为失效)
+initial_rul_hours: 2000.0
+fail_rul_hours: 300.0           # 退化到该值 = 失效(基线在这里非计划停机)
+node_hours: 6.0                 # 决策节点粒度(h), 与 RUL 模型一致
+
+# 预测性维护策略
+warn_rul_hours: 330.0           # 预测 RUL ≤ 该值 -> 触发计划停机保养(约提前30h)
+lead_target_hours: 24.0         # 预警提前目标
+
+# 基线策略(反应式): 退化到 fail_rul_hours 才处理 -> 记为一次非计划停机
+baseline_policy: reactive
+proposed_policy: predictive_rul
+
+paths:
+  rul_config: configs/rul.yaml
+  model_dir: artifacts/models
+  metrics: artifacts/metrics/maintenance_metrics.json
+  report_dir: analysis/reports/phaseA7_maint

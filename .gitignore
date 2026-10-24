@@ -49,6 +49,7 @@ artifacts/metrics/*
 !artifacts/metrics/forecast_rolling_metrics.json
 !artifacts/metrics/forecast_fold_metadata.json
 !artifacts/metrics/rul_history.parquet
+!artifacts/metrics/maintenance_metrics.json
 !artifacts/metrics/health_history.parquet
 artifacts/logs/*
 !artifacts/logs/.gitkeep

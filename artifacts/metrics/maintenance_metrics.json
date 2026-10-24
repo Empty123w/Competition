@@ -1,0 +1,29 @@
+{
+  "validation_mode": "simulation",
+  "origin": "simulated",
+  "policy": {
+    "baseline": "reactive",
+    "proposed": "predictive_rul",
+    "warn_rul_hours": 330.0,
+    "fail_rul_hours": 300.0,
+    "lead_target_hours": 24.0
+  },
+  "episodes": 240,
+  "unplanned_stops": {
+    "baseline": 240,
+    "proposed": 105,
+    "reduction_pct": 56.25
+  },
+  "mtbf_hours": {
+    "baseline": 1809.22,
+    "proposed": 4135.37,
+    "improvement_pct": 128.57
+  },
+  "warning_lead_hours": {
+    "mean": 40.49,
+    "median": 24.0,
+    "p10": 6.0,
+    "frac_ge_target": 0.5704
+  },
+  "detection_rate": 0.5625
+}
