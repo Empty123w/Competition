@@ -35,3 +35,11 @@ paths:
   processed_dir: data/processed
   metrics: artifacts/metrics/maintenance_metrics.json
   report_dir: analysis/reports/phaseA7_maint
+
+# 运行时维护预警接口(maintenance_json)
+runtime:
+  threshold: 12.0            # 由仿真网格选定的趋势分数阈值
+  lookback_nodes: 24         # 在线看回窗口(24 x 6h = 144h)
+  base_nodes: 8              # 窗口内用于基准的前段节点数
+  suggest_warning: "振动/温度/电流趋势偏离基准, 建议安排计划性检查与保养"
+  suggest_normal: "趋势平稳, 维持当前运行"

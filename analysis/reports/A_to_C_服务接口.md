@@ -174,3 +174,37 @@ artifacts/models/
 - C 的 API/MCP 层**不得修改**成功响应的字段名与层级；
 - 健康接口失败时，由 C 转换为服务层错误响应，**不得伪造 `status: success`**；
 - C 不直接下发设备控制指令。
+
+---
+
+## 8. 维护预警接口（A7 新增，模拟口径）
+
+```python
+from air_station.models.rul.maintenance_sim import maintenance_json
+
+def maintenance_json(config_path: str = "configs/maintenance_policy.yaml",
+                     processed_dir: str | None = None) -> dict: ...
+```
+
+成功响应（字段固定）：
+
+```json
+{
+  "status": "success",
+  "validation_mode": "hybrid_simulation",
+  "evaluation_time": "2026-09-11T22:00:00Z",
+  "method": "trend_score",
+  "threshold": 12.0,
+  "devices": [
+    {"device_id": "4#", "trend_score": 2.43, "warning": false,
+     "risk_level": "正常", "top_trend_factor": "vib3_current",
+     "suggestion": "趋势平稳, 维持当前运行"}
+  ]
+}
+```
+
+- 顶层固定 6 字段；每个设备固定 6 字段；`evaluation_time` 为 UTC ISO 8601（`Z`）；
+- 基于**真实遥测的振动/温度/电流/能效滚动趋势分数**，阈值取自 `configs/maintenance_policy.yaml`；
+- **`validation_mode="hybrid_simulation"`**：真实遥测作底 + 注入退化标定，C 不得表述为现场实测；
+- 异常行为：缺少 `health_features.parquet` → `FileNotFoundError`；配置缺失 → `FileNotFoundError`。
+- 凭据口径同前：C 只封装，不改字段名，失败转服务层错误。

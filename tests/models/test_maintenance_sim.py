@@ -53,3 +53,20 @@ def test_reproducible():
     a = MS.simulate(cfg)["metrics"]
     b = MS.simulate(cfg)["metrics"]
     assert a == b
+
+
+def test_maintenance_json_schema():
+    import re
+    from air_station.models.rul.maintenance_sim import maintenance_json
+    out = maintenance_json()
+    assert set(out.keys()) == {"status", "validation_mode", "evaluation_time",
+                               "method", "threshold", "devices"}
+    assert out["status"] == "success"
+    assert out["validation_mode"] == "hybrid_simulation"
+    assert re.match(r"^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$", out["evaluation_time"])
+    assert [d["device_id"] for d in out["devices"]] == ["4#", "5#"]
+    for d in out["devices"]:
+        assert set(d.keys()) == {"device_id", "trend_score", "warning", "risk_level",
+                                 "top_trend_factor", "suggestion"}
+        assert d["risk_level"] in ("正常", "预警", "未知")
+    json.dumps(out, ensure_ascii=False, allow_nan=False)

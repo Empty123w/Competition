@@ -133,3 +133,5 @@ python -m air_station.data.pipeline --stage features --input data
 python -m air_station.models.forecasting.train && python -m air_station.models.forecasting.evaluate
 python -m air_station.models.health.evaluate
 ```
+
+> - 维护预警（A7）：`rul.maintenance_sim.maintenance_json()`，模拟口径 `hybrid_simulation`；指标见 `artifacts/metrics/maintenance_metrics.json`、报告 `analysis/reports/phaseA7_maint/maintenance_report.md`。

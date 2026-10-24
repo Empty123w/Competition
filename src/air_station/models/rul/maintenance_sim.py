@@ -27,9 +27,9 @@ def load_config(path: str = "configs/maintenance_policy.yaml") -> dict:
     return yaml.safe_load(Path(path).read_text(encoding="utf-8"))
 
 
-def _real_nodes(cfg: dict) -> dict[int, pd.DataFrame]:
+def _real_nodes(cfg: dict, processed_dir: str | None = None) -> dict[int, pd.DataFrame]:
     """把真实 health_features 按设备重采样到 6h 节点(取窗口内最后一条运行记录)。"""
-    path = Path(cfg["paths"]["processed_dir"]) / "health_features.parquet"
+    path = Path(processed_dir or cfg["paths"]["processed_dir"]) / "health_features.parquet"
     if not path.exists():
         raise FileNotFoundError(f"[A7] 缺少真实特征: {path}")
     import pyarrow.parquet as pq
@@ -213,6 +213,65 @@ def _write_report(path: Path, m: dict) -> None:
              "- 结果为方法链路与可达性证明，不等同现场准确率。", ""]
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def _to_utc_z(ts) -> str:
+    from zoneinfo import ZoneInfo
+    t = pd.Timestamp(ts)
+    if t.tzinfo is None:
+        t = t.tz_localize("Asia/Shanghai")
+    return t.tz_convert("UTC").strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def maintenance_json(config_path: str = "configs/maintenance_policy.yaml",
+                     processed_dir: str | None = None) -> dict:
+    """运行时维护预警接口(趋势分数)。
+
+    返回:
+    {
+      "status": "success", "validation_mode": "hybrid_simulation",
+      "evaluation_time": "<UTC Z>", "method": "trend_score",
+      "threshold": 12.0,
+      "devices": [{"device_id":"4#","trend_score":..,"warning":bool,
+                   "risk_level":"正常|预警","top_trend_factor":"..","suggestion":".."}]
+    }
+    """
+    cfg = load_config(config_path)
+    rt = cfg.get("runtime", {})
+    thr = float(rt.get("threshold", 12.0)); lookback = int(rt.get("lookback_nodes", 24))
+    base = int(rt.get("base_nodes", 8))
+    nodes = _real_nodes(cfg, processed_dir)
+    devices, eval_time = [], None
+    for dev, frame in sorted(nodes.items()):
+        sub = frame.tail(lookback)
+        if len(sub) < base + 1:
+            devices.append({"device_id": f"{int(dev)}#", "trend_score": None, "warning": False,
+                            "risk_level": "未知", "top_trend_factor": "样本不足",
+                            "suggestion": "数据不足, 暂不评估"})
+            continue
+        w = sub.copy(); w["device_id"] = dev; w["episode_id"] = "rt"
+        sc = _trend_score(w, window=8, base_nodes=base).sort_values("time")
+        last = sc.iloc[-1]
+        eval_time = pd.Timestamp(last["time"]) if eval_time is None else max(eval_time, pd.Timestamp(last["time"]))
+        # 主因: 当前偏离最大的特征
+        base_rows = sc.iloc[:base]
+        contrib = {}
+        for c in TREND_FEATS:
+            mu = base_rows[c].mean(); sd = base_rows[c].std(ddof=0) or 1.0
+            contrib[c] = abs(float(last[c]) - mu) / sd
+        top = max(contrib, key=contrib.get)
+        warning = bool(last["score"] >= thr)
+        devices.append({
+            "device_id": f"{int(dev)}#",
+            "trend_score": round(float(last["score"]), 2),
+            "warning": warning,
+            "risk_level": "预警" if warning else "正常",
+            "top_trend_factor": top,
+            "suggestion": rt.get("suggest_warning" if warning else "suggest_normal", ""),
+        })
+    return {"status": "success", "validation_mode": "hybrid_simulation",
+            "evaluation_time": _to_utc_z(eval_time) if eval_time is not None else None,
+            "method": "trend_score", "threshold": thr, "devices": devices}
 
 
 def main() -> int:
