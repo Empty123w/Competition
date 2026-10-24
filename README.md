@@ -64,6 +64,9 @@ API / MCP / Agent 协同编排
 | A3 特征工程 | A | ✅ 完成 | 预测特征和健康特征 |
 | A4 负荷预测 | A | ✅ 完成 | 15/30/60 分钟预测、区间和评估 |
 | A5 健康诊断 | A | ✅ 完成 | 无监督评分、风险等级和建议 |
+| A6 滚动回放预测 | A | ✅ 完成 | 无泄漏扩展窗口、共形区间校准、45/75 分钟、历史健康/RUL |
+| A7 预测性维护 | A | ✅ 完成 | 真实遥测+注入退化混合仿真；`maintenance_json()`(hybrid_simulation) |
+| K 知识库构建 | A | ✅ 完成 | 10 类 12 卡、TF-IDF 检索、MCP/API/Agent 接入、拒答与 stale |
 | 历史人工基线 | B | ✅ 完成 | 历史策略还原、能耗和压力指标 |
 | 优化与安全 | B | ✅ 完成 | 多机调度(b3/balanced/load_balanced)、能耗目标、压力与喘振安全约束 |
 | 后端与 MCP | C | ✅ 完成 | API、MCP（含 RUL）、Agent、模拟控制闭环、数据库；调度/喘振调用 B 接口 |
@@ -381,21 +384,23 @@ suggestion
 运行：
 
 ```bash
-# A/A6
+# A / A6 / A7
 python -m pytest tests/data tests/models -q
 # B
 python -m pytest tests/baseline tests/optimization tests/safety -q
 # C
 python -m pytest tests/control tests/mcp tests/agent tests/db tests/api -q
+# K 知识库
+python -m pytest tests/knowledge -q
+# 全量
+python -m pytest tests -q
 ```
 
-当前交付基准（分块运行以避开内存峰值）：
+当前交付基准：
 
 ```text
-A/A6: 79 passed，0 skipped
-B   : 215 passed，0 skipped
-C   : 29 passed，0 skipped
-合计: 323 passed，0 skipped
+全量: 402 passed，0 skipped
+（分块：A/A6/A7 含 tests/data+tests/models；K 为 tests/knowledge 20 项）
 ```
 
 接收环境必须重新运行测试。如果出现大量 `skip`，应检查 Parquet、模型和依赖是否完整，不能把跳过测试当作通过。
@@ -435,6 +440,31 @@ artifacts/metrics/health_metrics.json
 - 已具备精确 RUL；
 - 健康评分可以直接替代人工检修判断；
 - 风险等级可以直接触发真实设备停机。
+
+### 13.3 预测性维护（A7，混合仿真）
+
+指标文件：`artifacts/metrics/maintenance_metrics.json`；报告：`analysis/reports/phaseA7_maint/maintenance_report.md`。
+
+| 指标 | 目标 | 结果 | 口径 |
+|---|---:|---:|---|
+| 非计划停机下降 | ≥50% | 92.08% | hybrid_simulation |
+| MTBF 提升 | ≥30% | 1163.16% | hybrid_simulation |
+| 异常预警准确率 | ≥90% | 92.92%（P=0.94,R=0.92） | hybrid_simulation |
+| 预警提前（中位） | ≥24h | 30.0h | hybrid_simulation |
+
+> 口径：真实遥测作底 + 注入退化标签（`label_source=injected_degradation`），证明方法链路与仿真下达标，不等同现场实测。
+
+### 13.4 知识库（阶段 K）
+
+指标文件：`analysis/reports/phaseK/knowledge_acceptance.json`。
+
+| 验收项 | 要求 | 实测 |
+|---|---:|---:|
+| 文档 / 类别 / 问题集 | ≥10 / 10 / ≥30 | 12 / 10 / 30 |
+| Top-3 命中率 | ≥85% | 88.46% |
+| 成功回答引用覆盖 | 100% | 100% |
+| 无依据拒答率 | ≥90% | 100% |
+| 检索 P95 | ≤2s | <0.1s |
 
 ## 14. 团队分工
 
@@ -503,10 +533,15 @@ feat/d-frontend-demo
 | [`analysis/reports/phaseA0/标准字段清单.md`](analysis/reports/phaseA0/标准字段清单.md) | 站级和设备级字段标准 |
 | [`analysis/reports/phaseA0/接口字段清单.md`](analysis/reports/phaseA0/接口字段清单.md) | 预测与健康输出标准 |
 | [`analysis/reports/phaseA5/health_report.md`](analysis/reports/phaseA5/health_report.md) | 健康诊断方法、指标和局限 |
-| [`项目协作与A模块详细交接说明.md`](项目协作与A模块详细交接说明.md) | 四人协作与验收流程 |
+| [`四人并行开发与集成方案.md`](四人并行开发与集成方案.md) | 四人协作与验收流程 |
 | [`analysis/reports/phaseC/README.md`](analysis/reports/phaseC/README.md) | C 模块总览（API/MCP/Agent/控制） |
 | [`analysis/reports/phaseC/API接口说明.md`](analysis/reports/phaseC/API接口说明.md) | 后端 REST 接口 |
 | [`analysis/reports/b/integration_B_to_C.md`](analysis/reports/b/integration_B_to_C.md) | B→C 调度接口与 C 侧接入 |
+| [`analysis/reports/团队进度总览.md`](analysis/reports/团队进度总览.md) | 团队级进度对照 |
+| [`analysis/reports/赛题要求对照与总进度.md`](analysis/reports/赛题要求对照与总进度.md) | 逐条赛题对照（含功能/性能指标） |
+| [`analysis/reports/phaseA7_maint/maintenance_report.md`](analysis/reports/phaseA7_maint/maintenance_report.md) | 预测性维护仿真（四指标） |
+| [`analysis/reports/phaseK/README.md`](analysis/reports/phaseK/README.md) | 知识库来源/架构/运行/限制 |
+| [`analysis/reports/phaseK/A_to_D_知识问答API.md`](analysis/reports/phaseK/A_to_D_知识问答API.md) | 知识问答 API（D 接入） |
 
 ## 17. 安全边界
 
