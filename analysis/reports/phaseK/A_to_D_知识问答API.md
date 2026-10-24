@@ -35,7 +35,7 @@ Content-Type: application/json
   "citations": [
     {"knowledge_id": "KB-FORECAST-001", "title": "负荷预测模型与接口",
      "category": "预测模型", "section": "结论", "score": 0.2105,
-     "source_path": "knowledge/03_预测模型/负荷预测模型与网关.md"}
+     "source_path": "knowledge/03_预测模型/负荷预测模型与接口.md"}
   ],
   "elapsed_seconds": 0.012
 }
