@@ -114,6 +114,13 @@ def orchestrate(user_input: str, execute: bool = False,
                      config_path=config_path)
 
 
+def maintenance_warning(config_path: str = "configs/maintenance_policy.yaml",
+                        processed_dir: str | None = None) -> dict:
+    """设备维护预警: 真实遥测的振动/温度/电流/能效趋势分数(A7, hybrid_simulation)。"""
+    from air_station.mcp_servers.maintenance_tool import maintenance_warning as _mw
+    return _mw(config_path=config_path, processed_dir=processed_dir)
+
+
 TOOL_SPECS = [
     {"name": "forecast_load", "fn": forecast_load},
     {"name": "health_diagnose", "fn": health_diagnose},
@@ -122,5 +129,6 @@ TOOL_SPECS = [
     {"name": "surge_warning", "fn": surge_warning},
     {"name": "control_command", "fn": control_command},
     {"name": "create_work_order", "fn": create_work_order},
+    {"name": "maintenance_warning", "fn": maintenance_warning},
     {"name": "orchestrate", "fn": orchestrate},
 ]

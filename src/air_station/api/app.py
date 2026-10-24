@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from air_station.api.errors import install_error_handlers
 from air_station.api.routers import (agent as agent_router, control as control_router,
+                                     maintenance as maintenance_router,
                                      metrics as metrics_router, models as models_router,
                                      system as system_router)
 from air_station.db import base as db_base
@@ -47,6 +48,7 @@ def create_app() -> FastAPI:
     app.include_router(control_router.router)
     app.include_router(agent_router.router)
     app.include_router(metrics_router.router)
+    app.include_router(maintenance_router.router)
     return app
 
 

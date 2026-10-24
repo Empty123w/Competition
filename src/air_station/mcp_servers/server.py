@@ -37,6 +37,8 @@ def build_server():
                 description="控制指令: SCADA 查询/PLC 下发/方案执行/EAM 维保/工单")(tools.control_command)
     server.tool(name="create_work_order",
                 description="生成设备维保工单")(tools.create_work_order)
+    server.tool(name="maintenance_warning",
+                description="设备维护预警: 振动/温度/电流/能效趋势分数(hybrid_simulation)")(tools.maintenance_warning)
     server.tool(name="orchestrate",
                 description="自然语言编排: 意图理解+工具链调用+可解释方案")(tools.orchestrate)
     return server
