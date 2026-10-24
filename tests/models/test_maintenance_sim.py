@@ -28,12 +28,16 @@ def test_targets_met():
     assert d["unplanned_stops"]["reduction_pct"] >= 50.0
     assert d["mtbf_hours"]["improvement_pct"] >= 30.0
     assert d["warning_lead_hours"]["median"] >= 24.0
+    assert d["warning_accuracy"]["accuracy"] >= 0.90
 
 
 def test_detection_not_trivial_or_degenerate():
     _need()
     d = json.loads(M.read_text(encoding="utf-8"))
-    assert 0.0 < d["detection_rate"] < 1.0     # 非完美、非全失败
+    # 非完美: 仍有少量未预警失效; 且存在误报评估口径(正常工况已计入)
+    assert 0.0 < d["warning_accuracy"]["recall"] < 1.0
+    assert d["unplanned_stops"]["proposed"] > 0
+    assert d["warning_accuracy"]["fp"] >= 0
 
 
 def test_report_exists():

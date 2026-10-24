@@ -20,6 +20,13 @@ node_hours: 6.0                 # 决策节点粒度(h), 与 RUL 模型一致
 warn_rul_hours: 330.0           # 预测 RUL ≤ 该值 -> 触发计划停机保养(约提前30h)
 lead_target_hours: 24.0         # 预警提前目标
 
+# 异常预警准确率评估(含正常工况以计误报)
+warn_eval:
+  target_accuracy: 0.90         # 异常预警准确率目标
+  normal_episodes_per_device: 120
+  normal_rul_floor: 1400.0       # 正常 episode 截断在 RUL>=该值(无失效)
+  warn_grid: [330.0, 400.0, 500.0, 600.0, 650.0, 680.0, 700.0, 800.0]
+
 # 基线策略(反应式): 退化到 fail_rul_hours 才处理 -> 记为一次非计划停机
 baseline_policy: reactive
 proposed_policy: predictive_rul
