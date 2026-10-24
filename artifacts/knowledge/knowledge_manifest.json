@@ -1,6 +1,6 @@
 {
   "kb_version": "2026.10.24.d9db4f",
-  "built_at": "2026-10-24T17:29:30",
+  "built_at": "2026-10-24T17:40:02",
   "retrieval_mode": "tfidf_char",
   "ngram_range": [
     2,
@@ -59,13 +59,13 @@
     "src/air_station/mcp_servers/server.py": "cb0f1288f3177d47",
     "src/air_station/api/app.py": "d4d725f7ddbe2735",
     "src/air_station/agent/intent.py": "2b42290f852ccc95",
-    "analysis/reports/A_to_C_服务接口.md": "05885fabe23774b1",
+    "analysis/reports/A_to_C_服务接口.md": "9b08bee28bce8708",
     "knowledge/09_赛题验收/赛题指标与证据等级.md": "c447d9a0358f072c",
-    "analysis/reports/团队进度总览.md": "4af46da1f5be3dc7",
+    "analysis/reports/团队进度总览.md": "8469d450cea57bf8",
     "artifacts/metrics/forecast_metrics.json": "4f72728e1418d826",
     "artifacts/metrics/maintenance_metrics.json": "055cbc00abb303c5",
     "knowledge/10_常见问题/常见问题速查.md": "e4618c4f1779c37d",
-    "analysis/reports/HANDOFF.md": "f5b770d4a8c3d7a0",
+    "analysis/reports/HANDOFF.md": "4e4e5f56e1b9a767",
     "artifacts/metrics/rul_metrics.json": "fb39208cf147b628",
     "artifacts/metrics/health_metrics.json": "99fb0fb45e168e6d"
   },

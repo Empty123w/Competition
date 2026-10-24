@@ -8,6 +8,7 @@
 > - 后端（C）：`analysis/reports/A_to_C_服务接口.md`
 > - 字段口径：`analysis/reports/phaseA0/接口字段清单.md`（已与当前实现同步）
 > - 剩余寿命（模拟）：`rul_json()`，见 `analysis/reports/phaseA5_rul/rul_report.md`（`validation_mode=simulation`）
+> - 知识库（能力⑤）：`knowledge_json()`/`search_knowledge()`，见 `analysis/reports/phaseK/README.md` 与 `A_to_D_知识问答API.md`
 
 ---
 
@@ -135,3 +136,4 @@ python -m air_station.models.health.evaluate
 ```
 
 > - 维护预警（A7）：`rul.maintenance_sim.maintenance_json()`，模拟口径 `hybrid_simulation`；指标见 `artifacts/metrics/maintenance_metrics.json`、报告 `analysis/reports/phaseA7_maint/maintenance_report.md`。
+> - 知识库（阶段 K）：知识卡 `knowledge/`、索引 `artifacts/knowledge/`；MCP `knowledge_search`、API `/api/knowledge/*`；验收见 `analysis/reports/phaseK/knowledge_acceptance.json`。

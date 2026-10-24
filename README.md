@@ -2,7 +2,7 @@
 
 面向工业空压站多机协同运行场景的智能调度项目。系统以真实历史运行数据为基础，融合数据治理、用气负荷预测、设备健康诊断、优化调度、安全约束和多智能体协同能力，目标是在满足供气压力和设备安全要求的前提下，降低空压站能耗并提高运行可靠性。
 
-本项目为竞赛项目，当前 A 模块（数据、预测、健康诊断）已经完成；B、C、D 模块正在并行开发。
+本项目为竞赛项目，当前 **A、B、C 三模块已完成**（A：数据/预测/健康/维护/RUL/知识库；B：基线/优化/安全；C：后端/MCP/Agent/控制/部署），**D（前端/演示）待开发**。
 
 ---
 
@@ -146,20 +146,21 @@ Competition/
 └─ 赛题详情.docx
 ```
 
-后续将由 B、C、D 分别增加：
+B/C/D 相关目录（多数已实现，frontend/demo 待开发）：
 
 ```text
-src/air_station/baseline/
-src/air_station/optimization/
-src/air_station/safety/
-src/air_station/api/
-src/air_station/mcp_servers/
-src/air_station/agent/
-src/air_station/control/
-src/air_station/db/
-frontend/
-demo/
-deployment/
+src/air_station/baseline/        # 已实现(B)
+src/air_station/optimization/    # 已实现(B)
+src/air_station/safety/          # 已实现(B)
+src/air_station/api/             # 已实现(C)
+src/air_station/mcp_servers/     # 已实现(C)
+src/air_station/agent/           # 已实现(C)
+src/air_station/control/         # 已实现(C)
+src/air_station/db/              # 已实现(C)
+src/air_station/knowledge/       # 已实现(K, A)
+deployment/                      # 已实现(C)
+frontend/                        # 待开发(D)
+demo/                            # 待开发(D)
 ```
 
 ## 7. 环境要求

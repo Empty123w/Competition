@@ -208,3 +208,36 @@ def maintenance_json(config_path: str = "configs/maintenance_policy.yaml",
 - **`validation_mode="hybrid_simulation"`**：真实遥测作底 + 注入退化标定，C 不得表述为现场实测；
 - 异常行为：缺少 `health_features.parquet` → `FileNotFoundError`；配置缺失 → `FileNotFoundError`。
 - 凭据口径同前：C 只封装，不改字段名，失败转服务层错误。
+
+
+---
+
+## 9. 知识库接口（阶段 K 新增）
+
+```python
+from air_station.knowledge.service import search_knowledge, knowledge_json, knowledge_status
+```
+
+成功响应（`knowledge_json`）：
+
+```json
+{
+  "status": "success",
+  "query": "负荷预测使用什么模型？",
+  "answer": "根据项目当前实现（负荷预测模型与接口）：……",
+  "confidence": 0.21,
+  "kb_version": "2026.10.24.d9db4f",
+  "retrieval_mode": "tfidf_char",
+  "kb_status": "fresh",
+  "stale_sources": [],
+  "citations": [{"knowledge_id":"KB-FORECAST-001","title":"负荷预测模型与接口",
+                 "category":"预测模型","section":"结论","score":0.21,
+                 "source_path":"knowledge/03_预测模型/负荷预测模型与接口.md"}],
+  "elapsed_seconds": 0.012
+}
+```
+
+无依据时：`status="no_answer"`、`confidence=0.0`、`citations=[]`，使用固定拒答文案。
+- MCP 工具：`knowledge_search`；API：`POST /api/knowledge/search`、`POST /api/knowledge/ask`、`GET /api/knowledge/status`；
+- `kb_status=stale` 表示来源文件（含 `artifacts/metrics/*.json`）已变更，索引需 `python -m air_station.knowledge.indexer --build` 重建；
+- C 只封装，不改字段名；前端接入说明见 `analysis/reports/phaseK/A_to_D_知识问答API.md`。
