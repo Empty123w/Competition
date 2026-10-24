@@ -1,0 +1,2329 @@
+[
+  {
+    "knowledge_id": "KB-DEVICE-001",
+    "doc_title": "设备档案与维护计数器口径",
+    "category": "设备档案",
+    "section": "结论",
+    "text": "本项目有两台同型号离心式空压机 **4#、5#**（阿特拉斯 ZH1250-6，工频、水冷，额定功率 1250 kW、额定气量 268.9 m³/min、额定压力 0.66 MPa，比功率 4.65 kW/(m³/min)，能效一级）。`设备档案.json` 另给出保养计划（周期 4000/8000/24000 小时）。**厂家信息中仓库未提供的部分（如内部故障码定义）属未知，知识库不编造。**",
+    "source_path": "knowledge/01_设备档案/设备档案与维护计数器.md",
+    "source_paths": [
+      "data/设备档案.json",
+      "data/指标释义.json",
+      "configs/rul.yaml"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "设备档案",
+      "4#",
+      "5#",
+      "保养周期",
+      "维护计数器",
+      65535,
+      "额定气量",
+      "离心机"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DEVICE-001",
+    "doc_title": "设备档案与维护计数器口径",
+    "category": "设备档案",
+    "section": "方法或规则",
+    "text": "- 设备参数与保养周期取自 `data/设备档案.json`；字段单位取自 `data/指标释义.json`。\n- 维护计数器（总运行时间/总负载时间/下次保养剩余时间）以小时计；其中出现的 **65535** 与约 **4.29e9** 属**溢出哨兵值**，处理为缺失，不代表真实运行小时。",
+    "source_path": "knowledge/01_设备档案/设备档案与维护计数器.md",
+    "source_paths": [
+      "data/设备档案.json",
+      "data/指标释义.json",
+      "configs/rul.yaml"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "设备档案",
+      "4#",
+      "5#",
+      "保养周期",
+      "维护计数器",
+      65535,
+      "额定气量",
+      "离心机"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DEVICE-001",
+    "doc_title": "设备档案与维护计数器口径",
+    "category": "设备档案",
+    "section": "证据与来源",
+    "text": "- 设备档案：`data/设备档案.json`\n- 字段释义：`data/指标释义.json`\n- 哨兵处理口径：`configs/data_quality.yaml`、`configs/rul.yaml`",
+    "source_path": "knowledge/01_设备档案/设备档案与维护计数器.md",
+    "source_paths": [
+      "data/设备档案.json",
+      "data/指标释义.json",
+      "configs/rul.yaml"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "设备档案",
+      "4#",
+      "5#",
+      "保养周期",
+      "维护计数器",
+      65535,
+      "额定气量",
+      "离心机"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DEVICE-001",
+    "doc_title": "设备档案与维护计数器口径",
+    "category": "设备档案",
+    "section": "适用范围和限制",
+    "text": "只覆盖仓库已有档案与口径；厂家专有故障码、真实现场维护台账若缺失，均标注为未知。",
+    "source_path": "knowledge/01_设备档案/设备档案与维护计数器.md",
+    "source_paths": [
+      "data/设备档案.json",
+      "data/指标释义.json",
+      "configs/rul.yaml"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "设备档案",
+      "4#",
+      "5#",
+      "保养周期",
+      "维护计数器",
+      65535,
+      "额定气量",
+      "离心机"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DATA-002",
+    "doc_title": "数据质量规则、哨兵值与异常处理",
+    "category": "数据与指标",
+    "section": "结论",
+    "text": "数据质量规则集中在 `configs/data_quality.yaml`：剔除无效列、按列处理哨兵值、限制插值长度、区分常量列。",
+    "source_path": "knowledge/02_数据与指标/数据质量与哨兵值.md",
+    "source_paths": [
+      "configs/data_quality.yaml",
+      "data/processed/data_manifest.json"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "数据质量",
+      "哨兵值",
+      "异常值",
+      "缺失",
+      65535,
+      4294970000,
+      "无效列",
+      "B相电流",
+      "插值"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DATA-002",
+    "doc_title": "数据质量规则、哨兵值与异常处理",
+    "category": "数据与指标",
+    "section": "方法或规则",
+    "text": "- **无效列**：`4#/5#B相电流`（恒 0）、`大气压`（恒 0.101325）→ 不入模型特征。\n- **哨兵值**：`65535`、`4294970000` 仅对**维护计数器列**置 NaN（不做全表替换），并标 `maintenance_sentinel_removed`。\n- **长缺失**：中冷/后冷温度前 6 天连续缺失 → 保留空、不插值、标 `temperature_available=false`。\n- **短缺口**：环境温湿度 =0 视为掉点，最多 30 分钟前向填充，标 `environment_interpolated`。\n- **运行态**：状态 8=开启/10=关闭；异常码用功率>1kW 兜底，标 `state_source`。",
+    "source_path": "knowledge/02_数据与指标/数据质量与哨兵值.md",
+    "source_paths": [
+      "configs/data_quality.yaml",
+      "data/processed/data_manifest.json"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "数据质量",
+      "哨兵值",
+      "异常值",
+      "缺失",
+      65535,
+      4294970000,
+      "无效列",
+      "B相电流",
+      "插值"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DATA-002",
+    "doc_title": "数据质量规则、哨兵值与异常处理",
+    "category": "数据与指标",
+    "section": "证据与来源",
+    "text": "- `rules:` 见 `configs/data_quality.yaml`（`invalid_columns`、`sentinels`、`missing`）；清单见 `data/processed/data_manifest.json`",
+    "source_path": "knowledge/02_数据与指标/数据质量与哨兵值.md",
+    "source_paths": [
+      "configs/data_quality.yaml",
+      "data/processed/data_manifest.json"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "数据质量",
+      "哨兵值",
+      "异常值",
+      "缺失",
+      65535,
+      4294970000,
+      "无效列",
+      "B相电流",
+      "插值"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DATA-002",
+    "doc_title": "数据质量规则、哨兵值与异常处理",
+    "category": "数据与指标",
+    "section": "适用范围和限制",
+    "text": "哨兵值按列精准处理，避免误杀正常值；无可信恢复依据的缺失不做伪造插值。",
+    "source_path": "knowledge/02_数据与指标/数据质量与哨兵值.md",
+    "source_paths": [
+      "configs/data_quality.yaml",
+      "data/processed/data_manifest.json"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "数据质量",
+      "哨兵值",
+      "异常值",
+      "缺失",
+      65535,
+      4294970000,
+      "无效列",
+      "B相电流",
+      "插值"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DATA-001",
+    "doc_title": "标准数据表与字段口径",
+    "category": "数据与指标",
+    "section": "结论",
+    "text": "标准化数据在 `data/processed/`，共 6 张 Parquet + 2 个清单。站级表 264,961 行、设备级/事件/维护表 529,922 行，均为 1 分钟粒度、主键含 `time`（设备级另含 `device_id`）。",
+    "source_path": "knowledge/02_数据与指标/标准数据表与字段.md",
+    "source_paths": [
+      "data/processed/data_manifest.json",
+      "data/processed/feature_manifest.json",
+      "data/指标释义.json"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "标准数据",
+      "站级表",
+      "设备级表",
+      "事件表",
+      "维护表",
+      "主键",
+      "单位",
+      "字段",
+      "origin"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DATA-001",
+    "doc_title": "标准数据表与字段口径",
+    "category": "数据与指标",
+    "section": "输出",
+    "text": "- `station_timeseries.parquet`：`time, header_pressure_mpa(MPa), total_flow_m3_min(m³/min), total_power_kw(kW), station_temperature_c(℃), station_humidity_percent(%RH), load_rate(-), load_level(-), environment_interpolated(bool)`\n- `device_timeseries.parquet`：`time, device_id(4/5), running, discharge_pressure_mpa, flow_m3_min, power_kw, load_ratio, specific_power, igv_percent, bov_closed_percent, current_proxy_a, vibration_stage_1/2/3_mm_s, discharge_temperature_c, runtime_hours, load_hours, maintenance_remaining_hours, fault_code, quality_valid, quality_reason`\n- `events.parquet`、`maintenance.parquet`：设备级长表。",
+    "source_path": "knowledge/02_数据与指标/标准数据表与字段.md",
+    "source_paths": [
+      "data/processed/data_manifest.json",
+      "data/processed/feature_manifest.json",
+      "data/指标释义.json"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "标准数据",
+      "站级表",
+      "设备级表",
+      "事件表",
+      "维护表",
+      "主键",
+      "单位",
+      "字段",
+      "origin"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DATA-001",
+    "doc_title": "标准数据表与字段口径",
+    "category": "数据与指标",
+    "section": "方法或规则",
+    "text": "- `origin` 取值 `real | inferred | simulated`，区分真实/推断/模拟来源。\n- 质量标记：`quality_valid`、`quality_reason`、`environment_interpolated`、`temperature_available`、`maintenance_sentinel_removed`。",
+    "source_path": "knowledge/02_数据与指标/标准数据表与字段.md",
+    "source_paths": [
+      "data/processed/data_manifest.json",
+      "data/processed/feature_manifest.json",
+      "data/指标释义.json"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "标准数据",
+      "站级表",
+      "设备级表",
+      "事件表",
+      "维护表",
+      "主键",
+      "单位",
+      "字段",
+      "origin"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DATA-001",
+    "doc_title": "标准数据表与字段口径",
+    "category": "数据与指标",
+    "section": "证据与来源",
+    "text": "- `data/processed/data_manifest.json`、`data/processed/feature_manifest.json`、`data/指标释义.json`",
+    "source_path": "knowledge/02_数据与指标/标准数据表与字段.md",
+    "source_paths": [
+      "data/processed/data_manifest.json",
+      "data/processed/feature_manifest.json",
+      "data/指标释义.json"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "标准数据",
+      "站级表",
+      "设备级表",
+      "事件表",
+      "维护表",
+      "主键",
+      "单位",
+      "字段",
+      "origin"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DATA-001",
+    "doc_title": "标准数据表与字段口径",
+    "category": "数据与指标",
+    "section": "适用范围和限制",
+    "text": "字段以生成清单为准；派生量（总流量、负荷率、压差）由真实字段计算，属 `inferred`。",
+    "source_path": "knowledge/02_数据与指标/标准数据表与字段.md",
+    "source_paths": [
+      "data/processed/data_manifest.json",
+      "data/processed/feature_manifest.json",
+      "data/指标释义.json"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "标准数据",
+      "站级表",
+      "设备级表",
+      "事件表",
+      "维护表",
+      "主键",
+      "单位",
+      "字段",
+      "origin"
+    ]
+  },
+  {
+    "knowledge_id": "KB-FORECAST-001",
+    "doc_title": "负荷预测模型与接口",
+    "category": "预测模型",
+    "section": "结论",
+    "text": "负荷预测使用**梯度提升树（LightGBM）**，对 15/30/60（滚动回放含 45/75）分钟分别训练**独立直接模型**；预测目标为 `target_time` 时刻的**瞬时站级总流量**（m3/min）。",
+    "source_path": "knowledge/03_预测模型/负荷预测模型与接口.md",
+    "source_paths": [
+      "configs/forecasting.yaml",
+      "configs/rolling_forecast.yaml",
+      "src/air_station/models/forecasting/service.py",
+      "src/air_station/models/forecasting/rolling_backtest.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "15min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.15min.MAPE"
+      },
+      {
+        "label": "30min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.30min.MAPE"
+      },
+      {
+        "label": "60min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.60min.MAPE"
+      }
+    ],
+    "keywords": [
+      "负荷预测",
+      "预测模型",
+      "15分钟",
+      "30分钟",
+      "60分钟",
+      "输入输出",
+      "forecast_json",
+      "as_of",
+      "target_time",
+      "LightGBM",
+      "滚动预测"
+    ]
+  },
+  {
+    "knowledge_id": "KB-FORECAST-001",
+    "doc_title": "负荷预测模型与接口",
+    "category": "预测模型",
+    "section": "输入",
+    "text": "- 当前与历史流量、滚动统计、差分、日历/周期特征、环境温湿度、运行机组数等（见特征字典）。\n- 运行时入口 `forecast_json(processed_dir, config_path, model_dir, horizons)`。",
+    "source_path": "knowledge/03_预测模型/负荷预测模型与接口.md",
+    "source_paths": [
+      "configs/forecasting.yaml",
+      "configs/rolling_forecast.yaml",
+      "src/air_station/models/forecasting/service.py",
+      "src/air_station/models/forecasting/rolling_backtest.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "15min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.15min.MAPE"
+      },
+      {
+        "label": "30min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.30min.MAPE"
+      },
+      {
+        "label": "60min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.60min.MAPE"
+      }
+    ],
+    "keywords": [
+      "负荷预测",
+      "预测模型",
+      "15分钟",
+      "30分钟",
+      "60分钟",
+      "输入输出",
+      "forecast_json",
+      "as_of",
+      "target_time",
+      "LightGBM",
+      "滚动预测"
+    ]
+  },
+  {
+    "knowledge_id": "KB-FORECAST-001",
+    "doc_title": "负荷预测模型与接口",
+    "category": "预测模型",
+    "section": "输出",
+    "text": "- `predicted_flow`（点预测）、`lower_bound`、`upper_bound`（经验区间），单位 m3/min；\n- `prediction_base_time`、`target_time = as_of + horizon_minutes`、`elapsed_seconds`。",
+    "source_path": "knowledge/03_预测模型/负荷预测模型与接口.md",
+    "source_paths": [
+      "configs/forecasting.yaml",
+      "configs/rolling_forecast.yaml",
+      "src/air_station/models/forecasting/service.py",
+      "src/air_station/models/forecasting/rolling_backtest.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "15min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.15min.MAPE"
+      },
+      {
+        "label": "30min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.30min.MAPE"
+      },
+      {
+        "label": "60min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.60min.MAPE"
+      }
+    ],
+    "keywords": [
+      "负荷预测",
+      "预测模型",
+      "15分钟",
+      "30分钟",
+      "60分钟",
+      "输入输出",
+      "forecast_json",
+      "as_of",
+      "target_time",
+      "LightGBM",
+      "滚动预测"
+    ]
+  },
+  {
+    "knowledge_id": "KB-FORECAST-001",
+    "doc_title": "负荷预测模型与接口",
+    "category": "预测模型",
+    "section": "方法或规则",
+    "text": "- 直接多模型，避免递归误差累积；时间顺序切分；`as_of` 之前数据构建因果特征。\n- 滚动回放采用扩展窗口、每 7 天重训、每折前 3 个完整自然日做区间校准；区间用**滚动共形**（`pred ± 分位(|残差|, 1-α)`）。\n- 不使用未来数据；`forecast_features.parquet` 缺失/为空时返回明确异常。",
+    "source_path": "knowledge/03_预测模型/负荷预测模型与接口.md",
+    "source_paths": [
+      "configs/forecasting.yaml",
+      "configs/rolling_forecast.yaml",
+      "src/air_station/models/forecasting/service.py",
+      "src/air_station/models/forecasting/rolling_backtest.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "15min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.15min.MAPE"
+      },
+      {
+        "label": "30min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.30min.MAPE"
+      },
+      {
+        "label": "60min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.60min.MAPE"
+      }
+    ],
+    "keywords": [
+      "负荷预测",
+      "预测模型",
+      "15分钟",
+      "30分钟",
+      "60分钟",
+      "输入输出",
+      "forecast_json",
+      "as_of",
+      "target_time",
+      "LightGBM",
+      "滚动预测"
+    ]
+  },
+  {
+    "knowledge_id": "KB-FORECAST-001",
+    "doc_title": "负荷预测模型与接口",
+    "category": "预测模型",
+    "section": "使用方式",
+    "text": "```python\nfrom air_station.models.forecasting.service import forecast_json\nforecast_json()                      # 默认 15/30/60 分钟\n```",
+    "source_path": "knowledge/03_预测模型/负荷预测模型与接口.md",
+    "source_paths": [
+      "configs/forecasting.yaml",
+      "configs/rolling_forecast.yaml",
+      "src/air_station/models/forecasting/service.py",
+      "src/air_station/models/forecasting/rolling_backtest.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "15min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.15min.MAPE"
+      },
+      {
+        "label": "30min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.30min.MAPE"
+      },
+      {
+        "label": "60min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.60min.MAPE"
+      }
+    ],
+    "keywords": [
+      "负荷预测",
+      "预测模型",
+      "15分钟",
+      "30分钟",
+      "60分钟",
+      "输入输出",
+      "forecast_json",
+      "as_of",
+      "target_time",
+      "LightGBM",
+      "滚动预测"
+    ]
+  },
+  {
+    "knowledge_id": "KB-FORECAST-001",
+    "doc_title": "负荷预测模型与接口",
+    "category": "预测模型",
+    "section": "证据与来源",
+    "text": "- 配置：`configs/forecasting.yaml`、`configs/rolling_forecast.yaml`\n- 代码：`src/air_station/models/forecasting/service.py`\n- 指标：`artifacts/metrics/forecast_metrics.json`",
+    "source_path": "knowledge/03_预测模型/负荷预测模型与接口.md",
+    "source_paths": [
+      "configs/forecasting.yaml",
+      "configs/rolling_forecast.yaml",
+      "src/air_station/models/forecasting/service.py",
+      "src/air_station/models/forecasting/rolling_backtest.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "15min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.15min.MAPE"
+      },
+      {
+        "label": "30min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.30min.MAPE"
+      },
+      {
+        "label": "60min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.60min.MAPE"
+      }
+    ],
+    "keywords": [
+      "负荷预测",
+      "预测模型",
+      "15分钟",
+      "30分钟",
+      "60分钟",
+      "输入输出",
+      "forecast_json",
+      "as_of",
+      "target_time",
+      "LightGBM",
+      "滚动预测"
+    ]
+  },
+  {
+    "knowledge_id": "KB-FORECAST-001",
+    "doc_title": "负荷预测模型与接口",
+    "category": "预测模型",
+    "section": "适用范围和限制",
+    "text": "MAPE 受零/低流量分母影响偏大，建议同时看 WAPE；模型与持续性基线接近，验证段为滚动更新评估。",
+    "source_path": "knowledge/03_预测模型/负荷预测模型与接口.md",
+    "source_paths": [
+      "configs/forecasting.yaml",
+      "configs/rolling_forecast.yaml",
+      "src/air_station/models/forecasting/service.py",
+      "src/air_station/models/forecasting/rolling_backtest.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "15min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.15min.MAPE"
+      },
+      {
+        "label": "30min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.30min.MAPE"
+      },
+      {
+        "label": "60min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.60min.MAPE"
+      }
+    ],
+    "keywords": [
+      "负荷预测",
+      "预测模型",
+      "15分钟",
+      "30分钟",
+      "60分钟",
+      "输入输出",
+      "forecast_json",
+      "as_of",
+      "target_time",
+      "LightGBM",
+      "滚动预测"
+    ]
+  },
+  {
+    "knowledge_id": "KB-MAINT-001",
+    "doc_title": "RUL 与预测性维护（混合仿真）",
+    "category": "健康与维护",
+    "section": "结论",
+    "text": "RUL（剩余寿命）由**模拟退化数据**训练的分位数 GBR 给出，标 `validation_mode=simulation`，仅作调度软约束。预测性维护在**真实遥测作底 + 注入退化标签**的混合仿真下，评估停机下降、MTBF、预警准确率与提前时间。",
+    "source_path": "knowledge/04_健康与维护/RUL与预测性维护.md",
+    "source_paths": [
+      "configs/rul.yaml",
+      "configs/maintenance_policy.yaml",
+      "src/air_station/models/rul/service.py",
+      "src/air_station/models/rul/maintenance_sim.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "非计划停机下降(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "unplanned_stops.reduction_pct"
+      },
+      {
+        "label": "MTBF提升(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "mtbf_hours.improvement_pct"
+      },
+      {
+        "label": "预警准确率",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_accuracy.accuracy"
+      },
+      {
+        "label": "预警提前中位(h)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_lead_hours.median"
+      },
+      {
+        "label": "RUL MAE(h)",
+        "path": "artifacts/metrics/rul_metrics.json",
+        "json_path": "metrics.MAE"
+      }
+    ],
+    "keywords": [
+      "RUL",
+      "剩余寿命",
+      "预测性维护",
+      "非计划停机",
+      "MTBF",
+      "异常预警",
+      "提前预警",
+      "hybrid_simulation",
+      "注入退化",
+      "maintenance_json"
+    ]
+  },
+  {
+    "knowledge_id": "KB-MAINT-001",
+    "doc_title": "RUL 与预测性维护（混合仿真）",
+    "category": "健康与维护",
+    "section": "输入",
+    "text": "- RUL：真实健康特征（振动/温度/电流/能效）滚动窗口；模型输入列见 `rul_meta.json`。\n- 维护预警：真实遥测 6 小时节点的滚动趋势分数（相对本段早期基准）。",
+    "source_path": "knowledge/04_健康与维护/RUL与预测性维护.md",
+    "source_paths": [
+      "configs/rul.yaml",
+      "configs/maintenance_policy.yaml",
+      "src/air_station/models/rul/service.py",
+      "src/air_station/models/rul/maintenance_sim.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "非计划停机下降(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "unplanned_stops.reduction_pct"
+      },
+      {
+        "label": "MTBF提升(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "mtbf_hours.improvement_pct"
+      },
+      {
+        "label": "预警准确率",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_accuracy.accuracy"
+      },
+      {
+        "label": "预警提前中位(h)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_lead_hours.median"
+      },
+      {
+        "label": "RUL MAE(h)",
+        "path": "artifacts/metrics/rul_metrics.json",
+        "json_path": "metrics.MAE"
+      }
+    ],
+    "keywords": [
+      "RUL",
+      "剩余寿命",
+      "预测性维护",
+      "非计划停机",
+      "MTBF",
+      "异常预警",
+      "提前预警",
+      "hybrid_simulation",
+      "注入退化",
+      "maintenance_json"
+    ]
+  },
+  {
+    "knowledge_id": "KB-MAINT-001",
+    "doc_title": "RUL 与预测性维护（混合仿真）",
+    "category": "健康与维护",
+    "section": "输出",
+    "text": "- `rul_json()`：`estimated_rul_hours / lower_bound_hours / upper_bound_hours / method`，`validation_mode=simulation`。\n- `maintenance_json()`：`trend_score / warning / risk_level / top_trend_factor / suggestion`，`validation_mode=hybrid_simulation`。",
+    "source_path": "knowledge/04_健康与维护/RUL与预测性维护.md",
+    "source_paths": [
+      "configs/rul.yaml",
+      "configs/maintenance_policy.yaml",
+      "src/air_station/models/rul/service.py",
+      "src/air_station/models/rul/maintenance_sim.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "非计划停机下降(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "unplanned_stops.reduction_pct"
+      },
+      {
+        "label": "MTBF提升(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "mtbf_hours.improvement_pct"
+      },
+      {
+        "label": "预警准确率",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_accuracy.accuracy"
+      },
+      {
+        "label": "预警提前中位(h)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_lead_hours.median"
+      },
+      {
+        "label": "RUL MAE(h)",
+        "path": "artifacts/metrics/rul_metrics.json",
+        "json_path": "metrics.MAE"
+      }
+    ],
+    "keywords": [
+      "RUL",
+      "剩余寿命",
+      "预测性维护",
+      "非计划停机",
+      "MTBF",
+      "异常预警",
+      "提前预警",
+      "hybrid_simulation",
+      "注入退化",
+      "maintenance_json"
+    ]
+  },
+  {
+    "knowledge_id": "KB-MAINT-001",
+    "doc_title": "RUL 与预测性维护（混合仿真）",
+    "category": "健康与维护",
+    "section": "方法或规则",
+    "text": "- 预警基于振动/温度/电流/能效的滚动趋势；阈值由标准网格选取，需满足准确率≥90% 且提前中位≥24h。\n- 标签来源为**注入退化**（`label_source=injected_degradation`），不是现场实测。",
+    "source_path": "knowledge/04_健康与维护/RUL与预测性维护.md",
+    "source_paths": [
+      "configs/rul.yaml",
+      "configs/maintenance_policy.yaml",
+      "src/air_station/models/rul/service.py",
+      "src/air_station/models/rul/maintenance_sim.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "非计划停机下降(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "unplanned_stops.reduction_pct"
+      },
+      {
+        "label": "MTBF提升(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "mtbf_hours.improvement_pct"
+      },
+      {
+        "label": "预警准确率",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_accuracy.accuracy"
+      },
+      {
+        "label": "预警提前中位(h)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_lead_hours.median"
+      },
+      {
+        "label": "RUL MAE(h)",
+        "path": "artifacts/metrics/rul_metrics.json",
+        "json_path": "metrics.MAE"
+      }
+    ],
+    "keywords": [
+      "RUL",
+      "剩余寿命",
+      "预测性维护",
+      "非计划停机",
+      "MTBF",
+      "异常预警",
+      "提前预警",
+      "hybrid_simulation",
+      "注入退化",
+      "maintenance_json"
+    ]
+  },
+  {
+    "knowledge_id": "KB-MAINT-001",
+    "doc_title": "RUL 与预测性维护（混合仿真）",
+    "category": "健康与维护",
+    "section": "使用方式",
+    "text": "```python\nfrom air_station.models.rul.service import rul_json\nfrom air_station.models.rul.maintenance_sim import maintenance_json\n```",
+    "source_path": "knowledge/04_健康与维护/RUL与预测性维护.md",
+    "source_paths": [
+      "configs/rul.yaml",
+      "configs/maintenance_policy.yaml",
+      "src/air_station/models/rul/service.py",
+      "src/air_station/models/rul/maintenance_sim.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "非计划停机下降(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "unplanned_stops.reduction_pct"
+      },
+      {
+        "label": "MTBF提升(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "mtbf_hours.improvement_pct"
+      },
+      {
+        "label": "预警准确率",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_accuracy.accuracy"
+      },
+      {
+        "label": "预警提前中位(h)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_lead_hours.median"
+      },
+      {
+        "label": "RUL MAE(h)",
+        "path": "artifacts/metrics/rul_metrics.json",
+        "json_path": "metrics.MAE"
+      }
+    ],
+    "keywords": [
+      "RUL",
+      "剩余寿命",
+      "预测性维护",
+      "非计划停机",
+      "MTBF",
+      "异常预警",
+      "提前预警",
+      "hybrid_simulation",
+      "注入退化",
+      "maintenance_json"
+    ]
+  },
+  {
+    "knowledge_id": "KB-MAINT-001",
+    "doc_title": "RUL 与预测性维护（混合仿真）",
+    "category": "健康与维护",
+    "section": "证据与来源",
+    "text": "- `configs/rul.yaml`、`configs/maintenance_policy.yaml`、`artifacts/metrics/{rul_metrics,maintenance_metrics}.json`\n- 报告：`analysis/reports/phaseA7_maint/maintenance_report.md`",
+    "source_path": "knowledge/04_健康与维护/RUL与预测性维护.md",
+    "source_paths": [
+      "configs/rul.yaml",
+      "configs/maintenance_policy.yaml",
+      "src/air_station/models/rul/service.py",
+      "src/air_station/models/rul/maintenance_sim.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "非计划停机下降(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "unplanned_stops.reduction_pct"
+      },
+      {
+        "label": "MTBF提升(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "mtbf_hours.improvement_pct"
+      },
+      {
+        "label": "预警准确率",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_accuracy.accuracy"
+      },
+      {
+        "label": "预警提前中位(h)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_lead_hours.median"
+      },
+      {
+        "label": "RUL MAE(h)",
+        "path": "artifacts/metrics/rul_metrics.json",
+        "json_path": "metrics.MAE"
+      }
+    ],
+    "keywords": [
+      "RUL",
+      "剩余寿命",
+      "预测性维护",
+      "非计划停机",
+      "MTBF",
+      "异常预警",
+      "提前预警",
+      "hybrid_simulation",
+      "注入退化",
+      "maintenance_json"
+    ]
+  },
+  {
+    "knowledge_id": "KB-MAINT-001",
+    "doc_title": "RUL 与预测性维护（混合仿真）",
+    "category": "健康与维护",
+    "section": "适用范围和限制",
+    "text": "**不得**把模拟/混合仿真结果称作现场效果；真实停机/维修台账缺失时按赛题许可用注入退化，属自证。",
+    "source_path": "knowledge/04_健康与维护/RUL与预测性维护.md",
+    "source_paths": [
+      "configs/rul.yaml",
+      "configs/maintenance_policy.yaml",
+      "src/air_station/models/rul/service.py",
+      "src/air_station/models/rul/maintenance_sim.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "非计划停机下降(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "unplanned_stops.reduction_pct"
+      },
+      {
+        "label": "MTBF提升(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "mtbf_hours.improvement_pct"
+      },
+      {
+        "label": "预警准确率",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_accuracy.accuracy"
+      },
+      {
+        "label": "预警提前中位(h)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_lead_hours.median"
+      },
+      {
+        "label": "RUL MAE(h)",
+        "path": "artifacts/metrics/rul_metrics.json",
+        "json_path": "metrics.MAE"
+      }
+    ],
+    "keywords": [
+      "RUL",
+      "剩余寿命",
+      "预测性维护",
+      "非计划停机",
+      "MTBF",
+      "异常预警",
+      "提前预警",
+      "hybrid_simulation",
+      "注入退化",
+      "maintenance_json"
+    ]
+  },
+  {
+    "knowledge_id": "KB-HEALTH-001",
+    "doc_title": "设备健康诊断方法与接口",
+    "category": "健康与维护",
+    "section": "结论",
+    "text": "健康诊断基于**专家软阈值规则 + 相对同负荷区间基准的偏差**（无监督），输出健康分（0~100）、风险等级与建议；无有监督故障标签，不声称故障识别准确率。",
+    "source_path": "knowledge/04_健康与维护/健康诊断方法与接口.md",
+    "source_paths": [
+      "configs/health_thresholds.yaml",
+      "src/air_station/models/health/service.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "健康分(4#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.4#.health_score_latest"
+      },
+      {
+        "label": "健康分(5#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.5#.health_score_latest"
+      }
+    ],
+    "keywords": [
+      "健康诊断",
+      "健康分数",
+      "风险等级",
+      "振动",
+      "温度",
+      "无监督",
+      "health_json",
+      "阈值",
+      "分层基准"
+    ]
+  },
+  {
+    "knowledge_id": "KB-HEALTH-001",
+    "doc_title": "设备健康诊断方法与接口",
+    "category": "健康与维护",
+    "section": "输入",
+    "text": "- 振动（一/二/三级）、排气温度、油箱油温、三相线圈温度、代理电流、单位流量功率等当前值；\n- 阈值配置 `configs/health_thresholds.yaml`（专家规则/分级/异常缩放）。",
+    "source_path": "knowledge/04_健康与维护/健康诊断方法与接口.md",
+    "source_paths": [
+      "configs/health_thresholds.yaml",
+      "src/air_station/models/health/service.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "健康分(4#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.4#.health_score_latest"
+      },
+      {
+        "label": "健康分(5#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.5#.health_score_latest"
+      }
+    ],
+    "keywords": [
+      "健康诊断",
+      "健康分数",
+      "风险等级",
+      "振动",
+      "温度",
+      "无监督",
+      "health_json",
+      "阈值",
+      "分层基准"
+    ]
+  },
+  {
+    "knowledge_id": "KB-HEALTH-001",
+    "doc_title": "设备健康诊断方法与接口",
+    "category": "健康与维护",
+    "section": "输出",
+    "text": "`health_json()`：`status, validation_mode=unsupervised, evaluation_time, devices[]`，每台含 `device_id, health_score, risk_level(正常/关注/预警/严重), anomaly_score, top_anomaly_factor, current_value, normal_range, trend_direction, suggestion`。",
+    "source_path": "knowledge/04_健康与维护/健康诊断方法与接口.md",
+    "source_paths": [
+      "configs/health_thresholds.yaml",
+      "src/air_station/models/health/service.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "健康分(4#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.4#.health_score_latest"
+      },
+      {
+        "label": "健康分(5#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.5#.health_score_latest"
+      }
+    ],
+    "keywords": [
+      "健康诊断",
+      "健康分数",
+      "风险等级",
+      "振动",
+      "温度",
+      "无监督",
+      "health_json",
+      "阈值",
+      "分层基准"
+    ]
+  },
+  {
+    "knowledge_id": "KB-HEALTH-001",
+    "doc_title": "设备健康诊断方法与接口",
+    "category": "健康与维护",
+    "section": "方法或规则",
+    "text": "- 健康分 = 100 × (1 − (权重×规则扣分 + 权重×异常分))；异常分为按加载率分层的 `dev_*` 归一化。\n- 停机时刻不计运行健康分（`quality_reason=not_running`）。",
+    "source_path": "knowledge/04_健康与维护/健康诊断方法与接口.md",
+    "source_paths": [
+      "configs/health_thresholds.yaml",
+      "src/air_station/models/health/service.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "健康分(4#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.4#.health_score_latest"
+      },
+      {
+        "label": "健康分(5#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.5#.health_score_latest"
+      }
+    ],
+    "keywords": [
+      "健康诊断",
+      "健康分数",
+      "风险等级",
+      "振动",
+      "温度",
+      "无监督",
+      "health_json",
+      "阈值",
+      "分层基准"
+    ]
+  },
+  {
+    "knowledge_id": "KB-HEALTH-001",
+    "doc_title": "设备健康诊断方法与接口",
+    "category": "健康与维护",
+    "section": "使用方式",
+    "text": "```python\nfrom air_station.models.health.service import health_json\nhealth_json()\n```",
+    "source_path": "knowledge/04_健康与维护/健康诊断方法与接口.md",
+    "source_paths": [
+      "configs/health_thresholds.yaml",
+      "src/air_station/models/health/service.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "健康分(4#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.4#.health_score_latest"
+      },
+      {
+        "label": "健康分(5#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.5#.health_score_latest"
+      }
+    ],
+    "keywords": [
+      "健康诊断",
+      "健康分数",
+      "风险等级",
+      "振动",
+      "温度",
+      "无监督",
+      "health_json",
+      "阈值",
+      "分层基准"
+    ]
+  },
+  {
+    "knowledge_id": "KB-HEALTH-001",
+    "doc_title": "设备健康诊断方法与接口",
+    "category": "健康与维护",
+    "section": "证据与来源",
+    "text": "- `configs/health_thresholds.yaml`、`src/air_station/models/health/service.py`、`artifacts/metrics/health_metrics.json`",
+    "source_path": "knowledge/04_健康与维护/健康诊断方法与接口.md",
+    "source_paths": [
+      "configs/health_thresholds.yaml",
+      "src/air_station/models/health/service.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "健康分(4#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.4#.health_score_latest"
+      },
+      {
+        "label": "健康分(5#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.5#.health_score_latest"
+      }
+    ],
+    "keywords": [
+      "健康诊断",
+      "健康分数",
+      "风险等级",
+      "振动",
+      "温度",
+      "无监督",
+      "health_json",
+      "阈值",
+      "分层基准"
+    ]
+  },
+  {
+    "knowledge_id": "KB-HEALTH-001",
+    "doc_title": "设备健康诊断方法与接口",
+    "category": "健康与维护",
+    "section": "适用范围和限制",
+    "text": "风险等级为无监督提示，不是真实故障定论；故障码 26 为弱标签，疑似站级共因。",
+    "source_path": "knowledge/04_健康与维护/健康诊断方法与接口.md",
+    "source_paths": [
+      "configs/health_thresholds.yaml",
+      "src/air_station/models/health/service.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "健康分(4#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.4#.health_score_latest"
+      },
+      {
+        "label": "健康分(5#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.5#.health_score_latest"
+      }
+    ],
+    "keywords": [
+      "健康诊断",
+      "健康分数",
+      "风险等级",
+      "振动",
+      "温度",
+      "无监督",
+      "health_json",
+      "阈值",
+      "分层基准"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DISPATCH-001",
+    "doc_title": "调度优化、基线与\"大马拉小车\"",
+    "category": "调度优化",
+    "section": "结论",
+    "text": "调度优化在满足供气需求、备用容量、加载率与安全/健康约束下，输出开机组合、各机加载率与压力设定；与人工基线对比评估能效、压力稳定性和\"大马拉小车\"时长。",
+    "source_path": "knowledge/05_调度优化/调度优化与基线.md",
+    "source_paths": [
+      "configs/optimization.yaml",
+      "src/air_station/optimization/optimizer.py",
+      "src/air_station/integration/dispatch_bridge.py",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "调度",
+      "优化",
+      "基线",
+      "人工调度",
+      "大马拉小车",
+      "备用容量",
+      "加载率",
+      "回退",
+      "安全回退",
+      "dispatch_optimize"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DISPATCH-001",
+    "doc_title": "调度优化、基线与\"大马拉小车\"",
+    "category": "调度优化",
+    "section": "输入",
+    "text": "- 需求流量（可由预测给出）、设备能力/性能曲线、约束（压力带、备用、喘振裕度、健康/维护软信号）。",
+    "source_path": "knowledge/05_调度优化/调度优化与基线.md",
+    "source_paths": [
+      "configs/optimization.yaml",
+      "src/air_station/optimization/optimizer.py",
+      "src/air_station/integration/dispatch_bridge.py",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "调度",
+      "优化",
+      "基线",
+      "人工调度",
+      "大马拉小车",
+      "备用容量",
+      "加载率",
+      "回退",
+      "安全回退",
+      "dispatch_optimize"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DISPATCH-001",
+    "doc_title": "调度优化、基线与\"大马拉小车\"",
+    "category": "调度优化",
+    "section": "输出",
+    "text": "- 机组组合与 `device_actions`、预计功率、能效与压力指标；`execution_permission=simulation_candidate_only`，不含真实 PLC 许可。",
+    "source_path": "knowledge/05_调度优化/调度优化与基线.md",
+    "source_paths": [
+      "configs/optimization.yaml",
+      "src/air_station/optimization/optimizer.py",
+      "src/air_station/integration/dispatch_bridge.py",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "调度",
+      "优化",
+      "基线",
+      "人工调度",
+      "大马拉小车",
+      "备用容量",
+      "加载率",
+      "回退",
+      "安全回退",
+      "dispatch_optimize"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DISPATCH-001",
+    "doc_title": "调度优化、基线与\"大马拉小车\"",
+    "category": "调度优化",
+    "section": "方法或规则",
+    "text": "- 多目标：能耗（SEC）/压力稳定性/切换代价；\"大马拉小车\"指大功率机组长期低负载运行，需被减少。\n- **安全回退**：求解失败或安全阻断时回退并标记，需人工复核。",
+    "source_path": "knowledge/05_调度优化/调度优化与基线.md",
+    "source_paths": [
+      "configs/optimization.yaml",
+      "src/air_station/optimization/optimizer.py",
+      "src/air_station/integration/dispatch_bridge.py",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "调度",
+      "优化",
+      "基线",
+      "人工调度",
+      "大马拉小车",
+      "备用容量",
+      "加载率",
+      "回退",
+      "安全回退",
+      "dispatch_optimize"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DISPATCH-001",
+    "doc_title": "调度优化、基线与\"大马拉小车\"",
+    "category": "调度优化",
+    "section": "使用方式",
+    "text": "```python\nfrom air_station.mcp_servers import tools\ntools.dispatch_optimize(mode=\"b3\", demand_flow_m3_min=500.0, horizon_minutes=15)\n```",
+    "source_path": "knowledge/05_调度优化/调度优化与基线.md",
+    "source_paths": [
+      "configs/optimization.yaml",
+      "src/air_station/optimization/optimizer.py",
+      "src/air_station/integration/dispatch_bridge.py",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "调度",
+      "优化",
+      "基线",
+      "人工调度",
+      "大马拉小车",
+      "备用容量",
+      "加载率",
+      "回退",
+      "安全回退",
+      "dispatch_optimize"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DISPATCH-001",
+    "doc_title": "调度优化、基线与\"大马拉小车\"",
+    "category": "调度优化",
+    "section": "证据与来源",
+    "text": "- `configs/optimization.yaml`、`src/air_station/optimization/optimizer.py`\n- B 验收：`analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md`",
+    "source_path": "knowledge/05_调度优化/调度优化与基线.md",
+    "source_paths": [
+      "configs/optimization.yaml",
+      "src/air_station/optimization/optimizer.py",
+      "src/air_station/integration/dispatch_bridge.py",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "调度",
+      "优化",
+      "基线",
+      "人工调度",
+      "大马拉小车",
+      "备用容量",
+      "加载率",
+      "回退",
+      "安全回退",
+      "dispatch_optimize"
+    ]
+  },
+  {
+    "knowledge_id": "KB-DISPATCH-001",
+    "doc_title": "调度优化、基线与\"大马拉小车\"",
+    "category": "调度优化",
+    "section": "适用范围和限制",
+    "text": "能效/压力类指标为**离线模型/工程仿真估计**（开发段达成、验证段部分未达），不构成现场结论。",
+    "source_path": "knowledge/05_调度优化/调度优化与基线.md",
+    "source_paths": [
+      "configs/optimization.yaml",
+      "src/air_station/optimization/optimizer.py",
+      "src/air_station/integration/dispatch_bridge.py",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "调度",
+      "优化",
+      "基线",
+      "人工调度",
+      "大马拉小车",
+      "备用容量",
+      "加载率",
+      "回退",
+      "安全回退",
+      "dispatch_optimize"
+    ]
+  },
+  {
+    "knowledge_id": "KB-SAFETY-001",
+    "doc_title": "喘振与安全边界",
+    "category": "喘振与安全",
+    "section": "结论",
+    "text": "喘振风险按低/中/高分级；高风险方案不得通过安全校验、不得下发执行。项目使用**机理代理边界**评估，厂家真实喘振曲线缺失。",
+    "source_path": "knowledge/06_喘振与安全/喘振与安全边界.md",
+    "source_paths": [
+      "configs/safety.yaml",
+      "src/air_station/safety/surge.py",
+      "src/air_station/integration/surge_bridge.py"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "喘振",
+      "安全",
+      "风险等级",
+      "边界",
+      "安全阻断",
+      "高风险",
+      "surge_warning",
+      "裕度"
+    ]
+  },
+  {
+    "knowledge_id": "KB-SAFETY-001",
+    "doc_title": "喘振与安全边界",
+    "category": "喘振与安全",
+    "section": "输入",
+    "text": "- 实时运行参数（流量、压力、IGV 等）与机理/代理边界配置。",
+    "source_path": "knowledge/06_喘振与安全/喘振与安全边界.md",
+    "source_paths": [
+      "configs/safety.yaml",
+      "src/air_station/safety/surge.py",
+      "src/air_station/integration/surge_bridge.py"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "喘振",
+      "安全",
+      "风险等级",
+      "边界",
+      "安全阻断",
+      "高风险",
+      "surge_warning",
+      "裕度"
+    ]
+  },
+  {
+    "knowledge_id": "KB-SAFETY-001",
+    "doc_title": "喘振与安全边界",
+    "category": "喘振与安全",
+    "section": "输出",
+    "text": "- 风险等级与建议；进入调度时 `safety_blocked=true` 表示禁止执行。",
+    "source_path": "knowledge/06_喘振与安全/喘振与安全边界.md",
+    "source_paths": [
+      "configs/safety.yaml",
+      "src/air_station/safety/surge.py",
+      "src/air_station/integration/surge_bridge.py"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "喘振",
+      "安全",
+      "风险等级",
+      "边界",
+      "安全阻断",
+      "高风险",
+      "surge_warning",
+      "裕度"
+    ]
+  },
+  {
+    "knowledge_id": "KB-SAFETY-001",
+    "doc_title": "喘振与安全边界",
+    "category": "喘振与安全",
+    "section": "方法或规则",
+    "text": "- 规则与阈值见 `configs/safety.yaml`；高风险的机组方案被安全校验拦截。\n- 喘振预警为**代理/工程仿真**，无真实喘振事件标签，不声称准确率。",
+    "source_path": "knowledge/06_喘振与安全/喘振与安全边界.md",
+    "source_paths": [
+      "configs/safety.yaml",
+      "src/air_station/safety/surge.py",
+      "src/air_station/integration/surge_bridge.py"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "喘振",
+      "安全",
+      "风险等级",
+      "边界",
+      "安全阻断",
+      "高风险",
+      "surge_warning",
+      "裕度"
+    ]
+  },
+  {
+    "knowledge_id": "KB-SAFETY-001",
+    "doc_title": "喘振与安全边界",
+    "category": "喘振与安全",
+    "section": "使用方式",
+    "text": "```python\nfrom air_station.mcp_servers import tools\ntools.surge_warning()\n```",
+    "source_path": "knowledge/06_喘振与安全/喘振与安全边界.md",
+    "source_paths": [
+      "configs/safety.yaml",
+      "src/air_station/safety/surge.py",
+      "src/air_station/integration/surge_bridge.py"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "喘振",
+      "安全",
+      "风险等级",
+      "边界",
+      "安全阻断",
+      "高风险",
+      "surge_warning",
+      "裕度"
+    ]
+  },
+  {
+    "knowledge_id": "KB-SAFETY-001",
+    "doc_title": "喘振与安全边界",
+    "category": "喘振与安全",
+    "section": "证据与来源",
+    "text": "- `configs/safety.yaml`、`src/air_station/safety/surge.py`",
+    "source_path": "knowledge/06_喘振与安全/喘振与安全边界.md",
+    "source_paths": [
+      "configs/safety.yaml",
+      "src/air_station/safety/surge.py",
+      "src/air_station/integration/surge_bridge.py"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "喘振",
+      "安全",
+      "风险等级",
+      "边界",
+      "安全阻断",
+      "高风险",
+      "surge_warning",
+      "裕度"
+    ]
+  },
+  {
+    "knowledge_id": "KB-SAFETY-001",
+    "doc_title": "喘振与安全边界",
+    "category": "喘振与安全",
+    "section": "适用范围和限制",
+    "text": "项目规则与厂家真实喘振线之间存在边界；缺真实喘振数据时的准确率/提前量不可作为现场结论。",
+    "source_path": "knowledge/06_喘振与安全/喘振与安全边界.md",
+    "source_paths": [
+      "configs/safety.yaml",
+      "src/air_station/safety/surge.py",
+      "src/air_station/integration/surge_bridge.py"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "喘振",
+      "安全",
+      "风险等级",
+      "边界",
+      "安全阻断",
+      "高风险",
+      "surge_warning",
+      "裕度"
+    ]
+  },
+  {
+    "knowledge_id": "KB-OPS-001",
+    "doc_title": "故障码、维护规则与常见数据异常",
+    "category": "运维知识",
+    "section": "结论",
+    "text": "运行事件中**故障码 26 是本项目唯一出现的故障码**，且 4#/5# 起止高度同步（2026-03-19 起、04-13 止），更像**站级共因事件**而非单机独立故障；只能作为**事件级弱标签**。仓库**没有厂家故障码 26 的权威定义**，知识库不编造其含义。",
+    "source_path": "knowledge/07_运维知识/故障码与维护规则.md",
+    "source_paths": [
+      "data/processed/events.parquet",
+      "data/设备档案.json",
+      "analysis/reports/phaseA5/health_report.md",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "故障码",
+      "故障26",
+      "维护周期",
+      "维护",
+      "保养",
+      "数据异常",
+      "掉点",
+      "停机",
+      "弱标签"
+    ]
+  },
+  {
+    "knowledge_id": "KB-OPS-001",
+    "doc_title": "故障码、维护规则与常见数据异常",
+    "category": "运维知识",
+    "section": "方法或规则",
+    "text": "- 保养周期取自 `data/设备档案.json`（4000/8000/24000 小时）。\n- 常见数据异常：环境温湿度偶发为 0（掉点）、维护计数器 65535/4.29e9（溢出哨兵）、中冷/后冷温度前 6 天长缺失——分别按 `configs/data_quality.yaml` 处理。",
+    "source_path": "knowledge/07_运维知识/故障码与维护规则.md",
+    "source_paths": [
+      "data/processed/events.parquet",
+      "data/设备档案.json",
+      "analysis/reports/phaseA5/health_report.md",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "故障码",
+      "故障26",
+      "维护周期",
+      "维护",
+      "保养",
+      "数据异常",
+      "掉点",
+      "停机",
+      "弱标签"
+    ]
+  },
+  {
+    "knowledge_id": "KB-OPS-001",
+    "doc_title": "故障码、维护规则与常见数据异常",
+    "category": "运维知识",
+    "section": "证据与来源",
+    "text": "- `data/processed/events.parquet`、`data/设备档案.json`、`analysis/reports/phaseA5/health_report.md`",
+    "source_path": "knowledge/07_运维知识/故障码与维护规则.md",
+    "source_paths": [
+      "data/processed/events.parquet",
+      "data/设备档案.json",
+      "analysis/reports/phaseA5/health_report.md",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "故障码",
+      "故障26",
+      "维护周期",
+      "维护",
+      "保养",
+      "数据异常",
+      "掉点",
+      "停机",
+      "弱标签"
+    ]
+  },
+  {
+    "knowledge_id": "KB-OPS-001",
+    "doc_title": "故障码、维护规则与常见数据异常",
+    "category": "运维知识",
+    "section": "适用范围和限制",
+    "text": "故障码语义、计划/非计划停机区分在仓库中**无可靠依据**；涉及这些的结论必须标注不确定。",
+    "source_path": "knowledge/07_运维知识/故障码与维护规则.md",
+    "source_paths": [
+      "data/processed/events.parquet",
+      "data/设备档案.json",
+      "analysis/reports/phaseA5/health_report.md",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "故障码",
+      "故障26",
+      "维护周期",
+      "维护",
+      "保养",
+      "数据异常",
+      "掉点",
+      "停机",
+      "弱标签"
+    ]
+  },
+  {
+    "knowledge_id": "KB-IFACE-001",
+    "doc_title": "系统接口、MCP 工具与 Agent 路由",
+    "category": "系统接口",
+    "section": "结论",
+    "text": "系统对外提供运行时函数、MCP 工具与 REST API。运行时接口包括 `forecast_json()`、`health_json()`、`rul_json()`、`maintenance_json()`。",
+    "source_path": "knowledge/08_系统接口/接口与MCP.md",
+    "source_paths": [
+      "src/air_station/mcp_servers/tools.py",
+      "src/air_station/mcp_servers/server.py",
+      "src/air_station/api/app.py",
+      "src/air_station/agent/intent.py",
+      "analysis/reports/A_to_C_服务接口.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "接口",
+      "MCP",
+      "API",
+      "调用",
+      "返回字段",
+      "forecast_json",
+      "health_json",
+      "rul_json",
+      "knowledge_search",
+      "Agent",
+      "意图"
+    ]
+  },
+  {
+    "knowledge_id": "KB-IFACE-001",
+    "doc_title": "系统接口、MCP 工具与 Agent 路由",
+    "category": "系统接口",
+    "section": "输出",
+    "text": "- 关键 MCP 工具：`forecast_load`、`health_diagnose`、`rul_estimation`、`dispatch_optimize`、`surge_warning`、`control_command`、`create_work_order`、`maintenance_warning`、`knowledge_search`、`orchestrate`。\n- API：`POST /api/forecast`、`POST /api/health`、`POST /api/rul`、`POST /api/dispatch`、`POST /api/control/command`、`GET /api/system/overview`、`GET /api/maintenance/status`、`POST /api/knowledge/search`、`POST /api/knowledge/ask`、`GET /api/knowledge/status`。",
+    "source_path": "knowledge/08_系统接口/接口与MCP.md",
+    "source_paths": [
+      "src/air_station/mcp_servers/tools.py",
+      "src/air_station/mcp_servers/server.py",
+      "src/air_station/api/app.py",
+      "src/air_station/agent/intent.py",
+      "analysis/reports/A_to_C_服务接口.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "接口",
+      "MCP",
+      "API",
+      "调用",
+      "返回字段",
+      "forecast_json",
+      "health_json",
+      "rul_json",
+      "knowledge_search",
+      "Agent",
+      "意图"
+    ]
+  },
+  {
+    "knowledge_id": "KB-IFACE-001",
+    "doc_title": "系统接口、MCP 工具与 Agent 路由",
+    "category": "系统接口",
+    "section": "方法或规则",
+    "text": "- 成功响应字段固定，封装方不得改名；失败由服务层错误处理，不伪造 `status=success`。\n- Agent 路由优先级：实时预测/健康/RUL/调度/喘振/控制 → 动态工具；方法/含义/规则/依据/输入输出 → 知识库；组合请求 → 先动态再解释；未知 → 知识库；知识库无依据 → 拒答。",
+    "source_path": "knowledge/08_系统接口/接口与MCP.md",
+    "source_paths": [
+      "src/air_station/mcp_servers/tools.py",
+      "src/air_station/mcp_servers/server.py",
+      "src/air_station/api/app.py",
+      "src/air_station/agent/intent.py",
+      "analysis/reports/A_to_C_服务接口.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "接口",
+      "MCP",
+      "API",
+      "调用",
+      "返回字段",
+      "forecast_json",
+      "health_json",
+      "rul_json",
+      "knowledge_search",
+      "Agent",
+      "意图"
+    ]
+  },
+  {
+    "knowledge_id": "KB-IFACE-001",
+    "doc_title": "系统接口、MCP 工具与 Agent 路由",
+    "category": "系统接口",
+    "section": "使用方式",
+    "text": "```python\nfrom air_station.models.forecasting.service import forecast_json\nfrom air_station.knowledge.service import knowledge_json\n```",
+    "source_path": "knowledge/08_系统接口/接口与MCP.md",
+    "source_paths": [
+      "src/air_station/mcp_servers/tools.py",
+      "src/air_station/mcp_servers/server.py",
+      "src/air_station/api/app.py",
+      "src/air_station/agent/intent.py",
+      "analysis/reports/A_to_C_服务接口.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "接口",
+      "MCP",
+      "API",
+      "调用",
+      "返回字段",
+      "forecast_json",
+      "health_json",
+      "rul_json",
+      "knowledge_search",
+      "Agent",
+      "意图"
+    ]
+  },
+  {
+    "knowledge_id": "KB-IFACE-001",
+    "doc_title": "系统接口、MCP 工具与 Agent 路由",
+    "category": "系统接口",
+    "section": "证据与来源",
+    "text": "- `src/air_station/mcp_servers/tools.py`、`src/air_station/api/app.py`、`src/air_station/agent/intent.py`、`analysis/reports/A_to_C_服务接口.md`",
+    "source_path": "knowledge/08_系统接口/接口与MCP.md",
+    "source_paths": [
+      "src/air_station/mcp_servers/tools.py",
+      "src/air_station/mcp_servers/server.py",
+      "src/air_station/api/app.py",
+      "src/air_station/agent/intent.py",
+      "analysis/reports/A_to_C_服务接口.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "接口",
+      "MCP",
+      "API",
+      "调用",
+      "返回字段",
+      "forecast_json",
+      "health_json",
+      "rul_json",
+      "knowledge_search",
+      "Agent",
+      "意图"
+    ]
+  },
+  {
+    "knowledge_id": "KB-IFACE-001",
+    "doc_title": "系统接口、MCP 工具与 Agent 路由",
+    "category": "系统接口",
+    "section": "适用范围和限制",
+    "text": "控制类能力仅作用于**模拟** PLC/SCADA/EAM；真实设备接口未接入。",
+    "source_path": "knowledge/08_系统接口/接口与MCP.md",
+    "source_paths": [
+      "src/air_station/mcp_servers/tools.py",
+      "src/air_station/mcp_servers/server.py",
+      "src/air_station/api/app.py",
+      "src/air_station/agent/intent.py",
+      "analysis/reports/A_to_C_服务接口.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "接口",
+      "MCP",
+      "API",
+      "调用",
+      "返回字段",
+      "forecast_json",
+      "health_json",
+      "rul_json",
+      "knowledge_search",
+      "Agent",
+      "意图"
+    ]
+  },
+  {
+    "knowledge_id": "KB-KPI-001",
+    "doc_title": "赛题指标、计算口径与证据等级",
+    "category": "赛题验收",
+    "section": "结论",
+    "text": "赛题 15 项指标中，本项目已实现的多为**离线模型估计 / 工程仿真 / 混合仿真**，少数为**实测级**（如负荷预测、调度时延）。任何指标必须标注 `validation_mode` 与证据文件。",
+    "source_path": "knowledge/09_赛题验收/赛题指标与证据等级.md",
+    "source_paths": [
+      "analysis/reports/团队进度总览.md",
+      "artifacts/metrics/forecast_metrics.json",
+      "artifacts/metrics/maintenance_metrics.json",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [
+      {
+        "label": "预测15min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.15min.MAPE"
+      },
+      {
+        "label": "非计划停机下降(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "unplanned_stops.reduction_pct"
+      },
+      {
+        "label": "预警准确率",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_accuracy.accuracy"
+      }
+    ],
+    "keywords": [
+      "指标",
+      "赛题",
+      "能效",
+      "压力合格率",
+      "证据等级",
+      "validation_mode",
+      "模拟",
+      "离线回放",
+      "混合仿真",
+      "大马拉小车"
+    ]
+  },
+  {
+    "knowledge_id": "KB-KPI-001",
+    "doc_title": "赛题指标、计算口径与证据等级",
+    "category": "赛题验收",
+    "section": "方法或规则（证据等级）",
+    "text": "- `real_data`：直接来自主办方数据；\n- `offline_backtest`：历史回放/离线评估（如负荷预测）；\n- `offline_model`：离线模型估计（如能效）；\n- `engineering_simulation`：工程仿真（如压力合格率）；\n- `hybrid_simulation`：真实遥测作底 + 注入标签（如停机/MTBF/预警）；\n- `simulation`：纯模拟（如 RUL）。",
+    "source_path": "knowledge/09_赛题验收/赛题指标与证据等级.md",
+    "source_paths": [
+      "analysis/reports/团队进度总览.md",
+      "artifacts/metrics/forecast_metrics.json",
+      "artifacts/metrics/maintenance_metrics.json",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [
+      {
+        "label": "预测15min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.15min.MAPE"
+      },
+      {
+        "label": "非计划停机下降(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "unplanned_stops.reduction_pct"
+      },
+      {
+        "label": "预警准确率",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_accuracy.accuracy"
+      }
+    ],
+    "keywords": [
+      "指标",
+      "赛题",
+      "能效",
+      "压力合格率",
+      "证据等级",
+      "validation_mode",
+      "模拟",
+      "离线回放",
+      "混合仿真",
+      "大马拉小车"
+    ]
+  },
+  {
+    "knowledge_id": "KB-KPI-001",
+    "doc_title": "赛题指标、计算口径与证据等级",
+    "category": "赛题验收",
+    "section": "使用方式",
+    "text": "询问某项指标时，先看对应 `artifacts/metrics/*.json` 与阶段报告，再报告其证据等级与适用范围。",
+    "source_path": "knowledge/09_赛题验收/赛题指标与证据等级.md",
+    "source_paths": [
+      "analysis/reports/团队进度总览.md",
+      "artifacts/metrics/forecast_metrics.json",
+      "artifacts/metrics/maintenance_metrics.json",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [
+      {
+        "label": "预测15min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.15min.MAPE"
+      },
+      {
+        "label": "非计划停机下降(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "unplanned_stops.reduction_pct"
+      },
+      {
+        "label": "预警准确率",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_accuracy.accuracy"
+      }
+    ],
+    "keywords": [
+      "指标",
+      "赛题",
+      "能效",
+      "压力合格率",
+      "证据等级",
+      "validation_mode",
+      "模拟",
+      "离线回放",
+      "混合仿真",
+      "大马拉小车"
+    ]
+  },
+  {
+    "knowledge_id": "KB-KPI-001",
+    "doc_title": "赛题指标、计算口径与证据等级",
+    "category": "赛题验收",
+    "section": "证据与来源",
+    "text": "- `analysis/reports/团队进度总览.md`、`artifacts/metrics/*.json`、`analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md`",
+    "source_path": "knowledge/09_赛题验收/赛题指标与证据等级.md",
+    "source_paths": [
+      "analysis/reports/团队进度总览.md",
+      "artifacts/metrics/forecast_metrics.json",
+      "artifacts/metrics/maintenance_metrics.json",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [
+      {
+        "label": "预测15min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.15min.MAPE"
+      },
+      {
+        "label": "非计划停机下降(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "unplanned_stops.reduction_pct"
+      },
+      {
+        "label": "预警准确率",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_accuracy.accuracy"
+      }
+    ],
+    "keywords": [
+      "指标",
+      "赛题",
+      "能效",
+      "压力合格率",
+      "证据等级",
+      "validation_mode",
+      "模拟",
+      "离线回放",
+      "混合仿真",
+      "大马拉小车"
+    ]
+  },
+  {
+    "knowledge_id": "KB-KPI-001",
+    "doc_title": "赛题指标、计算口径与证据等级",
+    "category": "赛题验收",
+    "section": "适用范围和限制",
+    "text": "模拟/仿真结果不得表述为现场结论；开发段与验证段、真实与模拟必须区分。",
+    "source_path": "knowledge/09_赛题验收/赛题指标与证据等级.md",
+    "source_paths": [
+      "analysis/reports/团队进度总览.md",
+      "artifacts/metrics/forecast_metrics.json",
+      "artifacts/metrics/maintenance_metrics.json",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [
+      {
+        "label": "预测15min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.15min.MAPE"
+      },
+      {
+        "label": "非计划停机下降(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "unplanned_stops.reduction_pct"
+      },
+      {
+        "label": "预警准确率",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_accuracy.accuracy"
+      }
+    ],
+    "keywords": [
+      "指标",
+      "赛题",
+      "能效",
+      "压力合格率",
+      "证据等级",
+      "validation_mode",
+      "模拟",
+      "离线回放",
+      "混合仿真",
+      "大马拉小车"
+    ]
+  },
+  {
+    "knowledge_id": "KB-FAQ-001",
+    "doc_title": "常见问题速查",
+    "category": "常见问题",
+    "section": "结论",
+    "text": "高频问题与正确去向：数据/算法/口径类问题查知识库；当前实时值调用动态工具。",
+    "source_path": "knowledge/10_常见问题/常见问题速查.md",
+    "source_paths": [
+      "configs/data_quality.yaml",
+      "analysis/reports/HANDOFF.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "常见问题",
+      "FAQ",
+      "origin",
+      "simulated",
+      "hybrid_simulation",
+      "端口"
+    ]
+  },
+  {
+    "knowledge_id": "KB-FAQ-001",
+    "doc_title": "常见问题速查",
+    "category": "常见问题",
+    "section": "方法或规则",
+    "text": "- `origin=simulated`：程序模拟生成的数据；\n- `validation_mode=hybrid_simulation`：真实遥测作底 + 注入标签的混合验证；\n- 标准表位于 `data/processed/`。",
+    "source_path": "knowledge/10_常见问题/常见问题速查.md",
+    "source_paths": [
+      "configs/data_quality.yaml",
+      "analysis/reports/HANDOFF.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "常见问题",
+      "FAQ",
+      "origin",
+      "simulated",
+      "hybrid_simulation",
+      "端口"
+    ]
+  },
+  {
+    "knowledge_id": "KB-FAQ-001",
+    "doc_title": "常见问题速查",
+    "category": "常见问题",
+    "section": "使用方式",
+    "text": "实时数值（当前健康分、未来预测、调度、喘振、控制）请调用对应动态工具。",
+    "source_path": "knowledge/10_常见问题/常见问题速查.md",
+    "source_paths": [
+      "configs/data_quality.yaml",
+      "analysis/reports/HANDOFF.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "常见问题",
+      "FAQ",
+      "origin",
+      "simulated",
+      "hybrid_simulation",
+      "端口"
+    ]
+  },
+  {
+    "knowledge_id": "KB-FAQ-001",
+    "doc_title": "常见问题速查",
+    "category": "常见问题",
+    "section": "证据与来源",
+    "text": "- `analysis/reports/HANDOFF.md`",
+    "source_path": "knowledge/10_常见问题/常见问题速查.md",
+    "source_paths": [
+      "configs/data_quality.yaml",
+      "analysis/reports/HANDOFF.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "常见问题",
+      "FAQ",
+      "origin",
+      "simulated",
+      "hybrid_simulation",
+      "端口"
+    ]
+  },
+  {
+    "knowledge_id": "KB-FAQ-001",
+    "doc_title": "常见问题速查",
+    "category": "常见问题",
+    "section": "适用范围和限制",
+    "text": "仓库没有依据的问题（供应商手册、外部系统）由服务层拒答。",
+    "source_path": "knowledge/10_常见问题/常见问题速查.md",
+    "source_paths": [
+      "configs/data_quality.yaml",
+      "analysis/reports/HANDOFF.md"
+    ],
+    "metric_refs": [],
+    "keywords": [
+      "常见问题",
+      "FAQ",
+      "origin",
+      "simulated",
+      "hybrid_simulation",
+      "端口"
+    ]
+  },
+  {
+    "knowledge_id": "KB-FORECAST-001",
+    "doc_title": "负荷预测模型与接口",
+    "category": "预测模型",
+    "section": "当前指标值(自动)",
+    "text": "当前指标数值(构建时读取):\n- 15min MAPE(%): 1.13（来源 artifacts/metrics/forecast_metrics.json#metrics.15min.MAPE）\n- 30min MAPE(%): 1.57（来源 artifacts/metrics/forecast_metrics.json#metrics.30min.MAPE）\n- 60min MAPE(%): 2.05（来源 artifacts/metrics/forecast_metrics.json#metrics.60min.MAPE）",
+    "source_path": "knowledge/03_预测模型/负荷预测模型与接口.md",
+    "source_paths": [
+      "configs/forecasting.yaml",
+      "configs/rolling_forecast.yaml",
+      "src/air_station/models/forecasting/service.py",
+      "src/air_station/models/forecasting/rolling_backtest.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "15min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.15min.MAPE"
+      },
+      {
+        "label": "30min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.30min.MAPE"
+      },
+      {
+        "label": "60min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.60min.MAPE"
+      }
+    ],
+    "keywords": []
+  },
+  {
+    "knowledge_id": "KB-MAINT-001",
+    "doc_title": "RUL 与预测性维护（混合仿真）",
+    "category": "健康与维护",
+    "section": "当前指标值(自动)",
+    "text": "当前指标数值(构建时读取):\n- 非计划停机下降(%): 92.08（来源 artifacts/metrics/maintenance_metrics.json#unplanned_stops.reduction_pct）\n- MTBF提升(%): 1163.16（来源 artifacts/metrics/maintenance_metrics.json#mtbf_hours.improvement_pct）\n- 预警准确率: 0.9292（来源 artifacts/metrics/maintenance_metrics.json#warning_accuracy.accuracy）\n- 预警提前中位(h): 30.0（来源 artifacts/metrics/maintenance_metrics.json#warning_lead_hours.median）\n- RUL MAE(h): 68.59（来源 artifacts/metrics/rul_metrics.json#metrics.MAE）",
+    "source_path": "knowledge/04_健康与维护/RUL与预测性维护.md",
+    "source_paths": [
+      "configs/rul.yaml",
+      "configs/maintenance_policy.yaml",
+      "src/air_station/models/rul/service.py",
+      "src/air_station/models/rul/maintenance_sim.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "非计划停机下降(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "unplanned_stops.reduction_pct"
+      },
+      {
+        "label": "MTBF提升(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "mtbf_hours.improvement_pct"
+      },
+      {
+        "label": "预警准确率",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_accuracy.accuracy"
+      },
+      {
+        "label": "预警提前中位(h)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_lead_hours.median"
+      },
+      {
+        "label": "RUL MAE(h)",
+        "path": "artifacts/metrics/rul_metrics.json",
+        "json_path": "metrics.MAE"
+      }
+    ],
+    "keywords": []
+  },
+  {
+    "knowledge_id": "KB-HEALTH-001",
+    "doc_title": "设备健康诊断方法与接口",
+    "category": "健康与维护",
+    "section": "当前指标值(自动)",
+    "text": "当前指标数值(构建时读取):\n- 健康分(4#): 65（来源 artifacts/metrics/health_metrics.json#devices.4#.health_score_latest）\n- 健康分(5#): 63（来源 artifacts/metrics/health_metrics.json#devices.5#.health_score_latest）",
+    "source_path": "knowledge/04_健康与维护/健康诊断方法与接口.md",
+    "source_paths": [
+      "configs/health_thresholds.yaml",
+      "src/air_station/models/health/service.py"
+    ],
+    "metric_refs": [
+      {
+        "label": "健康分(4#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.4#.health_score_latest"
+      },
+      {
+        "label": "健康分(5#)",
+        "path": "artifacts/metrics/health_metrics.json",
+        "json_path": "devices.5#.health_score_latest"
+      }
+    ],
+    "keywords": []
+  },
+  {
+    "knowledge_id": "KB-KPI-001",
+    "doc_title": "赛题指标、计算口径与证据等级",
+    "category": "赛题验收",
+    "section": "当前指标值(自动)",
+    "text": "当前指标数值(构建时读取):\n- 预测15min MAPE(%): 1.13（来源 artifacts/metrics/forecast_metrics.json#metrics.15min.MAPE）\n- 非计划停机下降(%): 92.08（来源 artifacts/metrics/maintenance_metrics.json#unplanned_stops.reduction_pct）\n- 预警准确率: 0.9292（来源 artifacts/metrics/maintenance_metrics.json#warning_accuracy.accuracy）",
+    "source_path": "knowledge/09_赛题验收/赛题指标与证据等级.md",
+    "source_paths": [
+      "analysis/reports/团队进度总览.md",
+      "artifacts/metrics/forecast_metrics.json",
+      "artifacts/metrics/maintenance_metrics.json",
+      "analysis/reports/b/B_FINAL_KPI_ACCEPTANCE.md"
+    ],
+    "metric_refs": [
+      {
+        "label": "预测15min MAPE(%)",
+        "path": "artifacts/metrics/forecast_metrics.json",
+        "json_path": "metrics.15min.MAPE"
+      },
+      {
+        "label": "非计划停机下降(%)",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "unplanned_stops.reduction_pct"
+      },
+      {
+        "label": "预警准确率",
+        "path": "artifacts/metrics/maintenance_metrics.json",
+        "json_path": "warning_accuracy.accuracy"
+      }
+    ],
+    "keywords": []
+  }
+]

@@ -18,6 +18,16 @@ DEFAULT_CONFIG = "configs/agent.yaml"
 
 RISK_RANK = {"正常": 0, "关注": 1, "预警": 2, "严重": 3}
 
+# 组合请求的知识检索提示(意图 -> 关键词)
+_KB_HINT = {
+    "dispatch_optimize": "健康风险如何影响调度 安全边界 备用",
+    "control_execute": "健康风险如何影响调度 安全边界",
+    "health_query": "健康分数计算 风险等级 无监督",
+    "forecast_query": "负荷预测模型输入输出 验证方式",
+    "rul_query": "RUL 模拟验证 软约束",
+    "surge_query": "喘振风险 安全边界 高风险",
+}
+
 
 def load_config(path: str | Path = DEFAULT_CONFIG) -> dict:
     import yaml
@@ -33,6 +43,7 @@ class Context:
     horizon: int | None = None
     flow: float | None = None
     plan: dict | None = None
+    question: str | None = None
     history: list[str] = field(default_factory=list)
 
 
@@ -63,6 +74,9 @@ def _run_tool(name: str, ctx: Context, results: dict, cfg: dict,
                 demand_flow_m3_min=ctx.flow,
                 horizon_minutes=ctx.horizon or 15)
             ctx.plan = results[name]
+        elif name == "knowledge_search":
+            from air_station.mcp_servers import tools
+            results["knowledge_search"] = tools.knowledge_search(question=ctx.question or "")
         elif name == "scada_query":
             results[name] = tools.control_command("scada_query", persist=persist)
         elif name == "control_command":
@@ -90,6 +104,17 @@ def _worst_device(health: dict) -> str:
 
 def _compose(intent: str, results: dict, ctx: Context, execute: bool) -> tuple[str, list[str], list[str]]:
     explain: list[str] = []
+    if intent == "knowledge_query":
+        ks = results.get("knowledge_search", {})
+        if ks.get("status") == "no_answer":
+            explain.append("调用 knowledge_search → 无可靠依据, 明确拒答")
+            return ks.get("answer", "知识库暂无可靠依据。"), explain, []
+        cites = "; ".join(f"{c.get('knowledge_id')}({c.get('section')})"
+                          for c in ks.get("citations", [])[:3])
+        explain.append("调用 knowledge_search → 检索知识卡")
+        if cites:
+            explain.append("引用: " + cites)
+        return ks.get("answer", ""), explain, []
     follow_up: list[str] = []
     if intent == "forecast_query" and "forecast_load" in results:
         fc = results["forecast_load"]
@@ -228,6 +253,7 @@ def run_agent(user_input: str, execute: bool = False, persist: bool = True,
             ctx.horizon = pctx.get("horizon")
             ctx.flow = pctx.get("flow")
 
+    ctx.question = user_input
     ctx.device = intent_mod.extract_device(user_input) or ctx.device
     ctx.horizon = intent_mod.extract_horizon(user_input) or ctx.horizon
     ctx.flow = intent_mod.extract_flow(user_input) or ctx.flow
@@ -238,7 +264,15 @@ def run_agent(user_input: str, execute: bool = False, persist: bool = True,
         intent = "control_execute"
         conf = max(conf, 0.6)
 
-    pipeline = cfg.get("pipelines", {}).get(intent, ["scada_query"])
+    # 知识库路由(增量): 未知问题先走知识库; 解释型问题走知识库;
+    # 组合请求(实时动作+解释) 动态工具后追加知识解释。
+    _kb = intent_mod.is_knowledge_question(user_input)
+    _rt = intent_mod.has_realtime_action(user_input)
+    if _kb and not _rt:
+        intent, conf = "knowledge_query", max(conf, 0.5)
+    pipeline = list(cfg.get("pipelines", {}).get(intent, ["knowledge_search"]))
+    if _kb and _rt and intent != "knowledge_query" and "knowledge_search" not in pipeline:
+        pipeline.append("knowledge_search")
     results: dict = {}
     for name in pipeline:
         # control_execute 仅在显式 execute=True 时真正下发控制指令
@@ -246,7 +280,18 @@ def run_agent(user_input: str, execute: bool = False, persist: bool = True,
             continue
         _run_tool(name, ctx, results, cfg, persist)
 
+    # 组合请求(实时动作 + 解释): 用意图提示补足知识检索
+    if _kb and _rt and intent != "knowledge_query":
+        from air_station.mcp_servers import tools
+        hint = _KB_HINT.get(intent, "")
+        results["knowledge_search"] = tools.knowledge_search((user_input + " " + hint).strip())
     answer, explain_chain, follow_up = _compose(intent, results, ctx, execute)
+    # 组合请求: 追加知识解释(不改动态结果)
+    if intent != "knowledge_query" and results.get("knowledge_search", {}).get("status") == "success":
+        ks = results["knowledge_search"]
+        if ks.get("answer"):
+            answer = answer + " 补充解释: " + ks["answer"]
+            explain_chain.append("调用 knowledge_search → 知识解释")
 
     tools_used = [n for n in pipeline if n in results and results[n].get("status") != "error"]
     elapsed = round(time.perf_counter() - t0, 3)

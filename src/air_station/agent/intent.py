@@ -52,3 +52,32 @@ def classify(text: str) -> tuple[str, float]:
     intent = max(scores, key=lambda k: (scores[k], -order[k]))
     total = sum(scores.values())
     return intent, round(scores[intent] / max(total, 1), 2)
+
+
+# ---- 知识库意图(阶段 K, 增量) ----
+# 解释型问法 → 知识库; 实时动作 → 动态工具
+_KNOWLEDGE_MARKERS: list[str] = [
+    "是什么意思", "什么意思", "是什么", "什么叫", "什么是",
+    "怎么算", "如何计算", "怎么计算", "计算方法", "怎么得到",
+    "为什么", "原因", "依据", "来自哪里", "数据来源", "来源",
+    "使用什么", "用什么模型", "什么模型", "什么算法",
+    "输入", "输出", "单位", "字段含义", "字段",
+    "怎么调用", "如何调用", "接口", "参数", "返回",
+    "验证方式", "validation_mode", "规则", "约束", "口径",
+    "故障码", "维护周期", "保养周期",
+]
+_REALTIME_MARKERS: list[str] = [
+    "现在", "当前", "实时", "马上", "立即", "立刻", "帮我", "请", "给我",
+    "下发", "执行", "启停", "开机", "关机",
+    "预测未来", "未来", "重新调度", "优化", "是多少", "几点", "怎么样",
+]
+
+
+def is_knowledge_question(text: str) -> bool:
+    t = text or ""
+    return any(m in t for m in _KNOWLEDGE_MARKERS)
+
+
+def has_realtime_action(text: str) -> bool:
+    t = text or ""
+    return any(m in t for m in _REALTIME_MARKERS)

@@ -35,4 +35,5 @@ pipelines:
   dispatch_optimize: [forecast_load, health_diagnose, rul_estimation, surge_warning, dispatch_optimize]
   control_execute: [dispatch_optimize, control_command]
   workorder: [health_diagnose, create_work_order]
-  unknown: [scada_query]
+  knowledge_query: [knowledge_search]
+  unknown: [knowledge_search]

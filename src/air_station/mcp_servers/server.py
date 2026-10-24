@@ -39,6 +39,8 @@ def build_server():
                 description="生成设备维保工单")(tools.create_work_order)
     server.tool(name="maintenance_warning",
                 description="设备维护预警: 振动/温度/电流/能效趋势分数(hybrid_simulation)")(tools.maintenance_warning)
+    server.tool(name="knowledge_search",
+                description="项目知识检索问答: 答案+来源引用, 无依据则拒答")(tools.knowledge_search)
     server.tool(name="orchestrate",
                 description="自然语言编排: 意图理解+工具链调用+可解释方案")(tools.orchestrate)
     return server

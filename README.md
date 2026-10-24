@@ -527,3 +527,27 @@ feat/d-frontend-demo
 ---
 
 项目当前处于：**A、B、C 三模块完成；C 的调度/喘振已接入 B 的稳定接口，端到端闭环可用；D 待开发**。
+
+---
+
+## 知识库（阶段 K）
+
+第五项平台能力：**知识库构建**。把设备/数据/模型/调度/安全/维护/验收知识整理为可检索知识卡，
+支持自然语言问答；无依据问题明确拒答。
+
+```bash
+# 构建索引
+python -m air_station.knowledge.indexer --build
+# 命令行问答
+python -m air_station.knowledge.service --question "负荷预测模型的输入和输出是什么"
+# 测试
+python -m pytest tests/knowledge -q
+```
+
+- 知识卡：`knowledge/`（10 类，12 份）；索引：`artifacts/knowledge/`
+- 代码：`src/air_station/knowledge/`；配置：`configs/knowledge.yaml`
+- 接口：`knowledge_json()` / `search_knowledge()`；MCP `knowledge_search`；
+  API `POST /api/knowledge/{search,ask}`、`GET /api/knowledge/status`
+- Agent：新增 `knowledge_query` 意图；实时问题仍走动态工具，组合请求先动态再知识解释。
+- 指标真源：`artifacts/metrics/*.json`；来源变化 → 知识库标记 `stale`。
+- 报告与验收：`analysis/reports/phaseK/`

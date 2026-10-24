@@ -121,6 +121,13 @@ def maintenance_warning(config_path: str = "configs/maintenance_policy.yaml",
     return _mw(config_path=config_path, processed_dir=processed_dir)
 
 
+def knowledge_search(question: str, top_k: int = 5,
+                     config_path: str = "configs/knowledge.yaml") -> dict:
+    """项目知识检索问答(阶段 K): 答案+来源引用; 无依据则拒答。"""
+    from air_station.mcp_servers.knowledge_tool import knowledge_search as _ks
+    return _ks(question=question, top_k=top_k, config_path=config_path)
+
+
 TOOL_SPECS = [
     {"name": "forecast_load", "fn": forecast_load},
     {"name": "health_diagnose", "fn": health_diagnose},
@@ -130,5 +137,6 @@ TOOL_SPECS = [
     {"name": "control_command", "fn": control_command},
     {"name": "create_work_order", "fn": create_work_order},
     {"name": "maintenance_warning", "fn": maintenance_warning},
+    {"name": "knowledge_search", "fn": knowledge_search},
     {"name": "orchestrate", "fn": orchestrate},
 ]
