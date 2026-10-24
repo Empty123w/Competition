@@ -1,6 +1,6 @@
 {
   "kb_version": "2026.10.24.d9db4f",
-  "built_at": "2026-10-24T17:52:07",
+  "built_at": "2026-10-24T17:53:40",
   "retrieval_mode": "tfidf_char",
   "ngram_range": [
     2,

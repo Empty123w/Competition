@@ -308,11 +308,14 @@ forecast_json(
 ) -> dict
 ```
 
-默认预测时域：
+`forecast_json()` 默认预测时域：
 
 ```text
 15分钟、30分钟、60分钟
 ```
+
+> 滚动回放（阶段 A6）另含 **45、75 分钟**（15/30/45/60/75），见 §13.1 与
+> `artifacts/handoff_b/forecast_*_dispatch_calibrated.parquet`。
 
 输出示例：
 
@@ -423,6 +426,24 @@ artifacts/metrics/forecast_metrics.json
 | 60分钟 | 2.05% | 10.196 m³/min | 28.554 m³/min | 2.16% |
 
 当前结果满足 MAPE 不高于 8% 的项目目标，但没有优于最强的短期 `lag_1` 基线。因此项目可以说明“达到预测精度目标”，不能说明“已全面优于所有简单基线”。
+
+滚动回放（阶段 A6，含 **45、75 分钟**）产出与校准：
+
+- 文件：`artifacts/handoff_b/forecast_{dev,validation}_dispatch.parquet`（六列）与
+  `forecast_scoring_actuals.parquet`；审计 `artifacts/metrics/forecast_rolling_audit.parquet`。
+- 时域：**15 / 30 / 45 / 60 / 75 分钟**；主键 `(as_of, horizon_minutes)`；`target_time=as_of+horizon`。
+- 区间：滚动共形校准（`pred ± 分位(|残差|, 1-α)`，α=0.12，名义 88%）；验证集实测覆盖率如下。
+
+| 时域 | 验证集覆盖率 | WAPE |
+|---|---:|---:|
+| 15分钟 | 0.9437 | 1.72% |
+| 30分钟 | 0.9411 | 2.10% |
+| **45分钟** | **0.9393** | **2.33%** |
+| 60分钟 | 0.9370 | 2.52% |
+| **75分钟** | **0.9359** | **2.70%** |
+
+> 口径：滚动回放为“开发/验证”评估材料（验证段标 `rolling_update_evaluation`），非独立最终测试；
+> 冻结测试表 `forecast_test_predictions.parquet` 仍为唯一最终测试预测表。详见 `analysis/reports/phaseA6_replay/A6_Update_Report.md`。
 
 ### 13.2 健康诊断
 
