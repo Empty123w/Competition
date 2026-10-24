@@ -18,8 +18,9 @@ def _need():
 def test_metrics_exist_and_simulated():
     _need()
     d = json.loads(M.read_text(encoding="utf-8"))
-    assert d["validation_mode"] == "simulation"
-    assert d["origin"] == "simulated"
+    assert d["validation_mode"] in ("simulation", "hybrid_simulation")
+    assert d["feature_base"] == "real_telemetry"
+    assert d["label_source"] == "injected_degradation"
 
 
 def test_targets_met():

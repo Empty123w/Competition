@@ -1,38 +1,37 @@
 # =====================================================================
-# 预测性维护策略仿真配置 (阶段 A7)
-# 目标: 在模拟退化闭环下, 自证三项指标
-#   - 非计划停机次数下降率 ≥50%
-#   - MTBF 提升率 ≥30%
-#   - 异常预警提前时间 ≥24h
-# 性质: 模拟闭环自证 (validation_mode=simulation), 不代表现场效果
+# 预测性维护策略仿真配置 (阶段 A7, 混合方案)
+#   真实主办方遥测作底 + 注入退化标签 + 趋势预警
+# 目标(模拟闭环自证):
+#   - 非计划停机次数下降率 >=50%
+#   - MTBF 提升率 >=30%
+#   - 异常预警准确率 >=90%
+#   - 预警提前时间 >=24h
 # =====================================================================
 
 seed: 123
 devices: [4, 5]
-episodes_per_device: 120        # 每个设备模拟的退化 episode 数(配对)
+episodes_per_device: 120
 
-# 退化与失效口径 (复用 RUL 模拟器: 初始 2000h -> 退化到 fail_rul_hours 视为失效)
-initial_rul_hours: 2000.0
-fail_rul_hours: 300.0           # 退化到该值 = 失效(基线在这里非计划停机)
-node_hours: 6.0                 # 决策节点粒度(h), 与 RUL 模型一致
+data_mode: hybrid                 # hybrid = 真实轨迹 + 注入退化
+hybrid:
+  nodes_per_episode: 40           # 40 节点 x 6h = 240h
+  k_vib: 1.2
+  k_temp: 1.0
+  temp_grow_c: 26.0
+  oil_grow_c: 13.0
+  current_grow_a: 8.0
+  ufp_grow: 1.2
+  normal_progress_max: 0.0       # 正常 episode 仅注入轻微上升(无失效)
 
-# 预测性维护策略
-warn_rul_hours: 330.0           # 预测 RUL ≤ 该值 -> 触发计划停机保养(约提前30h)
-lead_target_hours: 24.0         # 预警提前目标
-
-# 异常预警准确率评估(含正常工况以计误报)
 warn_eval:
-  target_accuracy: 0.90         # 异常预警准确率目标
-  normal_episodes_per_device: 120
-  normal_rul_floor: 1400.0       # 正常 episode 截断在 RUL>=该值(无失效)
-  warn_grid: [330.0, 400.0, 500.0, 600.0, 650.0, 680.0, 700.0, 800.0]
+  target_accuracy: 0.90
+  warn_grid: [3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 15.0]   # 趋势分数阈值
 
-# 基线策略(反应式): 退化到 fail_rul_hours 才处理 -> 记为一次非计划停机
+lead_target_hours: 24.0
 baseline_policy: reactive
-proposed_policy: predictive_rul
+proposed_policy: trend_warning_planned_maintenance
 
 paths:
-  rul_config: configs/rul.yaml
-  model_dir: artifacts/models
+  processed_dir: data/processed
   metrics: artifacts/metrics/maintenance_metrics.json
   report_dir: analysis/reports/phaseA7_maint
