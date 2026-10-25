@@ -45,16 +45,18 @@ def main():
                      "真实历史数据驱动反事实回测 (主口径)",
                      f"dev+valid+test pooled, service 口径 n={energy['pooled']['n_steps']}"])
 
-    # 2 加载率
+    # 2 加载率偏离度 (主指标=偏离度 pp)
     if lr:
         j = lr["pooled"]["joint"]
-        rows.append(["加载率偏离度", "≤±10%",
-                     f"双机步 abs(λ4−λ5): 均值 {j['gap_mean_pp']}pp, P95 {j['gap_p95_pp']}pp, 最大 {j['gap_max_pp']}pp; "
-                     f"≤10pp 达标率 {j['d3_both']}",
-                     "达标(内部口径)" if (j["d3_both"] or 0) >= 0.90 else "未达标",
-                     "λ_d=flow_d/268.9; 偏差=abs(λ4−λ5)(pp); D3=达标步占比",
+        nsc = lr["pooled"]["_scope_steps"]
+        ok = bool(j["all_within_limit"]) and (j["pass_rate_both"] or 0) >= 0.90
+        rows.append(["加载率偏离度", "≤±10% (即 ≤10pp)",
+                     f"平均 {j['deviation_mean_pp']}pp, P95 {j['deviation_p95_pp']}pp, 最大 {j['deviation_max_pp']}pp; "
+                     f"双机有效样本达标率 {j['pass_rate_both']*100:.1f}% (辅助D3)",
+                     "达标" if ok else "未达标",
+                     "D=|λ4−λ5|(pp), λ=Q/268.9; 仅双机运行样本; 主指标=偏离度(非达标率)",
                      "真实历史回测",
-                     f"service 口径, 双机步 n={j['n_both']}"])
+                     f"service 口径; 双机样本 {j['n_both']}/{nsc} (覆盖 {j['both_coverage']}); 单机/停机 NA"])
 
     # 3 大马拉小车
     if E:
@@ -142,12 +144,15 @@ def _md(card, energy, lr, press, surge, path, pdev=None):
             m = energy["pooled"]["_block"][s]
             L.append(f"| {s} | {m['sec_reduction_pct']} | {m['saving_pct']} | {m['supply_diff_vs_b1_pct']} |")
     if lr:
-        L += ["", "## 加载率偏离度 (真实历史, service 口径)", "",
-              "| 策略 | 双机步 | 平均pp | 中位pp | P95pp | 最大pp | ≤10pp达标率 | D3_all |", "|---|---|---|---|---|---|---|---|"]
+        L += ["", "## 加载率偏离度 (真实历史, service 口径; 主指标=偏离度 pp)", "",
+              "定义: D=|λ4−λ5|(pp), λ=Q/268.9; 仅双机运行样本; 内部要求 D≤10pp; 单机/停机 NA。", "",
+              "| 策略 | 平均pp | 中位pp | P95pp | 最大pp | 全部≤10pp | 双机达标率(辅助) | 双机样本 | 覆盖率 |",
+              "|---|---|---|---|---|---|---|---|---|"]
         for s in STRATS:
             m = lr["pooled"][s]
-            L.append(f"| {s} | {m['n_both']} | {m['gap_mean_pp']} | {m['gap_median_pp']} | {m['gap_p95_pp']} | "
-                     f"{m['gap_max_pp']} | {m['d3_both']} | {m['d3_all']} |")
+            L.append(f"| {s} | {m['deviation_mean_pp']} | {m['deviation_median_pp']} | {m['deviation_p95_pp']} | "
+                     f"{m['deviation_max_pp']} | {m['all_within_limit']} | {m['pass_rate_both']} | {m['n_both']} | "
+                     f"{m['both_coverage']} |")
     if pdev:
         L += ["", "## dev 压力根因 (详见 PRESSURE_DEV_ANALYSIS.md)", "",
               f"- dev 不合格 {pdev['dev']['noncompliant_steps']} 步: 超容量 {pdev['dev']['class_counts']['over_capacity']} (81.2%) "

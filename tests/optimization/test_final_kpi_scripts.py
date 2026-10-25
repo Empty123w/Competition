@@ -30,18 +30,20 @@ def _frame(f4, f5):
     return pd.DataFrame(d)
 
 
-def test_d3_formula_both_and_single():
-    # 三台情形: 双机等分(|Δλ|=0), 双机不等分(|Δλ|=0.2>0.1), 单机
+def test_load_ratio_deviation_and_NA():
+    # 双机等分(|D|=0pp), 双机不等分(|D|=37.19pp), 单机(NA)
     f4 = np.array([134.45, 200.0, 150.0])
     f5 = np.array([134.45, 100.0, 0.0])
     g = _frame(f4, f5)
     m = FLR._stats(g, "joint")
-    assert m["n_both"] == 2 and m["n_single"] == 1
-    # 第1步达标, 第2步不达标, 第3步(单机)达标 -> D3_all=2/3; D3_both=1/2
-    assert abs(m["d3_all"] - 2 / 3) < 1e-3
-    assert abs(m["d3_both"] - 0.5) < 1e-3
-    # λ4=200/268.9, λ5=100/268.9 -> |Δλ| = 100/268.9 = 37.19pp
-    assert abs(m["gap_max_pp"] - (100.0 / 268.9 * 100)) < 0.05
+    assert m["n_both"] == 2 and m["n_single"] == 1 and m["n_none"] == 0
+    # 主指标: 偏离度 (pp), 仅双机样本; 单机 NA 不计入
+    assert abs(m["deviation_max_pp"] - (100.0 / 268.9 * 100)) < 0.05
+    assert m["deviation_mean_pp"] is not None
+    assert m["all_within_limit"] is False        # 37.19pp > 10pp
+    assert abs(m["pass_rate_both"] - 0.5) < 1e-3  # 双机 1/2 达标
+    # 覆盖率: 双机样本占比
+    assert abs(m["both_coverage"] - 2 / 3) < 1e-3
 
 
 def test_scope_service_equiv():
@@ -79,3 +81,19 @@ def test_run_segmentation():
     import final_pressure_dev_analysis as FDA
     mask = np.array([False, True, True, False, True, True, True, False])
     assert FDA._runs(mask) == [(1, 2), (4, 6)]
+
+
+def test_pooled_joint_load_ratio_regression():
+    """真实历史账本回归: joint pooled 偏离度 平均 8.046pp / P95 9.862pp / 最大 9.999pp。"""
+    import final_load_ratio as FLR  # noqa
+    FIN = ROOT / "analysis/reports/b/final"
+    frames = [pd.read_csv(FIN / f"backtest_{w}_ledger.csv") for w in ("dev", "valid", "test")]
+    pooled = pd.concat(frames, ignore_index=True)
+    gp = pooled.loc[FLR._scope(pooled)]
+    m = FLR._stats(gp, "joint")
+    assert abs(m["deviation_mean_pp"] - 8.046) < 0.02
+    assert abs(m["deviation_p95_pp"] - 9.862) < 0.05
+    assert abs(m["deviation_max_pp"] - 9.999) < 0.02
+    assert m["all_within_limit"] is True
+    assert m["pass_rate_both"] >= 0.99
+    assert m["n_both"] > 0 and m["both_coverage"] < 1.0   # 存在单机样本, 覆盖率<1
