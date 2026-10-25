@@ -18,6 +18,8 @@ def test_root_and_system(client):
     assert r.status_code == 200
     assert r.json()["status"] == "ok"
     assert client.get("/api/system/health").json()["status"] == "success"
+    info = client.get("/api/system/info").json()
+    assert "joint_nompc" in info.get("dispatch_modes", [])
     ov = client.get("/api/system/overview").json()
     assert "scada" in ov and "health" in ov and "rul" in ov and "surge" in ov
 
@@ -33,6 +35,9 @@ def test_model_endpoints(client):
     assert disp["status"] == "success"
     assert disp["execution_permission"] == "simulation_candidate_only"
     assert disp.get("plan_id")
+    jm = client.post("/api/dispatch", json={"mode": "joint_nompc",
+                                            "horizon_minutes": 15}).json()
+    assert jm["mode"] == "joint_nompc" and "degraded" in jm
     assert client.get("/api/dispatch/plans").json()["plans"]
 
 

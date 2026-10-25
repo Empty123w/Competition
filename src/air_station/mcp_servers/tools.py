@@ -48,8 +48,9 @@ def dispatch_optimize(mode: str = "b3",
                       optimization_config: str = "configs/optimization.yaml") -> dict:
     """多机协同调度优化(B 的 plan_dispatch)。
 
-    mode ∈ {b3 能效优先, balanced 低负荷优先, load_balanced 加载率均衡};
-    输出 simulation_candidate_only, 不含任何 PLC 执行许可。
+    mode ∈ {b3 能效优先, balanced 低负荷优先, load_balanced 加载率均衡,
+    joint_nompc 多目标(能效+低负荷+机组间<=10pp 均衡, B 最终候选)};
+    输出 simulation_candidate_only, 不含任何 PLC 执行许可; joint_nompc 可能带 degraded 标记。
     """
     from air_station.integration import dispatch_plan
     return dispatch_plan(mode=mode, demand_flow_m3_min=demand_flow_m3_min,

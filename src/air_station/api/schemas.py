@@ -9,7 +9,9 @@ class ForecastRequest(BaseModel):
 
 
 class DispatchRequest(BaseModel):
-    mode: str = Field(default="b3", description="调度模式: b3|balanced|load_balanced")
+    mode: str = Field(default="b3",
+                      description="调度模式: b3(能效) | balanced(低负荷) | "
+                                  "load_balanced(加载率均衡) | joint_nompc(多目标, B 最终候选)")
     demand_flow_m3_min: float | None = Field(default=None, description="需求流量覆盖(缺省用预测)")
     horizon_minutes: int = Field(default=15, description="调度时域(分钟)")
     timeout_ms: float | None = Field(default=None, description="求解超时(ms), <=0 触发回退")
