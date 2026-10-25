@@ -1,0 +1,255 @@
+{
+  "window": "dev",
+  "n": 12284,
+  "strategies": [
+    "b1_rule",
+    "b3_b4",
+    "bal",
+    "lrb_t10",
+    "b3_lrb",
+    "joint_nompc",
+    "mpc_hist",
+    "joint"
+  ],
+  "kpi": {
+    "n_total": 12284,
+    "common_steps": 7600,
+    "service_steps": 6953,
+    "scopes": {
+      "common": {
+        "steps": 7600,
+        "b1_rule": {
+          "energy_kwh": 4499679.6,
+          "supply_m3": 42325078.8,
+          "sec": 0.106312,
+          "sec_reduction_pct": 0.0,
+          "saving_pct": 0.0,
+          "gap_m3": 190870.5,
+          "low_min": 76530.0,
+          "low_reduction_pct": 0.0,
+          "d3_meet": 0.2828
+        },
+        "b3_b4": {
+          "energy_kwh": 4003054.7,
+          "supply_m3": 41675467.0,
+          "sec": 0.096053,
+          "sec_reduction_pct": 9.65,
+          "saving_pct": 11.037,
+          "gap_m3": 244879.9,
+          "low_min": 38970.0,
+          "low_reduction_pct": 49.079,
+          "d3_meet": 0.2828
+        },
+        "bal": {
+          "energy_kwh": 4014098.0,
+          "supply_m3": 41673411.5,
+          "sec": 0.096323,
+          "sec_reduction_pct": 9.396,
+          "saving_pct": 10.791,
+          "gap_m3": 246773.9,
+          "low_min": 17580.0,
+          "low_reduction_pct": 77.029,
+          "d3_meet": 0.4324
+        },
+        "lrb_t10": {
+          "energy_kwh": 4059095.1,
+          "supply_m3": 41676410.9,
+          "sec": 0.097396,
+          "sec_reduction_pct": 8.387,
+          "saving_pct": 9.791,
+          "gap_m3": 244813.1,
+          "low_min": 29700.0,
+          "low_reduction_pct": 61.192,
+          "d3_meet": 0.9979
+        },
+        "b3_lrb": {
+          "energy_kwh": 4060152.7,
+          "supply_m3": 41674928.3,
+          "sec": 0.097424,
+          "sec_reduction_pct": 8.36,
+          "saving_pct": 9.768,
+          "gap_m3": 246976.6,
+          "low_min": 29640.0,
+          "low_reduction_pct": 61.27,
+          "d3_meet": 0.9983
+        },
+        "joint_nompc": {
+          "energy_kwh": 3963869.0,
+          "supply_m3": 41675468.4,
+          "sec": 0.095113,
+          "sec_reduction_pct": 10.535,
+          "saving_pct": 11.908,
+          "gap_m3": 244880.2,
+          "low_min": 22215.0,
+          "low_reduction_pct": 70.972,
+          "d3_meet": 1.0
+        },
+        "mpc_hist": {
+          "energy_kwh": 3926591.2,
+          "supply_m3": 41787068.4,
+          "sec": 0.093967,
+          "sec_reduction_pct": 11.613,
+          "saving_pct": 12.736,
+          "gap_m3": 243080.2,
+          "low_min": 31860.0,
+          "low_reduction_pct": 58.369,
+          "d3_meet": 0.3379
+        },
+        "joint": {
+          "energy_kwh": 3981218.6,
+          "supply_m3": 41787068.4,
+          "sec": 0.095274,
+          "sec_reduction_pct": 10.383,
+          "saving_pct": 11.522,
+          "gap_m3": 243080.2,
+          "low_min": 23145.0,
+          "low_reduction_pct": 69.757,
+          "d3_meet": 1.0
+        }
+      },
+      "service": {
+        "steps": 6953,
+        "b1_rule": {
+          "energy_kwh": 4114741.0,
+          "supply_m3": 38683096.0,
+          "sec": 0.106371,
+          "sec_reduction_pct": 0.0,
+          "saving_pct": 0.0,
+          "gap_m3": 1.2,
+          "low_min": 69120.0,
+          "low_reduction_pct": 0.0,
+          "d3_meet": 0.2793
+        },
+        "b3_b4": {
+          "energy_kwh": 3673226.7,
+          "supply_m3": 38126168.1,
+          "sec": 0.096344,
+          "sec_reduction_pct": 9.426,
+          "saving_pct": 10.73,
+          "gap_m3": 1.2,
+          "low_min": 36405.0,
+          "low_reduction_pct": 47.331,
+          "d3_meet": 0.2793
+        },
+        "bal": {
+          "energy_kwh": 3683348.1,
+          "supply_m3": 38126126.0,
+          "sec": 0.09661,
+          "sec_reduction_pct": 9.176,
+          "saving_pct": 10.484,
+          "gap_m3": 1.2,
+          "low_min": 16665.0,
+          "low_reduction_pct": 75.89,
+          "d3_meet": 0.4395
+        },
+        "lrb_t10": {
+          "energy_kwh": 3723476.9,
+          "supply_m3": 38127104.8,
+          "sec": 0.09766,
+          "sec_reduction_pct": 8.189,
+          "saving_pct": 9.509,
+          "gap_m3": 1.2,
+          "low_min": 28680.0,
+          "low_reduction_pct": 58.507,
+          "d3_meet": 0.9993
+        },
+        "b3_lrb": {
+          "energy_kwh": 3724793.3,
+          "supply_m3": 38129174.6,
+          "sec": 0.097689,
+          "sec_reduction_pct": 8.162,
+          "saving_pct": 9.477,
+          "gap_m3": 1.2,
+          "low_min": 28620.0,
+          "low_reduction_pct": 58.594,
+          "d3_meet": 0.9993
+        },
+        "joint_nompc": {
+          "energy_kwh": 3630623.9,
+          "supply_m3": 38126169.9,
+          "sec": 0.095227,
+          "sec_reduction_pct": 10.477,
+          "saving_pct": 11.765,
+          "gap_m3": 1.2,
+          "low_min": 21330.0,
+          "low_reduction_pct": 69.141,
+          "d3_meet": 1.0
+        },
+        "mpc_hist": {
+          "energy_kwh": 3598637.8,
+          "supply_m3": 38235969.9,
+          "sec": 0.094117,
+          "sec_reduction_pct": 11.52,
+          "saving_pct": 12.543,
+          "gap_m3": 1.2,
+          "low_min": 29550.0,
+          "low_reduction_pct": 57.248,
+          "d3_meet": 0.3373
+        },
+        "joint": {
+          "energy_kwh": 3647693.7,
+          "supply_m3": 38235969.9,
+          "sec": 0.0954,
+          "sec_reduction_pct": 10.314,
+          "saving_pct": 11.351,
+          "gap_m3": 1.2,
+          "low_min": 22245.0,
+          "low_reduction_pct": 67.817,
+          "d3_meet": 1.0
+        }
+      }
+    }
+  },
+  "runtime_ms": {
+    "b1_rule": {
+      "p50": 4.58,
+      "p95": 6.6,
+      "max": 57.28
+    },
+    "b3_b4": {
+      "p50": 33.58,
+      "p95": 44.96,
+      "max": 101.75
+    },
+    "bal": {
+      "p50": 7.71,
+      "p95": 13.69,
+      "max": 1047.11
+    },
+    "lrb_t10": {
+      "p50": 7.68,
+      "p95": 11.88,
+      "max": 246.8
+    },
+    "b3_lrb": {
+      "p50": 34.61,
+      "p95": 46.5,
+      "max": 114.39
+    },
+    "joint_nompc": {
+      "p50": 19.81,
+      "p95": 64.46,
+      "max": 681.82
+    },
+    "mpc_hist": {
+      "p50": 13.39,
+      "p95": 56.87,
+      "max": 109.75
+    },
+    "joint": {
+      "p50": 19.76,
+      "p95": 63.9,
+      "max": 119.33
+    }
+  },
+  "fallback": {
+    "b1_rule": 4018,
+    "b3_b4": 4018,
+    "bal": 4241,
+    "lrb_t10": 4241,
+    "b3_lrb": 4018,
+    "joint_nompc": 1673,
+    "mpc_hist": 1673,
+    "joint": 1673
+  }
+}

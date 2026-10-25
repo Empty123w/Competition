@@ -1,0 +1,140 @@
+{
+  "energy_service_equiv_pct": {
+    "b3_b4": 7.7063,
+    "bal": 7.4954,
+    "lrb_t10": 6.3852
+  },
+  "low_load_reduction_pct": {
+    "b3_b4": 46.6056,
+    "bal": 75.9892,
+    "lrb_t10": 59.1004
+  },
+  "pressure": {
+    "normal": {
+      "compl_reactive": 1.0,
+      "compl_mpc": 1.0,
+      "std_reactive": 0.00613,
+      "std_mpc": 0.00215,
+      "std_red_pct": 64.93
+    },
+    "low": {
+      "compl_reactive": 1.0,
+      "compl_mpc": 1.0,
+      "std_reactive": 0.00391,
+      "std_mpc": 0.00321,
+      "std_red_pct": 17.9
+    },
+    "peak": {
+      "compl_reactive": 0.4028,
+      "compl_mpc": 1.0,
+      "std_reactive": 0.10253,
+      "std_mpc": 0.00236,
+      "std_red_pct": 97.7
+    },
+    "step": {
+      "compl_reactive": 0.7639,
+      "compl_mpc": 1.0,
+      "std_reactive": 0.08637,
+      "std_mpc": 0.00395,
+      "std_red_pct": 95.43
+    },
+    "fault": {
+      "compl_reactive": 0.5035,
+      "compl_mpc": 0.5035,
+      "std_reactive": 0.10333,
+      "std_mpc": 0.09964,
+      "std_red_pct": 3.57
+    }
+  },
+  "surge": {
+    "lightgbm": {
+      "acc": 0.9085,
+      "precision": 0.344,
+      "recall": 0.5688,
+      "f1": 0.4287,
+      "fpr": 0.0697,
+      "fnr": 0.4312,
+      "lead_ge30": 0.7143,
+      "event_precision": 0.5455,
+      "fa_per_h": 4.4444
+    },
+    "gru": {
+      "acc": 0.9178,
+      "precision": 0.381,
+      "recall": 0.5806,
+      "f1": 0.4601,
+      "fpr": 0.0606,
+      "fnr": 0.4194,
+      "lead_ge30": 0.9143,
+      "event_precision": 0.4692,
+      "fa_per_h": 17.2222
+    },
+    "lstm": {
+      "acc": 0.9364,
+      "precision": 0.4696,
+      "recall": 0.4153,
+      "f1": 0.4408,
+      "fpr": 0.0301,
+      "fnr": 0.5847,
+      "lead_ge30": 0.7143,
+      "event_precision": 0.6667,
+      "fa_per_h": 5.5556
+    },
+    "ensemble": {
+      "acc": 0.9338,
+      "precision": 0.4579,
+      "recall": 0.5258,
+      "f1": 0.4895,
+      "fpr": 0.04,
+      "fnr": 0.4742,
+      "lead_ge30": 0.7143,
+      "event_precision": 0.4898,
+      "fa_per_h": 11.1111
+    }
+  },
+  "rl_present": true,
+  "latency": {
+    "target_s": 30.0,
+    "b_only_target_s": 60.0,
+    "ledger_dev": {
+      "b3_b4": {
+        "p50": 34.79,
+        "p95": 48.81,
+        "max": 189.74
+      },
+      "bal": {
+        "p50": 7.68,
+        "p95": 14.07,
+        "max": 530.07
+      }
+    },
+    "ledger_valid": {
+      "b3_b4": {
+        "p50": 35.02,
+        "p95": 45.08,
+        "max": 104.29
+      },
+      "bal": {
+        "p50": 7.55,
+        "p95": 12.03,
+        "max": 210.55
+      }
+    },
+    "api_valid_sample": {
+      "n": 200,
+      "b3": {
+        "p50": 37.12,
+        "p95": 48.88,
+        "max": 97.35
+      },
+      "balanced": {
+        "p50": 17.97,
+        "p95": 100.75,
+        "max": 417.93
+      },
+      "b3_fallback": 0,
+      "balanced_fallback": 0
+    },
+    "timeout_fallback_ok": true
+  }
+}

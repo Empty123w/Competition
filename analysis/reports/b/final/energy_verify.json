@@ -1,0 +1,307 @@
+{
+  "definitions": {
+    "sec": "SEC = ΣE(kWh) / ΣV(m³); E 由 B2 功率模型在执行流量下估计",
+    "sec_reduction": "(SEC_b1 - SEC_x)/SEC_b1 * 100",
+    "saving_same_supply": "(E_b1 - E_x)/E_b1 * 100 (前提: 服务等价, 见下)",
+    "service_equiv": "逐步要求 flow_x >= obs - 0.05 m³/min (沿用 B5 定义; obs 为真实 SCADA 总供气量代理)",
+    "obs_nature": "obs 为真实 SCADA 站级总供气量, 作为历史代理需求; 非独立实测用户侧需求",
+    "scope": "service 口径: 所有比较策略在该步均成功执行且满足服务等价"
+  },
+  "windows": {
+    "dev": {
+      "n_steps": 6957,
+      "_block": {
+        "b1_rule": {
+          "energy_kwh": 4116797.3,
+          "supply_m3": 38697831.0,
+          "sec": 0.106383,
+          "sec_reduction_pct": 0.0,
+          "saving_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0,
+          "supply_diff_vs_b1_pct": 0.0,
+          "low_min": 69240.0,
+          "low_reduction_pct": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 3674520.8,
+          "supply_m3": 38140687.2,
+          "sec": 0.096341,
+          "sec_reduction_pct": 9.439,
+          "saving_pct": 10.743,
+          "supply_diff_vs_b1_m3": -557143.8,
+          "supply_diff_vs_b1_pct": -1.44,
+          "low_min": 36405.0,
+          "low_reduction_pct": 47.422
+        },
+        "bal": {
+          "energy_kwh": 3684613.7,
+          "supply_m3": 38140645.0,
+          "sec": 0.096606,
+          "sec_reduction_pct": 9.191,
+          "saving_pct": 10.498,
+          "supply_diff_vs_b1_m3": -557186.0,
+          "supply_diff_vs_b1_pct": -1.44,
+          "low_min": 16665.0,
+          "low_reduction_pct": 75.932
+        },
+        "lrb_t10": {
+          "energy_kwh": 3724742.9,
+          "supply_m3": 38141623.8,
+          "sec": 0.097656,
+          "sec_reduction_pct": 8.204,
+          "saving_pct": 9.523,
+          "supply_diff_vs_b1_m3": -556207.2,
+          "supply_diff_vs_b1_pct": -1.437,
+          "low_min": 28680.0,
+          "low_reduction_pct": 58.579
+        },
+        "mpc_hist": {
+          "energy_kwh": 3599903.4,
+          "supply_m3": 38250488.9,
+          "sec": 0.094114,
+          "sec_reduction_pct": 11.533,
+          "saving_pct": 12.556,
+          "supply_diff_vs_b1_m3": -447342.1,
+          "supply_diff_vs_b1_pct": -1.156,
+          "low_min": 29550.0,
+          "low_reduction_pct": 57.322
+        },
+        "joint": {
+          "energy_kwh": 3648958.2,
+          "supply_m3": 38250488.9,
+          "sec": 0.095396,
+          "sec_reduction_pct": 10.328,
+          "saving_pct": 11.364,
+          "supply_diff_vs_b1_m3": -447342.1,
+          "supply_diff_vs_b1_pct": -1.156,
+          "low_min": 22245.0,
+          "low_reduction_pct": 67.873
+        }
+      }
+    },
+    "valid": {
+      "n_steps": 1857,
+      "_block": {
+        "b1_rule": {
+          "energy_kwh": 1193946.1,
+          "supply_m3": 12729346.2,
+          "sec": 0.093795,
+          "sec_reduction_pct": 0.0,
+          "saving_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0,
+          "supply_diff_vs_b1_pct": 0.0,
+          "low_min": 1800.0,
+          "low_reduction_pct": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 1128773.9,
+          "supply_m3": 12726969.0,
+          "sec": 0.088691,
+          "sec_reduction_pct": 5.441,
+          "saving_pct": 5.459,
+          "supply_diff_vs_b1_m3": -2377.2,
+          "supply_diff_vs_b1_pct": -0.019,
+          "low_min": 1710.0,
+          "low_reduction_pct": 5.0
+        },
+        "bal": {
+          "energy_kwh": 1130610.0,
+          "supply_m3": 12726691.2,
+          "sec": 0.088838,
+          "sec_reduction_pct": 5.285,
+          "saving_pct": 5.305,
+          "supply_diff_vs_b1_m3": -2655.0,
+          "supply_diff_vs_b1_pct": -0.021,
+          "low_min": 390.0,
+          "low_reduction_pct": 78.333
+        },
+        "lrb_t10": {
+          "energy_kwh": 1151133.5,
+          "supply_m3": 12726971.0,
+          "sec": 0.090448,
+          "sec_reduction_pct": 3.568,
+          "saving_pct": 3.586,
+          "supply_diff_vs_b1_m3": -2375.2,
+          "supply_diff_vs_b1_pct": -0.019,
+          "low_min": 540.0,
+          "low_reduction_pct": 70.0
+        },
+        "mpc_hist": {
+          "energy_kwh": 1126554.0,
+          "supply_m3": 12726971.0,
+          "sec": 0.088517,
+          "sec_reduction_pct": 5.627,
+          "saving_pct": 5.644,
+          "supply_diff_vs_b1_m3": -2375.2,
+          "supply_diff_vs_b1_pct": -0.019,
+          "low_min": 1155.0,
+          "low_reduction_pct": 35.833
+        },
+        "joint": {
+          "energy_kwh": 1147839.7,
+          "supply_m3": 12726971.0,
+          "sec": 0.09019,
+          "sec_reduction_pct": 3.844,
+          "saving_pct": 3.862,
+          "supply_diff_vs_b1_m3": -2375.2,
+          "supply_diff_vs_b1_pct": -0.019,
+          "low_min": 225.0,
+          "low_reduction_pct": 87.5
+        }
+      }
+    },
+    "test": {
+      "n_steps": 1979,
+      "_block": {
+        "b1_rule": {
+          "energy_kwh": 1287212.7,
+          "supply_m3": 14267041.3,
+          "sec": 0.090223,
+          "sec_reduction_pct": 0.0,
+          "saving_pct": 0.0,
+          "supply_diff_vs_b1_m3": 0.0,
+          "supply_diff_vs_b1_pct": 0.0,
+          "low_min": 990.0,
+          "low_reduction_pct": 0.0
+        },
+        "b3_b4": {
+          "energy_kwh": 1231777.1,
+          "supply_m3": 14240033.8,
+          "sec": 0.086501,
+          "sec_reduction_pct": 4.125,
+          "saving_pct": 4.307,
+          "supply_diff_vs_b1_m3": -27007.5,
+          "supply_diff_vs_b1_pct": -0.189,
+          "low_min": 345.0,
+          "low_reduction_pct": 65.152
+        },
+        "bal": {
+          "energy_kwh": 1233658.0,
+          "supply_m3": 14240031.5,
+          "sec": 0.086633,
+          "sec_reduction_pct": 3.979,
+          "saving_pct": 4.161,
+          "supply_diff_vs_b1_m3": -27009.8,
+          "supply_diff_vs_b1_pct": -0.189,
+          "low_min": 240.0,
+          "low_reduction_pct": 75.758
+        },
+        "lrb_t10": {
+          "energy_kwh": 1245743.1,
+          "supply_m3": 14240031.5,
+          "sec": 0.087482,
+          "sec_reduction_pct": 3.038,
+          "saving_pct": 3.222,
+          "supply_diff_vs_b1_m3": -27009.8,
+          "supply_diff_vs_b1_pct": -0.189,
+          "low_min": 240.0,
+          "low_reduction_pct": 75.758
+        },
+        "mpc_hist": {
+          "energy_kwh": 1234629.6,
+          "supply_m3": 14243631.5,
+          "sec": 0.086679,
+          "sec_reduction_pct": 3.927,
+          "saving_pct": 4.085,
+          "supply_diff_vs_b1_m3": -23409.8,
+          "supply_diff_vs_b1_pct": -0.164,
+          "low_min": 375.0,
+          "low_reduction_pct": 62.121
+        },
+        "joint": {
+          "energy_kwh": 1247254.7,
+          "supply_m3": 14243631.5,
+          "sec": 0.087566,
+          "sec_reduction_pct": 2.945,
+          "saving_pct": 3.104,
+          "supply_diff_vs_b1_m3": -23409.8,
+          "supply_diff_vs_b1_pct": -0.164,
+          "low_min": 270.0,
+          "low_reduction_pct": 72.727
+        }
+      }
+    }
+  },
+  "pooled": {
+    "n_steps": 10793,
+    "_block": {
+      "b1_rule": {
+        "energy_kwh": 6597956.1,
+        "supply_m3": 65694218.6,
+        "sec": 0.100434,
+        "sec_reduction_pct": 0.0,
+        "saving_pct": 0.0,
+        "supply_diff_vs_b1_m3": 0.0,
+        "supply_diff_vs_b1_pct": 0.0,
+        "low_min": 72030.0,
+        "low_reduction_pct": 0.0
+      },
+      "b3_b4": {
+        "energy_kwh": 6035071.8,
+        "supply_m3": 65107690.0,
+        "sec": 0.092694,
+        "sec_reduction_pct": 7.707,
+        "saving_pct": 8.531,
+        "supply_diff_vs_b1_m3": -586528.5,
+        "supply_diff_vs_b1_pct": -0.893,
+        "low_min": 38460.0,
+        "low_reduction_pct": 46.606
+      },
+      "bal": {
+        "energy_kwh": 6048881.7,
+        "supply_m3": 65107367.7,
+        "sec": 0.092906,
+        "sec_reduction_pct": 7.496,
+        "saving_pct": 8.322,
+        "supply_diff_vs_b1_m3": -586850.8,
+        "supply_diff_vs_b1_pct": -0.893,
+        "low_min": 17295.0,
+        "low_reduction_pct": 75.989
+      },
+      "lrb_t10": {
+        "energy_kwh": 6121619.5,
+        "supply_m3": 65108626.3,
+        "sec": 0.094022,
+        "sec_reduction_pct": 6.385,
+        "saving_pct": 7.219,
+        "supply_diff_vs_b1_m3": -585592.2,
+        "supply_diff_vs_b1_pct": -0.891,
+        "low_min": 29460.0,
+        "low_reduction_pct": 59.1
+      },
+      "mpc_hist": {
+        "energy_kwh": 5961086.9,
+        "supply_m3": 65221091.4,
+        "sec": 0.091398,
+        "sec_reduction_pct": 8.997,
+        "saving_pct": 9.653,
+        "supply_diff_vs_b1_m3": -473127.1,
+        "supply_diff_vs_b1_pct": -0.72,
+        "low_min": 31080.0,
+        "low_reduction_pct": 56.851
+      },
+      "joint": {
+        "energy_kwh": 6044052.7,
+        "supply_m3": 65221091.4,
+        "sec": 0.09267,
+        "sec_reduction_pct": 7.731,
+        "saving_pct": 8.395,
+        "supply_diff_vs_b1_m3": -473127.1,
+        "supply_diff_vs_b1_pct": -0.72,
+        "low_min": 22740.0,
+        "low_reduction_pct": 68.43
+      }
+    }
+  },
+  "synthetic_closed_loop": {
+    "source": "analysis/reports/b/stage3/causal_acceptance.json (合成 5 场景闭环, test 种子 3,4)",
+    "joint_sec_reduction_pct": 9.85,
+    "joint_low_reduction_pct": 87.38,
+    "note": "合成需求场景, 非真实历史; 仅作方法对照, 不作主展示口径"
+  },
+  "cost": {
+    "price_cny_per_kwh": 0.7,
+    "formula": "年成本降幅 ≈ 服务等价节电率 (同服务下电耗降幅); 非直接等同 SEC 降幅",
+    "assumption": "电价恒定, 负荷/运行时长年化不变, 节电率与窗口一致 (线性)"
+  }
+}

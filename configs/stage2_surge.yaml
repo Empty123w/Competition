@@ -1,0 +1,82 @@
+# =====================================================================
+# B 组第二阶段: 喘振预警高频工程仿真配置
+# - 无真实喘振标签/秒级数据 -> 独立高频仿真 (validation_mode=simulation)
+# - 事件生成机制 (真值) 与 被评估预警器 严格独立
+# - 所有物理/阈值参数为工程假设, 实验前冻结, 不因结果调整
+# =====================================================================
+
+version: "b-stage2-surge-v1.0"
+meta:
+  validation_mode: "simulation"
+  note: "高频工程仿真; 非厂家真实喘振线; 不用于真实设备控制"
+
+# ---- 采样与场景 ----
+sampling:
+  hz: 1.0                     # 1 Hz (秒级), 满足 >=30s 提前预警的评估粒度
+  nominal_steps: 1800          # 每段基础时长 (s)
+
+# ---- 真值机制 (事件生成), 与 B4 代理线形式/参数均不同 ----
+truth:
+  # 二次稳定流量边界 q_stab(p)=A+B*x+C*x^2, x=p-p_ref (独立工程估计, 非 B4 线性式)
+  p_ref_mpa: 0.66
+  A_m3min: 82.0
+  B_m3min_per_mpa: 300.0
+  C_m3min_per_mpa2: -400.0
+  event_rule: "flow < q_stab(p) 连续 >= 3 s"
+  min_event_gap_s: 20         # 事件合并间隔
+  # 事件由 "负荷缓降接近边界 + 突发扰动" 驱动:
+  #   预警前兆 = 事件前 pre_drift_s 内流量逐步下探 (可观测趋势);
+  #   触发 = onset 处快速扰动越过 q_stab; 深度随机 -> 不可由单一确定式直接推导
+  disturbance:
+    pre_drift_s: 60           # 事件前缓降时长 (提供 >=30s 提前预警的可观测前兆)
+    pre_drift_frac: 0.92      # 缓降幅度 = frac * 当前裕度 (将流量推向边界)
+    onset_ramp_s: 8           # 突发扰动下降时长
+    recover_s: 12
+    depth_frac_range: [1.30, 2.00]   # 突发扰动深度 = depth_frac * 剩余裕度
+    jitter_std_m3min: 2.5
+
+# ---- 工况场景 ----
+scenarios:
+  normal:        {kind: stable,     target_margin_frac: 0.45, n_events: 0}
+  low_stable:    {kind: stable,     target_margin_frac: 0.30, n_events: 0}
+  critical:      {kind: disturbance, target_margin_frac: 0.22, n_events: 3}
+  high_risk:     {kind: disturbance, target_margin_frac: 0.18, n_events: 4}
+  rapid:         {kind: rapid,      target_margin_frac: 0.24, n_events: 3}
+  noisy:         {kind: disturbance, target_margin_frac: 0.18, n_events: 4, noise_mult: 2.0}
+
+# ---- 传感器噪声 (工程假设) ----
+sensors:
+  flow_noise_std_m3min: 1.8
+  pressure_noise_std_mpa: 0.0015
+  igv_noise_std_percent: 0.8
+  bov_noise_std_percent: 0.6
+  current_noise_std_a: 4.0
+
+# ---- 被评估预警器 ----
+predictor:
+  model: "lightgbm"           # lightgbm | gru | lstm | ensemble | b4_proxy
+  window_s: 45                # 特征回看窗
+  horizon_s: 60               # 预测未来多少秒内发生事件
+  eval_hz: 1.0
+  # 阈值在验证集上选择 (dev 训练, valid 选阈值, test 冻结评估)
+  thresholds: [0.05, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6]
+  lead_target_s: 30.0
+  match_window_s: 120
+  min_alarm_s: 8              # 告警抖动去抖: 连续 >=8s 才算一次告警
+  gate_margin: 0.06           # B4 代理安全过滤: 代理裕度 < 该值才允许 ML 告警
+
+# ---- 数据划分 (合成段独立种子) ----
+split:
+  dev:   {seed_base: 1000, rep: 3}
+  valid: {seed_base: 2000, rep: 2}
+  test:  {seed_base: 3000, rep: 3}
+
+# ---- 复合预警器 (ML + B4 代理过滤) ----
+fusion:
+  mode: "ml_only"             # ml_only | ml_or_proxy | ml_and_not_proxy
+  proxy_band_m3min: 40.0
+
+# ---- 输出 ----
+paths:
+  out_dir: "analysis/reports/b/stage2/surge"
+  model_dir: "artifacts/models/stage2"

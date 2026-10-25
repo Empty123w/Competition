@@ -1,0 +1,7 @@
+[start] window=valid n=150
+[ckpt] 150/150 elapsed=13s
+[start] window=valid n=1916
+[ckpt] 500/1916 elapsed=41s
+[ckpt] 1000/1916 elapsed=78s
+[ckpt] 1500/1916 elapsed=117s
+[ckpt] 1916/1916 elapsed=151s

@@ -1,0 +1,565 @@
+{
+  "meta": {
+    "validation_mode": "simulation",
+    "episodes": 120,
+    "expert_episodes": 25,
+    "seeds": [
+      0,
+      1,
+      2
+    ],
+    "train_scenarios": [
+      "normal",
+      "low",
+      "step",
+      "peak"
+    ]
+  },
+  "scenarios": {
+    "normal": {
+      "baseline_reactive_pi": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00613,
+        "pressure_min": 0.5863,
+        "pressure_max": 0.6198,
+        "energy_kwh": 58734.2,
+        "supply_m3": 620862.6,
+        "demand_m3": 619200.0,
+        "sec_kwh_per_m3": 0.094601,
+        "supply_gap_m3": 7896.2,
+        "demand_satisfaction": 0.9872,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0
+      },
+      "baseline_mpc": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00215,
+        "pressure_min": 0.5939,
+        "pressure_max": 0.6051,
+        "energy_kwh": 58735.4,
+        "supply_m3": 620900.0,
+        "demand_m3": 619200.0,
+        "sec_kwh_per_m3": 0.094597,
+        "supply_gap_m3": 3691.4,
+        "demand_satisfaction": 0.994,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0
+      },
+      "per_seed": [
+        {
+          "pressure_compliance": 1.0,
+          "pressure_std": 0.01074,
+          "energy_kwh": 58728.3,
+          "sec_kwh_per_m3": 0.094616,
+          "demand_satisfaction": 0.9272,
+          "unserved_deficit_m3": 0.0,
+          "switch_events": 2,
+          "safety_blocks": 0,
+          "unmet_flow_m3": 45049.8
+        },
+        {
+          "pressure_compliance": 0.8021,
+          "pressure_std": 0.06562,
+          "energy_kwh": 55540.5,
+          "sec_kwh_per_m3": 0.092529,
+          "demand_satisfaction": 0.9233,
+          "unserved_deficit_m3": 18728.9,
+          "switch_events": 10,
+          "safety_blocks": 32,
+          "unmet_flow_m3": 47507.0
+        },
+        {
+          "pressure_compliance": 1.0,
+          "pressure_std": 0.01279,
+          "energy_kwh": 58749.6,
+          "sec_kwh_per_m3": 0.094559,
+          "demand_satisfaction": 0.9095,
+          "unserved_deficit_m3": 0.0,
+          "switch_events": 2,
+          "safety_blocks": 1,
+          "unmet_flow_m3": 56055.7
+        }
+      ],
+      "rl_mean": {
+        "pressure_compliance": {
+          "mean": 0.934,
+          "min": 0.8021,
+          "max": 1.0
+        },
+        "pressure_std": {
+          "mean": 0.0297,
+          "min": 0.0107,
+          "max": 0.0656
+        },
+        "energy_kwh": {
+          "mean": 57672.8,
+          "min": 55540.5,
+          "max": 58749.6
+        },
+        "sec_kwh_per_m3": {
+          "mean": 0.0939,
+          "min": 0.0925,
+          "max": 0.0946
+        },
+        "demand_satisfaction": {
+          "mean": 0.92,
+          "min": 0.9095,
+          "max": 0.9272
+        },
+        "switch_events": {
+          "mean": 4.6667,
+          "min": 2.0,
+          "max": 10.0
+        },
+        "safety_blocks": {
+          "mean": 11.0,
+          "min": 0.0,
+          "max": 32.0
+        },
+        "unserved_deficit_m3": {
+          "mean": 6242.9667,
+          "min": 0.0,
+          "max": 18728.9
+        }
+      }
+    },
+    "low": {
+      "baseline_reactive_pi": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00391,
+        "pressure_min": 0.592,
+        "pressure_max": 0.6131,
+        "energy_kwh": 35542.8,
+        "supply_m3": 361693.7,
+        "demand_m3": 360000.0,
+        "sec_kwh_per_m3": 0.098268,
+        "supply_gap_m3": 4263.0,
+        "demand_satisfaction": 0.9882,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0
+      },
+      "baseline_mpc": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00321,
+        "pressure_min": 0.5885,
+        "pressure_max": 0.603,
+        "energy_kwh": 32473.6,
+        "supply_m3": 361625.0,
+        "demand_m3": 360000.0,
+        "sec_kwh_per_m3": 0.089799,
+        "supply_gap_m3": 2894.6,
+        "demand_satisfaction": 0.992,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0
+      },
+      "per_seed": [
+        {
+          "pressure_compliance": 0.809,
+          "pressure_std": 0.03319,
+          "energy_kwh": 41200.6,
+          "sec_kwh_per_m3": 0.111285,
+          "demand_satisfaction": 0.939,
+          "unserved_deficit_m3": 0.0,
+          "switch_events": 34,
+          "safety_blocks": 104,
+          "unmet_flow_m3": 21975.9
+        },
+        {
+          "pressure_compliance": 0.4688,
+          "pressure_std": 0.03188,
+          "energy_kwh": 45559.6,
+          "sec_kwh_per_m3": 0.120366,
+          "demand_satisfaction": 0.9654,
+          "unserved_deficit_m3": 0.0,
+          "switch_events": 16,
+          "safety_blocks": 44,
+          "unmet_flow_m3": 12453.2
+        },
+        {
+          "pressure_compliance": 0.934,
+          "pressure_std": 0.03375,
+          "energy_kwh": 41190.0,
+          "sec_kwh_per_m3": 0.113325,
+          "demand_satisfaction": 0.9138,
+          "unserved_deficit_m3": 0.0,
+          "switch_events": 36,
+          "safety_blocks": 109,
+          "unmet_flow_m3": 31041.9
+        }
+      ],
+      "rl_mean": {
+        "pressure_compliance": {
+          "mean": 0.7373,
+          "min": 0.4688,
+          "max": 0.934
+        },
+        "pressure_std": {
+          "mean": 0.0329,
+          "min": 0.0319,
+          "max": 0.0338
+        },
+        "energy_kwh": {
+          "mean": 42650.0667,
+          "min": 41190.0,
+          "max": 45559.6
+        },
+        "sec_kwh_per_m3": {
+          "mean": 0.115,
+          "min": 0.1113,
+          "max": 0.1204
+        },
+        "demand_satisfaction": {
+          "mean": 0.9394,
+          "min": 0.9138,
+          "max": 0.9654
+        },
+        "switch_events": {
+          "mean": 28.6667,
+          "min": 16.0,
+          "max": 36.0
+        },
+        "safety_blocks": {
+          "mean": 85.6667,
+          "min": 44.0,
+          "max": 109.0
+        },
+        "unserved_deficit_m3": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        }
+      }
+    },
+    "peak": {
+      "baseline_reactive_pi": {
+        "steps": 288,
+        "pressure_compliance": 0.4028,
+        "pressure_std": 0.10253,
+        "pressure_min": 0.4,
+        "pressure_max": 0.6235,
+        "energy_kwh": 44744.9,
+        "supply_m3": 519390.2,
+        "demand_m3": 720000.0,
+        "sec_kwh_per_m3": 0.086149,
+        "supply_gap_m3": 205103.4,
+        "demand_satisfaction": 0.7151,
+        "unserved_deficit_m3": 193682.7,
+        "blowoff_m3": 0.0
+      },
+      "baseline_mpc": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00236,
+        "pressure_min": 0.5933,
+        "pressure_max": 0.6058,
+        "energy_kwh": 62316.6,
+        "supply_m3": 721675.0,
+        "demand_m3": 720000.0,
+        "sec_kwh_per_m3": 0.08635,
+        "supply_gap_m3": 4348.2,
+        "demand_satisfaction": 0.994,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0
+      },
+      "per_seed": [
+        {
+          "pressure_compliance": 1.0,
+          "pressure_std": 0.00657,
+          "energy_kwh": 62307.7,
+          "sec_kwh_per_m3": 0.086368,
+          "demand_satisfaction": 0.9798,
+          "unserved_deficit_m3": 0.0,
+          "switch_events": 2,
+          "safety_blocks": 0,
+          "unmet_flow_m3": 14511.4
+        },
+        {
+          "pressure_compliance": 0.7083,
+          "pressure_std": 0.02104,
+          "energy_kwh": 62259.6,
+          "sec_kwh_per_m3": 0.086463,
+          "demand_satisfaction": 0.9831,
+          "unserved_deficit_m3": 0.0,
+          "switch_events": 2,
+          "safety_blocks": 2,
+          "unmet_flow_m3": 12160.2
+        },
+        {
+          "pressure_compliance": 1.0,
+          "pressure_std": 0.00585,
+          "energy_kwh": 62329.0,
+          "sec_kwh_per_m3": 0.086325,
+          "demand_satisfaction": 0.9846,
+          "unserved_deficit_m3": 0.0,
+          "switch_events": 2,
+          "safety_blocks": 0,
+          "unmet_flow_m3": 11115.1
+        }
+      ],
+      "rl_mean": {
+        "pressure_compliance": {
+          "mean": 0.9028,
+          "min": 0.7083,
+          "max": 1.0
+        },
+        "pressure_std": {
+          "mean": 0.0112,
+          "min": 0.0059,
+          "max": 0.021
+        },
+        "energy_kwh": {
+          "mean": 62298.7667,
+          "min": 62259.6,
+          "max": 62329.0
+        },
+        "sec_kwh_per_m3": {
+          "mean": 0.0864,
+          "min": 0.0863,
+          "max": 0.0865
+        },
+        "demand_satisfaction": {
+          "mean": 0.9825,
+          "min": 0.9798,
+          "max": 0.9846
+        },
+        "switch_events": {
+          "mean": 2.0,
+          "min": 2.0,
+          "max": 2.0
+        },
+        "safety_blocks": {
+          "mean": 0.6667,
+          "min": 0.0,
+          "max": 2.0
+        },
+        "unserved_deficit_m3": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        }
+      }
+    },
+    "step": {
+      "baseline_reactive_pi": {
+        "steps": 288,
+        "pressure_compliance": 0.7639,
+        "pressure_std": 0.08637,
+        "pressure_min": 0.4,
+        "pressure_max": 0.6149,
+        "energy_kwh": 49315.2,
+        "supply_m3": 493654.4,
+        "demand_m3": 568325.2,
+        "sec_kwh_per_m3": 0.099898,
+        "supply_gap_m3": 80737.7,
+        "demand_satisfaction": 0.8579,
+        "unserved_deficit_m3": 70188.3,
+        "blowoff_m3": 0.0
+      },
+      "baseline_mpc": {
+        "steps": 288,
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00395,
+        "pressure_min": 0.5895,
+        "pressure_max": 0.6318,
+        "energy_kwh": 54926.8,
+        "supply_m3": 570000.0,
+        "demand_m3": 568325.2,
+        "sec_kwh_per_m3": 0.096363,
+        "supply_gap_m3": 4860.2,
+        "demand_satisfaction": 0.9914,
+        "unserved_deficit_m3": 0.0,
+        "blowoff_m3": 0.0
+      },
+      "per_seed": [
+        {
+          "pressure_compliance": 1.0,
+          "pressure_std": 0.0126,
+          "energy_kwh": 55687.2,
+          "sec_kwh_per_m3": 0.09774,
+          "demand_satisfaction": 0.9588,
+          "unserved_deficit_m3": 0.0,
+          "switch_events": 6,
+          "safety_blocks": 15,
+          "unmet_flow_m3": 23421.5
+        },
+        {
+          "pressure_compliance": 0.7396,
+          "pressure_std": 0.03395,
+          "energy_kwh": 51926.9,
+          "sec_kwh_per_m3": 0.091348,
+          "demand_satisfaction": 0.9516,
+          "unserved_deficit_m3": 0.0,
+          "switch_events": 18,
+          "safety_blocks": 61,
+          "unmet_flow_m3": 27523.1
+        },
+        {
+          "pressure_compliance": 0.9306,
+          "pressure_std": 0.02431,
+          "energy_kwh": 54498.6,
+          "sec_kwh_per_m3": 0.095506,
+          "demand_satisfaction": 0.9786,
+          "unserved_deficit_m3": 0.0,
+          "switch_events": 10,
+          "safety_blocks": 35,
+          "unmet_flow_m3": 12167.1
+        }
+      ],
+      "rl_mean": {
+        "pressure_compliance": {
+          "mean": 0.8901,
+          "min": 0.7396,
+          "max": 1.0
+        },
+        "pressure_std": {
+          "mean": 0.0236,
+          "min": 0.0126,
+          "max": 0.034
+        },
+        "energy_kwh": {
+          "mean": 54037.5667,
+          "min": 51926.9,
+          "max": 55687.2
+        },
+        "sec_kwh_per_m3": {
+          "mean": 0.0949,
+          "min": 0.0913,
+          "max": 0.0977
+        },
+        "demand_satisfaction": {
+          "mean": 0.963,
+          "min": 0.9516,
+          "max": 0.9786
+        },
+        "switch_events": {
+          "mean": 11.3333,
+          "min": 6.0,
+          "max": 18.0
+        },
+        "safety_blocks": {
+          "mean": 37.0,
+          "min": 15.0,
+          "max": 61.0
+        },
+        "unserved_deficit_m3": {
+          "mean": 0.0,
+          "min": 0.0,
+          "max": 0.0
+        }
+      }
+    },
+    "fault": {
+      "baseline_reactive_pi": {
+        "steps": 288,
+        "pressure_compliance": 0.5035,
+        "pressure_std": 0.10333,
+        "pressure_min": 0.4,
+        "pressure_max": 0.6198,
+        "energy_kwh": 45892.2,
+        "supply_m3": 504110.8,
+        "demand_m3": 619200.0,
+        "sec_kwh_per_m3": 0.091036,
+        "supply_gap_m3": 119875.2,
+        "demand_satisfaction": 0.8064,
+        "unserved_deficit_m3": 108838.2,
+        "blowoff_m3": 0.0
+      },
+      "baseline_mpc": {
+        "steps": 288,
+        "pressure_compliance": 0.5035,
+        "pressure_std": 0.09964,
+        "pressure_min": 0.4,
+        "pressure_max": 0.6045,
+        "energy_kwh": 45884.1,
+        "supply_m3": 503883.0,
+        "demand_m3": 619200.0,
+        "sec_kwh_per_m3": 0.091061,
+        "supply_gap_m3": 118105.0,
+        "demand_satisfaction": 0.8093,
+        "unserved_deficit_m3": 108939.5,
+        "blowoff_m3": 0.0
+      },
+      "per_seed": [
+        {
+          "pressure_compliance": 0.5,
+          "pressure_std": 0.09496,
+          "energy_kwh": 45862.8,
+          "sec_kwh_per_m3": 0.091127,
+          "demand_satisfaction": 0.7788,
+          "unserved_deficit_m3": 109359.3,
+          "switch_events": 3,
+          "safety_blocks": 0,
+          "unmet_flow_m3": 136997.1
+        },
+        {
+          "pressure_compliance": 0.3021,
+          "pressure_std": 0.08256,
+          "energy_kwh": 42685.8,
+          "sec_kwh_per_m3": 0.088352,
+          "demand_satisfaction": 0.7562,
+          "unserved_deficit_m3": 128319.6,
+          "switch_events": 11,
+          "safety_blocks": 32,
+          "unmet_flow_m3": 150962.3
+        },
+        {
+          "pressure_compliance": 0.5035,
+          "pressure_std": 0.10017,
+          "energy_kwh": 45889.5,
+          "sec_kwh_per_m3": 0.091045,
+          "demand_satisfaction": 0.7682,
+          "unserved_deficit_m3": 108796.4,
+          "switch_events": 3,
+          "safety_blocks": 1,
+          "unmet_flow_m3": 143522.5
+        }
+      ],
+      "rl_mean": {
+        "pressure_compliance": {
+          "mean": 0.4352,
+          "min": 0.3021,
+          "max": 0.5035
+        },
+        "pressure_std": {
+          "mean": 0.0926,
+          "min": 0.0826,
+          "max": 0.1002
+        },
+        "energy_kwh": {
+          "mean": 44812.7,
+          "min": 42685.8,
+          "max": 45889.5
+        },
+        "sec_kwh_per_m3": {
+          "mean": 0.0902,
+          "min": 0.0884,
+          "max": 0.0911
+        },
+        "demand_satisfaction": {
+          "mean": 0.7677,
+          "min": 0.7562,
+          "max": 0.7788
+        },
+        "switch_events": {
+          "mean": 5.6667,
+          "min": 3.0,
+          "max": 11.0
+        },
+        "safety_blocks": {
+          "mean": 11.0,
+          "min": 0.0,
+          "max": 32.0
+        },
+        "unserved_deficit_m3": {
+          "mean": 115491.7667,
+          "min": 108796.4,
+          "max": 128319.6
+        }
+      }
+    }
+  }
+}

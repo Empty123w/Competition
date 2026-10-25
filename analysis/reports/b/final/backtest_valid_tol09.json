@@ -1,0 +1,81 @@
+{
+  "window": "valid",
+  "n": 1916,
+  "strategies": [
+    "b1_rule",
+    "joint_nompc"
+  ],
+  "kpi": {
+    "n_total": 1916,
+    "common_steps": 1915,
+    "service_steps": 1858,
+    "scopes": {
+      "common": {
+        "steps": 1915,
+        "b1_rule": {
+          "energy_kwh": 1229015.3,
+          "supply_m3": 13055340.8,
+          "sec": 0.094139,
+          "sec_reduction_pct": 0.0,
+          "saving_pct": 0.0,
+          "gap_m3": 25277.1,
+          "low_min": 2385.0,
+          "low_reduction_pct": 0.0,
+          "d3_meet": 0.0204
+        },
+        "joint_nompc": {
+          "energy_kwh": 1179021.0,
+          "supply_m3": 13042017.5,
+          "sec": 0.090402,
+          "sec_reduction_pct": 3.97,
+          "saving_pct": 4.068,
+          "gap_m3": 33401.9,
+          "low_min": 270.0,
+          "low_reduction_pct": 88.679,
+          "d3_meet": 1.0
+        }
+      },
+      "service": {
+        "steps": 1858,
+        "b1_rule": {
+          "energy_kwh": 1194606.8,
+          "supply_m3": 12736974.0,
+          "sec": 0.09379,
+          "sec_reduction_pct": 0.0,
+          "saving_pct": 0.0,
+          "gap_m3": 0.0,
+          "low_min": 1800.0,
+          "low_reduction_pct": 0.0,
+          "d3_meet": 0.0151
+        },
+        "joint_nompc": {
+          "energy_kwh": 1148799.0,
+          "supply_m3": 12734598.7,
+          "sec": 0.090211,
+          "sec_reduction_pct": 3.817,
+          "saving_pct": 3.835,
+          "gap_m3": 0.0,
+          "low_min": 225.0,
+          "low_reduction_pct": 87.5,
+          "d3_meet": 1.0
+        }
+      }
+    }
+  },
+  "runtime_ms": {
+    "b1_rule": {
+      "p50": 4.68,
+      "p95": 7.14,
+      "max": 62.34
+    },
+    "joint_nompc": {
+      "p50": 18.78,
+      "p95": 35.39,
+      "max": 847.86
+    }
+  },
+  "fallback": {
+    "b1_rule": 0,
+    "joint_nompc": 0
+  }
+}

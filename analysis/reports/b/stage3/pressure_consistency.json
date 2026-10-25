@@ -1,0 +1,323 @@
+{
+  "static": {
+    "physics_identical": {
+      "k_vol_m3_per_mpa": 23700.0,
+      "leak_per_min": 0.001,
+      "p_env_mpa": 0.55,
+      "p_init_mpa": 0.6,
+      "p_hard_lo": 0.4,
+      "p_hard_hi": 0.75,
+      "band": [
+        0.55,
+        0.66
+      ],
+      "p_set": 0.6,
+      "blow_k": 1500.0,
+      "blow_deadband": 0.003,
+      "dt_min": 5.0,
+      "exec_delay_steps": 1,
+      "note": "阶段二 pressure_sim 直接 import closed_loop 的 SimParams/物理函数 -> 物理完全相同"
+    },
+    "scenarios_identical": {
+      "normal": {
+        "name": "normal",
+        "n_steps": 288,
+        "base_m3min": 430,
+        "amp_m3min": 40,
+        "period_steps": 288.0,
+        "step_change": null,
+        "fault": null,
+        "note": "正常负荷"
+      },
+      "low": {
+        "name": "low",
+        "n_steps": 288,
+        "base_m3min": 250,
+        "amp_m3min": 25,
+        "period_steps": 288.0,
+        "step_change": null,
+        "fault": null,
+        "note": "低负荷/大马拉小车"
+      },
+      "peak": {
+        "name": "peak",
+        "n_steps": 288,
+        "base_m3min": 500,
+        "amp_m3min": 20,
+        "period_steps": 288.0,
+        "step_change": null,
+        "fault": null,
+        "note": "高峰近容量"
+      },
+      "step": {
+        "name": "step",
+        "n_steps": 288,
+        "base_m3min": 300,
+        "amp_m3min": 30,
+        "period_steps": 288.0,
+        "step_change": [
+          144,
+          480
+        ],
+        "fault": null,
+        "note": "负荷突增"
+      },
+      "fault": {
+        "name": "fault",
+        "n_steps": 288,
+        "base_m3min": 430,
+        "amp_m3min": 40,
+        "period_steps": 288.0,
+        "step_change": null,
+        "fault": [
+          144,
+          "5#"
+        ],
+        "note": "设备异常(5#)"
+      }
+    },
+    "differences": [
+      {
+        "dim": "需求曲线",
+        "stage1": "CL.demand_series(SCENARIOS)",
+        "stage2": "同一函数",
+        "effect": "无差异"
+      },
+      {
+        "dim": "物理动力学",
+        "stage1": "pressure_step_accounted (质量守恒)",
+        "stage2": "同一函数 import",
+        "effect": "无差异"
+      },
+      {
+        "dim": "初始条件",
+        "stage1": "双机运行, flow=base/2 每台",
+        "stage2": "停机, flow=0",
+        "effect": "前若干步瞬态不同"
+      },
+      {
+        "dim": "供气决策",
+        "stage1": "dispatch_api(B3/bal/LRB) 或 B1 规则 -> 组合+分配; 需求取 upper_bound, PI 仅偏置预测",
+        "stage2": "控制器直接给**总供气 S**, PI 作用在瞬时需求上, 再 allocate(min120/max268.9)",
+        "effect": "主要差异来源: 供气档位/组合与过供程度不同"
+      },
+      {
+        "dim": "故障场景",
+        "stage1": "b3/bal/LRB 处理 5# 失效; b1 不处理(comp=1.0 为掩盖故障的假象)",
+        "stage2": "allocate 限定可用机组 (故障如实反映)",
+        "effect": "fault 场景口径不同"
+      },
+      {
+        "dim": "合格率定义",
+        "stage1": "步内 p∈[0.55,0.66] 占比",
+        "stage2": "定义相同",
+        "effect": "无差异"
+      }
+    ]
+  },
+  "stage1": {
+    "normal": {
+      "b1": {
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00613,
+        "energy_kwh": 61092.0,
+        "demand_satisfaction": 0.9872
+      },
+      "b3": {
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00613,
+        "energy_kwh": 56376.2,
+        "demand_satisfaction": 0.9872
+      },
+      "balanced": {
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00613,
+        "energy_kwh": 56548.1,
+        "demand_satisfaction": 0.9872
+      },
+      "load_balanced": {
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00613,
+        "energy_kwh": 58734.2,
+        "demand_satisfaction": 0.9872
+      }
+    },
+    "low": {
+      "b1": {
+        "pressure_compliance": 0.8472,
+        "pressure_std": 0.035,
+        "energy_kwh": 49923.6,
+        "demand_satisfaction": 0.9891
+      },
+      "b3": {
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00391,
+        "energy_kwh": 38466.5,
+        "demand_satisfaction": 0.9882
+      },
+      "balanced": {
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00391,
+        "energy_kwh": 38631.0,
+        "demand_satisfaction": 0.9882
+      },
+      "load_balanced": {
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00391,
+        "energy_kwh": 38758.3,
+        "demand_satisfaction": 0.9882
+      }
+    },
+    "peak": {
+      "b1": {
+        "pressure_compliance": 0.2639,
+        "pressure_std": 0.09194,
+        "energy_kwh": 62321.3,
+        "demand_satisfaction": 0.9425
+      },
+      "b3": {
+        "pressure_compliance": 0.2639,
+        "pressure_std": 0.09194,
+        "energy_kwh": 59416.5,
+        "demand_satisfaction": 0.9425
+      },
+      "balanced": {
+        "pressure_compliance": 0.2639,
+        "pressure_std": 0.09194,
+        "energy_kwh": 59475.9,
+        "demand_satisfaction": 0.9425
+      },
+      "load_balanced": {
+        "pressure_compliance": 0.2639,
+        "pressure_std": 0.09194,
+        "energy_kwh": 60868.9,
+        "demand_satisfaction": 0.9425
+      }
+    },
+    "step": {
+      "b1": {
+        "pressure_compliance": 0.6215,
+        "pressure_std": 0.09202,
+        "energy_kwh": 57868.8,
+        "demand_satisfaction": 0.9711
+      },
+      "b3": {
+        "pressure_compliance": 0.6215,
+        "pressure_std": 0.09202,
+        "energy_kwh": 54941.0,
+        "demand_satisfaction": 0.9711
+      },
+      "balanced": {
+        "pressure_compliance": 0.6215,
+        "pressure_std": 0.09201,
+        "energy_kwh": 55249.7,
+        "demand_satisfaction": 0.9712
+      },
+      "load_balanced": {
+        "pressure_compliance": 0.6215,
+        "pressure_std": 0.09202,
+        "energy_kwh": 56371.1,
+        "demand_satisfaction": 0.9711
+      }
+    },
+    "fault": {
+      "b1": {
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00613,
+        "energy_kwh": 61092.0,
+        "demand_satisfaction": 0.9872
+      },
+      "b3": {
+        "pressure_compliance": 0.6667,
+        "pressure_std": 0.0864,
+        "energy_kwh": 52941.6,
+        "demand_satisfaction": 0.9313
+      },
+      "balanced": {
+        "pressure_compliance": 0.6667,
+        "pressure_std": 0.08639,
+        "energy_kwh": 53033.3,
+        "demand_satisfaction": 0.9313
+      },
+      "load_balanced": {
+        "pressure_compliance": 0.6667,
+        "pressure_std": 0.08639,
+        "energy_kwh": 54608.3,
+        "demand_satisfaction": 0.9313
+      }
+    }
+  },
+  "stage2": {
+    "normal": {
+      "reactive_pi": {
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00613,
+        "energy_kwh": 58734.2,
+        "demand_satisfaction": 0.9872
+      },
+      "mpc": {
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00215,
+        "energy_kwh": 58735.4,
+        "demand_satisfaction": 0.994
+      }
+    },
+    "low": {
+      "reactive_pi": {
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00391,
+        "energy_kwh": 35542.8,
+        "demand_satisfaction": 0.9882
+      },
+      "mpc": {
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00321,
+        "energy_kwh": 32473.6,
+        "demand_satisfaction": 0.992
+      }
+    },
+    "peak": {
+      "reactive_pi": {
+        "pressure_compliance": 0.4028,
+        "pressure_std": 0.10253,
+        "energy_kwh": 44744.9,
+        "demand_satisfaction": 0.7151
+      },
+      "mpc": {
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00236,
+        "energy_kwh": 62316.6,
+        "demand_satisfaction": 0.994
+      }
+    },
+    "step": {
+      "reactive_pi": {
+        "pressure_compliance": 0.7639,
+        "pressure_std": 0.08637,
+        "energy_kwh": 49315.2,
+        "demand_satisfaction": 0.8579
+      },
+      "mpc": {
+        "pressure_compliance": 1.0,
+        "pressure_std": 0.00395,
+        "energy_kwh": 54926.8,
+        "demand_satisfaction": 0.9914
+      }
+    },
+    "fault": {
+      "reactive_pi": {
+        "pressure_compliance": 0.5035,
+        "pressure_std": 0.10333,
+        "energy_kwh": 45892.2,
+        "demand_satisfaction": 0.8064
+      },
+      "mpc": {
+        "pressure_compliance": 0.5035,
+        "pressure_std": 0.09964,
+        "energy_kwh": 45884.1,
+        "demand_satisfaction": 0.8093
+      }
+    }
+  },
+  "stage1_original_report": {}
+}

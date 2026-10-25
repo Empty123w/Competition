@@ -1,0 +1,965 @@
+[
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "dev",
+  "algorithm": "b1_rule",
+  "value": 0.0,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "dev",
+  "algorithm": "b1_rule",
+  "value": 0.0,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "dev",
+  "algorithm": "b1_rule",
+  "value": 55.359,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "dev",
+  "algorithm": "b1_rule",
+  "value": 19.26,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "dev",
+  "algorithm": "b3_b4",
+  "value": 9.439,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "dev",
+  "algorithm": "b3_b4",
+  "value": 47.422,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "dev",
+  "algorithm": "b3_b4",
+  "value": 55.359,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "dev",
+  "algorithm": "b3_b4",
+  "value": 23.173,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "dev",
+  "algorithm": "bal",
+  "value": 9.191,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "dev",
+  "algorithm": "bal",
+  "value": 75.932,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "dev",
+  "algorithm": "bal",
+  "value": 49.962,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "dev",
+  "algorithm": "bal",
+  "value": 20.0,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "dev",
+  "algorithm": "lrb_t10",
+  "value": 8.204,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "dev",
+  "algorithm": "lrb_t10",
+  "value": 58.579,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "dev",
+  "algorithm": "lrb_t10",
+  "value": 35.152,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "dev",
+  "algorithm": "lrb_t10",
+  "value": 8.734,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "dev",
+  "algorithm": "joint_nompc",
+  "value": 10.49,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "dev",
+  "algorithm": "joint_nompc",
+  "value": 69.194,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "dev",
+  "algorithm": "joint_nompc",
+  "value": 9.999,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "dev",
+  "algorithm": "joint_nompc",
+  "value": 8.383,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "dev",
+  "algorithm": "joint",
+  "value": 10.328,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "dev",
+  "algorithm": "joint",
+  "value": 67.873,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "dev",
+  "algorithm": "joint",
+  "value": 9.999,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "dev",
+  "algorithm": "joint",
+  "value": 8.285,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "valid",
+  "algorithm": "b1_rule",
+  "value": 0.0,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "valid",
+  "algorithm": "b1_rule",
+  "value": 0.0,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "valid",
+  "algorithm": "b1_rule",
+  "value": 55.337,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "valid",
+  "algorithm": "b1_rule",
+  "value": 27.652,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "valid",
+  "algorithm": "b3_b4",
+  "value": 5.441,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "valid",
+  "algorithm": "b3_b4",
+  "value": 5.0,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "valid",
+  "algorithm": "b3_b4",
+  "value": 55.337,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "valid",
+  "algorithm": "b3_b4",
+  "value": 27.695,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "valid",
+  "algorithm": "bal",
+  "value": 5.285,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "valid",
+  "algorithm": "bal",
+  "value": 78.333,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "valid",
+  "algorithm": "bal",
+  "value": 49.961,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "valid",
+  "algorithm": "bal",
+  "value": 26.107,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "valid",
+  "algorithm": "lrb_t10",
+  "value": 3.568,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "valid",
+  "algorithm": "lrb_t10",
+  "value": 70.0,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "valid",
+  "algorithm": "lrb_t10",
+  "value": 35.581,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "valid",
+  "algorithm": "lrb_t10",
+  "value": 8.486,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "valid",
+  "algorithm": "joint_nompc",
+  "value": 3.844,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "valid",
+  "algorithm": "joint_nompc",
+  "value": 87.5,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "valid",
+  "algorithm": "joint_nompc",
+  "value": 9.997,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "valid",
+  "algorithm": "joint_nompc",
+  "value": 7.816,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "valid",
+  "algorithm": "joint",
+  "value": 3.844,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "valid",
+  "algorithm": "joint",
+  "value": 87.5,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "valid",
+  "algorithm": "joint",
+  "value": 9.997,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "valid",
+  "algorithm": "joint",
+  "value": 7.816,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "test",
+  "algorithm": "b1_rule",
+  "value": 0.0,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "test",
+  "algorithm": "b1_rule",
+  "value": 0.0,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "test",
+  "algorithm": "b1_rule",
+  "value": 50.971,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "test",
+  "algorithm": "b1_rule",
+  "value": 19.526,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "test",
+  "algorithm": "b3_b4",
+  "value": 4.125,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "test",
+  "algorithm": "b3_b4",
+  "value": 65.152,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "test",
+  "algorithm": "b3_b4",
+  "value": 50.971,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "test",
+  "algorithm": "b3_b4",
+  "value": 19.808,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "test",
+  "algorithm": "bal",
+  "value": 3.979,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "test",
+  "algorithm": "bal",
+  "value": 75.758,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "test",
+  "algorithm": "bal",
+  "value": 49.029,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "test",
+  "algorithm": "bal",
+  "value": 18.278,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "test",
+  "algorithm": "lrb_t10",
+  "value": 3.038,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "test",
+  "algorithm": "lrb_t10",
+  "value": 75.758,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "test",
+  "algorithm": "lrb_t10",
+  "value": 10.0,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "test",
+  "algorithm": "lrb_t10",
+  "value": 8.406,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "test",
+  "algorithm": "joint_nompc",
+  "value": 2.978,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "test",
+  "algorithm": "joint_nompc",
+  "value": 77.273,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "test",
+  "algorithm": "joint_nompc",
+  "value": 9.993,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "test",
+  "algorithm": "joint_nompc",
+  "value": 7.627,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "test",
+  "algorithm": "joint",
+  "value": 2.945,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "test",
+  "algorithm": "joint",
+  "value": 72.727,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "test",
+  "algorithm": "joint",
+  "value": 9.993,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "test",
+  "algorithm": "joint",
+  "value": 7.62,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "pooled",
+  "algorithm": "b1_rule",
+  "value": 0.0,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "pooled",
+  "algorithm": "b1_rule",
+  "value": 0.0,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "pooled",
+  "algorithm": "b1_rule",
+  "value": 55.359,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "pooled",
+  "algorithm": "b1_rule",
+  "value": 20.753,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "pooled",
+  "algorithm": "b3_b4",
+  "value": 7.707,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "pooled",
+  "algorithm": "b3_b4",
+  "value": 46.606,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "pooled",
+  "algorithm": "b3_b4",
+  "value": 55.359,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "pooled",
+  "algorithm": "b3_b4",
+  "value": 23.365,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "pooled",
+  "algorithm": "bal",
+  "value": 7.496,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "pooled",
+  "algorithm": "bal",
+  "value": 75.989,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "pooled",
+  "algorithm": "bal",
+  "value": 49.962,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "pooled",
+  "algorithm": "bal",
+  "value": 20.841,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "pooled",
+  "algorithm": "lrb_t10",
+  "value": 6.385,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "pooled",
+  "algorithm": "lrb_t10",
+  "value": 59.1,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "pooled",
+  "algorithm": "lrb_t10",
+  "value": 35.581,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "pooled",
+  "algorithm": "lrb_t10",
+  "value": 8.618,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "pooled",
+  "algorithm": "joint_nompc",
+  "value": 7.842,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "pooled",
+  "algorithm": "joint_nompc",
+  "value": 69.763,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "pooled",
+  "algorithm": "joint_nompc",
+  "value": 9.999,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "pooled",
+  "algorithm": "joint_nompc",
+  "value": 8.103,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "SEC_reduction_pct",
+  "window": "pooled",
+  "algorithm": "joint",
+  "value": 7.731,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "low_load_reduction_pct",
+  "window": "pooled",
+  "algorithm": "joint",
+  "value": 68.43,
+  "unit": "%",
+  "evidence": "final/test_energy_diagnosis.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_max_pp",
+  "window": "pooled",
+  "algorithm": "joint",
+  "value": 9.999,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "load_ratio_dev_mean_pp",
+  "window": "pooled",
+  "algorithm": "joint",
+  "value": 8.046,
+  "unit": "pp",
+  "evidence": "final/load_ratio.json"
+ },
+ {
+  "group": "B",
+  "indicator": "pressure_compliance",
+  "window": "dev",
+  "algorithm": "joint",
+  "value": 0.8592,
+  "unit": "ratio",
+  "evidence": "final/pressure_real_dev.json"
+ },
+ {
+  "group": "B",
+  "indicator": "pressure_compliance",
+  "window": "valid",
+  "algorithm": "joint",
+  "value": 0.9998,
+  "unit": "ratio",
+  "evidence": "final/pressure_real_valid.json"
+ },
+ {
+  "group": "B",
+  "indicator": "pressure_compliance",
+  "window": "test",
+  "algorithm": "joint",
+  "value": 0.9957,
+  "unit": "ratio",
+  "evidence": "final/pressure_real_test.json"
+ },
+ {
+  "group": "B",
+  "indicator": "surge_accuracy",
+  "window": "test_synth",
+  "algorithm": "GRU_optimized",
+  "value": 0.9004,
+  "unit": "ratio",
+  "evidence": "stage3/surge/surge_optimized.json"
+ },
+ {
+  "group": "B",
+  "indicator": "surge_lead_ge30_coverage",
+  "window": "test_synth",
+  "algorithm": "GRU_optimized",
+  "value": 0.9143,
+  "unit": "ratio",
+  "evidence": "stage3/surge/surge_optimized.json"
+ },
+ {
+  "group": "A",
+  "indicator": "forecast_MAPE_15min",
+  "window": "test",
+  "algorithm": "LightGBM",
+  "value": 1.13,
+  "unit": "%",
+  "evidence": "team:artifacts/metrics/forecast_metrics.json"
+ },
+ {
+  "group": "A",
+  "indicator": "rul_within_20pct",
+  "window": "test_sim",
+  "algorithm": "GBR",
+  "value": 88.61,
+  "unit": "%",
+  "evidence": "team:artifacts/metrics/rul_metrics.json"
+ },
+ {
+  "group": "A",
+  "indicator": "maint_warning_accuracy",
+  "window": "hybrid_sim",
+  "algorithm": "trend_warning",
+  "value": 92.92,
+  "unit": "%",
+  "evidence": "team:artifacts/metrics/maintenance_metrics.json"
+ },
+ {
+  "group": "A",
+  "indicator": "unplanned_stop_reduction",
+  "window": "hybrid_sim",
+  "algorithm": "planned_maintenance",
+  "value": 92.08,
+  "unit": "%",
+  "evidence": "team:artifacts/metrics/maintenance_metrics.json"
+ },
+ {
+  "group": "A",
+  "indicator": "mtbf_improvement",
+  "window": "hybrid_sim",
+  "algorithm": "planned_maintenance",
+  "value": 1163.16,
+  "unit": "%",
+  "evidence": "team:artifacts/metrics/maintenance_metrics.json"
+ },
+ {
+  "group": "K",
+  "indicator": "kb_top3_hit_rate",
+  "window": "acceptance",
+  "algorithm": "tfidf_char",
+  "value": 88.46,
+  "unit": "%",
+  "evidence": "team:analysis/reports/phaseK/knowledge_acceptance.json"
+ }
+]
