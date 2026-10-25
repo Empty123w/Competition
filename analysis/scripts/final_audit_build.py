@@ -60,6 +60,17 @@ def md_kpi():
         f"> 数据说明: {DATA_NOTE}。",
         "> 判定: 已达标 / 未达标 / 部分达标 / 已实现但未测试 / 缺少必要真实数据 / 未实现 / 无法核查。",
         "",
+        "## 0. 评价范围 (样本口径) 核对 —— 不得混写",
+        "",
+        "| 口径 | 策略集合 | 运行步(service) | joint_nompc dev/valid/test/pooled SEC降% |",
+        "|---|---|---|---|",
+        "| **主口径** | b1,b3,bal,lrb_t10,joint_nompc,joint | **10793** | 10.49 / 3.84 / 2.98 / **7.842** |",
+        "| 宽口径 | b1,joint_nompc | 11048 | 10.203 / 3.843 / 2.955 / 7.692 |",
+        "| 窄口径(含b3_lrb) | +b3_lrb (8策略) | 10789 | — / — / — / 7.833 |",
+        "",
+        "> 差异来源: 纳入更多被比较策略后, 需剔除其不可行步 -> 样本 10793/11048/10789。",
+        "> 本报告主表统一采用**主口径 10793**; 稳健性对照另行标注 11048; 贡献消融标注 10789。",
+        "",
         "## A. 赛题 15 项 KPI (官方目标) —— 全项目现状",
         "",
         "| 组 | 指标 | 目标 | 实际 | 算法/模块 | 窗口/场景 | 样本 | 公式 | 数据来源 | 证据等级 | 达标 | 未达原因 | 证据文件 |",
@@ -68,7 +79,7 @@ def md_kpi():
     # 行: 15 项
     def R(g, name, tgt, val, mod, scope, n, formula, src, lvl, ok, why, ev):
         lines.append(f"| {g} | {name} | {tgt} | {val} | {mod} | {scope} | {n} | {formula} | {src} | {lvl} | {ok} | {why} | {ev} |")
-    R("B", "系统综合能效提升率", "≥6%", f"pooled {j['sec_reduction_pct']}% (dev 10.20/valid 3.84/test 2.98)", "joint_nompc (B3+均衡)",
+    R("B", "系统综合能效提升率", "≥6%", f"pooled {j['sec_reduction_pct']}% (dev {ted['per_window']['dev']['joint_nompc']['sec_reduction_pct']}/valid {ted['per_window']['valid']['joint_nompc']['sec_reduction_pct']}/test {ted['per_window']['test']['joint_nompc']['sec_reduction_pct']})", "joint_nompc (B3+均衡)",
       "dev/valid/test/pooled", f"{P['_steps']} 步", "SEC=ΣE/ΣV; 降幅 vs B1", "真实历史反事实回测", "②真实驱动模型回测", "部分达标",
       "valid/test 单窗口<6%; test 受高负荷+B1已高效+10pp 约束限制", "final/TEST_ENERGY_DIAGNOSIS.md")
     R("B", "加载率偏离度", "≤±10%", f"pooled joint_nompc 均 {jd['mean_pp']}pp / P95 {jd['p95_pp']}pp / 最大 {jd['max_pp']}pp; 双机达标率 {(lrj.get('pass_rate_both') or 0)*100:.1f}%",

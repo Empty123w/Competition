@@ -1,8 +1,9 @@
 """B 模块面向 C 模块的统一调度接口 (只读封装, 不修改 C 协议)。
 
-两种可选调度模式:
+四种可选调度模式:
   - "b3"       : 能效优先, 复用 optimize_dispatch (B3+B4)。
   - "balanced" : 低负荷优先, 复用 UC.plan(balanced=True)。
+  - "joint_nompc": 多目标(能效+低负荷+机组间<=10pp 均衡) 单步决策 (B 最终候选)。
 
 统一输入: StationSnapshot + ForecastResult(+可选多步序列) + health + DispatchConstraints + PolicyState。
 统一输出: JSON 可序列化 dict, 含 device_actions / 供气 / 功率 / 安全 / 时延 / 回退标志。
@@ -32,7 +33,7 @@ from air_station.optimization.contracts import (
     StationSnapshot,
 )
 
-MODES = ("b3", "balanced", "load_balanced")
+MODES = ("b3", "balanced", "load_balanced", "joint_nompc")
 DEFAULT_MODE = "b3"
 
 # 进程级功率估计缓存 (键: 模型路径 -> {(device, round(flow,1)): kW})。
@@ -135,6 +136,88 @@ def plan_dispatch(mode: str, snapshot: StationSnapshot, forecast: Optional[Forec
         # 归一化回退标志: B3 失败时 status!=success 且带 fallback_candidate, 统一标记 is_fallback
         if out.get("fallback_candidate") or out.get("status") != C.STATUS_SUCCESS:
             out["is_fallback"] = True
+        out["latency_ms"] = round((time.perf_counter() - t0) * 1000, 3)
+        return out
+
+    # ---- joint_nompc: 多目标(能效+低负荷+机组间<=10pp 均衡) 单步决策 (B 最终候选) ----
+    # 复用 stage2.joint_dispatch.mpc_decide (horizon=1, 无压力项); 延迟导入避免循环依赖。
+    if mode == "joint_nompc":
+        from air_station.simulation import closed_loop as CL
+        from air_station.stage2 import joint_dispatch as JD
+        if forecast_seq:
+            ub_seq = [float(x) for x in forecast_seq]
+            pred_seq = list(ub_seq)
+        else:
+            if forecast is None:
+                return _fallback(snapshot, forecast, health, constraints, state=state,
+                                 reason_codes=[C.RC_INSUFFICIENT_DATA], policy_version="joint-nompc-v1",
+                                 power_model_path=pm, baseline_config_path=bc, required=None,
+                                 t0=t0, opt_cfg=opt_cfg, mode=mode)
+            ub = forecast.demand_value("upper_bound")
+            if ub is None:
+                ub = forecast.predicted_flow
+            if ub is None:
+                return _fallback(snapshot, forecast, health, constraints, state=state,
+                                 reason_codes=[C.RC_INSUFFICIENT_DATA], policy_version="joint-nompc-v1",
+                                 power_model_path=pm, baseline_config_path=bc, required=None,
+                                 t0=t0, opt_cfg=opt_cfg, mode=mode)
+            pr = forecast.predicted_flow if forecast.predicted_flow is not None else ub
+            ub_seq = [float(ub)] * 4
+            pred_seq = [float(pr)] * 4
+        caps = CONS.build_capabilities(constraints, snapshot, health, state)
+        dmap = snapshot.device_map()
+        cur_on = {d for d in C.DEVICE_IDS if d in dmap and dmap[d].running}
+        cur_flows = {d: (dmap[d].flow_m3_min if d in dmap else None) for d in C.DEVICE_IDS}
+        p_now = snapshot.header_pressure_mpa if snapshot.header_pressure_mpa is not None else 0.60
+        w = JD.JointWeights(w_energy=1.0, w_switch=2.0, w_short=800.0, balance_mode="spread",
+                            spread_tol=0.10, w_low=1.5, w_imbalance=40.0, w_pressure=0.0,
+                            w_center=0.0, horizon=1)
+        try:
+            got = JD.mpc_decide(p_now, pred_seq, ub_seq, caps, constraints, cur_on, cur_flows,
+                                pm, _POWER_CACHE.setdefault(str(pm), {}), CL.SimParams(dt_min=15.0),
+                                w, power_cap=dcfg.get("power_cap_kw_per_device", 0.0))
+        except Exception as e:  # noqa
+            return _fallback(snapshot, forecast, health, constraints, state=state,
+                             reason_codes=[C.RC_MODEL_UNAVAILABLE, f"error:{type(e).__name__}"],
+                             policy_version="joint-nompc-v1", power_model_path=pm,
+                             baseline_config_path=bc, required=pred_seq[0], t0=t0, opt_cfg=opt_cfg, mode=mode)
+        if (time.perf_counter() - t0) * 1000 > to_ms:
+            return _fallback(snapshot, forecast, health, constraints, state=state,
+                             reason_codes=[C.RC_TIMEOUT], policy_version="joint-nompc-v1",
+                             power_model_path=pm, baseline_config_path=bc, required=pred_seq[0],
+                             t0=t0, opt_cfg=opt_cfg, mode=mode)
+        if got is None:
+            return _fallback(snapshot, forecast, health, constraints, state=state,
+                             reason_codes=[C.RC_INFEASIBLE_CAPACITY], policy_version="joint-nompc-v1",
+                             power_model_path=pm, baseline_config_path=bc, required=pred_seq[0],
+                             t0=t0, opt_cfg=opt_cfg, mode=mode)
+        combo = tuple(got["combo"]); alloc = got["alloc"]
+        trans_ok, steps, trans_rc = CONS.transition_feasibility(cur_on, combo, caps, pred_seq[0], constraints.reserve)
+        result = DispatchResult(status=C.STATUS_SUCCESS, policy_version="joint-nompc-v1",
+                                as_of=str(snapshot.as_of), required_flow_m3_min=pred_seq[0])
+        result.target_combination = list(combo)
+        result.device_actions = SVC._device_actions(combo, alloc, caps, cur_on,
+                                                    constraints.rated_capacity_m3min, dmap)
+        result.transition_plan = steps
+        result.total_flow_m3_min = sum(alloc["flows"].values())
+        result.estimated_power_kw = alloc["power_kw"]
+        result.estimated_energy_kwh = round(alloc["power_kw"] * constraints.demand_horizon_minutes / 60.0, 2)
+        result.reserve_m3_min = round(sum(caps[d].max_flow_m3min for d in combo) - pred_seq[0], 2)
+        rc = list(trans_rc)
+        if not trans_ok:
+            rc.append(C.RC_TRANSITION_CAPACITY_GAP)
+        if got.get("degraded"):
+            rc.append(C.RC_INFEASIBLE_CAPACITY)   # 需求上界超容量 -> 满容量降级
+        rc += [C.RC_PRESSURE_COUNTERFACTUAL, C.RC_SURGE_NOT_ASSESSED]
+        result.reason_codes = list(dict.fromkeys(rc))
+        result.simulation_feasible = True
+        result.requires_field_review = True
+        SVC._attach_surge(result, snapshot, dcfg)
+        out = result.to_dict()
+        out["mode"] = mode
+        out["balanced"] = False
+        out["load_balanced"] = False
+        out["degraded"] = bool(got.get("degraded"))
         out["latency_ms"] = round((time.perf_counter() - t0) * 1000, 3)
         return out
 
