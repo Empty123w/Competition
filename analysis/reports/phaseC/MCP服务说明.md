@@ -53,7 +53,7 @@ stdio 客户端配置示例（等价 JSON）：
 {"mode": "b3", "demand_flow_m3_min": 480.0, "horizon_minutes": 15, "timeout_ms": null}
 ```
 
-- `mode ∈ {b3 能效优先, balanced 低负荷优先, load_balanced 加载率均衡}`；
+- `mode ∈ {b3 能效优先, balanced 低负荷优先, load_balanced 加载率均衡, joint_nompc 多目标(B 最终候选)}`；
 - `demand_flow_m3_min` 省略时自动调用预测服务；
 - 输出即 B 的 `plan_dispatch` 结果（`device_actions/target_combination/estimated_power_kw/
   surge_status/safety_blocked/reason_codes/execution_permission` 等），另加 `c_meta`。

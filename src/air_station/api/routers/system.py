@@ -35,12 +35,15 @@ def health() -> dict:
 
 @router.get("/api/system/info", summary="服务信息")
 def info() -> dict:
+    from air_station.optimization.b_api import API_VERSION, DISPATCH_MODES
     return {"status": "success", "module": "C",
             "capabilities": ["forecast", "health", "rul", "dispatch", "surge",
                              "control", "agent"],
             "mcp_tools": ["forecast_load", "health_diagnose", "rul_estimation",
                           "dispatch_optimize", "surge_warning", "control_command",
-                          "create_work_order", "orchestrate"]}
+                          "create_work_order", "orchestrate"],
+            "dispatch_modes": list(DISPATCH_MODES),
+            "b_api_version": API_VERSION}
 
 
 @router.get("/api/system/overview", summary="运行总览")

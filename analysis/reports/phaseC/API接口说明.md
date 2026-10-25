@@ -71,7 +71,7 @@ devices[], safety_blocked, counts, reason_codes, capability`）另加 `station_r
 }
 ```
 
-- `mode ∈ {b3 能效优先, balanced 低负荷优先, load_balanced 加载率均衡}`。
+- `mode ∈ {b3 能效优先, balanced 低负荷优先, load_balanced 加载率均衡, joint_nompc 多目标(B 最终候选)}`。
 - `demand_flow_m3_min` 省略时自动调用 A 的预测接口取下界/上界。
 - `persist=true` 时方案落库并返回 `plan_id`。
 

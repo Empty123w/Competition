@@ -19,10 +19,13 @@ def test_tool_functions_expose_core_services():
 
 
 def test_dispatch_modes():
-    for mode in ("b3", "balanced", "load_balanced"):
+    for mode in ("b3", "balanced", "load_balanced", "joint_nompc"):
         out = tools.dispatch_optimize(mode=mode, horizon_minutes=15)
         assert out["mode"] == mode
         assert out["c_meta"]["execution_allowed"] is False
+    # B6 新增模式可能带 degraded 标记(需求上界超容量时满容量降级)
+    jm = tools.dispatch_optimize(mode="joint_nompc", horizon_minutes=15)
+    assert "degraded" in jm
 
 
 def test_orchestrate_tool():
