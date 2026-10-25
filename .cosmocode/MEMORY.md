@@ -111,3 +111,14 @@
   - 指标总表: `python3 analysis/scripts/final_kpi_table.py` → `analysis/reports/b/final/B_FINAL_KPI_TABLE.md`
   - 关键结论: 真实历史 pooled 上 joint SEC −7.73%、D3=1.0、低负荷 −68.4%；压力 KPI 在 valid/test（需求≤容量）达标 0.9998/0.9957，dev 因 13.1% 步需求超 2×额定容量而仅 0.71（物理容量不足，不可伪造）
   - 真实历史需求口径用 A6 真实滚动预测 (upper bound) 与 harness 一致；不得用未来真值
+
+[B 组封版与 B6/C 集成要点]
+- Date: 2026-10-25
+- Context: Agent 在 B 组封版、B6 集成与推送时发现
+- Category: 工作流协作/环境配置
+- Instructions:
+  - B6 `plan_dispatch` 新增可选 `mode="joint_nompc"`(默认仍 b3); 旧三模式不变; 实现为 lazy import `stage2.joint_dispatch.mpc_decide`(避免循环依赖)
+  - C 的 `integration/dispatch_bridge.dispatch_plan(mode=...)` 直接透传 mode, 无需改 C 代码即可调用 joint_nompc(已在 /tmp 一次性 clone 中 dry-run 验证)
+  - 样本口径必须区分: 主口径(6策略含 joint_nompc)=10793 步; 宽口径(b1+joint_nompc)=11048; 含 b3_lrb=10789; 不得混写
+  - 推送权限: 只能推 Fork `yang466/Competition`; 团队 `Wxyun113/Competition` 推送被拒(403, bot 无权限) -> 只能用 PR
+  - 团队 main 的 `optimization/dispatch_api.py` 与本分支改动前逐字节一致 -> 该改动无冲突风险
