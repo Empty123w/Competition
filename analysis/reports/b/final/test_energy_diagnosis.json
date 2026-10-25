@@ -1,0 +1,1080 @@
+{
+  "scope_note": "统一口径: 六策略共同可执行且 service(flow>=obs-0.05); 含 joint_nompc",
+  "per_window": {
+    "dev": {
+      "_steps": 6957,
+      "steps": 6957,
+      "b1_energy_kwh": 4116797.9,
+      "b1_supply_m3": 38697831.0,
+      "service_eq_volume_m3": 36175735.2,
+      "b1_sec": 0.106383,
+      "b1_rule": {
+        "energy_kwh": 4116797.9,
+        "supply_m3": 38697831.0,
+        "sec": 0.106383,
+        "sec_reduction_pct": 0.0,
+        "saving_pct": 0.0,
+        "low_min": 69240.0,
+        "low_reduction_pct": 0.0,
+        "supply_diff_pct": 0.0,
+        "gap_m3": 1.2,
+        "energy_saving_equalV_pct": 0.0
+      },
+      "b3_b4": {
+        "energy_kwh": 3674521.1,
+        "supply_m3": 38140687.2,
+        "sec": 0.096341,
+        "sec_reduction_pct": 9.439,
+        "saving_pct": 10.743,
+        "low_min": 36405.0,
+        "low_reduction_pct": 47.422,
+        "supply_diff_pct": -1.44,
+        "gap_m3": 1.2,
+        "energy_saving_equalV_pct": 10.743
+      },
+      "bal": {
+        "energy_kwh": 3684613.5,
+        "supply_m3": 38140645.0,
+        "sec": 0.096606,
+        "sec_reduction_pct": 9.191,
+        "saving_pct": 10.498,
+        "low_min": 16665.0,
+        "low_reduction_pct": 75.932,
+        "supply_diff_pct": -1.44,
+        "gap_m3": 1.2,
+        "energy_saving_equalV_pct": 10.498
+      },
+      "lrb_t10": {
+        "energy_kwh": 3724742.4,
+        "supply_m3": 38141623.8,
+        "sec": 0.097656,
+        "sec_reduction_pct": 8.204,
+        "saving_pct": 9.523,
+        "low_min": 28680.0,
+        "low_reduction_pct": 58.579,
+        "supply_diff_pct": -1.437,
+        "gap_m3": 1.2,
+        "energy_saving_equalV_pct": 9.523
+      },
+      "joint_nompc": {
+        "energy_kwh": 3631889.4,
+        "supply_m3": 38140688.9,
+        "sec": 0.095223,
+        "sec_reduction_pct": 10.49,
+        "saving_pct": 11.779,
+        "low_min": 21330.0,
+        "low_reduction_pct": 69.194,
+        "supply_diff_pct": -1.44,
+        "gap_m3": 1.2,
+        "energy_saving_equalV_pct": 11.779
+      },
+      "joint": {
+        "energy_kwh": 3648959.2,
+        "supply_m3": 38250488.9,
+        "sec": 0.095396,
+        "sec_reduction_pct": 10.328,
+        "saving_pct": 11.364,
+        "low_min": 22245.0,
+        "low_reduction_pct": 67.873,
+        "supply_diff_pct": -1.156,
+        "gap_m3": 1.2,
+        "energy_saving_equalV_pct": 11.364
+      },
+      "_deviation": {
+        "b1_rule": {
+          "mean_pp": 19.26,
+          "p95_pp": 48.2,
+          "max_pp": 55.359,
+          "both": 6957,
+          "single": 0,
+          "none": 0,
+          "both_coverage": 1.0
+        },
+        "b3_b4": {
+          "mean_pp": 23.173,
+          "p95_pp": 49.292,
+          "max_pp": 55.359,
+          "both": 5670,
+          "single": 1287,
+          "none": 0,
+          "both_coverage": 0.815
+        },
+        "bal": {
+          "mean_pp": 20.0,
+          "p95_pp": 46.275,
+          "max_pp": 49.962,
+          "both": 5671,
+          "single": 1286,
+          "none": 0,
+          "both_coverage": 0.8152
+        },
+        "lrb_t10": {
+          "mean_pp": 8.734,
+          "p95_pp": 9.92,
+          "max_pp": 35.152,
+          "both": 5671,
+          "single": 1286,
+          "none": 0,
+          "both_coverage": 0.8152
+        },
+        "joint_nompc": {
+          "mean_pp": 8.383,
+          "p95_pp": 9.9,
+          "max_pp": 9.999,
+          "both": 5180,
+          "single": 1777,
+          "none": 0,
+          "both_coverage": 0.7446
+        },
+        "joint": {
+          "mean_pp": 8.285,
+          "p95_pp": 9.898,
+          "max_pp": 9.999,
+          "both": 5241,
+          "single": 1716,
+          "none": 0,
+          "both_coverage": 0.7533
+        }
+      }
+    },
+    "valid": {
+      "_steps": 1857,
+      "steps": 1857,
+      "b1_energy_kwh": 1193946.1,
+      "b1_supply_m3": 12729346.2,
+      "service_eq_volume_m3": 12104004.6,
+      "b1_sec": 0.093795,
+      "b1_rule": {
+        "energy_kwh": 1193946.1,
+        "supply_m3": 12729346.2,
+        "sec": 0.093795,
+        "sec_reduction_pct": 0.0,
+        "saving_pct": 0.0,
+        "low_min": 1800.0,
+        "low_reduction_pct": 0.0,
+        "supply_diff_pct": 0.0,
+        "gap_m3": 0.0,
+        "energy_saving_equalV_pct": 0.0
+      },
+      "b3_b4": {
+        "energy_kwh": 1128773.9,
+        "supply_m3": 12726969.0,
+        "sec": 0.088691,
+        "sec_reduction_pct": 5.441,
+        "saving_pct": 5.459,
+        "low_min": 1710.0,
+        "low_reduction_pct": 5.0,
+        "supply_diff_pct": -0.019,
+        "gap_m3": 0.0,
+        "energy_saving_equalV_pct": 5.459
+      },
+      "bal": {
+        "energy_kwh": 1130609.9,
+        "supply_m3": 12726691.2,
+        "sec": 0.088838,
+        "sec_reduction_pct": 5.285,
+        "saving_pct": 5.305,
+        "low_min": 390.0,
+        "low_reduction_pct": 78.333,
+        "supply_diff_pct": -0.021,
+        "gap_m3": 0.0,
+        "energy_saving_equalV_pct": 5.305
+      },
+      "lrb_t10": {
+        "energy_kwh": 1151133.3,
+        "supply_m3": 12726971.0,
+        "sec": 0.090448,
+        "sec_reduction_pct": 3.568,
+        "saving_pct": 3.586,
+        "low_min": 540.0,
+        "low_reduction_pct": 70.0,
+        "supply_diff_pct": -0.019,
+        "gap_m3": 0.0,
+        "energy_saving_equalV_pct": 3.586
+      },
+      "joint_nompc": {
+        "energy_kwh": 1147839.5,
+        "supply_m3": 12726971.0,
+        "sec": 0.09019,
+        "sec_reduction_pct": 3.844,
+        "saving_pct": 3.862,
+        "low_min": 225.0,
+        "low_reduction_pct": 87.5,
+        "supply_diff_pct": -0.019,
+        "gap_m3": 0.0,
+        "energy_saving_equalV_pct": 3.862
+      },
+      "joint": {
+        "energy_kwh": 1147839.5,
+        "supply_m3": 12726971.0,
+        "sec": 0.09019,
+        "sec_reduction_pct": 3.844,
+        "saving_pct": 3.862,
+        "low_min": 225.0,
+        "low_reduction_pct": 87.5,
+        "supply_diff_pct": -0.019,
+        "gap_m3": 0.0,
+        "energy_saving_equalV_pct": 3.862
+      },
+      "_deviation": {
+        "b1_rule": {
+          "mean_pp": 27.652,
+          "p95_pp": 49.241,
+          "max_pp": 55.337,
+          "both": 1857,
+          "single": 0,
+          "none": 0,
+          "both_coverage": 1.0
+        },
+        "b3_b4": {
+          "mean_pp": 27.695,
+          "p95_pp": 49.25,
+          "max_pp": 55.337,
+          "both": 1854,
+          "single": 3,
+          "none": 0,
+          "both_coverage": 0.9984
+        },
+        "bal": {
+          "mean_pp": 26.107,
+          "p95_pp": 47.781,
+          "max_pp": 49.961,
+          "both": 1854,
+          "single": 3,
+          "none": 0,
+          "both_coverage": 0.9984
+        },
+        "lrb_t10": {
+          "mean_pp": 8.486,
+          "p95_pp": 9.862,
+          "max_pp": 35.581,
+          "both": 1854,
+          "single": 3,
+          "none": 0,
+          "both_coverage": 0.9984
+        },
+        "joint_nompc": {
+          "mean_pp": 7.816,
+          "p95_pp": 9.731,
+          "max_pp": 9.997,
+          "both": 1833,
+          "single": 24,
+          "none": 0,
+          "both_coverage": 0.9871
+        },
+        "joint": {
+          "mean_pp": 7.816,
+          "p95_pp": 9.731,
+          "max_pp": 9.997,
+          "both": 1833,
+          "single": 24,
+          "none": 0,
+          "both_coverage": 0.9871
+        }
+      }
+    },
+    "test": {
+      "_steps": 1979,
+      "steps": 1979,
+      "b1_energy_kwh": 1287212.7,
+      "b1_supply_m3": 14267041.3,
+      "service_eq_volume_m3": 14033065.7,
+      "b1_sec": 0.090223,
+      "b1_rule": {
+        "energy_kwh": 1287212.7,
+        "supply_m3": 14267041.3,
+        "sec": 0.090223,
+        "sec_reduction_pct": 0.0,
+        "saving_pct": 0.0,
+        "low_min": 990.0,
+        "low_reduction_pct": 0.0,
+        "supply_diff_pct": 0.0,
+        "gap_m3": 0.1,
+        "energy_saving_equalV_pct": 0.0
+      },
+      "b3_b4": {
+        "energy_kwh": 1231776.4,
+        "supply_m3": 14240033.8,
+        "sec": 0.086501,
+        "sec_reduction_pct": 4.125,
+        "saving_pct": 4.307,
+        "low_min": 345.0,
+        "low_reduction_pct": 65.152,
+        "supply_diff_pct": -0.189,
+        "gap_m3": 0.1,
+        "energy_saving_equalV_pct": 4.307
+      },
+      "bal": {
+        "energy_kwh": 1233657.9,
+        "supply_m3": 14240031.5,
+        "sec": 0.086633,
+        "sec_reduction_pct": 3.979,
+        "saving_pct": 4.161,
+        "low_min": 240.0,
+        "low_reduction_pct": 75.758,
+        "supply_diff_pct": -0.189,
+        "gap_m3": 0.0,
+        "energy_saving_equalV_pct": 4.161
+      },
+      "lrb_t10": {
+        "energy_kwh": 1245742.5,
+        "supply_m3": 14240031.5,
+        "sec": 0.087482,
+        "sec_reduction_pct": 3.038,
+        "saving_pct": 3.222,
+        "low_min": 240.0,
+        "low_reduction_pct": 75.758,
+        "supply_diff_pct": -0.189,
+        "gap_m3": 0.0,
+        "energy_saving_equalV_pct": 3.222
+      },
+      "joint_nompc": {
+        "energy_kwh": 1246517.8,
+        "supply_m3": 14240031.5,
+        "sec": 0.087536,
+        "sec_reduction_pct": 2.978,
+        "saving_pct": 3.161,
+        "low_min": 225.0,
+        "low_reduction_pct": 77.273,
+        "supply_diff_pct": -0.189,
+        "gap_m3": 0.0,
+        "energy_saving_equalV_pct": 3.161
+      },
+      "joint": {
+        "energy_kwh": 1247254.5,
+        "supply_m3": 14243631.5,
+        "sec": 0.087566,
+        "sec_reduction_pct": 2.945,
+        "saving_pct": 3.104,
+        "low_min": 270.0,
+        "low_reduction_pct": 72.727,
+        "supply_diff_pct": -0.164,
+        "gap_m3": 0.0,
+        "energy_saving_equalV_pct": 3.104
+      },
+      "_deviation": {
+        "b1_rule": {
+          "mean_pp": 19.526,
+          "p95_pp": 29.559,
+          "max_pp": 50.971,
+          "both": 1979,
+          "single": 0,
+          "none": 0,
+          "both_coverage": 1.0
+        },
+        "b3_b4": {
+          "mean_pp": 19.808,
+          "p95_pp": 29.577,
+          "max_pp": 50.971,
+          "both": 1950,
+          "single": 29,
+          "none": 0,
+          "both_coverage": 0.9853
+        },
+        "bal": {
+          "mean_pp": 18.278,
+          "p95_pp": 28.43,
+          "max_pp": 49.029,
+          "both": 1950,
+          "single": 29,
+          "none": 0,
+          "both_coverage": 0.9853
+        },
+        "lrb_t10": {
+          "mean_pp": 8.406,
+          "p95_pp": 9.837,
+          "max_pp": 10.0,
+          "both": 1950,
+          "single": 29,
+          "none": 0,
+          "both_coverage": 0.9853
+        },
+        "joint_nompc": {
+          "mean_pp": 7.627,
+          "p95_pp": 9.797,
+          "max_pp": 9.993,
+          "both": 1949,
+          "single": 30,
+          "none": 0,
+          "both_coverage": 0.9848
+        },
+        "joint": {
+          "mean_pp": 7.62,
+          "p95_pp": 9.797,
+          "max_pp": 9.993,
+          "both": 1952,
+          "single": 27,
+          "none": 0,
+          "both_coverage": 0.9864
+        }
+      }
+    }
+  },
+  "pooled": {
+    "_steps": 10793,
+    "steps": 10793,
+    "b1_energy_kwh": 6597956.7,
+    "b1_supply_m3": 65694218.6,
+    "service_eq_volume_m3": 62312805.6,
+    "b1_sec": 0.100434,
+    "b1_rule": {
+      "energy_kwh": 6597956.7,
+      "supply_m3": 65694218.6,
+      "sec": 0.100434,
+      "sec_reduction_pct": 0.0,
+      "saving_pct": 0.0,
+      "low_min": 72030.0,
+      "low_reduction_pct": 0.0,
+      "supply_diff_pct": 0.0,
+      "gap_m3": 1.3,
+      "energy_saving_equalV_pct": 0.0
+    },
+    "b3_b4": {
+      "energy_kwh": 6035071.4,
+      "supply_m3": 65107690.0,
+      "sec": 0.092694,
+      "sec_reduction_pct": 7.707,
+      "saving_pct": 8.531,
+      "low_min": 38460.0,
+      "low_reduction_pct": 46.606,
+      "supply_diff_pct": -0.893,
+      "gap_m3": 1.3,
+      "energy_saving_equalV_pct": 8.531
+    },
+    "bal": {
+      "energy_kwh": 6048881.4,
+      "supply_m3": 65107367.7,
+      "sec": 0.092906,
+      "sec_reduction_pct": 7.496,
+      "saving_pct": 8.322,
+      "low_min": 17295.0,
+      "low_reduction_pct": 75.989,
+      "supply_diff_pct": -0.893,
+      "gap_m3": 1.3,
+      "energy_saving_equalV_pct": 8.322
+    },
+    "lrb_t10": {
+      "energy_kwh": 6121618.2,
+      "supply_m3": 65108626.3,
+      "sec": 0.094022,
+      "sec_reduction_pct": 6.385,
+      "saving_pct": 7.219,
+      "low_min": 29460.0,
+      "low_reduction_pct": 59.1,
+      "supply_diff_pct": -0.891,
+      "gap_m3": 1.3,
+      "energy_saving_equalV_pct": 7.219
+    },
+    "joint_nompc": {
+      "energy_kwh": 6026246.7,
+      "supply_m3": 65107691.4,
+      "sec": 0.092558,
+      "sec_reduction_pct": 7.842,
+      "saving_pct": 8.665,
+      "low_min": 21780.0,
+      "low_reduction_pct": 69.763,
+      "supply_diff_pct": -0.893,
+      "gap_m3": 1.3,
+      "energy_saving_equalV_pct": 8.665
+    },
+    "joint": {
+      "energy_kwh": 6044053.1,
+      "supply_m3": 65221091.4,
+      "sec": 0.09267,
+      "sec_reduction_pct": 7.731,
+      "saving_pct": 8.395,
+      "low_min": 22740.0,
+      "low_reduction_pct": 68.43,
+      "supply_diff_pct": -0.72,
+      "gap_m3": 1.3,
+      "energy_saving_equalV_pct": 8.395
+    },
+    "_deviation": {
+      "b1_rule": {
+        "mean_pp": 20.753,
+        "p95_pp": 47.772,
+        "max_pp": 55.359,
+        "both": 10793,
+        "single": 0,
+        "none": 0,
+        "both_coverage": 1.0
+      },
+      "b3_b4": {
+        "mean_pp": 23.365,
+        "p95_pp": 48.297,
+        "max_pp": 55.359,
+        "both": 9474,
+        "single": 1319,
+        "none": 0,
+        "both_coverage": 0.8778
+      },
+      "bal": {
+        "mean_pp": 20.841,
+        "p95_pp": 46.066,
+        "max_pp": 49.962,
+        "both": 9475,
+        "single": 1318,
+        "none": 0,
+        "both_coverage": 0.8779
+      },
+      "lrb_t10": {
+        "mean_pp": 8.618,
+        "p95_pp": 9.902,
+        "max_pp": 35.581,
+        "both": 9475,
+        "single": 1318,
+        "none": 0,
+        "both_coverage": 0.8779
+      },
+      "joint_nompc": {
+        "mean_pp": 8.103,
+        "p95_pp": 9.864,
+        "max_pp": 9.999,
+        "both": 8962,
+        "single": 1831,
+        "none": 0,
+        "both_coverage": 0.8304
+      },
+      "joint": {
+        "mean_pp": 8.046,
+        "p95_pp": 9.862,
+        "max_pp": 9.999,
+        "both": 9026,
+        "single": 1767,
+        "none": 0,
+        "both_coverage": 0.8363
+      }
+    }
+  },
+  "sample_check": {
+    "dev": {
+      "six_no_mpc_hist": 6957,
+      "six_with_nompc": 6957,
+      "diff": 0,
+      "with_b3_lrb": 6953,
+      "cause": "10789 vs 10793 = 纳入 b3_lrb 后其 4 步不可行被剔除 (joint_nompc 不影响样本范围)"
+    },
+    "valid": {
+      "six_no_mpc_hist": 1857,
+      "six_with_nompc": 1857,
+      "diff": 0,
+      "with_b3_lrb": 1857,
+      "cause": "10789 vs 10793 = 纳入 b3_lrb 后其 4 步不可行被剔除 (joint_nompc 不影响样本范围)"
+    },
+    "test": {
+      "six_no_mpc_hist": 1979,
+      "six_with_nompc": 1979,
+      "diff": 0,
+      "with_b3_lrb": 1979,
+      "cause": "10789 vs 10793 = 纳入 b3_lrb 后其 4 步不可行被剔除 (joint_nompc 不影响样本范围)"
+    },
+    "pooled": {
+      "six_no_mpc_hist": 10793,
+      "six_with_nompc": 10793,
+      "diff": 0,
+      "with_b3_lrb": 10789,
+      "cause": "pooled: 6策略=10793; 纳入 b3_lrb 后=10789 → 差异 4 步由 b3_lrb 不可行造成; joint_nompc 不改变样本范围"
+    }
+  },
+  "workload": {
+    "dev": {
+      "n": 203041,
+      "mean": 420.3,
+      "p10": 245.9,
+      "p50": 487.7,
+      "p90": 545.3,
+      "max": 597.2,
+      "mean_ratio_to_cap": 0.781,
+      "bands": {
+        "low_<50%cap": 0.2457,
+        "mid_50-90%cap": 0.2447,
+        "high_>=90%cap": 0.5096,
+        "over_cap_>537.8": 0.131
+      },
+      "single_share": 0.1981,
+      "dual_share": 0.7701,
+      "off_share": 0.0318
+    },
+    "valid": {
+      "n": 27361,
+      "mean": 431.7,
+      "p10": 383.7,
+      "p50": 459.0,
+      "p90": 474.2,
+      "max": 495.8,
+      "mean_ratio_to_cap": 0.803,
+      "bands": {
+        "low_<50%cap": 0.0279,
+        "mid_50-90%cap": 0.9712,
+        "high_>=90%cap": 0.0009,
+        "over_cap_>537.8": 0.0
+      },
+      "single_share": 0.0166,
+      "dual_share": 0.9834,
+      "off_share": 0.0
+    },
+    "test": {
+      "n": 31681,
+      "mean": 472.0,
+      "p10": 455.9,
+      "p50": 478.8,
+      "p90": 499.6,
+      "max": 511.0,
+      "mean_ratio_to_cap": 0.878,
+      "bands": {
+        "low_<50%cap": 0.0191,
+        "mid_50-90%cap": 0.5482,
+        "high_>=90%cap": 0.4326,
+        "over_cap_>537.8": 0.0
+      },
+      "single_share": 0.0076,
+      "dual_share": 0.9826,
+      "off_share": 0.0098
+    }
+  },
+  "b1_baseline": {
+    "dev": {
+      "b1_sec": 0.106383,
+      "b1_energy_kwh": 4116797.9,
+      "b1_supply_m3": 38697831.0,
+      "b1_low_min": 69240.0,
+      "load_ratio_mean": 0.6895,
+      "load_ratio_p50": 0.5863,
+      "load_ratio_below_0.5_share": 0.3318,
+      "load_ratio_below_0.7_share": 0.5653
+    },
+    "valid": {
+      "b1_sec": 0.093795,
+      "b1_energy_kwh": 1193946.1,
+      "b1_supply_m3": 12729346.2,
+      "b1_low_min": 1800.0,
+      "load_ratio_mean": 0.8497,
+      "load_ratio_p50": 0.8524,
+      "load_ratio_below_0.5_share": 0.0323,
+      "load_ratio_below_0.7_share": 0.2038
+    },
+    "test": {
+      "b1_sec": 0.090223,
+      "b1_energy_kwh": 1287212.7,
+      "b1_supply_m3": 14267041.3,
+      "b1_low_min": 990.0,
+      "load_ratio_mean": 0.8937,
+      "load_ratio_p50": 0.8882,
+      "load_ratio_below_0.5_share": 0.0167,
+      "load_ratio_below_0.7_share": 0.0384
+    }
+  },
+  "band_contribution": {
+    "dev": {
+      "<268.9": {
+        "steps": 2975,
+        "obs_mean": 224.3,
+        "b1_rule": {
+          "E": 1565603.1,
+          "sec": 0.134166
+        },
+        "b3_b4": {
+          "E": 1262615.8,
+          "sec": 0.113627
+        },
+        "joint_nompc": {
+          "E": 1170444.2,
+          "sec": 0.105332
+        },
+        "joint": {
+          "E": 1187514.0,
+          "sec": 0.105822
+        },
+        "b3_vs_b1_sec_pct": 15.309,
+        "joint_vs_b3_E_pct": 5.948,
+        "nompc_vs_b3_E_pct": 7.3
+      },
+      "268.9-400": {
+        "steps": 1084,
+        "obs_mean": 364.0,
+        "b1_rule": {
+          "E": 666905.2,
+          "sec": 0.105377
+        },
+        "b3_b4": {
+          "E": 611037.1,
+          "sec": 0.096549
+        },
+        "joint_nompc": {
+          "E": 632967.8,
+          "sec": 0.100014
+        },
+        "joint": {
+          "E": 632967.8,
+          "sec": 0.100014
+        },
+        "b3_vs_b1_sec_pct": 8.378,
+        "joint_vs_b3_E_pct": -3.589,
+        "nompc_vs_b3_E_pct": -3.589
+      },
+      "400-480": {
+        "steps": 1563,
+        "obs_mean": 439.6,
+        "b1_rule": {
+          "E": 1006325.3,
+          "sec": 0.094346
+        },
+        "b3_b4": {
+          "E": 945832.9,
+          "sec": 0.088674
+        },
+        "joint_nompc": {
+          "E": 968480.4,
+          "sec": 0.090798
+        },
+        "joint": {
+          "E": 968480.4,
+          "sec": 0.090798
+        },
+        "b3_vs_b1_sec_pct": 6.012,
+        "joint_vs_b3_E_pct": -2.394,
+        "nompc_vs_b3_E_pct": -2.394
+      },
+      "480-537.8": {
+        "steps": 1335,
+        "obs_mean": 496.5,
+        "b1_rule": {
+          "E": 877964.3,
+          "sec": 0.087503
+        },
+        "b3_b4": {
+          "E": 855035.3,
+          "sec": 0.085217
+        },
+        "joint_nompc": {
+          "E": 859996.9,
+          "sec": 0.085712
+        },
+        "joint": {
+          "E": 859996.9,
+          "sec": 0.085712
+        },
+        "b3_vs_b1_sec_pct": 2.612,
+        "joint_vs_b3_E_pct": -0.58,
+        "nompc_vs_b3_E_pct": -0.58
+      },
+      ">537.8": {
+        "steps": 0
+      }
+    },
+    "valid": {
+      "<268.9": {
+        "steps": 46,
+        "obs_mean": 222.2,
+        "b1_rule": {
+          "E": 24917.3,
+          "sec": 0.127269
+        },
+        "b3_b4": {
+          "E": 23449.1,
+          "sec": 0.121241
+        },
+        "joint_nompc": {
+          "E": 19529.8,
+          "sec": 0.100977
+        },
+        "joint": {
+          "E": 19529.8,
+          "sec": 0.100977
+        },
+        "b3_vs_b1_sec_pct": 4.736,
+        "joint_vs_b3_E_pct": 16.714,
+        "nompc_vs_b3_E_pct": 16.714
+      },
+      "268.9-400": {
+        "steps": 453,
+        "obs_mean": 385.3,
+        "b1_rule": {
+          "E": 285288.4,
+          "sec": 0.10206
+        },
+        "b3_b4": {
+          "E": 259463.6,
+          "sec": 0.092821
+        },
+        "joint_nompc": {
+          "E": 269958.9,
+          "sec": 0.096576
+        },
+        "joint": {
+          "E": 269958.9,
+          "sec": 0.096576
+        },
+        "b3_vs_b1_sec_pct": 9.053,
+        "joint_vs_b3_E_pct": -4.045,
+        "nompc_vs_b3_E_pct": -4.045
+      },
+      "400-480": {
+        "steps": 1351,
+        "obs_mean": 458.0,
+        "b1_rule": {
+          "E": 879146.7,
+          "sec": 0.090763
+        },
+        "b3_b4": {
+          "E": 841403.3,
+          "sec": 0.086867
+        },
+        "joint_nompc": {
+          "E": 853858.6,
+          "sec": 0.088153
+        },
+        "joint": {
+          "E": 853858.6,
+          "sec": 0.088153
+        },
+        "b3_vs_b1_sec_pct": 4.292,
+        "joint_vs_b3_E_pct": -1.48,
+        "nompc_vs_b3_E_pct": -1.48
+      },
+      "480-537.8": {
+        "steps": 7,
+        "obs_mean": 481.5,
+        "b1_rule": {
+          "E": 4593.6,
+          "sec": 0.088145
+        },
+        "b3_b4": {
+          "E": 4458.0,
+          "sec": 0.085543
+        },
+        "joint_nompc": {
+          "E": 4492.3,
+          "sec": 0.086201
+        },
+        "joint": {
+          "E": 4492.3,
+          "sec": 0.086201
+        },
+        "b3_vs_b1_sec_pct": 2.952,
+        "joint_vs_b3_E_pct": -0.769,
+        "nompc_vs_b3_E_pct": -0.769
+      },
+      ">537.8": {
+        "steps": 0
+      }
+    },
+    "test": {
+      "<268.9": {
+        "steps": 34,
+        "obs_mean": 119.8,
+        "b1_rule": {
+          "E": 17920.0,
+          "sec": 0.131047
+        },
+        "b3_b4": {
+          "E": 10858.0,
+          "sec": 0.098945
+        },
+        "joint_nompc": {
+          "E": 10718.8,
+          "sec": 0.097677
+        },
+        "joint": {
+          "E": 11455.5,
+          "sec": 0.101074
+        },
+        "b3_vs_b1_sec_pct": 24.497,
+        "joint_vs_b3_E_pct": -5.503,
+        "nompc_vs_b3_E_pct": 1.282
+      },
+      "268.9-400": {
+        "steps": 10,
+        "obs_mean": 350.9,
+        "b1_rule": {
+          "E": 6186.0,
+          "sec": 0.102426
+        },
+        "b3_b4": {
+          "E": 5745.9,
+          "sec": 0.09514
+        },
+        "joint_nompc": {
+          "E": 5914.9,
+          "sec": 0.097938
+        },
+        "joint": {
+          "E": 5914.9,
+          "sec": 0.097938
+        },
+        "b3_vs_b1_sec_pct": 7.113,
+        "joint_vs_b3_E_pct": -2.941,
+        "nompc_vs_b3_E_pct": -2.941
+      },
+      "400-480": {
+        "steps": 988,
+        "obs_mean": 465.9,
+        "b1_rule": {
+          "E": 641013.7,
+          "sec": 0.091735
+        },
+        "b3_b4": {
+          "E": 610424.7,
+          "sec": 0.087358
+        },
+        "joint_nompc": {
+          "E": 621034.1,
+          "sec": 0.088876
+        },
+        "joint": {
+          "E": 621034.1,
+          "sec": 0.088876
+        },
+        "b3_vs_b1_sec_pct": 4.771,
+        "joint_vs_b3_E_pct": -1.738,
+        "nompc_vs_b3_E_pct": -1.738
+      },
+      "480-537.8": {
+        "steps": 947,
+        "obs_mean": 493.8,
+        "b1_rule": {
+          "E": 622093.1,
+          "sec": 0.087838
+        },
+        "b3_b4": {
+          "E": 604747.8,
+          "sec": 0.085389
+        },
+        "joint_nompc": {
+          "E": 608850.0,
+          "sec": 0.085968
+        },
+        "joint": {
+          "E": 608850.0,
+          "sec": 0.085968
+        },
+        "b3_vs_b1_sec_pct": 2.788,
+        "joint_vs_b3_E_pct": -0.678,
+        "nompc_vs_b3_E_pct": -0.678
+      },
+      ">537.8": {
+        "steps": 0
+      }
+    }
+  },
+  "constraints": {
+    "dev": {
+      "joint_vs_nompc_sec_pp": 0.163,
+      "note": "均衡约束代价用 pooled 的 b3 vs b3_lrb 估计 (见 pooled), MPC 压力项用 joint vs joint_nompc"
+    },
+    "valid": {
+      "joint_vs_nompc_sec_pp": 0.0,
+      "note": "均衡约束代价用 pooled 的 b3 vs b3_lrb 估计 (见 pooled), MPC 压力项用 joint vs joint_nompc"
+    },
+    "test": {
+      "joint_vs_nompc_sec_pp": 0.033,
+      "note": "均衡约束代价用 pooled 的 b3 vs b3_lrb 估计 (见 pooled), MPC 压力项用 joint vs joint_nompc"
+    },
+    "pooled": {
+      "b3_sec_red_pct": 7.698,
+      "b3_lrb_sec_red_pct": 6.359,
+      "balance_constraint_cost_pp": 1.34,
+      "joint_vs_nompc_pp": 0.112
+    }
+  },
+  "power_model": {
+    "dev": {
+      "n": 347071,
+      "MAE_kw": 50.3,
+      "bias_kw": -14.02,
+      "RMSE_kw": 68.74,
+      "flow_mean": 245.8,
+      "flow_p95": 280.9,
+      "extrap_share_gt268.9": 0.1645,
+      "measured_power_share_gt1600kw": 0.0
+    },
+    "valid": {
+      "n": 54171,
+      "MAE_kw": 43.32,
+      "bias_kw": 14.64,
+      "RMSE_kw": 66.19,
+      "flow_mean": 218.0,
+      "flow_p95": 240.4,
+      "extrap_share_gt268.9": 0.0,
+      "measured_power_share_gt1600kw": 0.0
+    },
+    "test": {
+      "n": 62478,
+      "MAE_kw": 30.63,
+      "bias_kw": -29.54,
+      "RMSE_kw": 38.75,
+      "flow_mean": 239.3,
+      "flow_p95": 252.8,
+      "extrap_share_gt268.9": 0.0,
+      "measured_power_share_gt1600kw": 0.0
+    }
+  },
+  "ideal_lower_bound": {
+    "dev": {
+      "ideal_energy": {
+        "E": 3292143.3,
+        "V_service_eq": 36175735.2,
+        "sec_service_eq": 0.091004,
+        "energy_saving_vs_b1_equalV_pct": 20.031,
+        "infeasible_steps": 0
+      },
+      "ideal_balanced": {
+        "E": 3346250.3,
+        "V_service_eq": 36175735.2,
+        "sec_service_eq": 0.0925,
+        "energy_saving_vs_b1_equalV_pct": 18.717,
+        "infeasible_steps": 0
+      },
+      "b1": {
+        "E": 4116797.9,
+        "V": 38697831.0,
+        "sec": 0.106383
+      },
+      "note": "模型下界; 忽略时序切换/爬坡/最短开停机; 用代理需求 obs; 非现场可达上限"
+    },
+    "valid": {
+      "ideal_energy": {
+        "E": 1090813.8,
+        "V_service_eq": 12104004.6,
+        "sec_service_eq": 0.09012,
+        "energy_saving_vs_b1_equalV_pct": 8.638,
+        "infeasible_steps": 0
+      },
+      "ideal_balanced": {
+        "E": 1119506.9,
+        "V_service_eq": 12104004.6,
+        "sec_service_eq": 0.092491,
+        "energy_saving_vs_b1_equalV_pct": 6.235,
+        "infeasible_steps": 0
+      },
+      "b1": {
+        "E": 1193946.1,
+        "V": 12729346.2,
+        "sec": 0.093795
+      },
+      "note": "模型下界; 忽略时序切换/爬坡/最短开停机; 用代理需求 obs; 非现场可达上限"
+    },
+    "test": {
+      "ideal_energy": {
+        "E": 1222565.1,
+        "V_service_eq": 14033065.7,
+        "sec_service_eq": 0.08712,
+        "energy_saving_vs_b1_equalV_pct": 5.022,
+        "infeasible_steps": 0
+      },
+      "ideal_balanced": {
+        "E": 1236935.2,
+        "V_service_eq": 14033065.7,
+        "sec_service_eq": 0.088144,
+        "energy_saving_vs_b1_equalV_pct": 3.906,
+        "infeasible_steps": 0
+      },
+      "b1": {
+        "E": 1287212.7,
+        "V": 14267041.3,
+        "sec": 0.090223
+      },
+      "note": "模型下界; 忽略时序切换/爬坡/最短开停机; 用代理需求 obs; 非现场可达上限"
+    }
+  }
+}

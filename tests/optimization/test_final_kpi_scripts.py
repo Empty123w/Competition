@@ -97,3 +97,19 @@ def test_pooled_joint_load_ratio_regression():
     assert m["all_within_limit"] is True
     assert m["pass_rate_both"] >= 0.99
     assert m["n_both"] > 0 and m["both_coverage"] < 1.0   # 存在单机样本, 覆盖率<1
+
+
+def test_joint_nompc_window_sec_regression():
+    """真实历史账本回归: joint_nompc 分窗口 SEC 改善 (统一六策略 service 口径)。"""
+    import final_test_energy_diagnosis as TED
+    FIN = ROOT / "analysis/reports/b/final"
+    exp = {"dev": 10.49, "valid": 3.844, "test": 2.978}
+    for w, e in exp.items():
+        df = pd.read_csv(FIN / f"backtest_{w}_ledger.csv")
+        g = df.loc[TED._scope(df, TED.STRATS)]
+        b = TED._block(g)
+        assert abs(b["joint_nompc"]["sec_reduction_pct"] - e) < 0.05, (w, b["joint_nompc"]["sec_reduction_pct"])
+        assert b["joint_nompc"]["low_reduction_pct"] is not None
+    # 统一口径样本数 (纳入 joint_nompc 不缩小样本)
+    df = pd.read_csv(FIN / "backtest_test_ledger.csv")
+    assert int(TED._scope(df, TED.STRATS).sum()) == int(TED._scope(df, TED.S6_OLD).sum())
