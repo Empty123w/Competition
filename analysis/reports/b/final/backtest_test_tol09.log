@@ -1,0 +1,6 @@
+[start] window=test n=2113
+[ckpt] 500/2113 elapsed=43s
+[ckpt] 1000/2113 elapsed=87s
+[ckpt] 1500/2113 elapsed=130s
+[ckpt] 2000/2113 elapsed=174s
+[ckpt] 2113/2113 elapsed=184s

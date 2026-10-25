@@ -1,0 +1,70 @@
+{
+  "constraint": {
+    "where": "optimization/unit_commitment.py: best_allocation (枚举内 abs(f1-f2) <= spread_tol*RATED -> continue)",
+    "type": "对**指令流量**的硬约束 (不是软惩罚)",
+    "internal_interpretation": "|λ4-λ5| <= 10pp = 赛题 ±10% 的内部解释 (非官方确认公式)"
+  },
+  "flow_precision": {
+    "4#": {
+      "min_nonzero_step": null,
+      "is_integer": true,
+      "two_decimals": true
+    },
+    "5#": {
+      "min_nonzero_step": null,
+      "is_integer": true,
+      "two_decimals": true
+    }
+  },
+  "station_vs_device_sum": {
+    "n": 217189,
+    "mean_m3min": 0.0,
+    "std_m3min": 0.0,
+    "p50": 0.0,
+    "p05": -0.0,
+    "p95": 0.0,
+    "abs_p95": 0.0,
+    "note": "含真实厂用气/泄漏/其它用户与仪表差异, 不能单独归因于流量计测量误差"
+  },
+  "steady_repeatability": {
+    "n": 201762,
+    "std_df4_m3min": 0.608,
+    "std_df5_m3min": 0.754,
+    "note": "相邻样本差分, 含控制抖动与测量噪声, 为上界"
+  },
+  "constraint_saturation": {
+    "dev": {
+      "both_steps": 8598,
+      "max_pp": 9.999,
+      "share_gt_9.5pp": 0.1617,
+      "share_gt_9.9pp": 0.0322,
+      "share_gt_9.0pp": 0.2153
+    },
+    "valid": {
+      "both_steps": 1881,
+      "max_pp": 9.997,
+      "share_gt_9.5pp": 0.0851,
+      "share_gt_9.9pp": 0.0175,
+      "share_gt_9.0pp": 0.1239
+    },
+    "test": {
+      "both_steps": 2073,
+      "max_pp": 9.993,
+      "share_gt_9.5pp": 0.0907,
+      "share_gt_9.9pp": 0.0241,
+      "share_gt_9.0pp": 0.1134
+    }
+  },
+  "to_pp": {
+    "residual_std_pp": 0.0,
+    "residual_absp95_pp": 0.0,
+    "steady_df4_pp": 0.32,
+    "formula": "sigma_D(pp) = sqrt(2)*sigma_flow(m3/min)/268.9*100"
+  },
+  "not_estimable": [
+    "指令-执行跟踪误差: 历史数据无(指令流量, 实际流量)配对, 无法估计执行误差",
+    "单一流量计无冗余/无标定记录: 无法分离测量误差与真实工况波动",
+    "B2 功率模型误差映射到流量: 现有残差为功率(kW)而非流量, 不能直接给出 pp 余量",
+    "回测按指令精确执行: 其 D 为理想(无执行误差)值, 不能作为现场 D 的上界"
+  ]
+}

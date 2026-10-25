@@ -6,6 +6,7 @@
 """
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -113,3 +114,15 @@ def test_joint_nompc_window_sec_regression():
     # 统一口径样本数 (纳入 joint_nompc 不缩小样本)
     df = pd.read_csv(FIN / "backtest_test_ledger.csv")
     assert int(TED._scope(df, TED.STRATS).sum()) == int(TED._scope(df, TED.S6_OLD).sum())
+
+
+def test_loadratio_robustness_regression():
+    """稳健性对照: 9pp 版最大偏离=9.0pp; 10pp 版<=10pp; 9pp 版仍满足能效/低负荷。"""
+    import final_loadratio_robustness as FLB
+    rep = json.loads((ROOT / "analysis/reports/b/final/loadratio_robustness.json").read_text(encoding="utf-8"))
+    v10 = rep["pooled"]["v10"]; v09 = rep["pooled"]["v09"]
+    assert abs(v09["deviation_max_pp"] - 9.0) < 0.02
+    assert v10["deviation_max_pp"] <= 10.0 + 1e-6
+    assert v09["sec_reduction_pct"] >= 6.0
+    assert v09["low_reduction_pct"] >= 60.0
+    assert v09["infeasible_steps"] == 0 and v09["blocked_steps"] == 0

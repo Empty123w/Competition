@@ -47,10 +47,11 @@ PRESETS = {
 }
 
 
-def _weights(kind, preset="full"):
+def _weights(kind, preset="full", tol=None):
     if kind == "joint_nompc":
         return JD.JointWeights(w_energy=1.0, w_switch=2.0, w_short=800.0,
-                               balance_mode="spread", spread_tol=0.10,
+                               balance_mode="spread",
+                               spread_tol=(0.10 if tol is None else float(tol)),
                                w_low=1.5, w_imbalance=40.0, w_pressure=0.0, w_center=0.0,
                                horizon=1)
     if kind == "joint":
@@ -85,7 +86,7 @@ def _load_bundle(window):
     return bd
 
 
-def run(window, start, n, logpath, preset="full", basis="pred"):
+def run(window, start, n, logpath, preset="full", basis="pred", tol=None, only=None):
     base = B1.load_config(B1.DEFAULT_CONFIG); con = C.DispatchConstraints.from_config(base)
     oc = load_optimization_config(); model = oc["paths"]["power_model"]
     dev, st = PIPE.load_processed()
@@ -94,12 +95,13 @@ def run(window, start, n, logpath, preset="full", basis="pred"):
         bd = bd.iloc[start:start + n].reset_index(drop=True) if n else bd.iloc[start:].reset_index(drop=True)
     cache = {}
     simp = CL.SimParams()
-    W = {s: _weights(s, preset) for s in ("joint", "mpc_hist", "joint_nompc")}
+    W = {s: _weights(s, preset, tol) for s in ("joint", "mpc_hist", "joint_nompc")}
+    strats = tuple(only) if only else STRATEGIES
     init = PIPE.snapshot_from_frames(dev, st, bd["t"].iloc[0])
     sim = {s: {d.device_id: {"running": bool(d.running), "flow": d.flow_m3_min} for d in init.devices}
-           for s in STRATEGIES}
-    stt = {s: C.PolicyState() for s in STRATEGIES}
-    rows = []; rt = {s: [] for s in STRATEGIES}; fb = {s: 0 for s in STRATEGIES}
+           for s in strats}
+    stt = {s: C.PolicyState() for s in strats}
+    rows = []; rt = {s: [] for s in strats}; fb = {s: 0 for s in strats}
     t0 = time.perf_counter()
     log = open(logpath, "a"); log.write(f"[start] window={window} n={len(bd)}\n"); log.flush()
     for i, (_, sr) in enumerate(bd.iterrows()):
@@ -107,7 +109,7 @@ def run(window, start, n, logpath, preset="full", basis="pred"):
         hist = PIPE.snapshot_from_frames(dev, st, t)
         p_now = float(hist.header_pressure_mpa) if hist.header_pressure_mpa is not None else 0.60
         r = {"t": ts, "obs": sr["obs"]}
-        for s in STRATEGIES:
+        for s in strats:
             snap = MS._sim_snapshot(hist, sim[s], ts)
             caps = CONS.build_capabilities(con, snap, [], stt[s])
             cur_on = {d for d in ("4#", "5#") if sim[s][d]["running"]}
@@ -182,16 +184,16 @@ def run(window, start, n, logpath, preset="full", basis="pred"):
         if (i + 1) % 500 == 0 or i == len(bd) - 1:
             log.write(f"[ckpt] {i+1}/{len(bd)} elapsed={time.perf_counter()-t0:.0f}s\n"); log.flush()
     log.close()
-    return pd.DataFrame(rows), rt, fb
+    return pd.DataFrame(rows), rt, fb, strats
 
 
-def kpis(df):
+def kpis(df, strats=STRATEGIES):
     dt_h = STEP / 60.0
-    common = df[[f"{s}_status" for s in STRATEGIES]].eq("success").all(axis=1)
-    for s in STRATEGIES:
+    common = df[[f"{s}_status" for s in strats]].eq("success").all(axis=1)
+    for s in strats:
         common = common & df[f"{s}_exec"]
     svc = common.copy()
-    for s in STRATEGIES:
+    for s in strats:
         svc = svc & (df[f"{s}_flow"].fillna(0) >= df["obs"] - 0.05)
     out = {"n_total": int(len(df)), "common_steps": int(common.sum()), "service_steps": int(svc.sum()),
            "scopes": {}}
@@ -203,7 +205,7 @@ def kpis(df):
         b1low = float((((g["b1_rule_f4"] > 0) & (g["b1_rule_f4"] / RATED < 0.5)).sum()
                        + ((g["b1_rule_f5"] > 0) & (g["b1_rule_f5"] / RATED < 0.5)).sum()) * STEP)
         blk = {"steps": int(len(g))}
-        for s in STRATEGIES:
+        for s in strats:
             E = float(g[f"{s}_power"].fillna(0).sum()) * dt_h
             V = float(g[f"{s}_flow"].fillna(0).sum()) * STEP
             sec = E / V if V else None
@@ -232,20 +234,24 @@ def main():
     ap.add_argument("--n", type=int, default=0)
     ap.add_argument("--preset", default="full")
     ap.add_argument("--basis", default="pred")
+    ap.add_argument("--tol", type=float, default=None)
+    ap.add_argument("--only", default="")
+    ap.add_argument("--tag", default="")
     a = ap.parse_args()
     (ROOT / "analysis/reports/b/final").mkdir(parents=True, exist_ok=True)
-    logp = str(ROOT / f"analysis/reports/b/final/backtest_{a.window}.log")
-    df, rt, fb = run(a.window, a.start, a.n, logp, a.preset, a.basis)
-    df.to_csv(ROOT / f"analysis/reports/b/final/backtest_{a.window}_ledger.csv", index=False)
-    rep = {"window": a.window, "n": int(len(df)), "strategies": list(STRATEGIES),
-           "kpi": kpis(df),
+    only = tuple(a.only.split(",")) if a.only else None
+    logp = str(ROOT / f"analysis/reports/b/final/backtest_{a.window}{a.tag}.log")
+    df, rt, fb, strats = run(a.window, a.start, a.n, logp, a.preset, a.basis, a.tol, only)
+    df.to_csv(ROOT / f"analysis/reports/b/final/backtest_{a.window}{a.tag}_ledger.csv", index=False)
+    rep = {"window": a.window, "n": int(len(df)), "strategies": list(strats),
+           "kpi": kpis(df, strats),
            "runtime_ms": {s: {"p50": round(float(np.percentile(rt[s], 50)) * 1000, 2),
                               "p95": round(float(np.percentile(rt[s], 95)) * 1000, 2),
-                              "max": round(float(np.max(rt[s])) * 1000, 2)} for s in STRATEGIES},
-           "fallback": {s: int(fb[s]) for s in STRATEGIES}}
-    (ROOT / f"analysis/reports/b/final/backtest_{a.window}.json").write_text(
+                              "max": round(float(np.max(rt[s])) * 1000, 2)} for s in strats},
+           "fallback": {s: int(fb[s]) for s in strats}}
+    (ROOT / f"analysis/reports/b/final/backtest_{a.window}{a.tag}.json").write_text(
         json.dumps(rep, ensure_ascii=False, indent=2), encoding="utf-8")
-    print(json.dumps({k: rep["kpi"]["scopes"]["service"][k] for k in STRATEGIES}, ensure_ascii=False, indent=1))
+    print(json.dumps({k: rep["kpi"]["scopes"]["service"][k] for k in strats}, ensure_ascii=False, indent=1))
     print("runtime", json.dumps(rep["runtime_ms"], ensure_ascii=False), "fb", rep["fallback"])
 
 
