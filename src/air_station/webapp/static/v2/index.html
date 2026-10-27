@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>空压站智能调度平台 · 前端 v2（对接 C 后端 API）</title>
+<link rel="stylesheet" href="/static/v2/styles.css?v=1" />
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">AS</div>
+      <div>
+        <div class="brand-title">空压站智能调度</div>
+        <div class="brand-sub">前端 v2 · 对接 C 后端 API</div>
+      </div>
+    </div>
+    <nav id="nav">
+      <a class="nav-item active" data-target="system">系统总览</a>
+      <a class="nav-item" data-target="scada">实时监控</a>
+      <a class="nav-item" data-target="models">预测与诊断</a>
+      <a class="nav-item" data-target="dispatch">智能调度</a>
+      <a class="nav-item" data-target="control">控制执行</a>
+      <a class="nav-item" data-target="agent">Agent 交互</a>
+      <a class="nav-item" data-target="knowledge">知识库</a>
+      <a class="nav-item" data-target="metrics">指标与验收</a>
+    </nav>
+    <div class="sidebar-foot"><span class="dot" id="be-dot"></span><span id="be-text">后端连接检测中…</span></div>
+  </aside>
+
+  <main class="content">
+    <header class="topbar">
+      <div>
+        <h1 id="page-title">系统总览</h1>
+        <div class="subtitle" id="page-sub">通过 /capi 同源调用 C 模块后端 API</div>
+      </div>
+      <div class="topbar-badges">
+        <span class="badge badge-blue">forecast / health / rul / surge</span>
+        <span class="badge badge-green">dispatch / control / agent</span>
+        <span class="badge badge-amber">simulation_candidate_only</span>
+      </div>
+    </header>
+
+    <!-- 系统总览 -->
+    <section class="panel active" id="system">
+      <div id="sys-kpis" class="kpi-grid"></div>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">站级实时快照（模拟 SCADA）</div><div id="sys-scada"></div></div>
+        <div class="card"><div class="card-title">健康 / 剩余寿命 / 喘振</div><div id="sys-health"></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">平台能力</div><div id="sys-info"></div></div>
+        <div class="card"><div class="card-title">知识库状态</div><div id="sys-kb"></div></div>
+      </div>
+    </section>
+
+    <!-- 实时监控 -->
+    <section class="panel" id="scada">
+      <div class="card">
+        <div class="card-title">机组实时状态
+          <span class="tools">
+            <label class="switch"><input type="checkbox" id="sc-live" checked /> 自动刷新（3s）</label>
+            <span class="muted" id="sc-time"></span>
+          </span>
+        </div>
+        <div class="grid-2" id="sc-cards"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">单机历史
+          <span class="tools">
+            <label>设备 <select id="sc-dev"><option>4#</option><option>5#</option></select></label>
+            <label>时长 <select id="sc-min"><option value="60">60 分钟</option><option value="180">180 分钟</option><option value="720">12 小时</option></select></label>
+            <button class="btn btn-sm" id="sc-load">加载</button>
+          </span>
+        </div>
+        <div class="chart" id="sc-chart"></div>
+      </div>
+    </section>
+
+    <!-- 预测与诊断 -->
+    <section class="panel" id="models">
+      <div class="card">
+        <div class="card-title">模型服务
+          <span class="tools">
+            <button class="btn btn-sm" data-m="forecast">用气负荷预测</button>
+            <button class="btn btn-sm" data-m="health">健康诊断</button>
+            <button class="btn btn-sm" data-m="rul">剩余寿命 RUL</button>
+            <button class="btn btn-sm" data-m="surge">喘振风险评估</button>
+          </span>
+        </div>
+        <div class="hint" id="md-hint">选择上方服务发起调用；结果来自 C 后端 <span class="mono">/api/forecast · /api/health · /api/rul · /api/surge</span>。</div>
+        <div id="md-result"></div>
+      </div>
+    </section>
+
+    <!-- 智能调度 -->
+    <section class="panel" id="dispatch">
+      <div class="card">
+        <div class="card-title">调度求解
+          <span class="tools">
+            <label>模式 <select id="dp-mode">
+              <option value="b3">b3 能效优先</option>
+              <option value="balanced">balanced 低负荷优先</option>
+              <option value="load_balanced">load_balanced 加载率均衡</option>
+              <option value="joint_nompc">joint_nompc 多目标</option>
+            </select></label>
+            <label>需求 m³/min <input id="dp-demand" type="number" placeholder="留空自动取预测" style="width:120px" /></label>
+            <label class="inline"><input type="checkbox" id="dp-persist" /> 落库</label>
+            <button class="btn btn-sm" id="dp-run">求解</button>
+          </span>
+        </div>
+        <div id="dp-result"></div>
+      </div>
+      <div class="card"><div class="card-title">历史方案</div><div id="dp-plans"></div></div>
+    </section>
+
+    <!-- 控制执行 -->
+    <section class="panel" id="control">
+      <div class="warn-banner">控制能力仅作用于模拟 PLC / SCADA / EAM；执行整份方案前需人工确认。</div>
+      <div class="card">
+        <div class="card-title">控制指令
+          <span class="tools">
+            <label>动作 <select id="ct-action">
+              <option value="scada_query">scada_query 实时查询</option>
+              <option value="plc_command">plc_command 下发负载</option>
+              <option value="execute_plan">execute_plan 执行方案</option>
+              <option value="eam_maintenance">eam_maintenance 维保</option>
+              <option value="work_order">work_order 工单</option>
+              <option value="command_status">command_status 指令状态</option>
+            </select></label>
+          </span>
+        </div>
+        <div class="grid-3">
+          <label class="field">设备 <input id="ct-dev" value="4#" /></label>
+          <label class="field">目标流量 m³/min <input id="ct-flow" type="number" value="240" /></label>
+          <label class="field">指令 ID（状态查询） <input id="ct-cid" placeholder="cmd id" /></label>
+        </div>
+        <div style="margin-top:10px"><button class="btn btn-sm" id="ct-run">提交</button>
+          <span class="muted" id="ct-hint">execute_plan 使用“智能调度”最近一次方案；需要人工确认后执行。</span></div>
+        <div id="ct-result"></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">维保计划（模拟 EAM）</div>
+          <span class="tools"><label>设备 <select id="eam-dev"><option>4#</option><option>5#</option></select></label><button class="btn btn-sm" id="eam-load">查询</button></span>
+          <div id="eam-result"></div>
+        </div>
+        <div class="card"><div class="card-title">工单
+          <span class="tools"><label>设备 <select id="wo-dev"><option>4#</option><option>5#</option></select></label>
+          <button class="btn btn-sm" id="wo-create">创建工单</button><button class="btn btn-sm btn-ghost" id="wo-reload">刷新</button></span>
+          <div id="wo-result"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Agent 交互 -->
+    <section class="panel" id="agent">
+      <div class="card">
+        <div class="card-title">自然语言交互
+          <span class="tools"><label class="inline"><input type="checkbox" id="ag-execute" /> 允许执行控制</label>
+          <span class="muted" id="ag-session"></span></span>
+        </div>
+        <div class="quick" id="ag-quick"></div>
+        <div class="chat" id="ag-chat"></div>
+        <div class="chat-input">
+          <input id="ag-input" placeholder="例如：负荷预测使用什么模型？ / 3号机组振动偏高，请优化调度" />
+          <button class="btn" id="ag-send">发送</button>
+        </div>
+      </div>
+      <div class="card"><div class="card-title">Agent 回答与链路</div><div id="ag-result"></div></div>
+    </section>
+
+    <!-- 知识库 -->
+    <section class="panel" id="knowledge">
+      <div class="card">
+        <div class="card-title">知识库 <span class="tools"><span id="kb-badge"></span></span></div>
+        <div id="kb-statusbar" class="kb-statusbar">加载中…</div>
+        <div class="kb-search">
+          <input id="kb-input" placeholder="请输入问题，例如：负荷预测模型的输入输出是什么？" />
+          <button class="btn" id="kb-ask">提问</button>
+          <button class="btn btn-ghost" id="kb-search-btn">仅检索</button>
+        </div>
+        <div class="kb-cats" id="kb-cats"></div>
+      </div>
+      <div class="card"><div class="card-title">回答</div><div id="kb-answer"></div></div>
+    </section>
+
+    <!-- 指标与验收 -->
+    <section class="panel" id="metrics">
+      <div class="card"><div class="card-title">预测指标（来自 C 后端）</div><div id="mt-forecast"></div></div>
+      <div class="card"><div class="card-title">最新调度节能对比</div><div id="mt-dispatch"></div></div>
+    </section>
+  </main>
+</div>
+
+<div id="loading" class="loading hidden"><div class="spinner"></div><span>请求中…</span></div>
+<script src="/static/charts.js"></script>
+<script src="/static/v2/app.js?v=1"></script>
+</body>
+</html>

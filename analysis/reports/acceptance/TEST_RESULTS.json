@@ -1,0 +1,739 @@
+{
+  "meta": {
+    "generated_at": "2026-10-23 15:09:11",
+    "test_set": "2026-08-21 ~ 2026-09-12",
+    "price_cny_per_kwh": 0.65
+  },
+  "forecast": {
+    "label": "实测（冻结测试集，离线评估）",
+    "test_set": "2026-08-21 ~ 2026-09-12",
+    "metrics": {
+      "15min": {
+        "n": 31666,
+        "MAPE": 1.133,
+        "RMSE": 18.975,
+        "MAE": 4.996,
+        "WAPE": 1.059,
+        "coverage_90": 0.9647
+      },
+      "30min": {
+        "n": 31651,
+        "MAPE": 1.575,
+        "RMSE": 22.611,
+        "MAE": 7.038,
+        "WAPE": 1.491,
+        "coverage_90": 0.9464
+      },
+      "60min": {
+        "n": 31621,
+        "MAPE": 2.046,
+        "RMSE": 28.554,
+        "MAE": 10.196,
+        "WAPE": 2.16,
+        "coverage_90": 0.9296
+      }
+    },
+    "frozen_reference": {
+      "15min_MAPE": 1.13,
+      "30min_MAPE": 1.57,
+      "60min_MAPE": 2.05
+    }
+  },
+  "dispatch_latency": {
+    "label": "实测（测试集抽样，算法入口耗时）",
+    "sample_times": 151,
+    "by_mode": {
+      "b3": {
+        "n": 151,
+        "p50_ms": 35.22,
+        "p95_ms": 45.31,
+        "max_ms": 103.32,
+        "success": 149,
+        "fallback": 2,
+        "target_s": 30.0,
+        "meet_target": true
+      },
+      "balanced": {
+        "n": 151,
+        "p50_ms": 16.2,
+        "p95_ms": 73.53,
+        "max_ms": 272.79,
+        "success": 149,
+        "fallback": 2,
+        "target_s": 30.0,
+        "meet_target": true
+      },
+      "load_balanced": {
+        "n": 151,
+        "p50_ms": 15.0,
+        "p95_ms": 22.04,
+        "max_ms": 31.95,
+        "success": 149,
+        "fallback": 2,
+        "target_s": 30.0,
+        "meet_target": true
+      }
+    }
+  },
+  "energy": {
+    "label": "仿真验证（离线模型估计；同供气 service_equiv 口径）",
+    "scope": "service_equiv",
+    "segments": {
+      "b3_b4": {
+        "name": "能效优先 (B3)",
+        "SEC": 0.086501,
+        "sec_reduction_pct": 4.1253,
+        "saving_same_supply_pct": 4.3068,
+        "cost_b1_cny": 836688.3,
+        "cost_x_cny": 800653.8,
+        "cost_reduction_pct": 4.3068
+      },
+      "bal": {
+        "name": "低负荷优先",
+        "SEC": 0.086633,
+        "sec_reduction_pct": 3.9793,
+        "saving_same_supply_pct": 4.1611,
+        "cost_b1_cny": 836688.3,
+        "cost_x_cny": 801873.1,
+        "cost_reduction_pct": 4.1611
+      },
+      "lrb_t10": {
+        "name": "加载率均衡",
+        "SEC": 0.087481,
+        "sec_reduction_pct": 3.0389,
+        "saving_same_supply_pct": 3.2225,
+        "cost_b1_cny": 836688.3,
+        "cost_x_cny": 809726.3,
+        "cost_reduction_pct": 3.2225
+      }
+    },
+    "reference_full_scope": {
+      "b1_rule": {
+        "energy_kwh": 1368306.42,
+        "supply_m3": 15141313.2,
+        "sec": 0.090369,
+        "saving_pct": 0.0,
+        "sec_reduction_pct": 0.0,
+        "gap_m3": 80253.12,
+        "low_min": 1380.0,
+        "low_reduction_pct": 0.0,
+        "supply_diff_vs_b1_m3": 0.0
+      },
+      "b3_b4": {
+        "energy_kwh": 1307259.63,
+        "supply_m3": 15100634.7,
+        "sec": 0.08657,
+        "saving_pct": 4.4615,
+        "sec_reduction_pct": 4.2041,
+        "gap_m3": 84924.27,
+        "low_min": 540.0,
+        "low_reduction_pct": 60.8696,
+        "supply_diff_vs_b1_m3": -40678.5
+      },
+      "bal": {
+        "energy_kwh": 1285350.02,
+        "supply_m3": 14818155.5,
+        "sec": 0.086742,
+        "saving_pct": 6.0627,
+        "sec_reduction_pct": 4.0141,
+        "gap_m3": 361730.12,
+        "low_min": 330.0,
+        "low_reduction_pct": 76.087,
+        "supply_diff_vs_b1_m3": -323157.7
+      },
+      "lrb_t10": {
+        "energy_kwh": 1298160.37,
+        "supply_m3": 14818280.7,
+        "sec": 0.087605,
+        "saving_pct": 5.1265,
+        "sec_reduction_pct": 3.0583,
+        "gap_m3": 361622.43,
+        "low_min": 345.0,
+        "low_reduction_pct": 75.0,
+        "supply_diff_vs_b1_m3": -323032.5
+      }
+    },
+    "price_cny_per_kwh": 0.65
+  },
+  "pressure": {
+    "historical": {
+      "label": "实测（压力合格带为假设，非官方）",
+      "within_reference_band_share": 0.6545,
+      "reference_band_mpa": [
+        0.55,
+        0.66
+      ],
+      "pressure_std_mpa": 0.04459
+    },
+    "simulation": {
+      "label": "仿真验证（闭环工程假设）",
+      "scenarios": {
+        "normal": {
+          "compliance_b1": 1.0,
+          "compliance_b3": 1.0,
+          "std_b1": 0.00613,
+          "std_b3": 0.00613,
+          "std_reduction_pct": 0.0
+        },
+        "low": {
+          "compliance_b1": 0.8472,
+          "compliance_b3": 1.0,
+          "std_b1": 0.035,
+          "std_b3": 0.00391,
+          "std_reduction_pct": 88.829
+        },
+        "peak": {
+          "compliance_b1": 0.2639,
+          "compliance_b3": 0.2639,
+          "std_b1": 0.09194,
+          "std_b3": 0.09194,
+          "std_reduction_pct": 0.0
+        },
+        "step": {
+          "compliance_b1": 0.6215,
+          "compliance_b3": 0.6215,
+          "std_b1": 0.09202,
+          "std_b3": 0.09202,
+          "std_reduction_pct": 0.0
+        },
+        "fault": {
+          "compliance_b1": 1.0,
+          "compliance_b3": 0.6667,
+          "std_b1": 0.00613,
+          "std_b3": 0.0864,
+          "std_reduction_pct": -1309.462
+        }
+      }
+    }
+  },
+  "load_ratio": {
+    "label": "仿真验证（离线模型估计）",
+    "definition": {
+      "D1": "相对额定 λ*=1.0 ±10% (单机统计)",
+      "D2": "相对效率平台下界 λ*(4#=0.8537,5#=0.9381) ±10%",
+      "D3": "机组间 |λ4-λ5|<=0.10 (pp)",
+      "official_status": "官方未给数学定义 (待确认)"
+    },
+    "segments_test": {
+      "paired_steps": 2063,
+      "b1_rule": {
+        "D1_meet_ratio": 0.4898,
+        "D2_meet_ratio": 0.1655,
+        "D3_within10pp_ratio": 0.017,
+        "D3_spread_mean": 0.197
+      },
+      "b3_b4": {
+        "D1_meet_ratio": 0.4968,
+        "D2_meet_ratio": 0.8306,
+        "D3_within10pp_ratio": 0.0005,
+        "D3_spread_mean": 0.2003
+      },
+      "bal": {
+        "D1_meet_ratio": 0.5005,
+        "D2_meet_ratio": 0.8649,
+        "D3_within10pp_ratio": 0.0429,
+        "D3_spread_mean": 0.1847
+      },
+      "lrb_t10": {
+        "D1_meet_ratio": 0.4819,
+        "D2_meet_ratio": 0.9878,
+        "D3_within10pp_ratio": 0.999,
+        "D3_spread_mean": 0.0842
+      }
+    }
+  },
+  "switches": {
+    "label": "仿真策略为模型估计；观测值为实测遥测",
+    "simulated_switches": {
+      "b1_rule": 8,
+      "b3_b4": 18,
+      "bal": 78,
+      "lrb_t10": 78
+    },
+    "observed_switches": {
+      "4#": 2,
+      "5#": 2
+    },
+    "observed_total": 4
+  },
+  "low_load": {
+    "label": "仿真验证（离线模型估计，λ<0.5 的运行机分钟）",
+    "strategies": {
+      "b1_rule": {
+        "low_min": 1380.0,
+        "low_reduction_pct": 0.0
+      },
+      "b3_b4": {
+        "low_min": 540.0,
+        "low_reduction_pct": 60.8696
+      },
+      "bal": {
+        "low_min": 330.0,
+        "low_reduction_pct": 76.087
+      },
+      "lrb_t10": {
+        "low_min": 345.0,
+        "low_reduction_pct": 75.0
+      }
+    }
+  },
+  "anomaly_warning": {
+    "label": "无法验证（缺少真实故障标签）",
+    "status": "not_provable",
+    "reason": "故障码 26 为弱标签且两台设备事件高度同步，疑似站级共因；弱标签分离度为负，无法据此计算准确率/召回率/误报率。",
+    "evidence": {
+      "4#": {
+        "separation": -6.09,
+        "anomaly_rate": 0.0742
+      },
+      "5#": {
+        "separation": -7.07,
+        "anomaly_rate": 0.0622
+      }
+    },
+    "precision": null,
+    "recall": null,
+    "false_positive_rate": null,
+    "lead_time_min": null
+  },
+  "surge": {
+    "label": "无法验证（无真实喘振标签）",
+    "status": "not_provable",
+    "reason": "数据无真实喘振正例标签 -> 误报/漏报/真实提前量不可计算",
+    "boundary_type": "proxy (历史运行点包络, 非真实喘振线)",
+    "boundary_version": "surge-proxy-v0.1",
+    "valid_stats": {
+      "4#": {
+        "minutes": 29923,
+        "level_minutes": {
+          "low": 29899,
+          "medium": 0,
+          "high": 5,
+          "unknown": 19
+        },
+        "level_pct": {
+          "low": 99.92,
+          "medium": 0.0,
+          "high": 0.017,
+          "unknown": 0.063
+        },
+        "proxy_events": 5,
+        "proxy_high_events": 5,
+        "proxy_medium_events": 0,
+        "blocked_proxy_steps": 24,
+        "proxy_median_medium_to_high_lead_min": null,
+        "lead_pairs": 0
+      },
+      "5#": {
+        "minutes": 29694,
+        "level_minutes": {
+          "low": 29640,
+          "medium": 11,
+          "high": 38,
+          "unknown": 5
+        },
+        "level_pct": {
+          "low": 99.818,
+          "medium": 0.037,
+          "high": 0.128,
+          "unknown": 0.017
+        },
+        "proxy_events": 16,
+        "proxy_high_events": 12,
+        "proxy_medium_events": 4,
+        "blocked_proxy_steps": 43,
+        "proxy_median_medium_to_high_lead_min": null,
+        "lead_pairs": 0
+      }
+    },
+    "accuracy": null,
+    "recall": null
+  },
+  "agent_intent": {
+    "label": "实测（固定意图用例集）",
+    "n": 23,
+    "correct": 23,
+    "accuracy": 1.0,
+    "cases": [
+      {
+        "text": "优先省电",
+        "expect": "energy_first",
+        "got": "energy_first",
+        "hit": true
+      },
+      {
+        "text": "以节能为目标",
+        "expect": "energy_first",
+        "got": "energy_first",
+        "hit": true
+      },
+      {
+        "text": "综合能效最优",
+        "expect": "energy_first",
+        "got": "energy_first",
+        "hit": true
+      },
+      {
+        "text": "降低能耗",
+        "expect": "energy_first",
+        "got": "energy_first",
+        "hit": true
+      },
+      {
+        "text": "减少大马拉小车",
+        "expect": "low_load",
+        "got": "low_load",
+        "hit": true
+      },
+      {
+        "text": "低负荷优化",
+        "expect": "low_load",
+        "got": "low_load",
+        "hit": true
+      },
+      {
+        "text": "降低空载",
+        "expect": "low_load",
+        "got": "low_load",
+        "hit": true
+      },
+      {
+        "text": "机组负荷均衡",
+        "expect": "load_balance",
+        "got": "load_balance",
+        "hit": true
+      },
+      {
+        "text": "加载率均衡",
+        "expect": "load_balance",
+        "got": "load_balance",
+        "hit": true
+      },
+      {
+        "text": "两台机负荷平衡",
+        "expect": "load_balance",
+        "got": "load_balance",
+        "hit": true
+      },
+      {
+        "text": "查看未来负荷",
+        "expect": "forecast",
+        "got": "forecast",
+        "hit": true
+      },
+      {
+        "text": "预测用气",
+        "expect": "forecast",
+        "got": "forecast",
+        "hit": true
+      },
+      {
+        "text": "接下来负荷多少",
+        "expect": "forecast",
+        "got": "forecast",
+        "hit": true
+      },
+      {
+        "text": "设备健康状态",
+        "expect": "health",
+        "got": "health",
+        "hit": true
+      },
+      {
+        "text": "查看诊断结果",
+        "expect": "health",
+        "got": "health",
+        "hit": true
+      },
+      {
+        "text": "机组是否异常",
+        "expect": "health",
+        "got": "health",
+        "hit": true
+      },
+      {
+        "text": "剩余寿命",
+        "expect": "rul",
+        "got": "rul",
+        "hit": true
+      },
+      {
+        "text": "还能运行多久",
+        "expect": "rul",
+        "got": "rul",
+        "hit": true
+      },
+      {
+        "text": "喘振风险",
+        "expect": "surge",
+        "got": "surge",
+        "hit": true
+      },
+      {
+        "text": "安全风险检查",
+        "expect": "surge",
+        "got": "surge",
+        "hit": true
+      },
+      {
+        "text": "是否有喘振",
+        "expect": "surge",
+        "got": "surge",
+        "hit": true
+      },
+      {
+        "text": "你好",
+        "expect": "general",
+        "got": "general",
+        "hit": true
+      },
+      {
+        "text": "随便聊聊",
+        "expect": "general",
+        "got": "general",
+        "hit": true
+      }
+    ]
+  },
+  "api": {
+    "label": "实测（本地服务 HTTP，已预热，稳态时延）",
+    "base_url": "http://127.0.0.1:8080",
+    "availability": 1.0,
+    "endpoints": [
+      {
+        "endpoint": "/api/overview",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 3.86,
+        "p95_ms": 4.4,
+        "max_ms": 4.46
+      },
+      {
+        "endpoint": "/api/station",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 11.63,
+        "p95_ms": 11.68,
+        "max_ms": 11.69
+      },
+      {
+        "endpoint": "/api/forecast",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 11.86,
+        "p95_ms": 13.33,
+        "max_ms": 13.5
+      },
+      {
+        "endpoint": "/api/health",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 12.03,
+        "p95_ms": 12.26,
+        "max_ms": 12.28
+      },
+      {
+        "endpoint": "/api/rul",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 12.21,
+        "p95_ms": 19.61,
+        "max_ms": 20.43
+      },
+      {
+        "endpoint": "/api/dispatch/times",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 2.9,
+        "p95_ms": 3.24,
+        "max_ms": 3.28
+      },
+      {
+        "endpoint": "/api/simulation",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 203.16,
+        "p95_ms": 218.73,
+        "max_ms": 220.46
+      },
+      {
+        "endpoint": "/api/energy",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 2.8,
+        "p95_ms": 3.61,
+        "max_ms": 3.7
+      },
+      {
+        "endpoint": "/api/alarms",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 2.48,
+        "p95_ms": 2.57,
+        "max_ms": 2.58
+      },
+      {
+        "endpoint": "/api/surge",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 2.69,
+        "p95_ms": 2.76,
+        "max_ms": 2.77
+      },
+      {
+        "endpoint": "/api/agent/intents",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 2.21,
+        "p95_ms": 2.26,
+        "max_ms": 2.27
+      },
+      {
+        "endpoint": "/api/control/log",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 2.09,
+        "p95_ms": 2.29,
+        "max_ms": 2.31
+      },
+      {
+        "endpoint": "/api/rt/frame?i=0",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 479.57,
+        "p95_ms": 502.58,
+        "max_ms": 505.14
+      },
+      {
+        "endpoint": "/api/scenario/normal",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 10.04,
+        "p95_ms": 27.06,
+        "max_ms": 28.95
+      },
+      {
+        "endpoint": "/api/dispatch?mode=b3",
+        "n": 3,
+        "ok": 3,
+        "p50_ms": 3.25,
+        "p95_ms": 3.63,
+        "max_ms": 3.67
+      }
+    ]
+  },
+  "summary": [
+    {
+      "no": 1,
+      "metric": "负荷预测 MAPE / RMSE",
+      "value": "15min 1.133% / 18.975",
+      "unit": "m³/min",
+      "evidence_label": "实测（冻结测试集，离线评估）",
+      "conclusion": "达标（目标 MAPE ≤ 8%）"
+    },
+    {
+      "no": 2,
+      "metric": "调度方案生成时间 (p95)",
+      "value": "b3 45.31ms / bal 73.53ms",
+      "unit": "ms",
+      "evidence_label": "实测（测试集抽样，算法入口耗时）",
+      "conclusion": "达标（< 30s）"
+    },
+    {
+      "no": 3,
+      "metric": "系统综合能效提升率 (B3)",
+      "value": "4.1253%",
+      "unit": "%",
+      "evidence_label": "仿真验证（离线模型估计；同供气 service_equiv 口径）",
+      "conclusion": "仿真验证"
+    },
+    {
+      "no": 4,
+      "metric": "单站用电成本降低率 (B3)",
+      "value": "4.3068%",
+      "unit": "%",
+      "evidence_label": "仿真验证（离线模型估计；同供气 service_equiv 口径）",
+      "conclusion": "仿真验证"
+    },
+    {
+      "no": 5,
+      "metric": "供气压力合格率 (sim B3)",
+      "value": "normal 1.0 / low 1.0",
+      "unit": "比例",
+      "evidence_label": "仿真验证（闭环工程假设）",
+      "conclusion": "仿真验证（非现场达标）"
+    },
+    {
+      "no": 6,
+      "metric": "压力波动降幅 (sim low B3)",
+      "value": "88.829%",
+      "unit": "%",
+      "evidence_label": "仿真验证（闭环工程假设）",
+      "conclusion": "仿真验证"
+    },
+    {
+      "no": 7,
+      "metric": "加载率偏离度 (D3达标率 LRB)",
+      "value": "0.999（机组间 Δλ ≤ 0.10）",
+      "unit": "比例",
+      "evidence_label": "仿真验证（离线模型估计）",
+      "conclusion": "仿真验证（非官方定义）"
+    },
+    {
+      "no": 8,
+      "metric": "机组启停次数 (B1/B3 仿真)",
+      "value": "8 / 18",
+      "unit": "次",
+      "evidence_label": "仿真策略为模型估计；观测值为实测遥测",
+      "conclusion": "模型估计+观测对比"
+    },
+    {
+      "no": 9,
+      "metric": "大马拉小车时长 (B3 降幅)",
+      "value": "60.8696%",
+      "unit": "%",
+      "evidence_label": "仿真验证（离线模型估计，λ<0.5 的运行机分钟）",
+      "conclusion": "仿真验证"
+    },
+    {
+      "no": 10,
+      "metric": "异常预警 准确率/召回率/误报率",
+      "value": "不可计算",
+      "unit": "—",
+      "evidence_label": "无法验证（缺少真实故障标签）",
+      "conclusion": "无法验证（无真实标签）"
+    },
+    {
+      "no": 11,
+      "metric": "异常预警提前量",
+      "value": "不可计算",
+      "unit": "min",
+      "evidence_label": "无法验证（缺少真实故障标签）",
+      "conclusion": "无法验证"
+    },
+    {
+      "no": 12,
+      "metric": "喘振风险识别准确率",
+      "value": "不可计算",
+      "unit": "—",
+      "evidence_label": "无法验证（无真实喘振标签）",
+      "conclusion": "无法验证（仅代理分级）"
+    },
+    {
+      "no": 13,
+      "metric": "Agent 意图识别准确率",
+      "value": "100.0%",
+      "unit": "%",
+      "evidence_label": "实测（固定意图用例集）",
+      "conclusion": "实测（固定用例集）"
+    },
+    {
+      "no": 14,
+      "metric": "接口响应时间 / 系统可用性",
+      "value": "max-p95 503ms / 可用性 100.0%",
+      "unit": "ms",
+      "evidence_label": "实测（本地服务 HTTP，已预热，稳态时延）",
+      "conclusion": "实测"
+    }
+  ]
+}
