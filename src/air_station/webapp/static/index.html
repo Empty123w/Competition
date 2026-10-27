@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>空压站多机协同智能调度 · 可视化平台</title>
+<link rel="stylesheet" href="/static/styles.css?v=29" />
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">AS</div>
+      <div>
+        <div class="brand-title">空压站智能调度</div>
+        <div class="brand-sub">预测 — 诊断 — 优化 — 仿真</div>
+      </div>
+    </div>
+    <nav id="nav">
+      <a class="nav-item active" data-target="overview">运行总览</a>
+      <a class="nav-item" data-target="units">机组实时状态</a>
+      <a class="nav-item" data-target="forecast">用气负荷预测</a>
+      <a class="nav-item" data-target="dispatch">智能调度方案</a>
+      <a class="nav-item" data-target="health">设备健康中心</a>
+      <a class="nav-item" data-target="surge">喘振风险监控</a>
+      <a class="nav-item" data-target="energy">能效与成本分析</a>
+      <a class="nav-item" data-target="alarms">告警与运行事件</a>
+      <a class="nav-item" data-target="agent">Agent 自然语言交互</a>
+      <a class="nav-item" data-target="knowledge">知识库</a>
+      <a class="nav-item" data-target="acceptance">测试验收</a>
+    </nav>
+    <div class="sidebar-foot"><span class="dot"></span> 全部调度为仿真候选，无 PLC 控制路径</div>
+  </aside>
+
+  <main class="content">
+    <header class="topbar">
+      <div>
+        <h1 id="page-title">运行总览</h1>
+        <div class="subtitle" id="page-sub">空压站多机协同智能调度项目的实现整合视图</div>
+      </div>
+      <div class="topbar-badges">
+        <span class="badge badge-blue">A: 数据 / 预测 / 健康</span>
+        <span class="badge badge-green">B: 基线 / 优化 / 安全</span>
+        <span class="badge badge-amber">simulation_candidate_only</span>
+      </div>
+    </header>
+
+    <!-- 1 运行总览 -->
+    <section class="panel active" id="overview">
+      <div id="ov-kpis" class="kpi-grid"></div>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">系统数据流与已实现模块</div>
+          <div id="ov-flow" class="flow"></div>
+        </div>
+        <div class="card">
+          <div class="card-title">当前推荐方案与状态</div>
+          <div id="ov-reco"></div>
+          <div class="card-title" style="margin-top:14px">关键指标</div>
+          <div id="ov-table"></div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">母管压力（历史小时均值）</div><div class="chart" id="ov-pressure"></div></div>
+        <div class="card"><div class="card-title">总用气流量（历史小时均值）</div><div class="chart" id="ov-flow-chart"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">平台能力 · 知识库</div>
+        <div id="ov-knowledge"></div>
+      </div>
+    </section>
+
+    <!-- 2 机组实时状态 -->
+    <section class="panel" id="units">
+      <div class="card">
+        <div class="card-title">实时数据模拟播放 <span class="muted">验证段历史快照逐帧回放（250 帧 / 5 分钟一帧）</span></div>
+        <div class="tb-group">
+          <button class="btn btn-sm" id="pb-play">▶ 播放</button>
+          <button class="btn btn-sm btn-ghost" id="pb-step">⏭ 单帧</button>
+          <button class="btn btn-sm btn-ghost" id="pb-reset">⏮ 重置</button>
+          <label class="tb-inline">速度
+            <select id="pb-speed">
+              <option value="2000">0.5×</option>
+              <option value="1000" selected>1×</option>
+              <option value="500">2×</option>
+            </select>
+          </label>
+          <span class="clock" id="pb-clock">—</span>
+          <span class="tb-frame" id="pb-count">0 / 0</span>
+          <span class="pill risk-low" id="pb-status" style="display:none">回放中</span>
+        </div>
+        <div class="tb-progress"><i id="pb-bar"></i></div>
+      </div>
+      <div class="card">
+        <div class="card-title">当前工况快照 <span class="muted" id="units-time"></span></div>
+        <div class="grid-2" id="units-cards"></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">流量趋势（近 120 分钟）</div><div class="chart" id="units-flow"></div></div>
+        <div class="card"><div class="card-title">功率趋势（近 120 分钟）</div><div class="chart" id="units-power"></div></div>
+      </div>
+      <div class="card"><div class="card-title">负荷率趋势（近 120 分钟）</div><div class="chart" id="units-load"></div></div>
+    </section>
+
+    <!-- 3 用气负荷预测 -->
+    <section class="panel" id="forecast">
+      <div class="card">
+        <div class="card-title">典型场景一键演示
+          <span class="tools">
+            <label>场景 <select id="demo-scenario"></select></label>
+            <button class="btn btn-sm" id="demo-run">一键演示</button>
+          </span>
+        </div>
+        <div class="hint">固定 5 个用气负荷场景（正常/低负荷/高峰/负荷突增/设备异常），对比人工规则基线 B1 与智能调度 B3 的能耗、成本、压力合格率与压力波动（闭环工程假设仿真）。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">当前预测（forecast_json 实时调用）</div>
+        <div id="fc-live" class="fc-live"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">测试集逐点回放
+          <span class="tools"><label>时域
+            <select id="fc-horizon"><option value="15">15 分钟</option><option value="30">30 分钟</option><option value="60">60 分钟</option></select>
+          </label></span>
+        </div>
+        <div class="chart" id="fc-chart"></div>
+        <div class="hint">阴影为 90% 预测区间；红色为实测流量。</div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">精度指标</div><div id="fc-metrics"></div></div>
+        <div class="card"><div class="card-title">特征重要性 Top</div><div class="chart" id="fc-importance"></div></div>
+      </div>
+    </section>
+
+    <!-- 4 智能调度方案 -->
+    <section class="panel" id="dispatch">
+      <div class="card">
+        <div class="card-title">调度求解
+          <span class="tools">
+            <label>时刻 <select id="dp-time"></select></label>
+            <button class="btn" id="dp-run">对三种模式求解</button>
+            <span class="muted" id="dp-status"></span>
+          </span>
+        </div>
+        <div class="hint">输入 = 历史真实快照（as_of 时刻）+ A 校准预测 + 健康评估；输出为仿真候选，execution_permission = simulation_candidate_only。</div>
+        <div id="dp-snapshot" class="snapshot"></div>
+        <div class="grid-3" id="dp-modes"></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">人工调度 vs 智能调度（同工况）</div><div id="dp-compare"></div></div>
+        <div class="card"><div class="card-title">优化前后能耗 / 成本 / 压力</div><div id="dp-beforeafter"></div><div class="chart" id="dp-cost-chart"></div></div>
+      </div>
+      <div class="card"><div class="card-title">决策逻辑链路</div><div id="dp-logic" class="logic"></div></div>
+      <div class="card"><div class="card-title">调度时延（ms）</div><div class="chart" id="dp-latency"></div>
+        <div class="hint">“确认 / 拒绝 / 回退”仅记录执行日志，不触发任何真实执行。</div>
+      </div>
+
+      <div class="warn-banner">所有方案均为仿真候选（execution_permission = simulation_candidate_only）。卡片上的确认/拒绝/回退仅记录日志，不发送任何 PLC 指令。</div>
+      <div class="card">
+        <div class="card-title">执行日志</div>
+        <div class="hint" id="ct-hint">当前 as_of：—</div>
+        <div id="ct-log"></div>
+      </div>
+    </section>
+
+    <!-- 5 设备健康中心 -->
+    <section class="panel" id="health">
+      <div class="grid-2">
+        <div class="card"><div class="card-title">4# 机组健康评分</div><div class="chart" id="hl-gauge-4"></div><div id="hl-info-4" class="dev-info"></div></div>
+        <div class="card"><div class="card-title">5# 机组健康评分</div><div class="chart" id="hl-gauge-5"></div><div id="hl-info-5" class="dev-info"></div></div>
+      </div>
+      <div class="card"><div class="card-title">健康评分历史（小时粒度，无监督滚动）</div><div class="chart" id="hl-history"></div></div>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">健康诊断指标</div><div id="hl-metrics"></div></div>
+        <div class="card"><div class="card-title">剩余寿命估计（模拟）</div><div class="chart" id="rul-bars"></div><div id="rul-live" class="dev-info"></div></div>
+      </div>
+    </section>
+
+    <!-- 6 喘振风险监控 -->
+    <section class="panel" id="surge">
+      <div class="warn-banner">喘振为代理分级（历史运行点包络，非真实喘振线）；数据无真实喘振标签，误报/漏报不可计算。</div>
+      <div class="card">
+        <div class="card-title">代理喘振边界（流量 vs 压力）</div>
+        <div class="chart" id="sg-curve"></div>
+        <div class="hint">曲线为历史低分位包络；低于边界即进入高风险区。</div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">当前调度方案的喘振评估</div><div id="sg-current"></div></div>
+        <div class="card"><div class="card-title">历史代理事件统计（valid 段）</div><div id="sg-stats"></div></div>
+      </div>
+    </section>
+
+    <!-- 7 能效与成本分析 -->
+    <section class="panel" id="energy">
+      <div class="card"><div class="card-title">策略能效与成本对比（同供气口径）</div><div class="chart" id="en-sec"></div></div>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">系统单位能耗 SEC 与成本</div><div id="en-table"></div></div>
+        <div class="card"><div class="card-title">节电/成本下降</div><div class="chart" id="en-cost"></div></div>
+      </div>
+      <div class="card"><div class="card-title">闭环场景能效（工程假设）</div><div id="en-closed"></div></div>
+    </section>
+
+    <!-- 8 告警与运行事件 -->
+    <section class="panel" id="alarms">
+      <div class="grid-2">
+        <div class="card"><div class="card-title">设备健康告警</div><div id="al-health"></div></div>
+        <div class="card"><div class="card-title">喘振代理告警（valid 段）</div><div id="al-surge"></div></div>
+      </div>
+      <div class="card"><div class="card-title">运行故障事件（弱标签）</div><div id="al-table"></div>
+        <div class="hint" id="al-note"></div>
+      </div>
+    </section>
+
+    <!-- 9 Agent 自然语言交互 -->
+    <section class="panel" id="agent">
+      <div class="card">
+        <div class="card-title">自然语言下达调度目标</div>
+        <div id="ag-quick" class="quick"></div>
+        <div id="ag-chat" class="chat"></div>
+        <div class="chat-input">
+          <input id="ag-input" type="text" placeholder="例如：优先省电 / 减少大马拉小车 / 机组负荷均衡 / 查看预测 / 检查喘振风险" />
+          <button class="btn" id="ag-send">发送</button>
+        </div>
+      </div>
+      <div class="card"><div class="card-title">Agent 解释与结果</div><div id="ag-result"></div></div>
+    </section>
+
+    <!-- 10 知识中心 -->
+    <section class="panel" id="knowledge">
+      <div class="card">
+        <div class="card-title">知识中心 <span class="tools"><span id="kb-status-badge"></span></span></div>
+        <div class="hint">基于项目设备、数据、算法、调度和安全资料回答；知识解释与实时预测 / 健康 / 调度结果相互区分。</div>
+        <div id="kb-statusbar" class="kb-statusbar">加载中…</div>
+        <div class="kb-search">
+          <input id="kb-input" type="text" placeholder="请输入问题，例如：负荷预测模型的输入输出是什么？" />
+          <button class="btn" id="kb-ask">提问</button>
+          <button class="btn btn-ghost" id="kb-clear">清空</button>
+        </div>
+        <div class="kb-cats" id="kb-cats"></div>
+      </div>
+      <div class="card">
+        <div class="card-title">回答</div>
+        <div id="kb-answer"></div>
+      </div>
+    </section>
+
+    <!-- 11 测试验收 -->
+    <section class="panel" id="acceptance">
+      <div class="card">
+        <div class="card-title">统一测试集验收（冻结测试段 2026-08-21 ~ 2026-09-12）</div>
+        <div class="hint">证据分级：<span class="pill risk-low">实测</span> 真实数据可证 ·
+          <span class="pill risk-medium">仿真验证</span> 模型/工程假设，不代表现场 ·
+          <span class="pill risk-unknown">无法验证</span> 缺真实标签。</div>
+        <div id="ac-summary"></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">负荷预测（实测）</div><div id="ac-forecast"></div></div>
+        <div class="card"><div class="card-title">调度方案生成时间（实测）</div><div id="ac-latency"></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">压力合格率与波动（实测/仿真）</div><div id="ac-pressure"></div></div>
+        <div class="card"><div class="card-title">能效与成本（仿真验证）</div><div id="ac-energy"></div></div>
+      </div>
+      <div class="grid-2">
+        <div class="card"><div class="card-title">Agent 意图识别（实测）</div><div id="ac-agent"></div></div>
+        <div class="card"><div class="card-title">接口响应时间与可用性（实测）</div><div id="ac-api"></div></div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div id="demo-modal" class="modal hidden">
+  <div class="modal-box">
+    <div class="modal-head"><span id="demo-title">场景演示</span><button class="btn btn-sm btn-ghost" id="demo-close">关闭</button></div>
+    <div id="demo-body"></div>
+  </div>
+</div>
+
+<div id="loading" class="loading"><div class="spinner"></div><span>加载数据中…</span></div>
+<script src="/static/charts.js?v=29"></script>
+<script src="/static/app.js?v=29"></script>
+</body>
+</html>

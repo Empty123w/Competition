@@ -122,3 +122,14 @@
   - 样本口径必须区分: 主口径(6策略含 joint_nompc)=10793 步; 宽口径(b1+joint_nompc)=11048; 含 b3_lrb=10789; 不得混写
   - 推送权限: 只能推 Fork `yang466/Competition`; 团队 `Wxyun113/Competition` 推送被拒(403, bot 无权限) -> 只能用 PR
   - 团队 main 的 `optimization/dispatch_api.py` 与本分支改动前逐字节一致 -> 该改动无冲突风险
+
+[前端与后端运行环境（补充）]
+- Date: 2026-10-25
+- Context: Agent 在安装依赖、运行可视化网页与 C 后端 API 时发现
+- Category: 环境配置 / 构建方法
+- Instructions:
+  - 无 `python` 命令，只有 `python3`（3.11.2）；pip 走 aliyun 镜像且下载大 wheel 极慢。可靠做法：用 `curl` 预下载 wheel 到本地目录，再 `pip3 install --break-system-packages --no-index --find-links=<dir> <pkgs>`；大 wheel 安装前用 zipfile.testzip() 校验。
+  - C 后端 API（`air_station.api`）需要 `sqlalchemy`，缺失会导致 uvicorn 启动即报 `ModuleNotFoundError`。
+  - C 后端：`PYTHONPATH=src python3 -m uvicorn air_station.api.app:app --host 0.0.0.0 --port 8000`（`/` 能力清单，`/docs` OpenAPI）。
+  - 旧版可视化网页：`python3 -m air_station.webapp.app`（默认 0.0.0.0:8080）。新版前端 v2 在 `/v2`，经同源反代 `/capi/*` 调用 C 后端（`CAPI_BASE` 可覆盖，默认 127.0.0.1:8000）。
+  - 验收测试：`python3 analysis/scripts/webapp_acceptance.py --base-url http://127.0.0.1:8080`；预测 MAPE 必须复用 `forecasting.evaluate.mape`（min_flow=1.0、分母 max(|y|,1)）。

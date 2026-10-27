@@ -35,6 +35,7 @@ air-station-health = "air_station.models.health.evaluate:main"
 air-station-api = "air_station.api.app:run"
 air-station-mcp = "air_station.mcp_servers.server:main"
 air-station-agent = "air_station.agent.workflow:cli"
+air-station-web = "air_station.webapp.app:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
